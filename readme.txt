@@ -29,6 +29,7 @@ Onplace :
 
 Framework :
 - create plugins and let them be used as page or as apps
+- use Msql (the own noSql data system) to add/share/capture datas.
 
 All the HTML is replaced by a system of [connectors] :
 - contents are normalized

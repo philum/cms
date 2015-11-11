@@ -1,6 +1,6 @@
 <?php
-$db='ph1';
-if($_SESSION['dev']=='lab')$db='philab';
-$dbb=mysql_pconnect('localhost','root','lgr3vdvx'); 
+//this is generated while the install
+$db='databasename';
+$dbb=mysql_pconnect('localhost','root','password'); 
 $dbq=mysql_select_db($db,$dbb);
 ?>
