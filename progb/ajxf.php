@@ -48,7 +48,7 @@ $r=$_SESSION['iv'.$iv]; $_SESSION['cur_div']=$cr_div;
 $jx='iv'.$iv.'_vview___'.$iv.'_'.$cr_div.'_';
 $ret.=divc('nb_pages right',nb_pages_j($r,$jx,$n));
 $ret.=bal('h3',lka(htac('read').$r[$n][0],suj_of_id($r[$n][0])));
-$ret.=video_auto(split_only('§',$r[$n][1],0,1),prma('content'),$r[$n][0],3);
+$ret.=video_auto(str_extract('§',$r[$n][1],0,1),prma('content'),$r[$n][0],3);
 return $ret.br();}
 
 #meca
@@ -162,16 +162,16 @@ $_POST['name']=$name; $_POST['ib']=$ib; $_POST['pub']=$pub; //$_POST['sub']=$sub
 return save_art();}
 
 //urlsrc
-function art_import($res){
-$res=ajx(trim($res),1); $res=utmsrc($res); $res=http($res); $_GET['urlsrc']=$res; 
-if(!$_GET['ti']){list($sujb,$msg,$rec,$current,$defid)=vacuum($res,$suj); 
-	$msg=embed_links($msg); $ret=$msg; $_SESSION['vacti'][$res]=$sujb;}
-else{$ret=clean_title($_SESSION['vacti'][$res]);$_SESSION['vacti'][$res]='';}
+function art_import($res){$f=ajx(trim($res),1); 
+$f=utmsrc($f); $f=http($f); $_GET['urlsrc']=$f; $fb=nohttp($f);
+if(!$_GET['ti']){list($sujb,$msg,$rec,$current,$defid)=vacuum($f,$suj); 
+	$msg=embed_links($msg); $ret=$msg; $_SESSION['vacti'][$f]=$sujb;}
+else{$ret=clean_title($_SESSION['vacti'][$f]);$_SESSION['vacti'][$f]='';}
 if($_GET['import'] && $sujb){$wh='WHERE id = "'.$_GET['import'].'" LIMIT 1;'; 
-	$sq='suj="'.clean_title($sujb).'", mail="'.$res.'", img="" ';//ib="0",
+	$sq='suj="'.clean_title($sujb).'", mail="'.$f.'", img="" ';//ib="0",
 	msquery('UPDATE '.$_SESSION['qda'].' SET '.$sq.$wh.'');
-	req('sav,pop'); modif_art($_GET['import'],$msg);
-	if($_SESSION['vacuum'][$res])unset($_SESSION['vacuum'][$res]);}
+	req('sav,pop'); modif_art($_GET['import'],$msg);}
+if($_SESSION['vacuum'][$fb]){unset($_SESSION['vacuum'][$fb]);}
 return $ret;}
 
 function bub_adm_addart(){
@@ -729,8 +729,8 @@ $r=msql_read('',$_SESSION['qb'].'_rssurl',"",1); $r=msq_tri($r,3,1);
 if($r)foreach($r as $k=>$v)batch_prep($v[0]);
 return batch('','in');}
 
-function batch_preview($f,$sug=''){req('pop,spe,tri'); 
-$_GET['urlsrc']=http($f); $w=prma('content');
+function batch_preview($f,$sug=''){req('pop,spe,tri');
+$f=http($f); $_GET['urlsrc']=$f; $w=prma('content');
 list($suj,$msg)=vacuum($f);
 $msg=embed_links($msg); $msg=clean_br_lite($msg); $msg=clean_punct($msg);
 $msg=format_txt($msg,'','test');

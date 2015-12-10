@@ -39,8 +39,9 @@ AJAX.prototype.handleResponse=function(){
 			if(this.m_sDiv=='popup')popub(res,this.a_ct);
 			else if(this.m_sDiv=='bubble')bubble(res,this.a_ct);
 			else if(this.m_sDiv=='togbub')togbub(res,this.a_ct);
-			else if(this.a_ct<2 && here!='chat' && here!='twit'){content.innerHTML=res;}
-			//Timer('opac',this.m_sDiv,10,100,4);
+			else if(this.a_ct<2 && here!='chat' && here!='twit'){
+				content.innerHTML=res; opac(100,this.m_sDiv);}
+				//Timer('opac',this.m_sDiv,10,100,4);
 			else if(this.a_ct==4||this.a_ct==7||this.a_ct==9)content.value=res;
 			else if(this.a_ct==5)insert(stripslashes(ajxget(res,1)));
 			else if(this.a_ct==6){insert(res); Close('popup');}
@@ -85,8 +86,8 @@ AJAX.prototype.handleResponse=function(){
 	else if(wait==0){wait=1;//wait
 		if((this.a_ct==3||this.a_ct==7||this.a_ct==9||this.a_ct==15) && wait)
 			waitmsg(this.m_sDiv);
-		//if(this.a_ct<2 && this.m_sDiv!='popup' && this.m_sDiv!='bubble')opac(10,this.m_sDiv);
-		}}
+		if(this.a_ct<2 && this.m_sDiv!='popup' && this.m_sDiv!='bubble')
+			opac(10,this.m_sDiv);}}
 
 function getbyid(id){return document.getElementById(id);}
 
@@ -147,7 +148,7 @@ function innerSizes(p){
 	if(p=='h')return h; else if(p=='w')return w; else return {w:w,h:h};}
 
 function poph(popu){
-	popu.style.maxHeight=''; var adjust=40;
+	popu.style.maxHeight=''; var adjust=50;
 	var ha=innerSizes('h'); var hb=popu.offsetHeight; //if(hb>400)hb=400;
 	if(hb>ha){popu.style.maxHeight=(ha-adjust)+'px'; popu.style.overflowY='scroll';}
 	else{popu.style.overflowY='visible';}
@@ -176,10 +177,10 @@ function bpos(id,nb,p){//bubblepop
 	return {x:px,y:py};}
 
 function ppos(popu,decal){
-	var px=0; var sw=innerSizes('w'); var w=popu.offsetWidth; var l=(sw-w)/2+px;
-	var py=-20; var sh=innerSizes('h'); var h=popu.offsetHeight; var t=(sh-h)/2+py; 
+	var sw=innerSizes('w'); var w=popu.offsetWidth; var l=(sw-w)/2;
+	var sh=innerSizes('h'); var h=popu.offsetHeight; var t=(sh-h)/2-20; 
 	if(l+decal+w+0>sw)decal=0; var px=(l>0?l:0)+decal;
-	if(t+decal+h+0>sh)decal=0; var py=(t>0?t:0)+decal;	
+	if(t+decal+h+0>sh)decal=0; var py=(t>8?t:8)+decal;	
 	if(fixpop==1){var px=px+window.pageXOffset; var py=py+window.pageYOffset;}
 	return {x:px+'px', y:py+'px'};}
 
@@ -199,8 +200,10 @@ function popub(res,act){popnb+=1; var nb=popnb; var ab,as='';
 	addEvent(popa,'mousedown',function(event){start_drag(event,nb)});
 	var popu=getbyid('popu'); poph(popu);//before ppos
 	if(act>100)var pos=bpos('bt'+act,'pop'+nb,0);
-	else if(!isNumber(act) && act.substr(0,4)=='bpop'){var ab=1; var pos=bpos('btpop'+act,nb,1);}
-	else if(!isNumber(act) && act.substr(0,2)=='bt'){var ab=0; var pos=bpos(act,'pop'+nb,0); 
+	else if(!isNumber(act) && act.substr(0,4)=='bpop'){
+		var ab=1; var pos=bpos('btpop'+act,nb,1);}
+	else if(!isNumber(act) && act.substr(0,2)=='bt'){
+		var ab=0; var pos=bpos(act,'pop'+nb,0); 
 		clpop('','pop'+nb); popa.style.display='none'; var as=1;}
 	//else if(fulpop)var pos=popf(popup);
 	else var pos=ppos(popu,decal);

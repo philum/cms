@@ -43,7 +43,7 @@ if(rstr(100))$ret.=js_link('http://code.jquery.com/jquery-1.9.1.min.js');
 if($_SESSION['jscode'])$ret.=js_code($_SESSION['jscode']);
 if($_SESSION['desgn'])$ret.=js_link('/js/live.js#css');
 if($_SESSION['head_r'])$ret.=headers_balises($_SESSION['head_r']);
-if($_SESSION['headr'])$ret.=$_SESSION['headr'];
+if($_SESSION['headr'])$ret.=$_SESSION['headr'];//
 $ret.='</head>'."\n";
 if($_GET['admin'])$sp=' spellcheck="false"';
 $ret.='<body'.atb('onload',$onload).' onclick="clpop(event)" onmousemove="popslide(event)"'.$sp.'>'."\n";//

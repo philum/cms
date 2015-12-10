@@ -29,7 +29,7 @@ function sugg_recall(){
 $nod=$_SESSION['qb'].'_suggest';
 $r=msql_read('',$nod,''); $js='popup_call__3__batch*preview_';
 if($r)foreach($r as $k=>$v){$j=ajx($v[1]); $lnk=lka($v[1],picto('url'));
-if(!$v[3])$ret.=br().lj('popbt',$js.$j.'_'.$k,$v[0].' '.preplink($v[1])).' '.$lnk.' '.$v[2];}
+if(!$v[3])$ret.=br().lj('popbt',$js.$j.'_'.$k,$v[0].' '.preplink($v[1])).' '.$lnk;}
 return $ret;}
 
 function sugg_rapport($m){

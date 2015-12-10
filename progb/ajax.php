@@ -2,6 +2,7 @@
 //philum_ajax_hangar
 session_start();
 error_report();
+$_SESSION['headr']=$_SESSION['head_r']=$_SESSION['jscode']=$_SESSION['onload']='';
 if(!$_SESSION['stime']){req('boot,art,spe'); master_params('params/_'.$db,$qd,$aqb,$subd);
 	define_hubs(); define_qb(); define_config(); time_system($cache);
 	cache_arts(); define_cats_rqt(); define_condition(); define_clr();}
@@ -25,7 +26,7 @@ onmouseup="stop_drag(event)"',$popa.div('id="popu" class="popu"',$d));}// onresi
 header('Content-Type:text/html; charset='.$_SESSION['enc']);//utf-8//iso-8859-1
 
 #private
-if($_SESSION["auth"]>1)switch($n){
+if($_SESSION['auth']>1)switch($n){
 //art
 case("tit"):req('meta,spe'); $t='meta:'.$id; $s=440; 
 	if($_GET['frm1'])save_tits_j($id); $ret=edit_tits($id,$va); break;
@@ -196,7 +197,7 @@ case("words"):req('pop,spe,tri,meta'); $ret=u_words($id); $t=nms(47); $s=440; br
 case("meta"):req('pop,spe,tri,meta'); $ret=u_words($id); $t=nms(47); $s=440; break;//
 //tracks
 case("track"):req('pop,spe'); $ret=plugin_func('tracks','f_inp_track',$id,$va);
-	$s=440; if(substr($id,0,4)=='wall')$t=nms(29);
+	if(substr($id,0,4)=='wall')$t=nms(29); //$s=440;
 	else $t=$id>0?nms(21):nms(34).' '.nms(36).' '.$id; break;
 case("tracks"):req('pop,spe,art,tri'); $id=(convhtml_b(nl2br($id),1)); //ajx()
 	reqp('tracks'); $ret=save_track($id,$va,$opt,$optb); break;
@@ -298,6 +299,7 @@ case("plupin"):if($id)$ret=plugin($id,$va,$opt,$optb,$res); $t=$id;
 case("plug"):$ret=plugin_func($id,$va,$opt,$optb,$res); break;
 case("plup"):$t=$id; if($optb>200 && $optb<1000){$s=$optb; $optb='';} else $s=550; $p=2;
 	if($id=='taxonav')req('spe,mod'); $ret=plugin_func($id,$va,$opt,$optb,$res); break;
+case("openapp"):$ret=openapp($id,$va,$opt); $t=$id; break;
 case("sesmake"):if(forbidden_sessions($va))$_SESSION[$va]=$id; break;
 case("session"):$ret=$_SESSION[$id]; break;
 case("togses"):$ret=offon(yesnoses($id)); break;

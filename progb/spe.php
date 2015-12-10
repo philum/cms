@@ -172,6 +172,7 @@ case('plug'): $ret='popup_plupin___'.$v[2].'_'.$v[3].'_'.$v[4]; break;
 case('plup'): $ret='popup_plugin___'.$v[2].'_'.$v[3].'_'.$v[4]; break;
 case('plugfunc'): $ret='popup_plup___'.$v[2].'_'.$v[3].'_'.$v[4]; break;
 case('mod'): $ret='popup_modpop__3_'.ajx($v[3].'///'.$v[4].'/'.$v[7].'///1:'.$v[2]).'_480'; break;
+case('app'): $ret='popup_openapp__3_'.ajx($v[2]).'_'.$v[3].'_'.$v[4]; break;
 case('bub'): $ret='bubble_popbub__d'.randid().'_'.$v[2].'_'.$v[3]; break;//loos mod
 }//ajax,art,file,finder,admin,msql,iframe,link,url,plug,plup,plugfunc,mod,bub
 return $ret;}
@@ -762,7 +763,7 @@ return divd('titles',template($p,'titles'));}
 function good_rech($rch=''){
 $ret=$rch?$rch:ajx(urldecode($_GET['search']),1); if(!$ret)return;
 $ret=str_replace('’',"'",$ret); $ret=utflatindecode($ret); $ret=clean_acc($ret);
-$ret=strip_tags($ret); $ret=trim($ret); stripslashes($ret); return $ret;}
+$ret=strip_tags($ret); stripslashes($ret); $ret=trim($ret); return $ret;}
 
 function rech_internal($rech){$load=search_engine($rech);
 $t=btn("",lka(htac('search').$rech,$rech));

@@ -22,12 +22,15 @@ function except_words($d){
 $r=array('de','des','du','dans','le','les','la','un','a','à','ou','où','on','en','y',"«","»","'",'"',":","-","!","?");
 if(!in_array($d,$r))return true;}
 
+function rech_lower($d,$o){
+return $o?strtolower($d):$d;}
+
 //rech->load
-function rech($rch,$days=''){
+function rech($rch,$days=''){$low=1;
 if(get('bool'))$bool=1; if(get('titles'))$titl=1;
 if(substr($rch,0,1)=='*'){$rch=substr($rch,1); $titl=1;}
 if(substr($rch,-1)=='*'){$rch=substr($rch,0,-1); $bool=1;}
-$rch=str_replace("’","'",$rch); $rchb=strtolower($rch);
+$rch=str_replace("’","'",$rch); $rchb=rech_lower($rch,$low);
 if(!$days)$days=$_SESSION["nbj"];
 if($days){$sqlm='AND day > '.calc_date($days);//limit
 $dayba=time_prev($days); $dayba=$dayba?calc_date($dayba):$_SESSION["daya"];
@@ -49,7 +52,7 @@ $rte=sql('id','qda','k','nod="'.$_SESSION['qb'].'" AND frm!="_system" AND re>="1
 		if($rtp<0.5)$whc='id="'.implode('" OR id="',$rtk).'"'; 
 		else $whc='id>="'.min($rtk).'" AND id<="'.max($rtk).'"';}
 	$rq=res("id,suj",$_SESSION['qda'].' WHERE '.$wh.' AND nod="'.$_SESSION['qb'].'" '.$sqlm.'');
-	if($rq)while($data=mysql_fetch_row($rq)){$nbc=""; $suj=strtolower($data[1]);
+	if($rq)while($data=mysql_fetch_row($rq)){$nbc=""; $suj=rech_lower($data[1],$low);
 	if($cp>1){foreach($parts as $k=>$v){$n=0; 
 		$nbd[$k]=substr_count($suj,trim($v)); if($nbd[$k])$n+=1;}
 		if($n==$cp)$ret[$data[0]]+=array_sum($nbd);}
@@ -59,7 +62,7 @@ else $rq=res("id,msg",$_SESSION['qdm'].' WHERE ('.$whb.') AND ('.$whc.')');
 	if($rq)while($data=mysql_fetch_row($rq)){$nbc="";
 	if($rte[$data[0]]){
 	if(strpos($data[1],":import")!==false){$msg=format_txt($data[1],"","");}
-	else $msg=$data[1]; $msg=strtolower($msg);
+	else $msg=$data[1]; $msg=rech_lower($msg,$low);
 	if($cp>1){
 		foreach($parts as $k=>$v){$n=0; 
 			if(trim($v))$nbd[$k]=substr_count($msg,trim($v));}

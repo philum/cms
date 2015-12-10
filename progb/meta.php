@@ -1,6 +1,18 @@
 <?php
 //philum_ajax_meta
 
+//patch
+function patch_tags_art(){
+//tri_tags
+//sql($v,'qdd','v',$ib.'cat="'.$cat.'" AND val="'.$val.'"');
+}
+function patch_tags(){
+
+
+}
+
+///
+
 function utag_sav($id,$val,$msg,$cat){$msg=trim($msg);//space mean erase
 list($vrf,$msb)=sql('id,msg','qdd','r','ib="'.$id.'" AND val="'.$val.'"');
 $dat=rse('day',$_SESSION['qda'].' WHERE id="'.$id.'"');//synchrone
@@ -265,7 +277,7 @@ if($ret)utag_sav($id,$t,$ret,"tables");}
 return $t.' set as: '.$ret;}
 
 /*function tag_sav($id,$val,$msg,$cat){
-$idtag=sql('id','qdt','v','tag="'.$val.'"');
+$idtag=sql('id','qds','v','tag="'.$val.'"');
 if(!$idtag)$idtag=insert('idt','("","'.$val.'")');
 $idmeta=sql('id','qdmt','v','ida="'.$id.'" and idt="'.$idtag.'"');
 if(!$idmeta)$idmeta=insert('qdmt','("","'.$id.'","'.$idtag.'")');}*/

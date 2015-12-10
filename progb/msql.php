@@ -403,7 +403,7 @@ $d=str_replace(array('`',", ''","''"),array('',", '-'","\'"),$d);
 $rb=explode("), '",$d);//very bad
 foreach($rb as $k=>$v){
 	if(substr($v,0,6)=='INSERT')$m=1; else $m=0;
-	$v=split_only('(',$v,0,1);
+	$v=str_extract('(',$v,0,1);
 	list($key,$v)=split_right(", '",$v); //echo $key.'-'.$v.br();
 	$v=trim($v); $rd='';
 	if($m)$rc=explode(',',$v); elseif($v)$rc=explode("', '",$v); //p($rc);

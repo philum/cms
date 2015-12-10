@@ -1,4 +1,26 @@
 <?php
+//1511
+
+//app/clock	
+/*		function detectDegrees(){
+			var el=document.getElementById("needleSec");
+			var st=window.getComputedStyle(el, null);
+			var tr=st.getPropertyValue("transform");
+			var matrix=tr.substring(7,tr.length-1); //alert(matrix);
+			var trx=matrix.split(","); //alert(trx[2]);
+			var a = trx[0];
+			var b = trx[1];
+			var c = trx[2];
+			var d = trx[3];
+			var scale = Math.sqrt(a*a + b*b);
+			//arc sin, convert from radians to degrees, round
+			//DO NOT USE: see update below
+			var sin = b/scale;
+			var angleSec = Math.round(Math.asin(sin) * (180/Math.PI));
+			//console.log("Rotate: "+angleSec+"deg"); //works!
+			//document.getElementById("angleSec").innerHTML=angleSec;
+		}*/
+
 //1509
 
 //tri

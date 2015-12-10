@@ -73,7 +73,7 @@ function functions_list($view,$f){
 $_SESSION['rec']=array();
 if($view)$_GET['view']=$view;
 if($f)$_GET['func']=$f;
-$dr=split_only('/',$view,1,0);
+$dr=str_extract('/',$view,1,0);
 if(!$view)$dr='plug';
 if(substr($dr,-1)=='/')$dr=substr($dr,0,-1);
 $rep=scrut_dirb($dr); if($rep)ksort($rep);

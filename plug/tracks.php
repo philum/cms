@@ -44,7 +44,7 @@ else{$ret.=autoclic('name" id="trkname'.$gn,$use,'8','50','',1).' ';//name
 $ret.=btd('bts'.$id,$sav).' '.hlpbt('trackhelp').' ';//.hlpbt('track_orth').' ';
 $ret.=lj('" title="'.nms(65),'popup_trkpreview_txtarea_',picto('view')).' ';
 //$ret.=divedit('txtarea','track','min-height:100px; min-width:320px;','',$d?$d:$msg);
-$ret.=micro_connedit('txtarea').br().txarea('txtarea',$d?$d:$msg,52,8,'console').br();
+$ret.=micro_connedit('txtarea').br().txarea('txtarea',$d?$d:$msg,80,16,'console').br();
 return $ret.$r['html'];}
 
 function trk_publish($id,$o){req('spe,pop,art,tri');
@@ -82,7 +82,7 @@ update('qdi','msg',$v,'id',$id); return tracks_read($id,1,1);}
 
 function trk_redit($id){$msg=sql('msg','qdi','v','id='.$id);
 $ret=lj('popsav','trk'.$id.'_trkedit_trkedit_x_'.$id.'','save').btd('bts','').' ';
-$ret.=micro_connedit('trkedit').br().txarea('trkedit',$msg,80,4).br();
+$ret.=micro_connedit('trkedit').br().txarea('trkedit',$msg,80,16,'console').br();
 return $ret;}
 
 //form

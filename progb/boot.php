@@ -10,7 +10,7 @@ if($_GET['qd']){$qdb=$_GET['qd']; $bqd=rse("id",$qdb.'_user'," LIMIT 1");//maste
 	if(!$bqd && !$_POST['create_hub'] && !$_POST['create_node'])
 	$qd=$prms[0]; else $qd=$qdb;}
 $_SESSION['qd']=$qd; $_SESSION['qds']='_sys'; 
-$r=array('qda'=>'art','qdm'=>'txt','qdd'=>'data','qdu'=>'user','qdi'=>'idy','qdp'=>'ips','qdv'=>'live','qdt'=>'stat'); 
+$r=array('qda'=>'art','qdm'=>'txt','qdd'=>'data','qdu'=>'user','qdi'=>'idy','qdp'=>'ips','qdv'=>'live','qdt'=>'tags','qdta'=>'tagart');//,'qds'=>'stat'
 foreach($r as $k=>$v)$_SESSION[$k]=$qd.'_'.$v;
 $_SESSION['htacc']=$prms[1]=="yes"?1:'';
 sesr('prms','create_hub',$prms[2]=='yes'?'on':'off');

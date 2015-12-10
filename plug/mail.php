@@ -11,7 +11,7 @@ function mail_prep($id){$r=mail_mails();
 if($_SESSION['auth']<3)$r=array($_SESSION['qbin']['adminmail']=>1);
 if($r){ksort($r); foreach($r as $k=>$v){
 	$j='jumpvalue(\''.$id.'_'.addslashes($k).'\'); Close(\'popup\');';
-	$ret.=ljb('txtx',$j,'',split_only('@',$k,0,0)).' ';}
+	$ret.=ljb('txtx',$j,'',str_extract('@',$k,0,0)).' ';}
 return divc('nb_pages',$ret);}}
 
 function mail_send($id,$va,$res){

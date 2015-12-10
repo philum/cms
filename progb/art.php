@@ -452,7 +452,7 @@ if($id){$panout["id"]=$id;
 		if(is_file($f))$panout["avatar"].=image($f,48,48,ats('vertical-align:bottom;'));
 		if($re!="0" or auth(3) or $host==$ip){//$msg=format_txt($msg,'','');
 			$msg=correct_br($msg); $msg=miniconn($msg);
-			$msg=correct_txt($msg,'','sconn'); $msg=embed_p($msg);} //$msg=nl2br($msg);
+			$msg=correct_txt($msg,'','sconn'); $msg=embed_p($msg); $msg=nl2br($msg);}//
 		else $msg=divc('txtalert',helps('trackbacks'));}
 	else{$state='show'; $msg='';}
 if(auth(4) && $frm!=$qb){$j='trk'.$id.'_plug___tracks_trk*publish_'.$id;

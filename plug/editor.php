@@ -68,6 +68,7 @@ if($_POST["convent"])$ret=html_entity_decode($ret);
 if($_POST["convutf"])$ret=utf8_decode($ret);
 if($_POST["convurl"])$ret=urldecode($ret);
 if($_POST["urlencode"])$ret=urlencode($ret);
+if($_POST["ucfirst"])$reb=ucfirst(strtolower($reb));//strtoupper
 
 if($ret && !$reb){
 	//if(!strpos($ret,'<br />') && strpos($ret,"\r"))$ret=nl2br($ret);
@@ -151,6 +152,7 @@ $otab['connectors'].=checkbox("del_n","ok","del_nl",0).' ';
 $otab['connectors'].=checkbox("add_punct","ok","add_nl",0).' ';
 $otab['connectors'].=checkbox("clean_punct","ok","typo_rules",0).' ';
 $otab['connectors'].=checkbox("del_tab","ok","del_tables",0).' ';
+$otab['connectors'].=checkbox("ucfirst","ok","ucfirst",0).' ';
 //$otab['connectors'].='<label>delete:</label>'.balise("select",array(2=>"conn_to_del",5=>"txtblc"),batch_defil_kv(connectors_reference_lite(),"","vv")).' ';
 $otab['connectors'].='</div>';
 $otab['connectors'].=divc('txtsmall2','replace by:').''.txarea("repla",$_POST['repla'],15,1).' '.txarea("replb",$_POST['replb'],15,1).' '.checkbox("rec_prg","ok","preg",0);

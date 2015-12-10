@@ -98,10 +98,9 @@ else return $doc;}
 
 function place_image($doc,$media,$large,$largb,$txt='',$com=''){
 $nl=substr($_SESSION['nl'],0,2); $nla=substr($media,0,2); $p['id']='rez';
-if(substr($doc,0,4)=='http'){
-	if(!joinable($doc))return image($doc,'','',atr($p))."\n\n"; 
-	else{list($w,$h)=getimagesize($doc);
-		return image($doc,$w>$large||!$w?$large:$w,'',atr($p))."\n\n";}}
+if(substr($doc,0,4)=='http'){if(eradic_acc($doc)==$doc)$ok=joinable($doc);
+	if($ok)list($w,$h)=@getimagesize($doc);
+	if($w>$large)$w=$large; return image($doc,$w,'',atr($p))."\n\n";}
 else $pre=jcim($doc);
 $dca=$pre.$doc;
 if($nl or $nla=='nl'){$http=host().'/'; $dca=str_replace('../','',$dca);}
@@ -256,26 +255,27 @@ case(':webpage'):return lj('txtbox','popup_webpage___'.ajx($pdoc),preplink($pdoc
 case(':weburl'):return weblink($pdoc,1); break;
 case(':web'):return weblink($pdoc); break;
 case(':idart'):return id_of_suj($pdoc);break;
-case(':petition'): return plugin('petition',$id,10); break;
-case(':book'): return plugin('book',$pdoc,$id); break;
-case(':popbook'): return plugin('book',$pdoc,'x'); break;
+case(':petition'):return plugin('petition',$id,10); break;
+case(':book'):return plugin('book',$pdoc,$id); break;
+case(':popbook'):return plugin('book',$pdoc,'x'); break;
 case(':track'):return tracks_read($pdoc); break;
-//case(':eco'): return txarea('',parse($pdoc),44,8); break;
-case(':svg'): return svg($pdoc); break;
-case(':svgcode'): list($p,$o)=split_one('§',$pdoc,1); return plugin_func('svg','svg_j',$p,$o); break;
-case(':plug'): list($p,$o,$conn)=decompact_conn($pdoc); 
-	return plugin($conn,$p,$o); break;
-case(':pluf'): list($fnc,$plg)=explode('§',$pdoc); return plugin_func($plg,$fnc,''); break;
-case(':plup'): list($p,$o,$conn)=decompact_conn($pdoc); list($plg,$bt)=split_right("§",$conn,1);
+//case(':eco'):return txarea('',parse($pdoc),44,8); break;
+case(':svg'):return svg($pdoc); break;
+case(':svgcode'):list($p,$o)=split_one('§',$pdoc,1); return plugin_func('svg','svg_j',$p,$o); break;
+case(':plug'):list($p,$o,$conn)=decompact_conn($pdoc); return plugin($conn,$p,$o); break;
+case(':pluf'):list($fnc,$plg)=explode('§',$pdoc); return plugin_func($plg,$fnc,''); break;
+case(':plup'):list($p,$o,$conn)=decompact_conn($pdoc); list($plg,$bt)=split_one("§",$conn,1);
 	return lj('','popup_plupin___'.$plg.'_'.ajx($p).'_'.ajx($o),$bt?$bt:$plg); break;
-case(':apps'):return read_apps_link($pdoc);
+case(':openapp'):list($p,$o,$d)=decompact_conn($pdoc); return openapp($d,$p,$o); break;
+case(':popapp'):list($p,$o,$d)=decompact_conn($pdoc); return lj('','popup_openapp___'.$d,$d); break;
+case(':apps'): return read_apps_link($pdoc);
 case(':bubble'):return bubble_menus($pdoc,'inline');
-case(':header'): $_SESSION['headr'].=delbr($pdoc,"\n"); return; break; 
-case(':basic'): list($func,$var)=good_param($pdoc); return cbasic($func,$var); break;
-case(':bazx'): return plugin('bazx',$pdoc); break;
-case(':version'): return $_SESSION['philum']; break;
-case(':ver'): $phi=$_SESSION['philum']; return substr($phi,0,2).'.'.substr($phi,2,2); break;
-case(':picto'): @list($p,$o)=explode('§',$pdoc); return picto($p,$o); break;
+case(':header'):$_SESSION['headr'].=delbr($pdoc,"\n"); return; break; 
+case(':basic'):list($func,$var)=good_param($pdoc); return cbasic($func,$var); break;
+case(':bazx'):return plugin('bazx',$pdoc); break;
+case(':version'):return $_SESSION['philum']; break;
+case(':ver'):$phi=$_SESSION['philum']; return substr($phi,0,2).'.'.substr($phi,2,2); break;
+case(':picto'):@list($p,$o)=explode('§',$pdoc); return picto($p,$o); break;
 case(':on'):return '['.$pdoc.']'; break;}
 if($doc=='--')return hr();//hr
 if(is_image($doc) && strpos($doc,'§')===false && strpos($doc,'<')===false){//images
@@ -585,7 +585,7 @@ static $i; $i++; $here='here'.$id.$i; $d=str_replace("\n",'',$d); $ik=0;
 if(strin($o,'notcloseable'))$clb=1; if(strin($o,'closed'))$cld=1;
 $cs='nbp'; if($pop=='togup')$cld=1;
 if(strpos($d,",")!==false){$r=explode(",",$d);
-	if(!$_SESSION[$here] && !$cld)$_SESSION[$here]=split_only('§',$r[0],1,0);
+	if(!$_SESSION[$here] && !$cld)$_SESSION[$here]=str_extract('§',$r[0],1,0);
 	foreach($r as $k=>$v){$hid=strprm($v,5);
 	if($v && !$hid){
 		if($pop=='popup')$ret.=poplk($v,$here).' ';//$pop=0??
@@ -633,7 +633,7 @@ function rssin_load($f){$alx=alx();//sesmk('alx');
 $r=rssin_xml($f); if(!$r)$r=rssin_old($f); reqp('search');
 if($r)foreach($r as $k=>$v){list($suj,$lnk,$dat)=$v;
 	if(strpos($lnk,'feedproxy'))$lnk=feedproxy($lnk);
-	if(strpos($lnk,'spip.'))$lnk=strdeb($lnk,'spip.').split_only('/spip',$lnk,1,1);
+	if(strpos($lnk,'spip.'))$lnk=strdeb($lnk,'spip.').str_extract('/spip',$lnk,1,1);
 	$id=recognize_article($lnk,$suj,$alx);
 	$ret[]=array($suj,$lnk,$dat,$id);}
 return $ret;}

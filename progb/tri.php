@@ -524,7 +524,7 @@ if(strpos($d,$r['default'][0]))return $r['default'];}
 function auto_video($f,$o='',$t='',$op=''){if($t)$t='§'.$t; //$t='';
 if(strpos($f,'/')===false)return '['.$f.$t.':video]';
 $f=str_replace(array("http://","www."),'',$f); $fa=http_root($f); 
-if(strpos($f,'#'))$f=split_only('#',$f,0,0); if(strpos($f,'?'))$f=split_only('?',$f,1,1);
+if(strpos($f,'#'))$f=str_extract('#',$f,0,0); if(strpos($f,'?'))$f=str_extract('?',$f,1,1);
 $r=array('','youtube','youtu','dailymotion','vimeo','vk','livestream','google');//,'ted'
 if(in_array($fa,$r))switch($fa){
 	case('youtube'):$p=strpos($f,'v='); $f=substr($f,$p+2); $pe=strpos($f,'&');
@@ -589,7 +589,7 @@ function converthtml($ret){
 $ret=stripslashes($ret);
 $ret=pre_clean($ret);
 $ret=br_rules($ret);
-$ret=interpret_html($ret,$_POST["jump"]);
+$ret=interpret_html($ret,$_POST['jump']);
 $ret=repair_post_treat($ret);
 $ret=add_anchors($ret);
 $ret=clean_br($ret);
@@ -603,18 +603,17 @@ $img=embed_detect($d,'<meta property="og:image" content="','"');
 return array($tit,$txt,$img);}
 
 function vaccum_ses($f){$fb=nohttp($f);//if(joinable($f))
-//if(!$_SESSION['vacuum'][$fb])
-$_SESSION['vacuum'][$fb]=get_file($f);
+if(!$_SESSION['vacuum'][$fb])$_SESSION['vacuum'][$fb]=get_file($f);
 return $_SESSION['vacuum'][$fb];}
 
-function vacuum($f,$sj=''){$f=https($f); $f=http($f); $f=utmsrc($f); $reb=vaccum_ses($f); 
-if(!$reb){return array('nothing');$_SESSION['vacuum'][nohttp($f)]='';}
-if($_POST['see'])eco($reb,1);
+function vacuum($f,$sj=''){$f=https($f); $f=http($f); $f=utmsrc($f); $reb=vaccum_ses($f);
+if(!$reb){$_SESSION['vacuum'][nohttp($f)]='';return array('nothing');}
+if($_POST['see'])eco($reb,1); 
 $encoding=embed_detect(strtolower($reb),'charset=','"');
 //if(!$encoding)$encoding=mb_detect_encoding($reb);
 list($defid,$defs)=verif_defcon($f);//defcons
 if(!$defs)$defs=known_defcon($f,$reb);
-$auv=auto_video($f); 
+$auv=auto_video($f);
 if(!$defs && !$auv){add_defcon($f); return array('Title',$f,$f,'','','');}
 if(strtolower($encoding)=='utf-8' or $_POST['utf'] or $defs[5])$reb=utf8_decode_b($reb);
 if($defs[2]){if(!$defs[3])$suj=embed_detect_c($reb,$defs[2]);//suj
@@ -745,7 +744,7 @@ if($bal) return "\n".'['.$bal.$end.']'."\n";}
 function piege_utube($v){$d=trap_v_id($v,'youtube.com/v/'); if($d)return '['.$d.':video]';}
 function piege_rutube($v){$d=trap_v_id($v,'rutube.ru/'); if($d)return '['.$d.':video]';}
 function piege_daily($v){$d=trap_v_id($v,'video/'); if(!$d)$d=trap_v_id($v,'swf/');
-	$d=split_only('_',$d,0,0); if($d)return '['.$d.':video]';}
+	$d=str_extract('_',$d,0,0); if($d)return '['.$d.':video]';}
 function piege_googv($v){$d=embed_detect($v,'docid=','&');
 	if($d)return '['.$d.':video]';}
 function piege_ted($v){$d=embed_detect($v,'vu=','&'); if($d)return '['.$d.':video]';}
@@ -822,7 +821,7 @@ else{
 	else $balise='<'.correct_widths($aa_inner).'>';} break; //<'.$bb_balise.'>
 case("iframe"):
 	if(strpos($aa_inner,'youtube.com')!==false){$d=trap_v_id($aa_inner,'embed/');
-		if(!$d)$d=embed_detect($aa_inner,'/v/','&'); $balise='['.$d.':video]';}
+		if(!$d)$d=embed_detect($aa_inner,'/v/','&'); $balise=$br.$br.'['.$d.':video]';}
 	elseif(strpos($aa_inner,'dailymotion.com')!==false)$balise=piege_daily($aa_inner);
 	elseif(strpos($aa_inner,'vimeo.com')!==false){
 		$d=trap_v_id($aa_inner,'video/'); $balise='['.$d.':video]';}

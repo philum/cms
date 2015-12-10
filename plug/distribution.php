@@ -21,7 +21,7 @@ return $ret;}
 function name_of_files(){//1=_sys,2=php,3=no_php
 $dr=$_SESSION['sdir'].$_SESSION['dest']; $drb=str_replace('../','',$dr);
 //if(!is_dir($dr) && $dr){mkdir($dr);}
-$authorized=array("progb","prog","msql","plug","js","gallery","fla","gdf","bkg","css","imgb/icons","fonts");//,"avatar"
+$authorized=array("app","progb","prog","msql","plug","js","gallery","fla","gdf","bkg","css","imgb/icons","fonts");//,"avatar"
 if(!in_array($_SESSION['dest'],$authorized))return;
 if($drb=='imgb/icons' or $drb=='bkg' or $drb=='avatar')
 	$rep=scrut_files_only($dr); else $rep=scrut_dirb($dr);

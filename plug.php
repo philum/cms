@@ -6,14 +6,11 @@ error_reporting(6135);
 
 if($_SESSION['dev']=='dev' or $_SESSION['dev']=='lab')$b='b';
 if(!function_exists('p'))require('prog'.$b.'/lib.php');
-if(!$_SESSION['dayx']){req('boot'); connect();
+if(!$_SESSION['dayx']){req('boot'); connect(); $_SESSION['dayx']=time();
 	master_params('params/_'.$db,$qd,$aqb,$subd);
-	define_hubs(); define_qb(); define_config(); $dayx['dayx']=time();}
+	define_hubs(); define_qb(); define_config();}
 //require('plug/msql.php');
 //require('plug/mysql.php');
-error_report();
-
-function callib(){if(!function_exists('p'))require('progb/lib.php');}
 
 function open_plug($d,$p,$o){$_GET['plug']=1;
 if(is_file($f='plug/'.$d.'.php'))require($f); else return 'nothing';
@@ -57,9 +54,10 @@ header_add('css','/css/_admin.css');
 //header_add('css','/css/'.$nod.'.css');
 header_add('js','/progb/ajx.js');
 header_add('js','/progb/utils.js');
-header_add('jscode','cutat="'.$_SESSION['jbuffer'].'";');
+header_add('jscode','cutat="'.$_SESSION['jbuffer'].'"; flow="0";');
 header_add('jscode',$_SESSION['jscode']);
 if($d)$content=open_plug($d,$p,$o);
+//if($d)$content=Plug::open($d,$p,$o);
 //pr($_SESSION['head_r']);
 $ret=headers_r($d?$d:'plugins');
 $ret.='<body onmousemove="popslide(event)" onclick="clpop(event);" spellcheck="false" onload="'.$_SESSION['onload'].'">'."\n";

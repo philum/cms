@@ -30,7 +30,7 @@ if($nid && $USE!=$qb && $_SESSION["auth"]<6){
 	mail($_SESSION['qbin']["adminmail"],'new article: '.stripslashes($suj),'
 	'.host().'/'.$nid.',
 	auth_level: '.$_SESSION["auth"]."\n",'From: '.$USE);}
-if($_SESSION['vacuum'][$urlsrc])unset($_SESSION['vacuum'][$urlsrc]);
+if($_SESSION['vacuum'][nohttp($urlsrc)])unset($_SESSION['vacuum'][nohttp($urlsrc)]);
 if($nid){$_SESSION['rqt'][$nid]=array($pdt,stripslashes($frm),stripslashes($suj),'',$qb,'','','',$siz,$urlsrc,$ib,$re); $msg=correct_txt($msg,$nid,'savimg'); $exp_out=$nid;
 	$_GET['read']=$nid; deductions_from_read($nid,''); $_POST='';}
 $_SESSION['daya']=$_SESSION['dayx'];

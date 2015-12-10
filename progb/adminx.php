@@ -494,9 +494,9 @@ return divc('nbp',$all.$ret);}}}
 
 #console_nav
 function build_mod_subname($p,$m){
-if(strpos($p,'§'))$p=split_only('§',$p,0,1);
-if(strpos($p,'__'))$p=split_only('__',$p,0,1); 
-$p=split_only(':',$p,0,0); $p=split_only(',',$p,0,0); $p=split_only(' ',$p,0,0);
+if(strpos($p,'§'))$p=str_extract('§',$p,0,1);
+if(strpos($p,'__'))$p=str_extract('__',$p,0,1); 
+$p=str_extract(':',$p,0,0); $p=str_extract(',',$p,0,0); $p=str_extract(' ',$p,0,0);
 $mb=mimes($m,$p); return ($mb?$mb.' ':'').$m;}
 
 function console_module($k,$v,$vl){//(4411)

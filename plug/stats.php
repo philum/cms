@@ -119,7 +119,7 @@ if($c=='nbf')$ret='user: '.$n.br();
 elseif($c=='nbp')$ret='article: '.$n.br();
 $sql=stat_list_sql($c,$n); $r=sql_b($sql,'',0); //p($r);
 if($c=='nbv' or $c=='nbu' or $c=='nbf'){foreach($r as $k=>$v){
-	$id=substr(split_only('&',$v[0]),5); 
+	$id=substr(str_extract('&',$v[0]),5); 
 	if(is_numeric($id)){$suj=suj_of_id($id); //else $suj=$id;
 	$flw=lj('','popup_popart___'.$id,picto(articles));
 	$ret.=$v[1].' '.lj('txtx',$j.'nbp_'.$id,$suj).' '.$flw.br();}}}
@@ -153,15 +153,15 @@ return divb('nbp|stt',$ret);}
 function stat_daytime($d){
 return mktime(0,0,0,substr($d,2,2),substr($d,4,2),substr($d,0,2));}
 
-function stat_upd(){
-//$d=sql('day','qdt','v','qb="'.ses('qb').'" order by id desc limit 1');
+/*function stat_upd(){
+//$d=sql('day','qds','v','qb="'.ses('qb').'" order by id desc limit 1');
 //echo stat_daytime($d);
 //1
 list($r,$w,$h)=stat_boot('nbv',7,'');
 //4
 //$r=stat_datas('nbv',7);
 //p($r);
-}
+}*/
 
 //plug
 function plug_stats($c,$n,$res=''){connect();
