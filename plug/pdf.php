@@ -1,9 +1,5 @@
 <?php
 //philum_plugin_pdf 
-session_start();
-if(!function_exists('ser')){require_once("../progb/lib.php");
-require_once("sys.php");}
-//require_once('../params/_connectx.php');
 
 function make_list_arts($v){
 $der=explode("~",$v);
@@ -34,15 +30,14 @@ $sq=$_SESSION['qda'].' WHERE nod = "'.$_SESSION['qb'].'" and day < '.$dya.' and 
 $rq=res("id,frm,thm,day",$sq);
 while($data=mysql_fetch_array($rq)){
 	$dt['cat'][ajx($data['frm'],'')]+=1;
-	$tags=explode(',',ajx($data['thm'],''));
-	foreach($tags as $k=>$v){$dt['tag'][ltrim($v)]+=1;}//tri_tags($r)
+	//$tags=explode(',',ajx($data['thm'],''));
+	//foreach($tags as $k=>$v){$dt['tag'][ltrim($v)]+=1;}//tri_tags($r)
 	if($data['day']<$mind)$mind=$data['day'];
-	if($data['day']>$maxd)$maxd=$data['day'];
-	}
+	if($data['day']>$maxd)$maxd=$data['day'];}
 $ret.='from '.input2('text','" id="dyb',date('d/m/Y',$mind),$cs).' ';
 $ret.='to '.input2('text','" id="dya',date('d/m/Y',$maxd),$cs).br().br();
 if($dt['cat'])$cts=implode('|',array_keys_b($dt['cat']));
-if($dt['tag'])$tgs=implode('|',array_keys_b($dt['tag']));
+//if($dt['tag'])$tgs=implode('|',array_keys_b($dt['tag']));
 $ret.='cats: '.input2('text','" id="cts','',$cs).' ';
 $ret.=jump_btns('cts',$cts,',').br();
 $ret.='no-cats: '.input2('text','" id="nct','',$cs).' ';
@@ -66,6 +61,9 @@ function little_split($v){$unkill=explode(",",$v);
 	foreach($unkill as $su){$su=trim($su);
 	if($su && $su!=" ")$ret[$su]+=$v;}
 return $ret;}
+
+function tri_tags($r){if(is_array($r)){foreach($r as $k=>$v){$rb=tri_tag($k);
+foreach($rb as $ka=>$va)if($va)$ret[$va]+=$v;}} return $ret;}
 
 function build_call(){//echo $_GET['nom'];
 $r=array('dya','dyb','cat','nocat','tag','notag','order');
@@ -106,9 +104,9 @@ $PDF->Output();
 
 $_SESSION['call']='';
 if(!$_GET['nom']){
-$rh[]['css']='../css/_admin.css';
-$rh[]['js']='../progb/ajx.js';
-echo headers_r('build_pdf',$rh);
+Head::add('csslink','../css/_admin.css');
+Head::add('jslink','../progb/ajx.js');
+echo Head::get();
 echo arts_menus($dya,$dyb);
 echo divd('call','');
 echo divd('pdf','');}

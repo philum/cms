@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_
-session_start();
-error_reporting(6135);
 //[Panorama;7;58d1f0;raleway_thin§_.jpg:overpop]
 
 //rideau

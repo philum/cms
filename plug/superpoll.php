@@ -1,7 +1,6 @@
 <?php
 //philum_plugin_superpoll
-session_start();
-error_reporting(6135);//E_ALL/E_NOTICE/NULL/2147483647/30719/6135
+
 if(!is_dir('plug'))$jc='../';
 if(!function_exists('p'))require($jc.'progb/lib.php');
 $_SESSION['dayx']=time();
@@ -17,7 +16,7 @@ $r=msql_read('users',$nod,'');
 $rb=explode('_',$res); $nb=count($rb);
 for($i=0;$i<$nb;$i++){$rb[$i]=ajx($rb[$i],1);}
 if(spp_verif($r,$rb[0])!=true){if(count($r)==1)$r[1]=$rb; else $r[]=$rb;
-	if($rb[0])write_file('msql/users/'.$nod.'.php',dump($r,$nod));
+	if($rb[0])msql_save('',$nod,$r);
 	return btn('txtred','saved');}
 else return btn('txtred','already_exists');}
 
@@ -39,7 +38,7 @@ function spp_poll($k,$p){
 $nod=$_SESSION['sppnod'];
 $r=msql_read('users',$nod,'');
 if($p==1)$r[$k][1]+=1; else $r[$k][1]-=1;
-if($k && !spp_verifuser($k,$p))write_file('msql/users/'.$nod.'.php',dump($r,$nod));
+if($k && !spp_verifuser($k,$p))msql_save('',$nod,$r);
 return $r[$k][1];}
 
 function spp_read($k){
@@ -52,7 +51,7 @@ modif_vars('users/',$_SESSION['sppnod'],$d,'del');
 return btn('txtred',$k.' deleted');}
 
 function spp_table(){$dfb['_menus_']=array('projet','poll');
-$r=plug_motor('msql/users/',$_SESSION['sppnod'],$dfb); unset($r['_menus_']); //p($r);
+$r=read_vars('msql/users/',$_SESSION['sppnod'],$dfb); unset($r['_menus_']); //p($r);
 if($r){$ra=array_keys_r($r,1); arsort($ra);
 foreach($ra as $k=>$v){
 $bt=ljb('txtbox','SaveJb','ob'.$k.'_plug___superpoll_spp*poll_'.$k.'_0\',\'res_plug___superpoll_spp*table','-').' ';

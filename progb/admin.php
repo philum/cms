@@ -134,7 +134,7 @@ if($type=='template'){$re['structure']=correct_txt($d,'','clpreview');
 else{$re['core']=divd('crv',core_view('',''));}
 $re['connectors']=divd('cnv',conn_view('',''));
 $ret=make_tabs($re,'cdl');
-return div('class="imgr" style="width:300px; padding:10px;"',$ret);}
+return div(atc('imgr').ats('width:300px; padding:10px;'),$ret);}
 
 //variables
 function clview_vars(){$r=template_vars();
@@ -419,7 +419,7 @@ function adm_admin($adm,$va){
 $st=$_SESSION['admin']?$_SESSION['admin']:'=';
 return iframe('index.php?admin='.($adm?$adm:$st).'§680/500');}
 
-function adm_console($d){require('adminx.php');
+function adm_console($d){req('adminx');
 if($d && !is_numeric($d) && auth(6))return divd('modules'.$d,console_block($d,1));
 $ret.=see_conds_b();//conditions
 $ret.=select_mods_m();//mods
@@ -478,7 +478,7 @@ if($auth>=6){$ret.=lkc('txtyl',$goto.'&kill_hub==',nms(76).' '.nms(100)).' ';
 	if($_GET['kill_hub']=='=')$ret.=btn('txtx','All datas will be lost').lkc('txtyl',$goto.'&kill_hub=ok','ok');}
 return $ret.br();}
 
-function adm_nodes($auth,$goto){require('params/_connectx.php');
+function adm_nodes($auth,$goto){connect();
 $valu=autoclic('qd','node','15','255','').' ';
 $valu.=submitj('txtbox','create_node','create_node');
 $ret.=form($goto.'&node=install" id="create_node',btn('panel',$valu)).br();
@@ -506,7 +506,7 @@ function adm_edit_plug(){}
 function update_ok(){$ret.=lkc('popbt','/?id==',helps('update_ok')).' ';
 if($_SESSION['dlnb'])$ret.='('.$_SESSION['dlnb'].' '.nms(52).')'.br().br();
 $upd=helps('update_ok_alert'); if($upd)$ret.=divc('alert',ico('alert').' '.$upd).br();
-$patch='150521';//
+$patch='160101';
 if($patch){$pok=msql_read('server','program_patches',$patch);
 	if($pok==0)$ret.=lkc('popdel','/admin/update','patch!').br();}
 $ret.=adm_update_notes($_SESSION['philum']); $_SESSION['dlnb']='';
@@ -519,7 +519,7 @@ $r=msql_read('system','program_updates_'.$updm,'',1);
 $phi=$phi?substr($phi,2):substr(2,$updm).'01';
 $ret=btn('txtcadr',nms(81)).' '.msqlink('system','program_updates_'.$updm).br().br();
 if($r){krsort($r); foreach($r as $k=>$v){if($v[0]>=$phi-1){$rn[]=1;
-	$ret.=divc('',nl2br(stripslashes($v[0]."\n".$v[1]))).br();}}}//format_txt(,'','')
+	$ret.=divc('',nl2br(stripslashes($v[0]."\n".$v[1]))).br();}}}
 return $n?$ret:scroll($rn,$ret,4,'',200);}
 
 function adm_update(){$goto='/?admin=update';
@@ -543,13 +543,15 @@ $uret.=btn('nbp',slct_menus(array('/','prog','progb','msql','plug','js','gallery
 $uret.=lkc('txtbox',$goto.'&update=all',picto('update').' '.$_SESSION['dest']).' ';
 if($_SESSION['dest']=='fonts'){$uret.=hlpbt('updfonts').' '.lkc('txtbox',$goto.'&update=del','del_obsoletes');}
 $uret.=br().br();
-$patch='150521';//patches//set update_ok//150521
+$patch='160101';//patches//set update_ok//150521
 if($patch){$pok=msql_read('server','program_patches',$patch);
 	$ptch=msql_read('system','program_patches',$patch);
 	if($pok==0 or $_GET['force']){
 		if($_GET['patch']){$uret.=plugin('patchs',$ptch['function']);
-			$rk=array(1); modif_vars('server','program_patches',$rk,$patch);}
-		else $uret.=divc('txtalert',lkc('txtyl',$goto.'&patch==',stripslashes($ptch['function'])).' '.$ptch['explics']).br();}}
+			if($uret)modif_vars('server','program_patches',array(1),$patch);}
+		else $uret.=divc('txtalert',lkc('txtyl',$goto.'&patch==',stripslashes($ptch['function'])).' '.$ptch['explics']).br();}
+	else $uret.=divc('txtalert',lkc('txtyl',$goto.'&patch==&force==','force patch')).br();
+	}
 //files
 $uret.=$plug_output;
 return $uret;}
@@ -564,7 +566,7 @@ msq_copy('users',$nd.prmb(1),'users',$nd.$d);
 echo btn('txtyl','_mods_'.$d.' created from _mods_'.prmb(1));}}
 
 function adm_params($curauth,$rep){$auth=ses('auth'); $goto='/?admin=params'; $qb=ses('qb');
-req('boot,adminx'); require('params/_connectx.php');//$db
+req('boot,adminx'); connect();//$db
 if($auth>6 && $_GET['m_cnfg']=='='){$mcfg='&m_cnfg=='; $f='params/_'.$db.'_config.txt';
 	if(is_file($f))$prms=explode('#',read_file($f));
 	$arr=msql_read_prep('system','admin_config'); $hl='lang_admin*config_';}	
@@ -582,12 +584,16 @@ if($_GET['params']=='save' && $auth>=$curauth){
 	else{$_SESSION['prmb']=$prms; update('qdu','config',$vaue,'name',$qb);}}
 $sty='" style="width:200px;';//read
 foreach($arr as $t=>$ak){foreach($ak as $i=>$v){if($i!=22){
-	if($valmax<$i)$valmax=$i;
-	if($i==11 && !$_GET['m_cnfg'])$r[$t].=menuder_form_kv(affect_auth($auth),'pms'.$i.$sty,$prms[$i],'kv');
+	if($valmax<$i)$valmax=$i; $attr=array('name'=>'pms'.$i,'style'=>'width:200px;');
+	if($i==11 && !$_GET['m_cnfg'])
+		//$r[$t].=menuder_form_kv(affect_auth($auth),'pms'.$i.$sty,$prms[$i],'kv');
+		$r[$t].=select($attr,affect_auth($auth),'kv',$prms[$i]);
 	//elseif($i==5)$r[$t].=menuder_form_kv($gdfonts,'pms'.$i.$sty,$prms[$i],'vv');
 	elseif($i==25){$lc='msql/lang/'; $dirs=explore($lc,'dirs',1); 
 		$dirs=str_replace($lc,'',$dirs); 
-		$r[$t].=menuder_form_kv($dirs,'pms'.$i.$sty,$prms[$i],'vv').' ';}
+		//$r[$t].=menuder_form_kv($dirs,'pms'.$i.$sty,$prms[$i],'vv').' ';
+		$r[$t].=select($attr,$dirs,'vv',$prms[$i]);
+		}
 	elseif($i==21)$r[$t].=txarea('pms'.$i,$prms[$i],31,5).' ';
 	else $r[$t].=input2('text" size="34','pms'.$i,$prms[$i],'').' ';
 	$r[$t].=btn('txtblc',$v).' '.btn('txtsmall2',bubble('grey','popmsqt',$hl.$i,$i)).br();}}}
@@ -677,7 +683,8 @@ relod($goto);}
 if($mmbrs){//readusers
 	foreach($mmbrs as $k=>$v){
 		if($k!=$USE && $v<=$auth){//$v=authlevel(nb)
-			$rc[$k]=menuder_form_kv($arr,$k,$v,'kv');
+			//$rc[$k]=menuder_form_kv($arr,$k,$v,'kv');
+			$rc[$k]=select(atn($k),$arr,'kv',$v);
 			$rc[$k].=' '.checkbox('del'.$k,$k,'delete','').br();}
 		elseif($k==$USE)$rc[$k]=btn('txtx',$k.' :: auth_level: '.$v).br();}
 	if($rc)$inp=on2cols($rc,470,5);
@@ -688,7 +695,8 @@ if($_GET['adduser']=='='){//show_list
 	$uss=sql('name','qdu','k',''); $mmbrs[$qb]=$auth;
 	$usrs=array_combine_sub($uss,$mmbrs);
 	if($usrs){
-		$inp=menuder_form_kv($usrs,'addu',$v,'kk').menuder_form_kv($arr,'adlv',$v,'kv');
+		//$inp=menuder_form_kv($usrs,'addu',$v,'kk').menuder_form_kv($arr,'adlv',$v,'kv');
+		$inp=select(atn('addu'),$usrs,'kk',$v).select(atn('adlv'),$arr,'kv',$v);
 		$inp.=input2('submit','Submit','Apply','');
 		$ret.=form($goto,$inp);}
 	if($auth>4){
@@ -696,7 +704,8 @@ if($_GET['adduser']=='='){//show_list
 	$inp=input2('text','newuser','newuser'.$cls,'').' ';
 	$inp.=input2('text','pass','password'.$cls,'').' ';
 	$inp.=input2('text','mail','mail'.$cls,'').' ';
-	$inp.=menuder_form_kv($arr,'adlv',$v,'kv').' ';
+	//$inp.=menuder_form_kv($arr,'adlv',$v,'kv').' ';
+	$inp.=select(atn('adlv'),$arr,'kv',$v);
 	$valu=$inp.' '.input2('submit','Submit','add_user','');
 	$ret.=br().form($goto.'&adduser==',$valu);}}
 return $ret;}
@@ -737,7 +746,7 @@ return $ret;}
 
 function admin_art_edit($id){
 $msg=sql('msg','qdm','v','id='.$id);
-$ath=data_val('msg',$id,'options','authlevel');
+$ath=data_val('msg',$id,'authlevel');
 if($ath>$_SESSION['auth'])return popup('article '.$id,nms(55));
 //$msg=str_replace('['.ses('qb').'/','['.host().'/users/'.ses('qb').'/',$msg);
 //$msg=str_replace('['.ses('qb'),'['.host().'/img/'.ses('qb'),$msg);
@@ -952,7 +961,7 @@ case('templates'):$ret=data_brain('template'); break;
 case('plugin'):$ret=adm_plugin(); break;
 case('msql'):$ret=adm_msql(); break;
 case('dev'):$ret=plugin('dev','',''); break;
-case('tools'):$ret=plugin('tools','',''); break;
+case('editags'):req('meta'); $ret=admin_tags(get('set')); break;
 case('finder'):$ret=call_finder($qb,'disk'); break;
 case('backup'):$ret=adm_backup($qb,$auth,$goto,$rep); break;
 case('update_notes'):$ret.=adm_update_notes('',1); break;

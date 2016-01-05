@@ -1,8 +1,6 @@
 <?php
 //philum_plugin_indent
-session_start();
 
-//
 function countchars_b($v){
 foreach(count_chars($v,1) as $i=>$val){$res+=$val;} //chr($i)
 return $res;}

@@ -40,7 +40,7 @@ function script_for_flash_b($movie,$sizh,$sizl,$fvar){return "
 function plug_player(){
 $movie='../fla/rss.swf';
 //$js=script_for_flash_b($movie,"100%","100%",$fvar);
-//header_add('jscode',$js);
+//Head::add('jscode',$js);
 $clr=$_SESSION['clr'][$_SESSION['prmd']];
 $clr=msql_read('design',$_SESSION["qb"].'_clrset_1','');
 if(!$clr)$clr=msql_read('system','default_clr',''); //p($clr);

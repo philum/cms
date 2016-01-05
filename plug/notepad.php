@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_notepad
-session_start();
 
 function np_j($id){return 'mem_storage(\''.$id.'_m'.$d.'_1_1\')';}
 

@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_
-session_start();
-error_reporting(6135);
 
 //pop/maker_mini_c
 function plug_rollovertopop($doc,$t){

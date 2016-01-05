@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_htaccess
-session_start();
-error_reporting(6135);
-//if(!function_exists('p'))require('prog/lib.php');
 
 function htaccess_update(){
 $txt=msql_read('system','default_htaccess',1);

@@ -2,8 +2,7 @@
 //philum_microsql_helps_txts
 $r["_menus_"]=array('description');
 $r["philum_pub_txt"]=array('[[http://philum.net/236§[phi1§32::picto]:popart] [v[:ver]§txtsmall2:css] [http://philum.net§[logo:picto]]:center]');
-$r["update_ok_alert"]=array('Derniers correctifs critiques :
-1506 : reset global de tous les fichiers');
+$r["update_ok_alert"]=array('');
 $r["conn_help_txt"]=array('Les connecteurs remplacent le code html par des fonctions interrogeables avec une séquence de variables, du type de celles-ci :
 
 Connecteurs de mise en forme :
@@ -341,5 +340,7 @@ $r["first_user"]=array('Créer le compte Admin');
 $r["new_user"]=array('Création de compte');
 $r["meta_lang"]=array('ID des versions dans une autre langue. Le menu définit la langue de l\'article.');
 $r["tracks_moderation"]=array('les commentaires sont modérés');
+$r["twitter_oAuth"]=array('Paramètres d\'authentification de l\'API twitter 1.1 (https://apps.twitter.com/)');
+$r["tag_rename"]=array('Renommer un tag va, s\'il existe déjà, le détruire et associer les articles à au tag existant');
 
 ?>

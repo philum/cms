@@ -7,7 +7,7 @@ return $k;}
 
 //array('date','cat','title','img','hub','tag','lu','author','lenght','url','ib','re'); 
 function matrix_rq(){return ses('rqt'); 
-connect(); req('art,boot,spe'); $_GET['dig']=30; //$r=sql_b($sql,'');
+req('art,boot,spe'); $_GET['dig']=30; //$r=sql_b($sql,'');
 list($slct,$in,$wh,$ord)=play_req(' and re>0');
 $sq=sqlmk($slct,'qda',$in,$wh,$ord); $rq=$req=mysql_query($sq);
 $ret=tri_cache($rq); if($rq)mysql_free_result($rq); return $ret;}

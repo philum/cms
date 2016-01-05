@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_msqm
-connect();
 define('db',$db);
 
 function mq_edit($p,$o,$res=''){list($p,$o)=ajxp($res,$p,$o);

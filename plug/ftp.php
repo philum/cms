@@ -33,7 +33,7 @@ if($r)foreach($r as $k=>$v){$f=$v[2]; $t=$v[3];
 return make_divtable($rb);}
 
 function ftp_j($p,$o,$res=''){list($p,$o)=ajxp($res,$p,$o); //$p='/'.$p;
-sesv('pp',$p);
+if($p)ses('pp',$p);
 $r=explore($p,'',1);//pr($r);
 if($r)foreach($r as $k=>$v)//p,v,f,t
 	$rb[$k]=array($p,$v,$p.'/'.$v,strdeb($v,'.'));
@@ -45,7 +45,7 @@ return $ret;}*/
 
 //plugin('ftp',$p,$o)
 function plug_ftp($p,$o){$rid='plg'.randid(); 
-$p=sesv('pp',$p);
+if($p)ses('pp',$p);
 //$ret=menuderj_prep('backup|progb|plug','inp',$p,1);
 $ret=select_jb('inp','progb|plug',$p,1,'');
 $j=$rid.'_plug__2_ftp_ftp*j___inp';

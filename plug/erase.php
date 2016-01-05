@@ -1,13 +1,5 @@
 <?php
-//philum_plugin_download 
-//erase files impossible to erase from ftp cause permissions
-session_start();
-//ini_set('display_errors','1');
-//error_reporting(6135);//E_ALL//
-//require("../progb/lib.php");
-
-$del=$_GET['del'];
-$dir=$_GET['dir'];
+//philum_plugin_erase
 
 function funcb($j,$k,$v,$n){echo $j.'/'.$v.'_'.$k.br();}
 //need refresh for each depth
@@ -31,9 +23,7 @@ echo $del.'-'.$dir.'-';
 //rmdir($dir);
 //chmod($dir,0777);
 if($del)return $del;
-if($dir)return $dir;}
-
-echo lkc('','/plug/erase.php?del=','del file');
-if($_GET['del'] or $_GET['dir'])echo plug_erase($_GET['del'],$_GET['dir']);
+if($dir)return $dir;
+return lkc('','/plug/erase.php?del=','del file');}
 
 ?>

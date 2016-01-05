@@ -16,10 +16,10 @@
 'adios_mail'=>'clic this link to confirm unsubscribe');*/
 
 function ml_ra(){$defsb['_menus_']=array('name','re','date','ip','id');
-return plug_motor('msql/users/',$_SESSION['qb'].'_mails',$defsb);}
+return read_vars('msql/users/',$_SESSION['qb'].'_mails',$defsb);}
 function ml_rb(){return msql_read('',$_SESSION['qb'].'_mails','',1);}
 function ml_rm($r,$d){modif_vars('users',$_SESSION['qb'].'_mails',$r,$d);}
-function ml_rs($r){write_file('msql/users/'.$_SESSION['qb'].'_mails.php',dump($r,$_SESSION['qb'].'_mails'));}
+function ml_rs($r){msql_save('',$_SESSION['qb'].'_mails',$r);}
 function mailvoc(){return msql_read('lang','helps_newsletter','');}
 
 /*function mailist_upgrade($p){//patch

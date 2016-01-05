@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_newsletter
-session_start();
-error_reporting(6135);
 
 function nl_mklist(){$dpl=$_POST['dpl']; 
 $dpl=str_replace(array("\n","\r"),",",$dpl); $r=explode(',',trim($dpl));

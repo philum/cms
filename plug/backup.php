@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_backup
-session_start();
-error_reporting(6135);
-ini_set('display_errors','1');
 if(!auth(6))exit;
 
 function backup_restore($d){//import
@@ -20,7 +17,7 @@ $d='mysqldump -u'.$user.' -h'.$host.' -p'.$pasw.' '.$base.' > '.$f;
 //$d='mysqldump -u '.$user.' -p '.$pasw.' -h '.$host.' --opt '.$base.' > '.$f;
 if(!is_file($f))exc($d);
 if(is_file($f))if($o)exc('gzip -r '.$f);//gzip
-$ret=lkc('',substr($f,10).'.gz',$p);
+$ret=lkc('',$f.'.gz',$p);//substr(,10)
 return $ret;}
 
 ?>

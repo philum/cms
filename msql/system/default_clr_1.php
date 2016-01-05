@@ -8,5 +8,6 @@ $r[5]=array('bd0000');
 $r[6]=array('eeeeee');
 $r[7]=array('000000');
 $r[8]=array('424242');
+$r[9]=array();
 
 ?>

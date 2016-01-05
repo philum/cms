@@ -38,11 +38,12 @@ $ret=div('id="sdjv'.$a.'" style="margin-left:0px;"',$ret);
 $ret=div('style="overflow:hidden; width:'.($w).'px; height:75px;"',$ret);
 return $ret;}
 
-function sliderJ_javs($f,$a){$_SESSION['headr'].=js_code('
+function sliderJ_javs($f,$a){
+Head::add('jscode','
 function sliderjnav_'.$a.'(v,i){
 	SaveJ("sdj"+'.$a.'+"_plug___sliderJ_sliderJ*img_'.ajx($f,"").'_"+i+"-'.$a.'");
 	var curv=Number(document.getElementById("sdjv"+"'.$a.'").style.marginLeft.replace("px",""));
-	Timer("slide","sdjv"+"'.$a.'",curv,v,2);}');}
+	Timer("slide","sdjv"+"'.$a.'",curv,v,2);}';}
 
 function sliderJ_nav($n,$na,$nb,$f){
 $j='sdj'.$na.'_plug__2_sliderJ_sliderJ*img_'.ajx($f,'').'_';

@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_smsreader
-session_start();
-error_reporting(6135);
 
 /*<Root
 <Item>

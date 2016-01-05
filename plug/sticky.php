@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_sticky
-session_start();
 
 function popup_stick($d){
 return div('id="popu" style="width:320px; background-color:#ffd500; color:#000; padding:4px;"',$d);}

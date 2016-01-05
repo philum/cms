@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_txt
-session_start();
 
 function txt_log(){return $_SESSION['auth']>6?$_SESSION['qb']:$_SESSION['USE'];}
 
@@ -19,14 +18,14 @@ $ret.=ljb('" title="copy" id="cka1','mem_storage','_m1___cka0',picto('copy')).' 
 $ret.=ljb('" title="paste" id="ckb1','mem_storage','_m1_1__ckb0',picto('paste'));
 return btn('nbp',$ret).' ';}
 
-function stx_files($nd,$tx){$r=msq_select('',$nd,'txt'); if($r)asort($r);
+function stx_files($nd,$tx){$r=msq_choose('',$nd,'txt'); if($r)asort($r);
 $ret=lj('txtbox','pop_plup___txt_stx*files_'.$nd.'_'.$tx,picto('reload')).br();
 if($r)foreach($r as $k=>$i){$rb=msql_read('',$nd.'_txt_'.$i,'1');
 	if($rb)$ret.=$i.': '.ljb($cs,'notepad_open',$nd.'_txt_'.$i.'_'.$tx,$rb[0]).br();}
 return divc('nbp',$ret);}
 
 function stx_btn($d,$nd,$tx){//version,node,
-$r=msq_select('',$nd,'txt'); $nxt=msq_find_next($r); $tt='txtbox" title="';
+$r=msq_choose('',$nd,'txt'); $nxt=msq_find_next($r); $tt='txtbox" title="';
 if($d){$ret.=btd('bck','').' '; $tar='tit|txtarea';
 	$ret.=btd('bts',lj('popbt','bck_plug__xd_txt_txt*j_'.$d.'__'.$tar,nms(27))).' ';
 	$ret.=ljb('txtx','notepad_open',$nd.'_txt_'.$d.'_'.$tx,$d).' ';//reload

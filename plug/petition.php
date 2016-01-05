@@ -57,7 +57,7 @@ $keys=explode(',',pet_hlp('entries').',host,valid');
 $defsb['_menus_']=array('name','mail','web','city','country','host','valid');
 if(auth(6))$msq=msqlink('',ses('qb').'_petition_'.$id);
 $nod=$_SESSION['qb'].'_petition_'.$id;
-$r=plug_motor('msql/users/',$nod,$defsb);
+$r=read_vars('msql/users/',$nod,$defsb);
 $ret=lj('txtbox','popup_plup___petition_pet*form_'.$id,pet_hlp('sign')).$msq.br();
 if($_GET['confirm']){$ret.=pet_confirm($r,$nod,$id); $r=msql_read('users',$nod);}
 if($r)$ret.=divd('pet'.$id,pet_read($r,$p,$page));

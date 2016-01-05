@@ -1,7 +1,7 @@
 <?php
 //philum_microsql_default_clr_2
-$r[1]=array('ededed');
-$r[2]=array('eeeeee');
+$r[1]=array('dedede');
+$r[2]=array('ededed');
 $r[3]=array('ffffff');
 $r[4]=array('777777');
 $r[5]=array('870087');

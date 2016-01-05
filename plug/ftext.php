@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_stext
-session_start();
 
 function stext_log(){return $_SESSION['auth']>6?$_SESSION['qb']:'public';}
 

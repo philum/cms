@@ -2,7 +2,7 @@
 session_start();
 error_reporting(-1);
 ini_set('display_errors',1);
-callib();
+if(!function_exists('p'))require('progb/lib.php');//
 $_SESSION['uproot']='../users/'.ses('qb').'/downloads';//destination folder
 
 function fsize_b($d){$u=array('B','KB','MB');

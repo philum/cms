@@ -3,7 +3,7 @@
 
 #master_config//(3)
 function master_config($div,$va,$cond,$res){
-require('boot.php'); $r=ajxr(substr($res,1));
+req('boot'); $r=ajxr(substr($res,1));
 $r[4]=substr($r[4],0,1)!='-'?$r[4]:''; $r[5]=$r[5]!='-'?$r[5]:''; 
 $r[9]=$r[9]!='-'?$r[9]:'';//4cond 5com 6opt 9tmpl
 if($r[1]=='blocks')$r[2]=str_replace(array('page','popup'),'bloc',$r[2]);//forbidden_blocks
@@ -71,7 +71,9 @@ $ret=btn('txtcadr','command-line').' ';
 $rb=msql_read('system','admin_modules','',1); 
 foreach($rb as $k=>$v){if($v[0]!='system')$ra[$k]=$k;}
 $ret.=btn('txtsmall2','module: ');
-$ret.=balise("select",array(3=>'sdx',5=>"",15=>sj('moded_medit_sdx__'.$o.'__'.$id)),batch_defil($ra));
+//$ret.=balise("select",array(3=>'sdx',5=>"",15=>sj('moded_medit_sdx__'.$o.'__'.$id)),batch_defil($ra));
+//$ret.=balise('select',atd('sdx').atd('onchange',sj('moded_medit_sdx__'.$o.'__'.$id))),batch_defil($ra));
+$ret.=select(array('id'=>'sdx','onchange'=>sj('moded_medit_sdx__'.$o.'__'.$id)),$ra,'kk');
 $ret.=divd('moded','');
 return $ret;}
 
@@ -180,11 +182,11 @@ return adm_apps($id,$ob,'');}
 
 //modpos
 function mod_pos($ka,$vl){$r=define_modc_b($vl);
-	foreach($r as $k=>$v){$t=build_mod_subname($v[1],$v[0]);
+	foreach($r as $k=>$v){$t=build_mod_subname($v);
 	if($k==$ka)$ret.=lj('active','',$t).br();
 	else $ret.=lj('','modules'.$vl.'_submds__x_'.$ka.'_'.$vl.'_mps_'.$k,$t).br();}
 	return popup('position',divc('nbp',$ret),240);}
-function mod_mps($ka,$vl,$va){if($ka==$va)return; require('boot.php');
+function mod_mps($ka,$vl,$va){if($ka==$va)return; req('boot');
 	$r=msql_read('users',$_SESSION['modsnod']); $ra=msq_move($r,$ka,$va);
 	msql_modif('users',$_SESSION['modsnod'],$ra,'','add','mdf'); 
 	define_mods(''); define_condition(); return console_block($vl);}
@@ -304,9 +306,10 @@ function submod_pop(){return popup('Apps',adm_apps('',''),460);}
 //function artmod_edit_j($d){return popup('',artmod_edit($d));}
 function artmod_edit_t($a,$b,$d){$r=ajxr($d); return $r[0].'&'.$r[1].'='.$r[2];}
 function artmod_edit_l($a,$b,$d){$d=ajx($d,1);
-$r=array('-'=>'','id'=>'1234','cat'=>'cat1|cat2','nocat'=>'cat','tag'=>1,'notag'=>1,'nbdays'=>'30-60','nbhours'=>'12','from'=>'01-01-12','until'=>'01-12-12','lasts'=>'0-10','preview'=>'true/false/full/auto','priority'=>'0-4','nopriority'=>'0-4','lenght'=>'<4000','orderby'=>'day desc','list'=>'id1|id2');
-$rb=array(3=>'sdx',5=>"",15=>sj('amc_call___adminx_artmod*edit*l_'.$a.'__sdx'));
-$ret.=balise("select",$rb,batch_defil_kv($r,$d,'kk'));
+$r=array('-'=>'','id'=>'1234','cat'=>'cat1|cat2','nocat'=>'cat','tag'=>1,'notag'=>1,'nbdays'=>'30-60','nbhours'=>'12','from'=>'01-01-12','until'=>'01-12-12','lasts'=>'0-10','preview'=>'true/false/full/auto','priority'=>'0-4','nopriority'=>'0-4','lenght'=>'<4000','orderby'=>'day desc','list'=>'id1|id2'); $sj=sj('amc_call___adminx_artmod*edit*l_'.$a.'__sdx');
+//$rb=array('id'=>'sdx','onchange'=>$sj);
+//$ret.=balise("select",$rb,batch_defil_kv($r,$d,'kk'));
+$ret.=select(atd('sdx').atb('onchange',$sj),$r,'kk',$d);
 if($d){$ret.=hidden('','amca',$d).input(1,'amcb',$r[$d],'');
 $ret.=ljc('popbt',$a,'adminx_artmod*edit*t___'.$a.'|amca|amcb','add',4);
 $ret.=' '.hlpbt('call_arts');}
@@ -353,17 +356,12 @@ if($mod=="submenus"){require_once('spe.php'); $rc["edit"]=menus_h($mnb);
 	if($option)$param=menu_h_g($option);}
 if($mod=="Banner") $rc["edit"]=lkc("popbt",'/admin/banner','edit_banner');
 elseif($mod=="user_menu")$rc["edit"]=jump_btns($rvs['mp'],spelinks(),' ');
-elseif($mod=="app_menu"){//$rd=msql_read_prep('system','default_apps_menu');
-	//jump_btns($rvs['mp'],array_keys($rd),' ');
-	$rc["edit"]=btn('console','button/type/process/param/option/condition/root/icon/hide/private§display[,]');}
+elseif($mod=="app_menu"){$rc["edit"]=btn('console','button/type/process/param/option/condition/root/icon/hide/private§display[,]');}
 elseif($mod=='link' or $mod=="url"){$arr=explode('|',spelinks());
-	if($_SESSION['line'])$arr+=array_flip($_SESSION['line']); $rc["edit"]=balise("select",array(3=>'mps',15=>'jumpslct(\''.$rvs['mp'].'\',this)',16=>"width:90px;"),batch_defil_kv($arr,'','vv'));}
+	if($_SESSION['line'])$arr+=array_flip($_SESSION['line']);
+	$rc["edit"]=select(array('id'=>'mps','onchange'=>'jumpslct(\''.$rvs['mp'].'\',this)','style'=>"width:90px;"),$arr,'vv');}
 elseif($mod=='template'){$ra=msql_read('',ses('qb').'_template','',1); 
 	if($ra){$rb=array_keys_r($ra,1,'k'); $rc["edit"]=jump_btns($rvs['mp'],$rb,'');}}
-elseif($mod=='tag_arts' && is_array($_SESSION['interm']))
-	$rc["edit"]=jump_btns($rvs['mp'],array_keys($_SESSION['interm']),'');
-elseif($mod=='usertags' && prmb(18))
-	$rc["edit"]=jump_btns($rvs['mp'],str_replace(' ','|',prmb(18)),'');
 elseif($mod=='msql_links')$rc["edit"]=jump_btns($rvs['mp'],'links|rssurl|deploy','');
 elseif($mod=='connector'){req('art'); $rc["edit"]=conn_edit();
 	$rc["edit"].=txarea('txtarea',$param,50,5,'txtnoir" onkeyup="transvalue(\''.$rvs['mp'].'\')" onclick="transvalue(\''.$rvs['mp'].'\')"; onblur="transvalue(\''.$rvs['mp'].'\');');}
@@ -381,7 +379,7 @@ else $form.=hidden('',$rvs['mp'],'');
 if($mod=='desktop'){$rc["edit"]=$phlp; $rc["param"].=' '.hlpbt('desklr');}//dskbk_slct().
 elseif($rc["param"] && $mod!='apps' && $phlp)$rc["param"].=' '.$phlp;
 //title
-if($prm!='1' && $arb["title"]=='')$rc["title"]=input(1,$rvs['mt'].'" size="42'.$sty,$rm['title'],""); else $form.=hidden('',$rvs['mt'],'');
+if($prm!='1' && !$arb["title"])$rc["title"]=input(1,$rvs['mt'].'" size="42'.$sty,$rm['title'],""); else $form.=hidden('',$rvs['mt'],'');
 //bloc
 if($bloc!='system' && $bloc!='newsletter' && $bloc!='gsm'){
 $rc["bloc"]=select_j($rvs['mb'],'system '.prma('blocks'),$bloc,1,$bloc,0);}
@@ -441,13 +439,16 @@ $re=prep_cond_mods($vl);
 list($defb,$defc,$defd)=whose_mods($re,$vl,$defs);
 $def=array_merge($defc,$defd);
 $ret.=btn("txtsmall",'module:'); ksort($def); 
-$ret.=menuder_form_kv($def,'bar" id="modbar',"","kk").' ';//defc
+//$ret.=menuder_form_kv($def,'bar" id="modbar',"","kk").' ';//defc
+$ret.=select(atn('bar').atd('modbar'),$def,'kk');
 $ret.=btn("txtsmall",'condition:');
 $here=$_SESSION['cond'][0];
-$ret.=menuder_form_kv(array('-','home','cat','art'),'pos" id="modcond',$here,"vv").' ';
+//$ret.=menuder_form_kv(array('-','home','cat','art'),'pos" id="modcond',$here,"vv").' ';
+$ret.=select(atn('pos'),array('-','home','cat','art'),'vv',$here);
 $ret.=btn("txtsmall",'position:');
-if(!is_array($re))$re=array("-"=>array("-")); end($re); $here=current($re);//select last
-$ret.=menuder_form_kv($re,'pos" id="modpos',$here,"vk").' ';
+if(!is_array($re))$re=array("-"=>"-"); end($re); $here=current($re);//select last
+//$ret.=menuder_form_kv($re,'pos" id="modpos',$here,"vk").' ';
+$ret.=select(atn('pos').atd('modpos'),array_flip($re),'kv',$here).' ';//
 $ret.=ljb('popsav','SaveR','modules_'.$vl.'__add\',\'modpos|modbar|modcond',nms(92)).br();
 $ret.='</form>'.br();
 $ret.=divc('imgr',hlpbt('modules'));
@@ -493,20 +494,22 @@ if($ret){$all=ljb($cnd[0]?'':'active','SaveBb','modules_'.$vl.'__all',nms(100));
 return divc('nbp',$all.$ret);}}}
 
 #console_nav
-function build_mod_subname($p,$m){
-if(strpos($p,'§'))$p=split_only('§',$p,0,1);
-if(strpos($p,'__'))$p=split_only('__',$p,0,1); 
-$p=split_only(':',$p,0,0); $p=split_only(',',$p,0,0); $p=split_only(' ',$p,0,0);
-$mb=mimes($m,$p); return ($mb?$mb.' ':'').$m;}
+function build_mod_subname($v){
+list($m,$p,$t,$c,$e,$g,$ch,$h)=$v;
+$t=str_extract(':',$t,0,0);
+if(strpos($p,'§'))$p=str_extract('§',$p,0,1);
+if(strpos($p,'__'))$p=str_extract('__',$p,0,1); 
+$p=str_extract(':',$p,0,0); $p=str_extract(',',$p,0,0); $p=str_extract(' ',$p,0,0);
+$mb=mimes($m,$t?$t:$p); return ($mb?$mb.' ':'').$m;}
 
 function console_module($k,$v,$vl){//(4411)
 list($m,$p,$t,$c,$e,$g,$ch,$h)=$v; $cnd=$_SESSION['cond'];
-if($k){$ret.=lj('','popup_submds___'.$k.'_'.$vl.'_mpos',picto('kright'));
+if($k){$ret=lj('','popup_submds___'.$k.'_'.$vl.'_mpos',picto('kright'));
 if(($c==$cnd[0] && !$cnd[1]) or ($c && $c==$cnd[1]))$css='popw'; 
 else $css='popbt'; if($h)$css.=' hide';
 $css.='" title="'.stripslashes(is_array($p)?implode(' ',$p):$p);
 //if($m=='apps')$ret.=lj($css,'popup_call___adminx_submod*pop_'.$k,$m); else 
-$ret.=lj($css,'popup_module___'.$k,build_mod_subname($p,$m));}
+$ret.=lj($css,'popup_module___'.$k,build_mod_subname($v));}
 return $ret;}
 
 function console_system(){$r=array('blocks','design','content');
@@ -529,6 +532,20 @@ $ret.=ljb('txtx','SaveBb','modules_dev__','test').hlpbt('bloctest').divc('menu',
 return $ret;}//.divb('cell|modedit','')
 
 #rstr
+function backup_rstr_msql($r){
+if($r)foreach($r as $k=>$v)$rc[$k]=array($v?1:0);
+if($_GET['mkdflts']){$bs='system'; $nd='default';} else {$bs='users'; $nd=ses('qb');}
+msql_save($bs,$nd.'_rstr',$rc,array('rstr'));}
+
+function backup_rstr($b){$r=get_rstr($b);
+if($b!='restore' && $b!='defaults')backup_rstr_msql($r); $r[0]=0;
+if($b!='=' && is_array($r))update('qdu','rstr',implode('',$r),'name',ses('qb'));}
+
+function modif_params($slct,$restrict){
+$_SESSION['rstr'][$slct]=$restrict;
+if($_SESSION['rstr'][63]==1)$_SESSION['negcss']=0;
+backup_rstr('save');}
+
 function show_params_cat($r,$h){$ron=1;$fon=0; $j='lang_admin*restrictions_';
 foreach($r as $k=>$v){$hlp=bubble('txtsmall2','popmsqt',$j.$k.'_description',$k);
 $t=$h[$k][0]?$h[$k][0]:$v; if(rstr($k)){$n=1; $c='';} else {$n=0; $c='active';}
@@ -538,30 +555,16 @@ return divc('nbp',colonize($ret,3,'','',550));}
 function show_params($slct,$restrict){
 $r=msql_read_prep('system','admin_restrictions');
 $h=msql_read('lang','admin_restrictions');
-if(auth(6))modif_params($slct,$restrict);
+if($slct && auth(6))modif_params($slct,$restrict);
 foreach($r as $k=>$v)$rb[$k]=show_params_cat($v,$h);
 if(auth(6))$bt=msqlink('system','admin_restrictions','','imgr');
 return $bt.make_tabs($rb,'rst');}
-
-function modif_params($slct,$restrict){
-$_SESSION['rstr'][$slct]=$restrict;
-if($_SESSION['rstr'][63]==1)$_SESSION['negcss']=0;
-backup_rstr('save');}
-
-function backup_rstr_msql($r){
-if($r)foreach($r as $k=>$v)$rc[$k]=array($v?1:0);
-if($_GET['mkdflts']){$bs='system'; $nd='default';} else {$bs='users'; $nd=ses('qb');}
-msql_save($bs,$nd.'_rstr',$rc,'');}
 
 function get_rstr($b){
 if($b=='defaults')$_SESSION['rstr']=default_rstr(0);
 elseif($b=='restore')$_SESSION['rstr']=default_rstr(1);
 $r=$_SESSION['rstr']; if(!$r)$r=default_rstr(0);
 return $r;}
-
-function backup_rstr($b){$r=get_rstr($b);
-if($b!='restore' && $b!='defaults')backup_rstr_msql($r); $r[0]=0;
-if($b!='=' && is_array($r))update('qdu','rstr',implode('',$r),'name',ses('qb'));}
 
 function edit_rstr(){
 $ret=msqlink('users',ses('qb').'_rstr');
@@ -575,7 +578,7 @@ return $ret;}
 
 #console
 function select_mods_m(){
-$r=msq_select('users',ses('qb'),'mods'); sort($r); $nw=msq_find_next($r);
+$r=msq_choose('users',ses('qb'),'mods'); sort($r); $nw=msq_find_next($r);
 $ret=slct_menus($r,'/?admin=console&slct_mods=',prmb(1),'active','','v').' ';
 $ret.=lkc("popbt",'/?admin=console&newfrom_mods='.$nw,nms(99).':'.$nw).' ';//new
 $prmb=sql('config','qdu','v','name="'.ses('qb').'"'); $prmb1=strprm($prmb,1,'#');

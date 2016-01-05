@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_export_bases 
-session_start();
-require("params/_connectx.php");
-//echo $_SERVER['HTTP_HOST'];
 
 function export($su,$sn,$pw,$db,$file){
 exc('mysqldump -h"'.$su.'" -u"'.$sn.'" -p"'.$pw.'" '.$db.' '.$file.' > '.$file.'.sql');

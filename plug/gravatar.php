@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_gravatar
-session_start();
-//if(!function_exists('p'))require('../progb/lib.php');
 
 function grav_hash($d){
 return md5(strtolower(trim($d)));}

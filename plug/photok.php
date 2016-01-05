@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_
-session_start();
-error_reporting(6135);
 
 function kmini($f,$w,$h){
 $thumb=thumb_name(strrchr_b($f,'/'),$wb,$hb);

@@ -1,7 +1,5 @@
 <?php
 //philum_table2img
-session_start();
-if(!function_exists('p'))require('../progb/lib.php');//always_progb
 
 function plug_table2img($d,$p){
 list($dr,$nod)=split_right('/',$p,'');
@@ -11,7 +9,5 @@ if($r)foreach($r as $k=>$v){
 	$ret.='<a title="'.$k.'::'.$v.'">'.image($d.$v,'','').$k.'::'.$v.'</a>';}
 //$ret=make_tables('',$rb,$csa,$csb);
 return $ret;}
-
-//echo plug_table2img('../imgb/system/actions32/','system/edition_icons');
 
 ?>

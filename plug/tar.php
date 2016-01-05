@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_tar
-error_reporting(6135);
 
 // Adds file header to the tar file,it is used before adding file content.
 // f: file resource (provided by eg. fopen)
@@ -62,7 +61,7 @@ fclose($fp);}
 function targz($f,$r){tar($f,$r);
 $s=file_get_contents($f); 
 $ok=file_put_contents($f.'.gz',gzencode($s,9));
-if($ok)echo $f;//unlink($f);
+if($ok)echo $f; unlink($f);
 return $f.'.gz';}
 
 function read_dir($dr,$o=''){$fp=opendir($dr); static $ret; static $i;

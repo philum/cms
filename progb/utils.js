@@ -453,8 +453,6 @@ function locals(id,va){if(localStorage){//,com
 	if(va)localStorage.setitem(id,va);
 	else return localStorage.getitem[id];}}
 
-//function encode_conn(d){//.childNodes[0].nodeValue	}
-
 function mem_storage(val){//tar_var_copy_type
 	var vn=val.split("_"); vn[0]=vn[0]?vn[0]:'txtarea';
 	var ob=getbyid(vn[0].replace('*','_')); //
@@ -613,6 +611,18 @@ function getScroll(){
 	return [sx,sy];}}
 
 //continuous scroll
+/*
+function artlive(e){var ret=''; var ia=0;
+	var scrl=pageYOffset+innerHeight;
+	var mnu=getbyid('content').getElementsByTagName('div');
+	var load=mnu[mnu.length-4];
+	var pos=getPosition(load);
+	var last=mnu[mnu.length-1];
+	var id=last.id;
+	var idx=exs.indexOf(id);
+	if(idx==-1 && scrl>pos.y){exs.push(id);
+		SaveJ('content_load__14_'+id);}}*/
+
 function artlive(e){var ret=''; var ia=0;
 	var scrl=pageYOffset+innerHeight;
 	var mnu=getbyid('content').getElementsByTagName("div");
@@ -626,7 +636,7 @@ function artlive(e){var ret=''; var ia=0;
 					if(idx==-1 && ia<20){
 						exs.push(id); if(mnu[i])var md=mnu[i].className;
 						SaveJ(id+'_artone___'+id+'_'+md);}}}}}}
-if(flow==1)addEvent(document,'scroll',function(event){artlive(event)});
+if(typeof read==='string' && flow==1)addEvent(document,'scroll',function(event){artlive(event)});
 
 //fixdiv
 function fixdiv(){var scrl=pageYOffset;

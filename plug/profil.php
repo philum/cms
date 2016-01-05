@@ -1,7 +1,5 @@
 <?php
-//philum_plugin_profil
-ini_set('display_errors',1);
-error_reporting(6135);
+//philum_plugin_profil (for troc)
 
 /*function mysql_values($r,$d){$ra=sesmk($d); $i=0;
 foreach($ra as $k=>$v){$rb[$k]=$r[$i]; $i++;}
@@ -36,11 +34,12 @@ google.maps.event.addDomListener(window,'load',initialize);
 /*function profil_build($p,$o){
 $ret=$p.'-'.$o;
 return $ret;}*/
+function squ($bs,$v,$w){}
 
 function profil_sav($p,$o,$res){$r=ajxr($res); //p($r);
 $ra=mysql_values($r,'mysql_profil'); //p($ra);
 $id=sql('id','profil','v','user="'.$r[0].'"');
-if($id)squ('profil',implode(',',atmrup($ra)),'user="'.$r[0].'"'); 
+if($id)msquery('update '.$_SESSION['profil'].' set '.implode(',',atmrup($ra)),'').' where user="'.$r[0].'" limit 1');
 else insert('profil',mysqlra($ra));
 return btn('txtyl','ok');}
 
@@ -115,8 +114,8 @@ function plug_profil($p,$o){$rid='plg'.randid(); //echo $p.'-'.$o;
 profil_mysql();
 $r=profil_datas(ses('USE')); //p($r);
 if(strpos($r['gps'],'/')===false)$r['gps']='0/0';
-header_add('js','http://maps.googleapis.com/maps/api/js');
-header_add('jscode',profil_js($r['gps']));
+Head::add('js','http://maps.googleapis.com/maps/api/js');
+Head::add('jscode',profil_js($r['gps']));
 //ses('jscode',profil_js($r[5]));
 $ret=profil_form($r,$o);
 return divd($rid,$ret);}

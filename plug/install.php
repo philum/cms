@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `'.$qd.'_user` (
   `dscrp` mediumtext collate latin1_general_ci NOT NULL,
   `menus` mediumtext collate latin1_general_ci NOT NULL,
   `active` int(2) NOT NULL,
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `one` (`name`)
 ) ENGINE=MyISAM  collate latin1_general_ci;';
 
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `'.$qd.'_stat` (
   `pag` longtext collate latin1_general_ci NOT NULL,
   `nbu` int(9) collate latin1_general_ci NOT NULL default "0",
   `nbv` int(9) collate latin1_general_ci NOT NULL default "0",
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY (`id`),
   KEY `qb` (`qb`,`day`)
 ) ENGINE=MyISAM collate latin1_general_ci ;';
 
@@ -136,9 +136,32 @@ CREATE TABLE IF NOT EXISTS `_sys` (
   KEY `name` (`name`)
 ) ENGINE=MyISAM COLLATE=latin1_general_ci ;';
 
+
+$table["_meta"]='
+CREATE TABLE IF NOT EXISTS `'.$qd.'_meta` (
+  `id` int(7) NOT NULL,
+  `cat` varchar(255) collate latin1_general_ci NOT NULL,
+  `tag` varchar(255) collate latin1_general_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
+$table["_meta-ai"]=' 
+ALTER TABLE `'.ses('qd').'_meta`
+MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;';
+
+$table["_meta_art"]='
+CREATE TABLE IF NOT EXISTS `'.$qd.'_meta_art` (
+  `id` int(11) NOT NULL,
+  `idart` int(7) NOT NULL,
+  `idtag` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
+$table["_meta_art-ai"]='
+ALTER TABLE `'.ses('qd').'_meta_art`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;';
+
 //relationnal
 /*$table["_cat"]='
-CREATE TABLE IF NOT EXISTS `pub_cat` (
+CREATE TABLE IF NOT EXISTS `'.$qd.'_cat` (
   `id` tinyint(4) NOT NULL,
   `cat` tinytext collate latin1_general_ci NOT NULL,
   `active` enum(\'0\',\'1\') collate latin1_general_ci NOT NULL,
@@ -146,41 +169,28 @@ CREATE TABLE IF NOT EXISTS `pub_cat` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
 
 $table["_hubs"]='
-CREATE TABLE IF NOT EXISTS `pub_hubs` (
+CREATE TABLE IF NOT EXISTS `'.$qd.'_hubs` (
   `id` tinyint(4) NOT NULL,
   `hub` tinytext collate latin1_general_ci NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
 
 $table["_mbrs"]='
-CREATE TABLE IF NOT EXISTS `pub_mbrs` (
+CREATE TABLE IF NOT EXISTS `'.$qd.'_mbrs` (
   `id` tinyint(4) NOT NULL,
   `name` smallint(255) NOT NULL,
   `auth` enum(\'0\',\'1\',\'2\',\'3\',\'4\',\'5\',\'6\',\'7\') collate latin1_general_ci NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';*/
 
 /*$table["_opt"]='
-CREATE TABLE IF NOT EXISTS `pub_opt` (
+CREATE TABLE IF NOT EXISTS `'.$qd.'_opt` (
   `id` tinyint(4) NOT NULL,
   `opt` tinytext collate latin1_general_ci NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
+*/
 
-$table["_tags"]='
-CREATE TABLE IF NOT EXISTS `pub_tags` (
-  `id` tinyint(4) NOT NULL,
-  `tag` tinytext collate latin1_general_ci NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
-
-$table["_utg"]='
-CREATE TABLE IF NOT EXISTS `pub_utg` (
-  `id` tinyint(4) NOT NULL,
-  `classe` tinytext collate latin1_general_ci NOT NULL,
-  `utag` tinytext collate latin1_general_ci NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';*/
 
 if($_SESSION['auth']>6 or $_SESSION['first'])
 foreach($table as $k=>$sql){

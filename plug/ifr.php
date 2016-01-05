@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_ifre
-session_start();
 
 function ifrgz($dr){$r=explore($dr);//p($r);
 $f='users/public/ifr'.date('ymd').'.tar';
@@ -12,10 +11,7 @@ write_file($dr.mkday('','ydmHis').'.jpg',$ret);
 return image($f);}
 
 function ifrget($a,$b,$f){$f=ajxg($f); $f=http($f);
-if($f){
-	//$ret=read_file($f);
-	//$ret=file_get_contents($f);
-	$ret=curl_get_contents($f);
+if($f){$ret=curl_get_contents($f);
 	if(is_image($f) && $ret)$ret=ifrim($f,$ret);}
 $encoding=embed_detect(strtolower($ret),"charset=",'"',"");
 if(strtolower($encoding)=="utf-8" or strpos($ret,'é'))$ret=utf8_decode_b($ret);

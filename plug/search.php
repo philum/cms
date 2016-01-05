@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_search
-session_start();
 
 //spe
 function next_sptime($d){//,4015,4380,4745,5110,5475,5840
@@ -8,10 +7,11 @@ $r=array(1,7,30,90,365); for($i=5;$i<20;$i++){$r[]=$r[$i-1]+365;}
 $k=in_array_b($d,$r);//$_GET['dig']//getorpost('dig',$_SESSION['nbj'])
 if($r[$k+1])return $_GET['dig']=$r[$k+1];}
 
-function dig_h($n){$r=define_digr();
+function dig_h($n){$r=define_digr(); $nprev=time_prev($n);
 if(!$r[$n])$r[$n]=$n>=365?round($n/365,2):$n; $cur=$r[$n];
-if($n!=1 && $n!=7)$r[$n]=$r[time_prev($n)].' '.nms(36).' '.$r[$n];//from
+if($n!=1 && $n!=7)$r[$n]=$r[$nprev].' '.nms(36).' '.$r[$n];//from
 $r[$n].=' '.($n<365?plurial($cur,3):plurial($cur,7));
+if($n>365)$r[$n]=date('Y',calc_date($n));//from
 return menuder_h($r,'srdig',$n,'Search2();');}
 
 function mkurl($r){$n=count($r); 
@@ -22,12 +22,15 @@ function except_words($d){
 $r=array('de','des','du','dans','le','les','la','un','a','à','ou','où','on','en','y',"«","»","'",'"',":","-","!","?");
 if(!in_array($d,$r))return true;}
 
+function rech_lower($d,$o){
+return $o?strtolower($d):$d;}
+
 //rech->load
-function rech($rch,$days=''){
+function rech($rch,$days=''){$low=1;
 if(get('bool'))$bool=1; if(get('titles'))$titl=1;
 if(substr($rch,0,1)=='*'){$rch=substr($rch,1); $titl=1;}
 if(substr($rch,-1)=='*'){$rch=substr($rch,0,-1); $bool=1;}
-$rch=str_replace("’","'",$rch); $rchb=strtolower($rch);
+$rch=str_replace("’","'",$rch); $rchb=rech_lower($rch,$low);
 if(!$days)$days=$_SESSION["nbj"];
 if($days){$sqlm='AND day > '.calc_date($days);//limit
 $dayba=time_prev($days); $dayba=$dayba?calc_date($dayba):$_SESSION["daya"];
@@ -49,7 +52,7 @@ $rte=sql('id','qda','k','nod="'.$_SESSION['qb'].'" AND frm!="_system" AND re>="1
 		if($rtp<0.5)$whc='id="'.implode('" OR id="',$rtk).'"'; 
 		else $whc='id>="'.min($rtk).'" AND id<="'.max($rtk).'"';}
 	$rq=res("id,suj",$_SESSION['qda'].' WHERE '.$wh.' AND nod="'.$_SESSION['qb'].'" '.$sqlm.'');
-	if($rq)while($data=mysql_fetch_row($rq)){$nbc=""; $suj=strtolower($data[1]);
+	if($rq)while($data=mysql_fetch_row($rq)){$nbc=""; $suj=rech_lower($data[1],$low);
 	if($cp>1){foreach($parts as $k=>$v){$n=0; 
 		$nbd[$k]=substr_count($suj,trim($v)); if($nbd[$k])$n+=1;}
 		if($n==$cp)$ret[$data[0]]+=array_sum($nbd);}
@@ -58,8 +61,8 @@ if($titl)$rq=res("id,suj",$_SESSION['qda'].' WHERE ('.$whb.') AND ('.$whc.')');
 else $rq=res("id,msg",$_SESSION['qdm'].' WHERE ('.$whb.') AND ('.$whc.')'); 
 	if($rq)while($data=mysql_fetch_row($rq)){$nbc="";
 	if($rte[$data[0]]){
-	if(strpos($data[1],":import")!==false){$msg=format_txt($data[1],"","");}
-	else $msg=$data[1]; $msg=strtolower($msg);
+	if(strpos($data[1],":import")!==false)$msg=format_txt($data[1],"","");
+	else $msg=$data[1]; $msg=rech_lower($msg,$low);
 	if($cp>1){
 		foreach($parts as $k=>$v){$n=0; 
 			if(trim($v))$nbd[$k]=substr_count($msg,trim($v));}
@@ -89,29 +92,28 @@ $ret.=br().checkact('srord',$ord,nms(18)).' ';
 $ret.=checkact('srtit',$tit,nms(72)).' ';
 //$ret.=checkact('srpho',get('pho'),'').' ';//nms(123)
 $ret.=checkact('srbol',$bol,nms(70)).''.hlpbt('bool').' ';
-$ret.=select_j('srcat','category',$cat,1).' ';
-$ret.=select_j('srtag','tag',$tag,1);
+$ret.=select_j('srcat','category',$cat,1).' ';//hidslct_j
+$ret.=select_j('srtag','tag',$tag,'tag');
+$ret.=select_j('srtag2','tag',$tag2,'thèmes');
 return divc('titles',$ret).br();}
 
-//j
-function array_intersect_c($a,$b,$c){$load=$a+$b+$c;
+function array_intersect_b($a,$b){$load=$a+$b;
 foreach($a as $k=>$v)$r[$k]=1;
 foreach($b as $k=>$v)$r[$k]+=1;
-foreach($c as $k=>$v)$r[$k]+=1;
 if($r)foreach($r as $k=>$v)if($v>1)$ret[$k]=$load[$k];
 return $ret?$ret:$load;}
 
-function rech_ut($utg,$n){list($p,$o)=split(':',$utg); $dy=calc_date($n);
-return sql('ib','qdd','k','qb="'.$_SESSION['qb'].'" AND day>"'.$dy.'" AND cat="tables" AND val="'.eradic_acc($p).'" AND msg LIKE "%'.$o.'%"'.' ORDER BY id DESC');}
-
 function rech_catag($d,$cat,$tag,$utg,$n){
 $rr=array(); if($d)$ra=rech($d,$n,$b);
-$wh='nod="'.$_SESSION['qb'].'" AND re>0 AND day>"'.calc_date($n).'"'; 
-if($n>7)$wh.=' AND day<"'.calc_date(time_prev($n)).'"'; 
-if($cat)$wh.=' AND frm="'.$cat.'" '; if($tag)$wh.='AND thm LIKE "%'.$tag.'%"';
-if($cat or $tag)$rb=sql('id','qda','k',$wh); if($utg)$rc=rech_ut($utg,$n);
-if(!$ra)$ra=$rr; if(!$rb)$rb=$rr; if(!$rc)$rc=$rr; 
-return array_intersect_c($ra,$rb,$rc);}
+$wh='select '.ses('qda').'.id from '.ses('qda').'';
+if($tag)$wh.=' inner join '.ses('qdta').' on '.ses('qdta').'.idart='.ses('qda').'.id
+inner join '.ses('qdt').' on '.ses('qdta').'.idtag='.ses('qdt').'.id and tag="'.$tag.'"';
+$wh.=' where nod="'.ses('qb').'" and re>0 and day>"'.calc_date($n).'"'; 
+if($n>7)$wh.=' and day<"'.calc_date(time_prev($n)).'"'; 
+if($cat)$wh.=' and frm="'.$cat.'"';
+if($cat or $tag)$rb=sql_b($wh,'k'); //p($rb); p($ra);
+if(!$ra)$ra=$rr; if(!$rb)$rb=$rr;
+return array_intersect_b($ra,$rb);}
 
 function rech_script($d){$sp=strpos($d,';')?';':' '; $r=explode($sp,$d); $n=count($r);
 for($i=0;$i<$n;$i++){list($o,$p)=split(':',$r[$i]); if($p=='tag')$tag=$o; 
@@ -119,19 +121,6 @@ for($i=0;$i<$n;$i++){list($o,$p)=split(':',$r[$i]); if($p=='tag')$tag=$o;
 return array($rech,$cat,$tag,$utg);}
 
 function rech_reset($p){unset($_SESSION['recache'][$p]);}
-
-/*Search2
-function Search2(){
-	var src=ajxget(getbyid('search').value);
-	var dig=getbyid('srdig').value;
-	var bol=getbyid('srbol').value;
-	var ord=getbyid('srord').value;
-	var tit=getbyid('srtit').value;
-	var cat=ajxget(getbyid('srcat').value);
-	var tag=ajxget(getbyid('srtag').value);
-	var cll=src+'_'+dig+'_'+bol+'-'+ord+'-'+tit+'&nom='+cat+(tag?'_'+tag:'');
-	var ajax=new AJAX(jurl()+'search_'+cll,'popup',3);
-	Close('popup');}*/
 
 function plug_search($d,$n,$opt='',$res=''){list($b,$o,$t,$ph)=split("-",$opt);
 $rech=good_rech($d); $_GET['search']=$rech; list($cat,$tag)=ajxr($res);
@@ -146,6 +135,7 @@ elseif($rech)$load=rech($rech,$n); if($load && !is_array($load))$load='';
 if(!$load && ($cat or $tag or $utg))$load=rech_catag($rch,$cat,$tag,$utg,$n);
 $_SESSION['load']=$load; $_SESSION['recache'][$vrf]=$load; save_get();
 $ret=rech_titles($rech,$n,$opt,$cac,$cat,$tag); $_SESSION['page']=1;
+if($load[0])unset($load[0]); if($load[1])unset($load[1]);
 if($load){if($o)krsort($load); else arsort($load); //$_GET['targ']=$vrf;
 $ret.=scroll($load,divd($vrf,output_pages($load,'flow','')),1,400);}
 return $ret;}

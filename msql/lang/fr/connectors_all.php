@@ -155,8 +155,8 @@ $r["swf"]=array('Renvoie un lien qui renvoie une popup en ajax où s\'affiche l\'
 $r["t"]=array('css \'txtit\' (titres)');
 $r["tables"]=array('efface les tableaux');
 $r["thumb"]=array('fabrique une miniature d\'une image avec des dimensions personnalisées : [img.jpg§140/100:thumb]');
-$r["twit"]=array('affiche un Twit depuis son url ; les données sont sauvées localement');
-$r["twitter"]=array('appelle le plugin \'twitter\', qui ouvre la liste des Twits de l\'utilisateur, passé en paramètre');
+$r["poptwit"]=array('ouvre un twit dans une popup');
+$r["twitter"]=array('appelle un twit depuis son ID, ou un flux depuis le nom d\'utilisateur, à travers l\'API Twitter');
 $r["version"]=array('num version');
 $r["video"]=array('lit une vidéo youtube daily vimeo rutube etc... d\'après leur id. §1 renvoie un lien qui ouvre une popup');
 $r["w"]=array('affiche le lien en entier');
@@ -165,5 +165,7 @@ $r["webpage"]=array('affiche une page web dans une popup (utilisant le plugin \'
 $r["mktable"]=array('formate les données csv en tableau (virgule et saut de ligne) ');
 $r["svgcode"]=array('crée un svg depuis des connecteurs. §width/height');
 $r["popmsql"]=array('affiche le contenu d\'une base msql dans une popup ; [public_atomic§GNU:popmsql]');
+$r[1]=array('');
+$r[":pre"]=array('');
 
 ?>

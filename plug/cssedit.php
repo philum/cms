@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_cssedit
-session_start();
-error_reporting(6135);
 
 function f_inp_edit_css_conn(){
 $r["used"]=array("float:left;","margin:0px;","padding:0px;","width:0px;","border-style:solid;","border-width:1px;","list-style-position:inside/none;","position:absolute;","cursor:pointer;","display:block;","overflow:auto;","opacity:0.9;","clear:left;");

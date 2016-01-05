@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_microform
-session_start();
-error_reporting(6135);
 
 function mform_j($p,$id,$res){$r=ajxr($res);//form
 if(!$r[0])return lj('txtbox',ses('mformj'),pictxt('reload','error')); 

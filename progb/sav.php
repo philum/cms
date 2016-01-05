@@ -3,12 +3,13 @@
 
 function save_art(){$dayx=$_SESSION['dayx']; $frm=$_SESSION['frm'];
 $qb=$_SESSION['qb']; $base=$_SESSION['qda']; $qdm=$_SESSION['qdm']; $USE=$_SESSION['USE'];
-if(!$frm or $frm=="Home" or $frm=="user")$frm="public"; $suj=clean_title($_POST['suj']); 
+if(!$frm or $frm=="Home" or $frm=="user")$frm="public"; 
+$suj=clean_title($_POST['suj']); $suj=etc($suj,240);
 $msg=nl2br($_POST['msg']); $name=$_POST['name']; $mail=$_POST['mail']; 
 $ib=trim($_POST['ib']); $pdat=$_POST['postdat']; $urlsrc=$_POST['urlsrc']; 
 if($_POST['pub'])$re=1;
 if($urlsrc)$mail=https($urlsrc); $mail=utmsrc($mail); if(!$ib)$ib='/';//!$_POST['sub'] or 
-if(!$name or $name==nms(38)){$exp_out.=btn("txtalert","empty_name $name");$stoop="ok";}
+if(!$name or $name==nms(38)){alert("empty_name $name"); $stoop="ok";}
 if($mail=="mail" or $mail=="url"){$mail='';$urlsrc='';}
 $msg=str_replace(array("<br />","<br/>","<br>","<BR>"),"\n",$msg);
 $msg=str_replace("\n","",$msg); $msg=str_replace("\r","\n",$msg);
@@ -30,7 +31,7 @@ if($nid && $USE!=$qb && $_SESSION["auth"]<6){
 	mail($_SESSION['qbin']["adminmail"],'new article: '.stripslashes($suj),'
 	'.host().'/'.$nid.',
 	auth_level: '.$_SESSION["auth"]."\n",'From: '.$USE);}
-if($_SESSION['vacuum'][$urlsrc])unset($_SESSION['vacuum'][$urlsrc]);
+if($_SESSION['vacuum'][nohttp($urlsrc)])unset($_SESSION['vacuum'][nohttp($urlsrc)]);
 if($nid){$_SESSION['rqt'][$nid]=array($pdt,stripslashes($frm),stripslashes($suj),'',$qb,'','','',$siz,$urlsrc,$ib,$re); $msg=correct_txt($msg,$nid,'savimg'); $exp_out=$nid;
 	$_GET['read']=$nid; deductions_from_read($nid,''); $_POST='';}
 $_SESSION['daya']=$_SESSION['dayx'];
@@ -113,7 +114,8 @@ if(is_uploaded_file($fich_tmp) && !$exp_out){
 		if(!$_POST["imnot"])add_im_msg("",$rep.$mg.$w);}}//msg
 else{$exp_out.="upload refused: $rep$mg";}
 }//end_no_file
-return array($exp_out,$rep.$mg);}
+if($exp_out)alert($exp_out);
+return $rep.$mg;}
 
 function edit_tracks($hide,$erase){$id=$hide?$hide:$erase;
 if($_SESSION['USE']==$nam or $_SESSION['auth']>=4){
@@ -126,11 +128,10 @@ if($_GET['insert']=='ok')save_art();
 if($_GET['continue']=="ok" && $read)modif_art($read,$_POST['msg']);
 if($_GET['trash_art'])trash_art();
 if($_GET['delete_art'])delete_art();
-if($_GET['im']=='on')list($results,$im)=save_img();
+if($_GET['im']=='on')$im=save_img();
 if($_GET['publish'] && $_GET['idy'])publish_art($_GET['publish'],$_GET['idy'],'qdi');
 elseif($_GET['publish'] && $read)publish_art($_GET['publish'],$read,"qda");
-if($_GET['deploy']){require("ajxf.php"); $results.=deploy($_GET['deploy']);}
-if($_GET['idy_hide'] or $_GET['idy_erase'])edit_tracks($_GET["idy_hide"],$_GET["idy_erase"]);
-if($results)alert($results);}
+if($_GET['deploy']){req('ajxf'); alert($_GET['deploy']);}
+if($_GET['idy_hide'] or $_GET['idy_erase'])edit_tracks($_GET["idy_hide"],$_GET["idy_erase"]);}
 
 ?>

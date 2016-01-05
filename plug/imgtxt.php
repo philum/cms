@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_imgtxtb
-session_start();
 
 function gdf_nblines($t,$maxl){$n=0; 
 $t=str_replace("\n"," \n",$t); $r=explode(" ",$t);

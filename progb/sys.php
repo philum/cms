@@ -4,19 +4,17 @@
 //tests();
 #Boot
 secure_inputs(); setget();
-//$_SESSION='';
 $_SESSION['stime']=$stime; $_SESSION['dayx']=time();
-$_SESSION['headr']=''; $_SESSION['head_r']=''; $_SESSION['jscode']='';
 if($_GET['rl']=='=' && $_SESSION['sbdm'])//good_subdom
 	relod(subdom($_GET['id']).'/'.$_GET['id'].'/logon');
 //reload
-if(!$_SESSION['qb'] or !$_SESSION['qd'] or !$_SESSION['qda'] or $_GET['qd'] or $_GET['id'] or $_GET['nbj'] or !$_SESSION['mods'] or $_GET['refresh']){$cache='ok'; reset_ses(); prog($g);}
+if(!$_SESSION['qb'] or !$_SESSION['qd'] or !$_SESSION['qda'] or $_GET['qd'] or $_GET['id'] or $_GET['nbj'] or !$_SESSION['mods'] or $_GET['refresh']){$cache='ok'; reset_ses(); prog($g,1);}
 if($_GET['dev']){$_SESSION['dev']=$_GET["dev"]; relod('/?id==');}
 //master_params
 if(!$_SESSION['qd'] or $cache)master_params('params/_'.$db,$qd,$aqb,$subd);
 if(!$_SESSION['master'])$_SESSION['master']=rse('name',$_SESSION['qdu'].' WHERE id="1"');
 if(!$_SESSION['philum'])$_SESSION['philum']=msql_read('system','program_version',1);//philum
-date_default_timezone_set(prms('timez'));//php5
+date_default_timezone_set(prms('timez'));
 if($_SESSION['dev'])error_report();
 if(!$_SESSION['mn'] or $cache)define_hubs();//hubs
 if(!$_GET['nbj'] && $cache)define_qb();//qb::need $mn
@@ -32,12 +30,10 @@ $log=log_mods();//login
 $_SESSION['auth']=define_auth();
 #environment
 $cache=time_system($cache);//time_system
-//patch($db);
 define_s('lang','all');//cache_system
 if(!isset($_SESSION['rqt']) or $cache)cache_arts();
 if(!is_array($_SESSION['line']) or $cache or $_GET["continue"]=="edit")define_cats_rqt();//cats
 $_SESSION['frm']=define_frm();//frm
-if(!isset($_SESSION['interm']) or $cache)define_interm();//interm
 //hierarchics
 if((!isset($_SESSION['superline']) or $cache) && is_array($_SESSION['line']))
 	$_SESSION['superline']=collect_hierarchie('');
@@ -69,14 +65,13 @@ if($_SESSION['stsys']!='no')eye();
 #structure
 if($_GET['admin']){req('admin'); $out['content']=admin();}
 elseif($_GET['msql']){req('msql'); $out['content']=msql_adm();}
-elseif($p=$_GET['plug']){$out['content']=divd('content',plugin($p,get('p'),get('o')));}
-elseif(rstr(85)){$_SESSION['headr'].=desktop_js('boot');//$_SESSION['desktop']=1;
-	if($read)$_SESSION['headr'].=js_code(sj('popup_popart___'.$read.'_3'));}
+elseif(rstr(85)){Head::add('jscode',desktop_js('boot'));//$_SESSION['desktop']=1;
+	if($read)Head::add('jscode',sj('popup_popart___'.$read.'_3'));}
 //elseif($read && rstr(72))$rout=cache_html($read);
 else $out=build_blocks();
 //meta
 $host=host();
-$meta['favicon']=favicon();
+$meta['favicon']='favicon.ico';//favicon();
 if($_GET["admin"])$meta["title"]=$_GET['admin'];
 elseif($_GET["msql"])$meta["title"]=$_GET['msql'];
 elseif($_SESSION["read"]){$meta["title"]=$_SESSION["raed"];
@@ -89,7 +84,7 @@ $cst=$_SESSION['desgn']?'?'.randid():'';
 if($_SESSION['mobile'] && rstr(63))$_SESSION['negcss']=1;
 $meta["css"]=define_design();
 verif_update();//update
-if($_SESSION['dlnb'])$_SESSION['headr'].=js_code(sj('popup_update'));
+if($_SESSION['dlnb'])Head::add('jscode',sj('popup_update'));
 if($_POST['flow'] or rstr(39))$flow=1;
 #back_in_time
 if(abs(ses('dayx')-ses('daya'))>86400)

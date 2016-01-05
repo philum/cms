@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_msqads
-session_start();
-error_reporting(6135);
 
 function msqads_j($p,$o,$res){$r=ajxr($res);//form
 reqp('msql'); $msq=new msql();

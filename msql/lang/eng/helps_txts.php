@@ -252,5 +252,7 @@ $r["first_user"]=array('Create Admin account');
 $r["new_user"]=array('Create account');
 $r["meta_lang"]=array('ID of articles in others languages');
 $r["tracks_moderation"]=array('tracks are moderated');
+$r["twitter_oAuth"]=array('parameters of twitter API (https://apps.twitter.com/)');
+$r["tag_rename"]=array('Rename a tag could delete and associate articles to an existing tag');
 
 ?>

@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_troc
-ini_set('display_errors',1);
-error_reporting(6135);
 
 function troc_js(){return "
 function geo(){

@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_phi
-session_start();
-error_reporting(6135);
 //http://www.piday.org/million/
 
 //$pi4=1-1/3+1/5-1/7+1/9-1/11...

@@ -1,6 +1,5 @@
 <?php
-//philum_plugin_shop 
-session_start();
+//philum_plugin_cart (for shop)
 
 function qtes($k,$v){
 	if($_GET["l"]==$k){$v=$_GET["n"];$_SESSION['cart'][$k]=$v;}

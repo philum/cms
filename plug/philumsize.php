@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_philumsize
-session_start();
 
 function plug_philumsize($p='',$o=''){
 $dr=($p?$p:'progb');//_old/

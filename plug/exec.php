@@ -1,6 +1,5 @@
 <?php
-//philum_exec 
-session_start();
+//philum_exec
 
 function f_inp_insert($r){
 foreach($r as $k=>$v){

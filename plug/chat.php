@@ -2,7 +2,7 @@
 //philum_plugin_chat
 
 function chatdata($p){$dr=root().'msql/users/'; $dfb['_menus_']=array('time','name','msg');
-$r=plug_motor($dr,ses('qb').'_chat_'.$p,$dfb); if($r)unset($r['_menus_']); return $r;}
+$r=read_vars($dr,ses('qb').'_chat_'.$p,$dfb); if($r)unset($r['_menus_']); return $r;}
 
 function chaterz($p,$erz){$nod=ses('qb').'_chat_'.$p;
 modif_vars('users',$nod,$erz,'del'); return chatread($p);}

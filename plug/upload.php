@@ -1,7 +1,5 @@
 <?php
 //philum_plug-in_upload
-session_start();
-ini_set('display_errors',1);
 
 function upurlsav($dr,$o,$u){$u=ajxg($u);
 if(!is_image($u))return'no'; $ret=get_file($u); $nm=strrchr($u,'/');

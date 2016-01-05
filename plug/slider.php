@@ -63,7 +63,7 @@ return array($newl,$newh);}
 
 function slider_builder($re,$predir,$nod){
 require('progb/spe.php'); $minidir='gallery/mini/'; $sqdir='msql/gallery/';
-$ref=plug_motor($sqdir,$nod,'');
+$ref=read_vars($sqdir,$nod,'');
 $ret['_menus_']=array('name','mini','img','width','height','mini_w','mini_h','text','size','color','align','position','alpha');
 //echo divd('barprogress','');
 $nb=count($re); //p($re);
@@ -97,8 +97,10 @@ $r=msql_read('gallery',$nod,$n); $get=$n.'nam|'.$n.'txt';
 $sets=slider_params(); $sty=' style="border:1px solid grey;"';
 $sets['size'][]=$r['size']; $sets['color'][]=$r['color']; $sets['alpha'][]=$r['alpha'];
 foreach($sets as $k=>$v){$entry=$r[$k]; $get.='|'.$n.$k;//echo $r[$k];
-	$rb=batch_defil_kv($sets[$k],$entry,"vv");
-$set.=balise("select",array(3=>$n.$k,"selected"=>$entry),$rb).' '.$k.br();}
+	//$rb=batch_defil_kv($sets[$k],$entry,"vv");
+	//$set.=balise("select",array(3=>$n.$k,"selected"=>$entry),$rb).' '.$k.br();
+	$set.=select(array('id'=>$n.$k),$sets[$k],'vv',$entry).' '.$k.br();
+	}
 $ret=input2('text','"'.$sty.' size="17" id="'.$n.'nam',$r['name'],'').' name'.br();
 $ret.=txarea('"'.$sty.' id="'.$n.'txt',$r['text'],20,3).' text'.br();
 $ret.=$set.br();

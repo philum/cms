@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_cubes
-session_start();
-error_reporting(6135);//E_ALL/E_NOTICE/NULL/2147483647/30719/6135
-//if(!function_exists('p'))require('../prog/lib.php');
 
 function cub_clr($r){
 foreach($r as $k=>$v){$clr='';

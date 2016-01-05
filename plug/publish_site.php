@@ -14,7 +14,7 @@ for($i=1;$i<5;$i++){$ret[]=$d.'design_'.$i.'.php'; $ret[]=$d.'clrset_'.$i.'.php'
 return $ret;}
 
 function dirs(){$msqu='msql/users/public_';
-$ra=array("index.php","ajax.php","plug.php","htaccess.txt","favicon.ico","install.php","readme.txt","robots.txt","user.ini",
+$ra=array("index.php","ajax.php","plug.php","app.php","htaccess.txt","favicon.ico","install.php","readme.txt","robots.txt","user.ini",
 $msqu.'defcons.php',$msqu.'connectors.php',$msqu.'modules.php',$msqu.'design.php',$msqu.'template.php',$msqu.'mods_1.php','msql/system','msql/lang',
 'css/_global.css','css/_admin.css','css/_classic.css','css/_default.css',
 'fla','imgb/icons/system','imgb/icons/flags','imgb/icons/finder','plug','prog','progb','pub','video',

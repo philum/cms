@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_pictos
-session_start();
 
 function icons_ascii($d){
 $c25='&#9617;'; $c50='&#9618;'; $c75='&#9619;'; $c100='&#9608;';}
@@ -94,7 +93,9 @@ function icons_icon($d,$id){if($d)$r=str_split($d); $n=16; $nb=$n*$n; $sz=16;
 for($i=0;$i<$nb;$i++){$ret.=ljd($r[$i],$i);}
 return div('id="pct'.$id.'" class="pixels" style="width:'.($n*$sz+32).'px;"',$ret);}
 
-function icons_edit($k){$id=randid(); $ret=js_code(icons_js());
+function icons_edit($k){$id=randid();
+Head::add('csscode',icons_css()); 
+Head::add('jscode',icons_js());
 $d=msql_read('system','program_icons',$k);
 if(auth(6)){
 	$ret.=lj('popbt','pctpanel_plug___icons_icons*read_'.$k,picto('reload'));
@@ -105,7 +106,7 @@ if(auth(6)){
 	$ret.=btd('prw'.$id,pictosys($k)).br();}
 $ret.=ljb('popbt','icons_fill',$id.'\',\'0','empty');
 $ret.=ljb('popbt','icons_fill',$id.'\',\'1','fill');
-$ret.=btn('imgr',icons_pick());
+$ret.=divc('',icons_pick()).br();
 if($k)$ret.=icons_icon($d,$id);
 $ret.=divc('clear','');
 return $ret;}
@@ -122,8 +123,8 @@ if($r)foreach($r as $k=>$v){$im=pictosys($k).' ';
 return onxcols($ret,'5','550');}
 
 function plug_icons($d){
-$_SESSION['headr']=css_code(icons_css()); 
-$_SESSION['headr'].=js_code(icons_js());
+Head::add('csscode',icons_css()); 
+Head::add('jscode',icons_js());
 //echo js_code('addjs(\'\',\''.icons_js().'\',\'\')');
 $ret.=lj('popbt','popup_plup___icons_icons*edit_new',picto('add'));
 $ret.=btd('cbk','').br();

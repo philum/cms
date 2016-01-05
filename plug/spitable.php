@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_spitable
-session_start();
-error_reporting(6135);
-if(!function_exists('p'))require('../progb/lib.php');
 
 function spi_infos($d){
 $r=msql_read('','public_atomic',$d);

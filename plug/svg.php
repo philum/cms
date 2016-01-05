@@ -28,7 +28,7 @@ function svg_motor(){return array(
 'stop'=>array('offset','style','opac'),
 );}
 
-function svg_clr($d=''){$r=mread('system/edition_colors','',1);
+function svg_clr($d=''){$r=msql_read_b('system','edition_colors','',1);
 $rb=array_keys($r); if($d=='rand')$d=rand(0,count($rb));
 return is_numeric($d)?$rb[$d]:$d;}
 

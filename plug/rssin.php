@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_rss_input 
-error_reporting(6135);
 
 function template_rss(){
 return '[[_URL§_SUJ:url]§h2:html]
@@ -30,6 +29,7 @@ $ret=template_build(template_rss(),$panout);
 return divd('article',$ret);}
 
 function plug_rssin($u){req('pop,art,tri,spe');
+Head::add('jslink','/prog/utils.js');
 if($_GET['rssurl'])foreach($_GET as $k=>$v){if($k=="rssurl")$u=$v; else $u.='&'.$k.'='.$v;}
 $u=str_replace('http://','',$u);
 if($u){$alx=alx(); $rss=load_xml('http://'.$u,1);

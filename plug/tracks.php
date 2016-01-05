@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_tracks
-session_start();
-error_reporting(6135);
 
 function captcha($d){return substr($d,2,2).substr($d,0,2);}//lol
 function secure_tracks(){
@@ -44,7 +42,7 @@ else{$ret.=autoclic('name" id="trkname'.$gn,$use,'8','50','',1).' ';//name
 $ret.=btd('bts'.$id,$sav).' '.hlpbt('trackhelp').' ';//.hlpbt('track_orth').' ';
 $ret.=lj('" title="'.nms(65),'popup_trkpreview_txtarea_',picto('view')).' ';
 //$ret.=divedit('txtarea','track','min-height:100px; min-width:320px;','',$d?$d:$msg);
-$ret.=micro_connedit('txtarea').br().txarea('txtarea',$d?$d:$msg,52,8,'console').br();
+$ret.=micro_connedit('txtarea').br().txarea('txtarea',$d?$d:$msg,80,16,'console').br();
 return $ret.$r['html'];}
 
 function trk_publish($id,$o){req('spe,pop,art,tri');
@@ -54,7 +52,7 @@ return tracks_read($id,'','');}
 function save_track($msg,$id,$name,$mail){$pdt=time(); $ip=hostname();
 if(is_numeric($id) or substr($id,0,4)=='wall')$local=true;
 if(!$msg)return;// btn('popdel','bruuu! '.helps('empty_msg'));
-require('prog/sav.php'); $qb=$_SESSION['qb']; $base=$_SESSION['qdi'];
+req('sav'); $qb=$_SESSION['qb']; $base=$_SESSION['qdi'];
 $_GET['idy']='ok'; $_GET['insert']='ok'; $_POST['name']=$nm; $_POST['msg']=$msg;
 if(!rstr(2) or auth(4))$op=1; else $op=0;
 $here=host().'/?read='.$id; $msg=str_replace(":chat","",$msg); $msg=repair_latin($msg);
@@ -82,7 +80,7 @@ update('qdi','msg',$v,'id',$id); return tracks_read($id,1,1);}
 
 function trk_redit($id){$msg=sql('msg','qdi','v','id='.$id);
 $ret=lj('popsav','trk'.$id.'_trkedit_trkedit_x_'.$id.'','save').btd('bts','').' ';
-$ret.=micro_connedit('trkedit').br().txarea('trkedit',$msg,80,4).br();
+$ret.=micro_connedit('trkedit').br().txarea('trkedit',$msg,80,16,'console').br();
 return $ret;}
 
 //form

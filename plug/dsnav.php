@@ -1,9 +1,5 @@
 <?php
 //philum_plugin_dsnav
-session_start();
-error_reporting(6135);
-//tag:system
-//usage:petit navigateur topologique
 
 //disk_space_nav
 function embed_li_dsnav($d,$v,$isr){$_SESSION["nbsd"]++; $ds=$_SESSION["ds"];

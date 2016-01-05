@@ -1,25 +1,5 @@
 <?php
 //philum_dev
-session_start();
-
-require('plug/lib.php');
-/*function recup_fileinfob($doc){//echo $doc.'  --  ';
-if(is_file($doc)){
-return date('d-m-Y',filemtime($doc)).'-'.round(filesize($doc)/1024).'Ko';}}*/
-
-/*function scrut_dirb($dr){//file_infos
-if(is_dir($dr)){$dir=opendir($dr);
-	while($f=readdir($dir)){$drb=$dr.'/'.$f;
-	if(is_dir($drb) && $f!='..' && $f!='.' && $f)$ret[$f]=scrut_dirb($drb);
-	elseif(is_file($drb))$ret[$drb]=recup_fileinfob($drb);}}
-return $ret;}*/
-/*function explode_dirc($rep,$j,$func){
-static $i; $i++;
-if(is_array($rep)){
-foreach($rep as $k=>$v){$io++;
-	if(!is_array($v)){$ret.=call_user_func_array($func,array($j,$k,$v,$i.'_'.$io));}
-	else{$ret.=explode_dirc($v,$j.'/'.$k,$func);$i--;}}
-return $ret;}}*/
 
 #read
 function scrut_func($r,$i,$deb,$end){
@@ -73,7 +53,7 @@ function functions_list($view,$f){
 $_SESSION['rec']=array();
 if($view)$_GET['view']=$view;
 if($f)$_GET['func']=$f;
-$dr=split_only('/',$view,1,0);
+$dr=str_extract('/',$view,1,0);
 if(!$view)$dr='plug';
 if(substr($dr,-1)=='/')$dr=substr($dr,0,-1);
 $rep=scrut_dirb($dr); if($rep)ksort($rep);

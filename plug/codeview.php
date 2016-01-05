@@ -1,7 +1,6 @@
 <?php
 //philum_codeview
 #not work with bad number of {}, verify code under comments
-session_start();
 ini_set("memory_limit","1200M");
 
 function scrut_dira($dr){//file_infos

@@ -1,7 +1,8 @@
 <?php
 //philum_sitemap 
 session_start();
-ini_set('display_errors',1); error_reporting(6135);
+ini_set('display_errors',1);
+error_reporting(6135);
 
 function prep_host_b($nod){
 if($_SESSION['sbdm'])return subdom($nod).'plug/sitemap.php?p='.$nod;

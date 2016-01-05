@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_download 
-session_start();
-ini_set('display_errors','1');
-error_reporting(6135);
 
 function download_gzip($f){
 header('Content-Type: application/x-bzip');

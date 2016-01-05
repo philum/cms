@@ -1,17 +1,54 @@
 <?php
 //philum_plugin_patches 
-session_start();
-error_reporting(0);
-//require_once("../progb/lib.php");
-//require_once('../params/_connectx.php');
 
 function qlerror($ret){
 //die($ret.mysql_error());
 $ret.=mysql_error();
 return $ret.br();}
 
+//160101
+function patch_tags(){
+$table["_meta"]='
+CREATE TABLE IF NOT EXISTS `'.ses('qd').'_meta` (
+  `id` int(7) NOT NULL,
+  `cat` varchar(255) collate latin1_general_ci NOT NULL,
+  `tag` varchar(255) collate latin1_general_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
+/*
+$table["_meta-id"]='
+ALTER TABLE `'.ses('qd').'_meta`
+ADD PRIMARY KEY (`id`);';*/
+
+$table["_meta-ai"]=' 
+ALTER TABLE `'.ses('qd').'_meta`
+MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;';
+
+$table["_meta_art"]='
+CREATE TABLE IF NOT EXISTS `'.ses('qd').'_meta_art` (
+  `id` int(11) NOT NULL,
+  `idart` int(7) NOT NULL,
+  `idtag` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
+/*
+$table["_meta_art-id"]='
+ALTER TABLE `'.ses('qd').'_meta_art`
+ADD PRIMARY KEY (`id`);';*/
+
+$table["_meta_art-ai"]='
+ALTER TABLE `'.ses('qd').'_meta_art`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;';
+
+foreach($table as $k=>$sql){
+	$req=mysql_query($sql) or die(mysql_error()); 
+	$ret.=divc('',ses('qd').''.$k.': created');}
+
+$ret.=lka('/plug/tagpatch/','Apply patch to fill the new databases (click on each links)');
+return $ret;}
+
 //150521
-function patch_passwd(){connect(); echo 'ok';
+function patch_passwd(){echo 'ok';
 msquery('ALTER TABLE '.$_SESSION['qdu'].' CHANGE `pass` `pass` VARCHAR( 41 ) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL DEFAULT "";');
 $r=sql('id,pass','qdu','kv',''); 
 foreach($r as $k=>$v)//echo $v.br();
@@ -155,7 +192,7 @@ return $ret;}
 
 function patch_correct_option($nod){ 
 $dfb=array("block","module","param","title","condition","command","option","cache","hide","template","nobr");
-$r=plug_motor('msql/users/',$nod,'');
+$r=read_vars('msql/users/',$nod,'');
 if(count($r['_menus_'])<11){echo $nod.' '.count($r['_menus_']); unset($r['_menus_']);
 //backup_old
 	if($r){$valu=dump($r,$nod);	write_file('msql/users/'.$nod.'_sav.php',$valu);}
@@ -179,11 +216,11 @@ return $ret;}*/
 
 /*function patch_mods($qb){
 $bs='msql/users/'; $nd=$qb.'_mods';
-$r=plug_motor($bs,$nd,""); 
+$r=read_vars($bs,$nd,""); 
 $r['_menus_'][]='template';
 $r=repair_nbofcols($r);
 save_vars($bs,$nd.'_1',$r);
-//$rb=plug_motor($bs,$nd.'_1',"");
+//$rb=read_vars($bs,$nd.'_1',"");
 //if($rb){$erz=unlink($bs.$nd.'.php'); 
 //	if($erz)echo $nd.': erased'.br();}
 return $r;}*/

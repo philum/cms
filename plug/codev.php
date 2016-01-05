@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_codev
-session_start();
-error_reporting(6135);
-if(!function_exists('p'))require('progb/lib.php');
 
 /*function memtmp_b(){if($_SESSION['memtmp']){ksort($_SESSION['memtmp']); 
 $ret=implode('',$_SESSION['memtmp']); $_SESSION['memtmp']='';}

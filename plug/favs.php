@@ -1,25 +1,24 @@
 <?php
 //philum_plugin_favs
-session_start();
 
 /*function favs_edt_b($id){if($_SESSION['favs'][$id])$c='color:#428a4a;';
 return lj('','popup_modpop___favs:plug',picto('like',$c));}*/
 
 function fav_sav($d){//id
-$bs='msql/users/'; $nod=$_SESSION['qb'].'_fav'; req('art');
-$r=plug_motor($bs,$_SESSION['qb'].'_fav',''); //p($r);
+$nod=$_SESSION['qb'].'_fav'; req('art');
+$r=msql_read_b($dr,$nod,'');
 $_SESSION['favs']=array_flip(explode(' ',$r[$_SESSION['iq']][0]));
 if(strpos($r[$_SESSION['iq']][0],$d)===false){
 	$r[$_SESSION['iq']][0].=$d.' '; $_SESSION['favs'][$d]=1;}
-write_file($bs.$nod.'.php',dump($r,$nod));
+msql_save('',$nod,$r);
 return favs_edt($d);}
 
 function fav_del($d){$nod=$_SESSION['qb'].'_fav';
-$r=plug_motor('msql/users/',$nod,'');
+$r=read_vars('msql/users/',$nod,'');
 $da=$r[$_SESSION['iq']][0];
 $da=str_replace(array(' '.$d,$d.' ',$d),'',$da); if($d=='all')$da='';
 $r[$_SESSION['iq']][0]=$da; unset($_SESSION['favs'][$d]);
-write_file('msql/users/'.$nod.'.php',dump($r,$nod));
+msql_save('',$nod,$r);
 return fav_read($da);}
 
 /*function fav_book(){$nod=$_SESSION['qb'].'_fav';
@@ -61,7 +60,7 @@ $load=array_flip(explode(' ',$da));
 $ret=output_pages($load,2,'');
 return $ret;}
 
-function plug_favs($p,$o,$ob='',$res=''){$res=ajxg($res); connect();
+function plug_favs($p,$o,$ob='',$res=''){$res=ajxg($res);
 if($res)if(!is_numeric($res))$_SESSION['iq']=sql('id','qdp','v','ip="'.ses(ip).'" LIMIT 1'); 
 else $_SESSION['iq']=$res;
 //$_SESSION['plgs']=btd('pgbt_ID',lj('" title="'.nms(108),'pgbt_ID_plug__xd_favs_fav*sav__ID',picto('like')));//plgfavs

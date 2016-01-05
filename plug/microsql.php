@@ -30,8 +30,8 @@ function save_xmsg($dr,$nod,$arr,$dfb=''){$dir='../msql/'.$dr.'/';
 if(is_file($dir.$nod.'.php')){
 	if(is_numeric($_GET['suj']))modif_vars($dr,$nod,$_GET['suj'],'del');
 	else modif_vars($dr,$nod,$arr,'push');}
-else{$r=plug_motor($dir,$nod,$dfb); $r[]=$arr; if($r[0])$r=msq_reorder($r); 
-write_file($dir.$nod.'.php',dump($r,$nod));}
+else{$r=read_vars($dir,$nod,$dfb); $r[]=$arr; if($r[0])$r=msq_reorder($r); 
+msql_save($dr,$nod,$r);}
 if($arr[2] && ($_GET['chat']=='tickets' or $_GET['tickets']))mail('8119@philum.net','tickets',stripslashes($arr[2]),'From: '.$_GET['name'].'<'.$_GET['admail'].'>');}
 
 if($reg=$_GET['register']){
@@ -46,7 +46,7 @@ if($_GET['chat']){$msg=receive_xmsg($_GET['msg']);
 $dfb['_menus_']=array('time','name','msg','host');
 $arr=array(time(),$_GET['name'],($msg),$_GET['host']);//html_entity_decode
 save_xmsg('clients','chat_'.$_GET['chat'],$arr,$dfb);}
-if($_GET['canalchat'])echo implode(';',array_keys(msq_select('clients','chat','')));
+if($_GET['canalchat'])echo implode(';',array_keys(msq_choose('clients','chat','')));
 if($m=$_GET['kmail']){require('sys.php'); echo sql('mail','qdu','v','name="'.$m.'"');}
 
 if($_GET['connect']){$mnu['_menus_']=array('url'); 

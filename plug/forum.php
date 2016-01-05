@@ -1,6 +1,5 @@
 <?php
 //philum_plugin_forum
-connect();
 
 function forum_read($cht){
 if($_POST["submit"]){forumsave($_POST["name"],$cht,$_POST["msg"],$_POST["suj"]);}

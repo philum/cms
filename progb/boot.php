@@ -10,7 +10,7 @@ if($_GET['qd']){$qdb=$_GET['qd']; $bqd=rse("id",$qdb.'_user'," LIMIT 1");//maste
 	if(!$bqd && !$_POST['create_hub'] && !$_POST['create_node'])
 	$qd=$prms[0]; else $qd=$qdb;}
 $_SESSION['qd']=$qd; $_SESSION['qds']='_sys'; 
-$r=array('qda'=>'art','qdm'=>'txt','qdd'=>'data','qdu'=>'user','qdi'=>'idy','qdp'=>'ips','qdv'=>'live','qdt'=>'stat'); 
+$r=array('qda'=>'art','qdm'=>'txt','qdd'=>'data','qdu'=>'user','qdi'=>'idy','qdp'=>'ips','qdv'=>'live','qdt'=>'meta','qdta'=>'meta_art');//,'qds'=>'stat','qdtag'=>'tag'
 foreach($r as $k=>$v)$_SESSION[$k]=$qd.'_'.$v;
 $_SESSION['htacc']=$prms[1]=="yes"?1:'';
 sesr('prms','create_hub',$prms[2]=='yes'?'on':'off');
@@ -92,7 +92,7 @@ define_mods('');
 $_SESSION['nms']=msql_read('lang','helps_nominations','',1);
 $_SESSION['picto']=msql_read('system','edition_pictos','',1);
 $_SESSION['icons']=msql_read('system','program_pictos','',1);
-$_SESSION["art_options"]=array("related","folder","lang","template","authlevel","tracks","2cols");
+$_SESSION['art_options']=array("related","folder","lang","template","authlevel","tracks","2cols");
 $_SESSION['node_clr']=$_SESSION['qb'];
 $_SESSION['mobile']=mobile();
 $_SESSION["switch"]=''; $_SESSION['prma']='';
@@ -106,7 +106,7 @@ $_SESSION['node_clr']=$node_clr;
 $_SESSION['rstr']=strsplit($qbinb['rstr']);}
 
 function reset_mjx(){for($i=1;$i<12;$i++)$_SESSION['heremjx'.$i]='';}
-function reset_ses(){reset_mjx(); $r=array('interm','tab','mem','plgs','digr','admb','icotag','pagewidth','jscode','recache','adminauthes','csslayer','prog','msqmimes','negcss','temp');
+function reset_ses(){reset_mjx(); $r=array('tab','mem','plgs','digr','admb','icotag','pagewidth','jscode','recache','adminauthes','csslayer','prog','msqmimes','negcss','temp');
 $n=count($r); for($i=1;$i<$n;$i++)$_SESSION[$r[$i]]='';}
 //notempty
 function setget(){$r=array('module','log','nbj','timetravel','read','','','','','','','','','','dev','continue'); $n=count($r);
@@ -120,7 +120,7 @@ if((!$_SESSION['nbj'] or $cache=="ok") && !$_GET['nbj'] && !$_GET['continue']){
 		$_SESSION['nbj']=dayslenght($_SESSION['qb'],50);
 	else $_SESSION['dayb']=$_SESSION['nbj']=0;
 	if(is_numeric($prmb16))$_SESSION['nbj']=$prmb16;}
-if($_SESSION['daya']=="" or date("dmy",$_SESSION['daya'])==date("dmy",$_SESSION['dayx']) or $cache=="ok")$_SESSION['daya']=$_SESSION['dayx'];
+if(!$_SESSION['daya'] or date("dmy",$_SESSION['daya'])==date("dmy",$_SESSION['dayx']) or $cache=="ok")$_SESSION['daya']=$_SESSION['dayx'];
 if($_GET['timetravel']){$_SESSION['daya']=dayref($_GET['timetravel']); $cache="ok";}
 if($_SESSION['nbj'])$_SESSION['dayb']=calc_date($_SESSION['nbj']);
 $_SESSION['sqlimit']='AND day < '.$_SESSION['daya'];
@@ -135,12 +135,6 @@ for($i=0;$i<9;$i++){$nbj=$r[$i];
 return $nbj;}
 
 #current
-function define_interm(){
-$fms=tri_rqt("",5); $interm=tri_tags_r($fms); 
-if($interm){ksort($interm);
-foreach($interm as $k=>$v)krsort($interm[$k]);}
-$_SESSION['interm']=$interm;}
-
 function deductions_from_read($read,$cache){$qda=$_SESSION['qda'];
 if(!is_numeric($read) && $read){$read=$_GET['read']=id_of_urlsuj($read);}
 if(is_numeric($read)){$_SESSION['module']='';
@@ -148,41 +142,35 @@ if(is_numeric($read)){$_SESSION['module']='';
 	if($pb!=$_SESSION['qb'] && $_SESSION['mn'][$pb]){reset_ses();//
 		$cache=$_GET['id']="ok"; $_SESSION['qb']=$pb; $_SESSION['author']=$author;}
 	if($raed){$_SESSION['frm']=$frm; $_SESSION['read']=$read; $_SESSION['raed']=$raed;
-	if($_SESSION["art_options"])$_SESSION['opts']=define_meta($read);
-	$_SESSION['mem'][$read]+=1; $_SESSION['opts']['tags']=$them;}
-	else{$_GET['read']=''; $_GET['continue']='';
+	if($_SESSION['art_options'])$_SESSION['opts']=art_opts($read);
+	$_SESSION['artags']=art_tags($id);
+	$_SESSION['mem'][$read]+=1;}
+	else{$_GET['read']=''; $_GET['continue']=''; $_SESSION['artags']='';
 		$_SESSION['read']=''; $_SESSION['raed']=''; $_SESSION['frm']='Home';}}
 else{$_SESSION['read']=''; $_SESSION['raed']=''; $_SESSION['frm']='Home';
 	$_SESSION['opts']=''; $_SESSION['module']='';}
 if(isset($_GET['module'])){$_SESSION['module']=$_GET['module']; $_SESSION['frm']='Home';}
 return $cache;}
 
-function define_meta($id){
-foreach($_SESSION["art_options"] as $k=>$v)$wh[]=' val="'.$v.'" '; $wh=implode('OR',$wh);
-$rq=res('val,msg',$_SESSION['qdd'].' WHERE ib="'.$id.'" AND cat="options" AND ('.$wh.')');
-while($d=mysql_fetch_row($rq)){$ret[$d[0]]=$d[1];}
-if(!$ret['lang'])$ret['lang']=prmb(25);
-return $ret;}
-
 function define_frm(){$ret=$_SESSION['frm'];
 $m=stripslashes(urldecode($_GET['section']));
 if($m)$ret=$m; return $ret;}
 
 function repair_mods($nod){
-$r=plug_motor('msql/users/',$nod.'_sav',"");
+$r=read_vars('msql/users/',$nod.'_sav',"");
 if($r){$r=msq_copy('users',$nod.'_sav','users',$nod);
 	if(auth(2))alert('backup mods restored');}
-if(!$r){$r=plug_motor('msql/system/','default_mods',"");
+if(!$r){$r=read_vars('msql/system/','default_mods',"");
 	if($r)$r=msq_copy('system','default_mods','users',$nod);
 	if(auth(4))alert('using minimal config '.lkc('txtx','/admin/hubs&reinit==','reinit?'));} 
 return $r;}
 
 function define_mods($q='',$r=''){
 $nod=($q?$q:$_SESSION['qb']).'_mods_'.prmb(1);
-$r=$r?$r:plug_motor('msql/users/',$nod,"");
-if(!$r)$r=repair_mods($nod); if($r){unset($r['_menus_']);
-	foreach($r as $k=>$v){if($v[0]=='system' && $v[2])$vrf[$v[1]]=$k;
-		$key=array_shift($v); $ret[$key][$k]=$v;}}
+$r=$r?$r:msql_read('',$nod,'',1);
+if(!$r)$r=repair_mods($nod); 
+if($r)foreach($r as $k=>$v){if($v[0]=='system' && $v[2])$vrf[$v[1]]=$k;
+	$key=array_shift($v); $ret[$key][$k]=$v;}
 if(!$vrf['blocks']){//alert('block: using default');
 	$ret['system'][]=array('blocks','banner menu content footer');}
 if(!$vrf['design']){$ret['system'][]=array('design','2');}
@@ -208,7 +196,7 @@ elseif(is_numeric($n))return 'public_design_'.$n; elseif(is_numeric($n))return '
 
 function auto_design(){$n=$_SESSION['prmb'][5]; $phi=ses('philum');
 $d=msql_read_b('',ses('qb').'_autodesign',$phi,'',array($phi=>array(1)));
-if(!$d){require('styl.php');// or get(id)
+if(!$d){req('styl');// or get(id)
 if($n<4)$r=msql_read('system','default_css_'.$n);
 elseif(is_numeric($n))$r=msql_read('design','public_design_'.$n);
 $f='css/'.ses('qb').'_auto.css';
@@ -232,7 +220,7 @@ build_css($f,$r,$klr);}}
 function define_design(){$nod=$_SESSION['node_clr'].'_design';if($_SESSION['desgn'])$nod.='_dev';
 if($_SESSION["switch"])$nod.='_'.$_SESSION["switch"]; else $nod.='_'.$_SESSION['prmd'];
 if($_SESSION['prmb'][5] && !$_SESSION['desgn'])$nod=$_SESSION['qb'].'_auto';
-if($_SESSION['tablet'])$_SESSION['head_r'][]['csscode']=plugin('tablet');
+if($_SESSION['tablet'])Head::add('csscode',plugin('tablet'));
 if(!$_SESSION['node_clr'])$nod='_classic'; 
 if($_SESSION['negcss']){$nod.='_neg'; negcss();}
 return $nod;}
@@ -296,7 +284,6 @@ function eye_iq(){$ip=ses('ip');
 list($iq,$nva)=sql('id,nav','qdp','r','ip="'.$ip.'" LIMIT 1');
 $nav=addslashes($_SERVER['HTTP_USER_AGENT']); $ref=$_SERVER['HTTP_REFERER'];
 if(!$iq)$iq=insert('qdp','("","'.$ip.'","'.$nav.'","'.$ref.'","1",NOW())');
-//elseif($nav!=$nva)squ('qdp','ip=ip,nav="'.$nav.'",ref="'.$ref.'",nb=nb+1,time="'.time().'"','id='.$iq);
 return $iq;}
 
 #update
@@ -333,9 +320,11 @@ function build_content(){$gmd=$_GET['module'];
 return $content;}
 
 function build_blocks(){
-$r=explode(' ',$_SESSION['prma']['blocks']);
+$r=explode(' ',$_SESSION['prma']['blocks']); $p=$_GET['plug'];
 foreach($r as $k=>$v){
-	if($v=='content')$ret[$v]=divd($v,build_content())."\n";
+	if($v=='content'){
+		if($p)$d=plugin($p,get('p'),get('o')); else $d=build_content();
+		$ret[$v]=divd($v,$d)."\n";}
 	elseif($v=='clear')$ret[$v]=divc('clear','');
 	else $ret[$v]=divd($v,build_modules($v,$cache))."\n";}
 $ret=str_replace('</p>',"</p>\n",$ret);
@@ -351,13 +340,11 @@ if((!is_array($main[$lastart]) && $lastart) or get('refresh') or $_GET['nbj']){
 	$sq=sqlmk($slct,'qda',$in,$wh,$ord); $rq=$req=mysql_query($sq);
 	$ret["_menus_"]=array('date','cat','title','img','hub','tag','lu','author','lenght','url','ib','re'); $rtb=tri_cache($rq); if($rtb)$ret+=$rtb; if($rq)mysql_free_result($rq);
 	if(!$_GET["lang"] && count($ret)<500){//!$_GET["timetravel"] && !$_GET["nbj"] && 
-	$ok='cache reloaded'; write_file(msq_f('',$nod),dump($ret,$nod)); 
+	$ok='cache reloaded'; msql_save('',$nod,$ret);
 	maj_nbarts($last[0]);}}
 else $_SESSION['rqt']=$main;
 //if($ok && $rtb)alert($ok);
 return lka('/reload/'.ses('qb'),'reload');}
-
-/*function error_art(){return array(ses('dayx'),'_system',nms(11).' '.nms(1),'',ses('qb'),'',0,'system','1','','/','1');}*///s'affiche dans $_line
 
 //0=>id,1=>ib,2=>day,3=>mail,4=>frm,5=>suj,6=>img,7=>nod,8=>thm,9=>name,10=>lu,11=>re,12=>host
 function tri_cache($rq){
@@ -372,7 +359,7 @@ if($last!=$lastdy)update('qdu','struct',$last,'name',ses('qb'));}
 
 #utils
 function umem(){$r=array('_menus_','type','value');//$r=sesmk('umem');
-return plug_motor('/users/',ses('qb').'_visitors_'.ses('iq'),$r);}
+return read_vars('/users/',ses('qb').'_visitors_'.ses('iq'),$r);}
 
 function block_crawls(){$ip=ses('hostname');//proxad
 $r=array('msnbot','googlebot','spider','wowrack','netestate','tralex'); $n=count($r);
@@ -393,13 +380,7 @@ foreach($r as $k=>$v){if($v!='_trash.php'){
 	if($sa!=$sb or $da>$db){copy($fb,$old.$v); copy($fa,$fb); $ret.=strdeb($v,'.').' ';}}}
 return $ret;}
 
-//140615
-function patch($db){$r=lstrc(rcptb($db));
-if(!in_array(ses('qdv'),$r)){$_SESSION['stsys']='no'; plugin('patchs','patch_sql_stats');
-alert('/plug/patchs/patch_sql_stats');}}
-
 function tests(){//chrono('test');
-p(get_defined_functions());
-}
+p(get_defined_functions());}
 
 ?>

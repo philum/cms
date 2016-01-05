@@ -2,31 +2,32 @@
 //philum_ajax_hangar
 session_start();
 error_report();
+$_SESSION['onload']='';
 if(!$_SESSION['stime']){req('boot,art,spe'); master_params('params/_'.$db,$qd,$aqb,$subd);
 	define_hubs(); define_qb(); define_config(); time_system($cache);
 	cache_arts(); define_cats_rqt(); define_condition(); define_clr();}
 if(!$_SESSION['picto'])$_SESSION['picto']=msql_read('system','edition_pictos','',1);
 $res=($_GET['res']); if(substr($res,-1)=='_')$res=substr($res,0,-1);
 list($n,$id,$va,$opt,$optb)=ajxr($_GET['callj']); $sz=$_GET['sz']; $pp=$_GET['popup'];
-$ar=array('plug'=>1,'plup'=>1,'plugin'=>1,'plupin'=>1,'titsav'=>1,'popbub'=>1);
+$ar=array('plug'=>1,'plup'=>1,'plugin'=>1,'plupin'=>1,'titsav'=>1,'popbub'=>1,'call'=>1,'callp'=>1);
 if(!$ar[$n])require_once('prog'.$b.'/ajxf.php');//
 
-function popbt($o){return ljb('','Close','popup',picto('close')).' '.ljb('','reduce()','',picto('less')).' '.ljb('','poprepos()','',picto('fsopen')).' '.ljb('','fixelem()','',picto('fix')).' '.$o.$_SESSION['popm'];}
-function popa($t,$o='',$s=''){
-return div('id="popa" class="popa" onmouseup="stop_drag(event); noslct(1);" onmousedown="noslct(0);"',popbt($o).balb('small',ats('cursor:move;'),$t?etc($t,70):'popup'));}
+//ljb('','expand()','',picto('expand')).' './/fsopen
+function popbt($o){return ljb('','Close','popup',picto('close')).' '.ljb('','poprepos()','',picto('ktop')).' '.ljb('','reduce()','',picto('less')).' '.ljb('','fixelem()','',picto('fix')).' '.$o.$_SESSION['popm'];}
+//function popbt($o){return ljb('','Close','popup','&#9209;').' '.ljb('','poprepos()','','&#9899;').' '.ljb('','reduce()','','&#9650;').' '.ljb('','fixelem()','','&#9660;').' '.$o.$_SESSION['popm'];}
+function popa($t,$o='',$s=''){return div(atd('popa').atc('popa'),popbt($o).balb('small',ats('cursor:move;').atb('onmouseup','stop_drag(event); noslct(1);').atb('onmousedown','noslct(0);'),$t?etc($t,70):'popup'));}
 function popup($t,$d,$w='',$p=''){if($w)$s='max-width:'.($w+16).'px;';
 if($p==1)$p=lj('','page_deskbkg',picto('desktop')).' ';
-//if($p==2)$p=ljb('','popfull()','',picto('expand')).' ';
-$popa=popa($t,'',$s); $_SESSION['popm']='';
-return div('class="popup" style="'.$s.'" 
-onmouseup="stop_drag(event)"',$popa.div('id="popu" class="popu"',$d));}// onresize="poprepos()"
-
-header('Content-Type:text/html; charset='.$_SESSION['enc']);//utf-8//iso-8859-1
+if($p==2)$p=ljb('','pagrepos()','',picto('expand')).' ';
+$popa=popa($t,$p,$s); $_SESSION['popm']='';// onresize="poprepos()"
+return div(atc('popup').ats($s).atb('onmouseup','stop_drag(event)'),$popa.div(atd('popu').atc('popu'),$d));}
+function pagup($d){$x=ljb('','Close','popup',picto('close'));
+return divc('popup',$x.divd('popu',$d));}
 
 #private
-if($_SESSION["auth"]>1)switch($n){
+if($_SESSION['auth']>1)switch($n){
 //art
-case("tit"):req('meta,spe'); $t='meta:'.$id; $s=440; 
+case("tit"):req('meta,spe'); $t='meta:'.$id; $s=480; 
 	if($_GET['frm1'])save_tits_j($id); $ret=edit_tits($id,$va); break;
 case("titsav"):req('art,pop,spe,mod,tri,meta'); save_tits_j($id); 
 	$ret=art_read_d($id,'',$va,$opt); break;
@@ -38,7 +39,7 @@ case("addfolder"):req('meta'); $ret=slct_folder($id); $t='folder'; $s=440; break
 case("addArt"):req('art,tri,spe'); $_GET['continue']=''; $p=1;
 	$ret=f_inp("",$id); if($va==1)$t='Article'; $s=550; break; 
 case("saveart"):req('tri,pop,spe,sav'); $msg=modif_art($va,$id); 
-	if($opt!='no')$ret=txarea1($msg,1); break;
+	if($opt!='no')$ret=txarea1($msg); break;
 case("newart"):req('art,pop,tri,spe,mod,sav'); $ret=addart_new($id,$va,$res); break;
 case("addurlsav"):req('pop,art,tri,spe'); $ret=addart_sav($id,$va,$opt,$optb); break;
 case("placeim"):$ret=placeim($id); break;
@@ -46,6 +47,16 @@ case("recenseim"):$ret=recenseim($id); break;
 //meta
 case("autolang"):req('meta'); $ret=lang_arts_auto($id,$va); break;
 case("chday"):req('meta'); $ret=edit_day($id,$va); break;
+case("upload"):$ret=plugin('upload',$id,$va); break;
+case("upimg"):if($id)write_file('users/'.ses('qb').'/'.$va,base64_decode($id)); break;
+//meta::new
+case("editag"):req('meta'); $ret=edit_tags($id,$va,$opt); break;
+case("addtag"):req('meta'); $ret=addtag($id,$va,$opt,$optb); break;
+case("deltag"):req('meta'); $ret=deltag($id,$va,$opt,$optb); break;
+case("slctag"):req('meta'); $ret=slctag($id,$va,$opt); break;
+case("savtag"):req('meta'); $ret=savtag($id,$va,$opt); break;
+case("matchtag"):req('pop,tri,spe,meta'); $ret=match_tags($id,$va); break;
+case("slctfrm"):req('meta'); $ret=slct_frm($id,$va); break;
 //read
 case("readart"):sleep(1); req('pop,spe,mod,tri,art'); 
 	$_GET["continue"]=1; $_SESSION["read"]=$id; $ret=read_msg($id,3); break;
@@ -55,11 +66,6 @@ case("batchfbi"):req('tri'); $ret=batchfbi(); break;
 case("batchprep"):req('tri'); $ret=batch_prep($id); break;
 case("cmption"):req('spe,meta'); $ret=cmption_call($id,$va,$opt,$optb); if(!$optb)$t=$id; 
 	$s=440; break;
-//meta
-case("autotag"):req('pop,tri,spe,meta'); $ret=auto_tag_j($id,$va); break;
-case("upload"):$ret=plugin('upload',$id,$va); break;
-case("upimg"):if($id)write_file('users/'.ses('qb').'/'.$va,base64_decode($id)); break;//
-case("savtag"):req('meta'); $ret=savtag($id,$va,$opt); break;
 //admin
 case("banslct"):req('admin,spe'); $ret=ban_dir($id); break;
 case("bansav"):req('admin'); $ret=ban_sav($id); break;
@@ -75,7 +81,7 @@ case("modadd"):req('adminx,tri,spe'); $ret=bar_add_mod($id); $tt='new module'; b
 case("medit"):req('adminx'); $ret=mod_edit_j($id,$va,$opt,$optb); break;
 case("submds"):req('adminx,spe'); $ret=submds($id,$va,$opt,$optb,$res); break;
 case("comline"):req('adminx'); $ret=comline_edit($id,$va,$opt,$res); break;
-case("modsee"):req('pop,spe,art,tri,mod'); 
+case("modsee"):req('pop,spe,art,tri,mod');
 	$r=msql_read('users',$_SESSION['modsnod'],$id,1); $rb=array_shift($r);
 	$t='module:'.$r[0]; $ret=$va?modsee($r):build_mods($r); $s=720;
 	if(!$ret)$ret=nms(11).' '.nms(16); break;
@@ -137,10 +143,10 @@ case("filters"):req('tri'); $msg=$id;
 		$rt=sql('msg','qdm','v','id='.$read);}
 	if($va=='revert')$rt=sql('msg','qdm','v','id='.$_SESSION['read']);
 	if($va=='postreat')$rt=post_treat_batch($id,$va,$opt);
-	$ret=txarea1($rt,1); break;
+	$ret=txarea1($rt); break;
 case("backup"):$optb=sql('msg','qdm','v','id='.$_SESSION['read']); //$t='backup';
 	modif_vars('users',$id,$opt?$opt:array($optb),$va); $ret=navs('backup'); break;
-case("restore"):$ret=txarea1(stripslashes(msql_read($id,$va,$opt)),1); break;
+case("restore"):$ret=txarea1(stripslashes(msql_read($id,$va,$opt))); break;
 }
 
 #public
@@ -151,10 +157,11 @@ case("loged"):req('pop'); $ret=loged($id,$va,$opt); if($optb)$t='login'; break;
 //readers
 case("art"):req('pop,spe,art,tri'); $ret=art_read_c($id,$va,$opt); break;
 case("artone"):req('art,pop,spe,tri'); $ret=art_read_b($id,'',$va,$opt); break;
+case("load"):req('art,pop,spe,tri'); $ret=play_arts('','','',$id); break;
 case("popart"):req('pop,spe,art,tri,mod,boot'); //$_SESSION['read']=$id;
-	$_SESSION['cur_div']='content'; deductions_from_read($id,''); 
-	if(auth(6))ses('popm',lj('','popup_tit___'.$id,picto('tag')).' '.lj('','popup_artedit___'.$id,picto('edit'))); $t=suj_of_id($id);
-	$s=prma('content')+30; $nl='nlpop'; $ret=art_read_b($id,'',3,''); break;
+	$_SESSION['cur_div']='content'; deductions_from_read($id,''); $p=2;
+	if(auth(6))ses('popm',lj('','popup_tit___'.$id,picto('tag')).' '.lj('','popup_artedit___'.$id,picto('edit'))); $t=suj_of_id($id); $s=prma('content')+20;
+	$nl='nlpop'; $ret=art_read_b($id,'',3,''); break;
 case("popartmod"):req('mod,spe,art,pop,tri,boot'); deductions_from_read($id,'');
 	$ret=build_art_mod(''); $t=nms(39); $s=440; break;
 case("divcontent"):req('pop,spe,art,tri,mod,boot'); 
@@ -163,20 +170,21 @@ case("getcontent"):req('pop,spe,art,tri,mod'); $_GET[eradic_acc($id)]=$va;
 	if(is_numeric($opt))$_GET['dig']=$opt; elseif($opt)$_GET[$opt]=$optb; 
 	$_SESSION['load']=define_load(); $tt=$id.':'.$va; $s=prma('content');
 	$ret=output_load($_SESSION['load'],slct_media()); break;
-case("site"):list($w,$h)=explode('-',$sz); $w=sesmk('content_width','',1); $h=$h?$h-80:640;
+case("modj"):req('mod,pop,art,spe,tri'); $ret=modj($id,$va); break;
+case("site"):list($w,$h)=explode('-',$sz); $w=currentwidth(); $h=$h?$h-80:640;
 	if($id)$go='?'.$id.'='.$va; $ret=iframe('index.php'.$go.'§'.($w+24).'/'.($h),''); 
 	$t=$_SESSION['qb']; break;
 case("ucom"):$ret='module/'.$id; if($va)$t=$va; break;
 case("modpop"):req('pop,spe,art,tri,mod'); $t=strprm($id,1); 
 	$t=$t?$t:strrchr_b($id,':'); $t=$t?$t:$id; $s=$va?$va:640; $ret=build_mod_r($id); break;
 case("ajxlnk"):req('pop,spe,art,tri,mod');
-	$_SESSION[$va]=$id; if($id!='close')$ret.=build_mod_r($id); break;
+	$_SESSION[$va]=$id; if($id!='close')$ret=build_mod_r($id); break;
 case("ajxlnk2"):req('pop,spe,art,tri,mod,boot');
 	if($id=='art'){deductions_from_read($va,$cache); define_condition();}
 	if($id=='one')$ret=build_mod_r($va); else $ret=build_modules('content',''); break;
 case("rssart"):req('pop,tri,spe'); $t=$id; $s=640; $ret=rss_art($id,$va,1); break;
 case("archives"):req('spe'); $ret=m_archives($id); break;
-case("editbrut"):req('admin'); if($va)admin_art_sav($id,$va); 
+case("editbrut"):req('admin,spe'); if($va)admin_art_sav($id,$va); 
 	$ret=admin_art_edit($va?$va:$id); break;
 //content
 case("webpage"):require('plug/suggest.php');
@@ -191,10 +199,10 @@ case("iframe"):$s=strdeb($res,'-'); $s=is_numeric($s)?$s:720;
 case("search"):req('pop,spe,art,tri,mod'); require('plug/search.php'); 
 	$ret=plug_search($id,$va,$opt,$res); $t=nms(24); $s=640; break;
 case("words"):req('pop,spe,tri,meta'); $ret=u_words($id); $t=nms(47); $s=440; break;
-case("meta"):req('pop,spe,tri,meta'); $ret=u_words($id); $t=nms(47); $s=440; break;//
+//case("meta"):req('pop,spe,tri,meta'); $ret=u_words($id); $t=nms(47); $s=440; break;//
 //tracks
 case("track"):req('pop,spe'); $ret=plugin_func('tracks','f_inp_track',$id,$va);
-	$s=440; if(substr($id,0,4)=='wall')$t=nms(29);
+	if(substr($id,0,4)=='wall')$t=nms(29); //$s=440;
 	else $t=$id>0?nms(21):nms(34).' '.nms(36).' '.$id; break;
 case("tracks"):req('pop,spe,art,tri'); $id=(convhtml_b(nl2br($id),1)); //ajx()
 	reqp('tracks'); $ret=save_track($id,$va,$opt,$optb); break;
@@ -216,9 +224,9 @@ case("delconn"):req('tri'); $rt=sql('msg','qdm','v','id='.$id);
 case("navs"):$ret=navs($id); if(!$va)$tt=$id; $s=500; break;
 case("vmail"):$ret=vmail($id); $t='mail article:'.$id; $s=320; break;
 case("vmailsend"):req('pop,spe,tri,mod'); $ret=vmailsend($id,$res); break;
-case("extractid"):req('tri'); $ret=auto_video($id,$va); break;
-//plugs
-case("gallery"):$ret=conn_params_photo($id); $t='gallery'; break;
+case("extractid"):req('tri'); $ret=auto_video($id,$va,$opt,$optb); break;
+//medias
+case("gallery"):$ret=plugin('gallery',$id); $t='gallery'; break;
 case("photo"):$ret=photo_screen($id,$va,$opt,$optb); break;
 case("viewer"):$ret=photo_viewer($id,$va,$opt,$optb); break;
 case("chat"):$ret=plugin_func($n,$id,$va,$opt,$res); break;
@@ -227,7 +235,7 @@ case("chatxml"):$ret=plugin_func($n,$id,$va,$opt,$res); break;
 case("offon"):$ret=offon($id); break;
 case("nbp"):req('pop,spe,tri'); $ret=nbp($id,$va); $t='footnote #'.$id; $s=400; break;
 case("export"):$ret=exportation($id,$va,$opt,$optb); $t='export:'.$id; $s=440; break;
-case("deploy"):$ret=deploy($id); break;
+case("deploy"):$ret=plugin('deploy',$id); $t='deployement: '.$id; $s=440; break;
 //j
 case("embed"):$ret=input2('text','" size="40',$id,'txtblc'); $tt=$va; break;
 case("url"):$ret=mbd_url(); $tt='url'; break;
@@ -263,7 +271,7 @@ case("msqlfind"):req('msql'); $ret=msql_find($id,$va,$opt,$res); break;
 case("msqlcall"):$r=msql_read($id,$va,$opt); if(auth(6))$ret=msqlink($id,$va,$opt).' ';
 	$ret.=$optb!==false?stripslashes($r[$optb]):$r; break;
 case("msqlread"):$ret=msq_goodtable($id.'_'.$va.'_'.$opt.'_'.$optb.'§'.$optb);
-	if($res){req('pop,spe,art,tri'); $ret=format_txt_r($ret,'','');} break;
+	if($res){req('pop,spe,art,tri'); $ret=format_txt_r(stripslashes($ret),'','');} break;
 case("popmsqt"):$rt=msql_read($id,$va,$opt); if(is_array($rt))$rt=$rt[$optb?$optb:0];
 	if(auth(6))$ret=msqlink($id,$va,$opt).' ';
 	$ret.=nl2br(stripslashes($rt)); $t=$va.' '.$opt.' '.$optb; $s=440; break;
@@ -291,11 +299,12 @@ case("chkbx"):$ret=offon($id); break;
 //call
 case("popbub"):req('bubs,spe'); $ret=bub_root($id,$va); break;
 case("plugin"):if($id)$ret=plugin($id,$va,$opt,$optb,$res); break;
-case("plupin"):if($id)$ret=plugin($id,$va,$opt,$optb,$res); $t=$id;
+case("plupin"):if($id)$ret=plugin($id,$va,$opt,$optb,$res); $t='/plug/'.$id;
 	$s=$id=='iframe'?720:550; $p=2; break;
 case("plug"):$ret=plugin_func($id,$va,$opt,$optb,$res); break;
-case("plup"):$t=$id; if($optb>200 && $optb<1000){$s=$optb; $optb='';} else $s=550; $p=2;
-	if($id=='taxonav')req('spe,mod'); $ret=plugin_func($id,$va,$opt,$optb,$res); break;
+case("plup"):if($optb>200 && $optb<1000){$s=$optb; $optb='';} else $s=550; $p=2;
+	$ret.=plugin_func($id,$va,$opt,$optb,$res); $t='/plug/'.$id; break;
+case("openapp"):$ret=openapp($id,$va,$opt); $t=$id; break;
 case("sesmake"):if(forbidden_sessions($va))$_SESSION[$va]=$id; break;
 case("session"):$ret=$_SESSION[$id]; break;
 case("togses"):$ret=offon(yesnoses($id)); break;
@@ -311,9 +320,14 @@ if($n=='call' or $n=='callp'){if($n=='callp')$t=$va;
 $eye=array('art','popart','popartmod');
 if($eye[$n])eye();
 
-//
 if($tt && $pp)$t=$tt;
-if($t)$ret=popup($t,$ret,$s,$p);
+if($t=='pagup')$ret=pagup($ret);
+elseif($t)$ret=popup($t,$ret,$s,$p);
+//
+if(Head::$add){
+Head::add('meta',array('http-equiv','Content-Type','text/html; charset='.$_SESSION['enc']));
+echo Head::generate();}
+else header('Content-Type:text/html; charset='.$_SESSION['enc']);
 echo utf($ret);
 mysql_close();
 ?>

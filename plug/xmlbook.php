@@ -52,14 +52,14 @@ $daybb=$daya-86400*$_SESSION['nbjb'];
 //heads
 if($_GET["plug"]==""){
 $title='xmlbook';
-$rh[]['css']='../css/_admin.css';
-$rh[]['css_in']='
-body { font-family: Georgia; }
-#page {	width:600px; font-size:18px; }
-.txtfrmb { font-family: Times ; }
-.titres { font-size:24px; }
-.justy { font-size:16px; }';
-echo headers_r($title,$rh);
+Head::add('csslink','../css/_admin.css');
+Head::add('csscode','
+body {font-family: Georgia;}
+#page {width:600px; font-size:18px;}
+.txtfrmb {font-family: Times;}
+.titres {font-size:24px;}
+.justy {font-size:16px;}');
+echo Head::get();
 echo '<body"><center><div id="page" class="tabd">';}
 
 //render

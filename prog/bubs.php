@@ -18,6 +18,10 @@ $j='SearchT(\''.$id.'\')';
 $js='onClick="'.$j.'" onkeyup="'.$j.'" onContextMenu="'.$j;
 $ret=autoclic('search" id="'.$id.'" role="search" '.$js,$t,$s,'100','');
 return divb('search|'.$di,$ret);}
+//addart_fast
+function bub_addart_btn(){req('ajxf');
+return bub_adm_addart();}
+
 //ucom
 function bub_ucom_btn(){$j='sjtime(\'ucom\',\'socket_ucom_ucom_url\');';
 $js='onClick="'.$j.'" onContextMenu="'.$j;
@@ -48,8 +52,8 @@ return $ret;}
 function bub_dev(){$r=array('dev','lab','prod');
 //$ret[]=array('cache','ajax','popup','rebuild__3xx','','','dev','reload');
 foreach($r as $k=>$v)$ret[]=bub_l($v,'link','/dev/'.$v,'dev','phi2');
-if(auth(6))$ret[]=bub_l('pub','link','/?dev2prod==','dev','down');
-//if(auth(7))$ret[]=bub_l('publish','linkt','/plug/publish_site','dev','export');
+if(auth(6))$ret[]=bub_l('push','link','/?dev2prod==','dev','down');
+if(auth(7))$ret[]=bub_l('publish','linkt','/plug/publish_site','dev','export');
 return $ret;}
 //time
 function bub_timetravel(){req('spe,art'); $r=timetravel(); $travel=date('Y',ses('daya'));
@@ -68,15 +72,14 @@ return $ret;}
 
 //seek
 //tag find arts
-function bub_seek_art($d){req('mod'); list($cat,$tag)=explode('-',$d); 
-if($cat=='tag')$r=sesr('interm',$tag); else $r=usertag_arts($tag); unset($r[ses('read')]);
+function bub_seek_art($d){req('mod'); list($cat,$tag)=explode('-',$d);
+$r=tag_arts($tag,$cat); unset($r[ses('read')]);
 if($r)foreach($r as $k=>$v)
 	$ret[]=array(suj_of_id($k),'art','',$k,$d,'',$d,'article');
 return $ret;}
 //class find tags
 function bub_seek_tag($d){req('mod'); $id=ses('read');
-if($id){req('art'); if($d=='tag')$r=tri_tag(rqt($id,5)); else $r=utags_v($id,$d);}
-else{if($d=='tag')$r=tags_list(); else $r=usertags($d);}
+$r=classtag_arts($d);
 if($id && $r)$r=array_flip($r);
 if($r)foreach($r as $k=>$v)if($k)//id
 	//$ret[]=array($k,'bub','seekart',$d.'-'.$k,'','',$d,'tag');
@@ -84,7 +87,7 @@ if($r)foreach($r as $k=>$v)if($k)//id
 return $ret;}
 //id find classes
 function seek_merge($d,$ret){$id=ses('read');
-if($d=='tag')$r=tri_tag(rqt($id,5)); else $r=utags_v($id,$d); if($r)$r=array_flip($r);
+$r=art_tags($d); //p($r);
 if($r)foreach($r as $k=>$v)if($k)//id
 	$ret[]=array($k,'bub','seekart',$d.'-'.$k,'','','','tag');
 	//$ret[]=array($k,'ajax','popup_getcontent___'.$d.'_'.$k,'','','','','tag');
@@ -115,7 +118,7 @@ return $ret;}
 
 //msql
 function bub_msql($cat,$a,$b,$c){
-$r=msq_select($a,$b,$c); $j='msql___'.$a.'_'.$b.'_'; if($c)sort($r);
+$r=msq_choose($a,$b,$c); $j='msql___'.$a.'_'.$b.'_'; if($c)sort($r);
 if($r)foreach($r as $k=>$v){if(is_array($v)){sort($v); $kp=in_array_b('php',$v);
 	if($kp!==false){unset($v[$kp]);
 		$ret[]=array('This','ajax','popup',$j.$k,'','',$cat.'/'.$k,'msql');}
@@ -328,6 +331,7 @@ function bub_root($d,$dir){switch($dir){//pre-rendered, intercepte navigation
 case('batch'): req('tri,pop,ajxf'); return batch('','c');break;
 case('fastmenu'): return bub_adm_admin_fast();break;
 case('search'): return bub_search_btn('',18,'srchb');break;
+case('addart'): return bub_addart_btn();break;
 case('ucom'): return bub_ucom_btn();break;
 case('arts'): return bub_adm_arts_fast(); break;
 case('user'): return bub_adm_user_fast(); break;

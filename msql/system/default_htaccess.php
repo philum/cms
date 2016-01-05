@@ -2,10 +2,6 @@
 //philum_microsql_default_htaccess
 $r["_menus_"]=array('title_1');
 $r[1]=array('RewriteEngine on
-Options +Indexes
-Options -Multiviews
-Options +FollowSymlinks
-RewriteEngine on
 RewriteRule ^([0-9]+)$ /?read=$1 [L]
 RewriteRule ^read/([^/])$ /?read=$1#$1 [L]
 RewriteRule ^read/(.+)/page/([0-9]+) /?read=$1&page=$2#pages [L]
@@ -28,13 +24,18 @@ RewriteRule ^module/([^/]+)/([^.]+)/([^.]+)/([^.]+)/([^.]+)$ /?module=$2/$3/$4/$
 RewriteRule ^module/([^/]+)/([^.]+)/([^.]+)/([^.]+)$ /?module=$2/$3/$4:$1 [L]
 RewriteRule ^module/([^/]+)/([^.]+)/([^.]+)$ /?module=$2/$3:$1 [L]
 RewriteRule ^module/([^/]+)/([^.]+)$ /?module=$2:$1 [L]
+RewriteRule ^admin/([^/]+)/([0-9]+)/([0-9]+)$ /?admin=$1&dig=$2&page=$3 [L]
+RewriteRule ^admin/([^/]+)/([0-9]+)$ /?admin=$1&dig=$2 [L]
+RewriteRule ^admin/([^/]+)/(.+)$ /?admin=$1&set=$2 [L]
 RewriteRule ^msql/(.+)/(.+)/(.+)/([0-9]+)$ /?msql=$1/$2&page=$4 [L]
 RewriteRule ^msql/(.+)$ /?msql=$1 [L]
-RewriteRule ^([^.]+)/(.+)/(.+)/page/([0-9]+)$ /?$1=$2&dig=$3&page=$4#pages [L]
+RewriteRule ^app/([^/]+)/([^/]+)/([^/]+) /app.php?app=$1&p=$2&o=$3 [L]
+RewriteRule ^app/([^/]+)/([^/]+) /app.php?app=$1&p=$2 [L]
+RewriteRule ^app/([^/]+) /app.php?app=$1 [L]
+RewriteRule ^([^.]+)/(.+)/([0-9]+)/page/([0-9]+)$ /?$1=$2&dig=$3&page=$4#pages [L]
 RewriteRule ^([^.]+)/(.+)//page/([0-9]+)$ /?$1=$2&page=$3#pages [L]
 RewriteRule ^([^.]+)/(.+)/page/([0-9]+) /?$1=$2&page=$3#pages [L]
 RewriteRule ^([^.]+)/(.+)/([0-9]+)$ /?$1=$2&dig=$3 [L]
-RewriteRule ^admin/([^/]+)/([^/]+)$ /?admin=$1&set=$2 [L]
 RewriteRule ^reload/(.+) /?id=$1&refresh== [L]
 RewriteRule ^([^.]+)/([^.^/]+)$ /?$1=$2 [L]
 RewriteRule ^reload /?refresh== [L]

@@ -4,14 +4,15 @@
 //twitter date
 //07:01 - 13 juin 2015
 function clean_day_tw($d){//echo $d.br();
-$dr=array('jan'=>'01','fev'=>'02','mars'=>'03','avr.'=>'04','mai'=>'05','juin'=>'06','juil'=>'07','août'=>'08','sept'=>'09','oct'=>'10','nov'=>'11','déc'=>'12',);
+$dr=array('jan'=>'01','fev'=>'02','mars'=>'03','avr.'=>'04','mai'=>'05','juin'=>'06','juil'=>'07','août'=>'08','sept'=>'09','oct'=>'10','nov'=>'11','déc'=>'12','Dec'=>'12');
 list($h,$y)=split_right('-',$d); 
 $hr=explode(':',trim($h)); //echo $h.br();
 $yr=explode(' ',trim($y)); 
 $yr[0]=strlen($yr[0])==1?'0'.$yr[0]:$yr[0];
 $yr[1]=str_replace(array_keys($dr),array_values($dr),$yr[1]);
 //echo $y.br(); //p($hr);
-$tim=mktime($hr[0],$hr[1],0,$yr[1],$yr[0],$yr[2]);
+$month=is_numeric($yr[1])?$yr[1]:$dr[strtolower($yr[1])];
+$tim=mktime($hr[0],$hr[1],0,$month,$yr[0],$yr[2]);
 if(!$tim)p($yr);
 return $tim;}
 
@@ -80,7 +81,7 @@ $ret.=lj('',$rid.'_plug__2_msqarts_msqarts*j___inp',picto('reload')).' ';
 return $ret;}
 
 //
-function plug_msqarts($p,$o){$rid='plg'.randid(); connect(); //if(!$p)$p='Oyagaa Ayoo Yissaa';
+function plug_msqarts($p,$o){$rid='plg'.randid(); //if(!$p)$p='Oyagaa Ayoo Yissaa';
 $nod=msqt_name($p);
 reqp('msql'); $msq=new msql('',$nod); $rb=array('id','suj','msg'); $msq->create($rb);
 $bt=msqarts_menu($p,$o,$rid); $ret=msqarts_j($p,$o);

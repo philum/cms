@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_retape
-session_start();
-error_reporting(6135);
 //tag:system
 //usage:retape arts pour désactiver rstr70
 

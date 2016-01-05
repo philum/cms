@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_ixquick
-session_start();
-//if($f)$data=file_get_contents($f);
 
 //$sty='" onkeypress="checkEnter(event,\'ixq\')';
 function plug_ixquick($a,$b,$d=''){$d=ajxg($d); $ret.=input(1,'furl',$d,'search');

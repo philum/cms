@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_book
-session_start();
-//error_reporting(6135);
 
 function scroll_c0($d,$id){$h=$h?$h:400;;
 $cb='id="scrll'.$id.'" style="overflow:auto; padding-right:10px; max-height:400px;"';
@@ -80,10 +78,10 @@ return $ret;}
 function book_reload(){bk_rq();
 return plug_book($_SESSION['book'],$_SESSION['read']);}
 
-function plug_book($d,$id){if($_GET['plug'])bk_rq(); connect();
+function plug_book($d,$id){if($_GET['callj'])bk_rq();
 $here='book'; $id=$id?$id:$_SESSION['read']; $rid=randid();//if(!$id)
-echo css_code(book_css());
-echo js_code(book_js());
+Head::add('csscode',book_css());
+Head::add('jscode',book_js());
 $_SESSION['book']=$d; list($p,$o)=split('§',$d);
 $rb['opt']=lj('','popup_plug___book_book*ifr_'.$d,picto('get'));
 $r=array(); $ra=explode(',',$p); curwidth_set($_SESSION['prma']['content']-60);

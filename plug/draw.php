@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_draw
-session_start();
-error_reporting(6135);
-if(!function_exists('p'))require('../progb/lib.php');
 
 function draw_js(){return '
 $(document).ready(function(){
@@ -74,10 +71,10 @@ function draw_css(){return '#canvas{border:1px solid #999; margin:0; display:blo
 #couleurs a.actif{width:20px; height:20px;}';}
 
 function plug_draw($w,$h){if(!$w)$w=400;//currentwidth();
-$ret.=js_link('/js/jquery.js'); //$_SESSION['headr'].=
-$ret.=js_code(draw_js());
-$ret.=css_code(draw_css());
-$ret.=balc('canvas','" id="canvas" width="'.$w.'px" height="'.$h.'px','');
+Head::add('jslink','/js/jquery.js');
+Head::add('jscode',draw_js());
+Head::add('csscode',draw_css());
+$ret=balc('canvas','" id="canvas" width="'.$w.'px" height="'.$h.'px','');
 $r=array('black','white','blue','green','yellow','orange','brown','red','indigo','violet','pink','cyan'); $n=count($r);
 for($i=0;$i<$n;$i++){
 	$c='" style="background: none repeat scroll 0% 0% '.$r[$i].';" data-couleur="'.$r[$i];

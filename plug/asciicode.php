@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_asciicode
-session_start();
-error_reporting(6135);
 
 // _  _  _  _  
 //¦ ¦¦  ¦  ¦  ¦ ¦

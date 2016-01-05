@@ -137,8 +137,7 @@ $r["same_title"]=array('articles with same title','Give a title','','');
 $r["search"]=array('internal search engine (opt=1 : float right)','Give a title','float on right','');
 $r["see_also-rub"]=array('In the same category','specify the category, 1=auto where Home=All','','');
 $r["see_also-source"]=array('articles from the same source','Give a title','','');
-$r["see_also-tags"]=array('Articles with the same Tags','Give a title','','');
-$r["see_also-usertags"]=array('list of articles with same user_tag','specify the user_tag','','');
+$r["see_also-tags"]=array('Articles with the same Tags as the current article','specify a class of tags','','');
 $r["short_arts"]=array('short articles','define lenght (4000)','','');
 $r["social"]=array('list of publications','Give a title','','');
 $r["sources"]=array('url source of article','number of occurences','','');
@@ -156,9 +155,9 @@ three
 -- five','horizontal','');
 $r["suggest"]=array('let the visitor purpose an article from his Url','','','');
 $r["tab_mods"]=array('tabs of modules','param/title/command/option:module§button[,]','','');
-$r["tag_arts"]=array('articles with Tag :','specify the tag ; CAT = current category','','');
-$r["tags"]=array('list of tags','Give a title','nb cols or scroll limit','');
-$r["tags_cloud"]=array('cloud of tags','Give a title','','');
+$r["tag_arts"]=array('articles with Tag :','specify the tag (+ the class if needed, ex: tag:class)','','');
+$r["tags"]=array('list of tags','specify the class of tags','nb cols or scroll limit','');
+$r["tags_cloud"]=array('cloud of tags','specify the class of tags','','');
 $r["taxo_arts"]=array('articles from a parent article','specify 1 (=current/All), category, or ID_art','','');
 $r["taxo_nav"]=array('list of nodes with openable menu','','','');
 $r["taxonomy"]=array('','','','');
@@ -171,10 +170,6 @@ $r["user_menu"]=array('site navigation','predefined links :
 - title: Home§Accueil
 - picto : Home§home:picto
 - url: /?plug=myplug§name_of_plug','css','');
-$r["usertag_arts"]=array('articles with an user_tag','(not need to specify the class of tags) ; 
-CAT = current category','','');
-$r["usertags"]=array('list of usertags','','nb cols or scroll limit','');
-$r["usertags_cloud"]=array('cloud of user_tags','','','');
 $r["video_playlist"]=array('list of videos founded','nb of days','','');
 $r["video_viewer"]=array('video viewer in ajax','rules (|) :
 - tag, cat, priority 
@@ -185,6 +180,6 @@ $r["video_viewer"]=array('video viewer in ajax','rules (|) :
 $r["desktop"]=array('params ofdesktop','background : html color,gradient or image','','');
 $r["popart"]=array('open article (local or distant) in a popup','','','');
 $r["video"]=array('embed video','id of video','','');
-$r["userclasstag_arts"]=array('articles with an user tag of specified class','specify the class of tags','','');
+$r["classtag_arts"]=array('Display articles from a class of tags ','','','');
 
 ?>

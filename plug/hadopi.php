@@ -1,6 +1,5 @@
 <?php
-//philum_plugin_hadopi ALL RIGHTS RESERVED
-session_start();
+//philum_plugin_hadopi
 
 function make_table_b($r){
 if($r){foreach($r as $k=>$v){$td="";

@@ -1,7 +1,6 @@
 <?php
 //philum_plugin_tickets 
 //loaded from admin
-session_start();
 
 function microxform(){
 $j='tickets_plug___tickets_tickets*j_'.ses('qb').'__tckmsg|tckansw';

@@ -156,8 +156,8 @@ $r["swf"]=array('return a link who return an ajax popup with the Flash animation
 $r["t"]=array('css: txtit (titles)');
 $r["tables"]=array('detele tables');
 $r["thumb"]=array('build a thumbnail with personalized dimensions : [img.jpg§140/100:thumb]');
-$r["twit"]=array('display a twit called by its url ; data are saved in art datas');
-$r["twitter"]=array('call the plugin twitter whose display the twits of the account name (param)');
+$r["poptwit"]=array('open a twit in a popup');
+$r["twitter"]=array('open a twit from it\'s ID or a thread from it\'s username');
 $r["version"]=array('philum version');
 $r["video"]=array('read a video youtube daily vimeo rutube etc... §1 return a link to open a popup');
 $r["w"]=array('give entire link');
@@ -166,5 +166,7 @@ $r["webpage"]=array('display a web page in a popup (using suggest plugin)');
 $r["mktable"]=array('format csv as table datas');
 $r["svgcode"]=array('create svg from connectors. §width/height');
 $r["popmsql"]=array('return content from a msql entry in a popup ; [public_atomic§GNU:popmsql]');
+$r[1]=array('');
+$r[":pre"]=array('');
 
 ?>

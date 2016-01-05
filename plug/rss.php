@@ -2,7 +2,6 @@
 //philum_plugin_rss_output 
 session_start();
 //error_reporting(E_ALL);
-$cache=1;
 
 function rss_del_old($da){
 $r=scrut_dirb('plug/_data');//dav_1305584269_.xml
@@ -23,13 +22,12 @@ if($v[1]!="user" && $v[7]!=""){
 		//if($preview!="full")$msg=substr($msg,0,kmax_nb(400,$msg));
 		//$msg=nl2br($msg); //$msg=strip_tags($msg);
 		$msg=parse_msg_xml($msg);}
-	if($v[3] && $v[3]!="/" && $preview){$gmi=$http.'/imgc/'.$v[3];
+	if(is_image($v[3]) && $preview){$gmi=$http.'/imgc/'.$v[3];
 		//$sty='float:left; border-color:1px solid black;';
 		$gmo='<img src="'.$gmi.'" style="margin:0 10px 4px 0;" />'."\n";
 		$gmo=parse_msg_xml($gmo);}
 	else{$gmi="";$gmo="";}
-	$author=data_val('msg',$k,'tables','auteurs');
-	$lang=data_val('msg',$k,'options','lang');
+	$lang=data_val('msg',$k,'lang');
 	$xml.="<item>\n";
 	$v[2]=str_replace("&nbsp;",' ',$v[2]);
 	$xml.=bal('title',parse_msg_xml($v[2]))."\n";
@@ -62,6 +60,7 @@ $nb_arts=count($main);
 $lastid=lastid('qda'); $last_art=$main[$lastid];
 $newest=key($main); $oldest=array_pop($main);
 $nb_days=round((time()-$oldest[0])/86400);
+$cache=1;
 
 $f='../plug/_data/'.$_SESSION["qb"].'_'.$newest.'_'.$preview.'.xml';
 if(is_file($f) && !$_GET['rebuild'] && $cache)return read_file($f);

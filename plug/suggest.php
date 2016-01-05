@@ -1,8 +1,5 @@
-
 <?php
 //philum_plugin_suggest
-session_start();
-error_reporting(6135);
 
 function sugg_mail($from,$f){
 $dest=$_SESSION['qbin']['adminmail'];
@@ -29,11 +26,11 @@ function sugg_recall(){
 $nod=$_SESSION['qb'].'_suggest';
 $r=msql_read('',$nod,''); $js='popup_call__3__batch*preview_';
 if($r)foreach($r as $k=>$v){$j=ajx($v[1]); $lnk=lka($v[1],picto('url'));
-if(!$v[3])$ret.=br().lj('popbt',$js.$j.'_'.$k,$v[0].' '.preplink($v[1])).' '.$lnk.' '.$v[2];}
+if(!$v[3])$ret.=br().lj('popbt',$js.$j.'_'.$k,$v[0].' '.preplink($v[1])).' '.$lnk;}
 return $ret;}
 
 function sugg_rapport($m){
-$r=plug_motor('msql/users/',ses('qb').'_suggest','');
+$r=read_vars('msql/users/',ses('qb').'_suggest','');
 if($r)foreach($r as $k=>$v){$id='';
 	if($v[3])$id=sql('id','qda','v','mail="'.$v[1].'"'); 
 	if($id)$art=lj('popw','popup_popart__3_'.$id.'_3',nms(89));
@@ -47,22 +44,22 @@ if($r)foreach($r as $k=>$v){if($v[1]==$u)return true;}}
 function suggest_j($v1,$v2,$res){req('spe');
 $nod=ses('qb').'_suggest'; $ra=ajxr($res);
 $dfb['_menus_']=array('day','url','mail','ok','iq');
-$r=plug_motor('msql/users/',$nod,$dfb); $lnk=trim($ra[0]);
+$r=read_vars('msql/users/',$nod,$dfb); $lnk=trim($ra[0]);
 $alx=sugg_alx($r,$lnk); $rap='popup_plup___suggest_sugg*rapport_'.ajx($ra[1]);
 $view='popup_call__3__batch*preview_'.ajx($lnk);
 if($alx)return lj('popdel',$rap,nms(56)); 
 $r[]=array(date("ymdHi"),$lnk,$ra[1],'',ses(iq)); if($r[0])$r=msq_reorder($r);
 $ret=suggest_import($lnk);
-if($ret){write_file('msql/users/'.$nod.'.php',dump($r,$nod));
+if($ret){msql_save('',$nod,$r);
 	sugg_mail($ra[1],$lnk);
 	return lj('txtyl',$view,nms(56)).' '.$ret;}
 else return lj('txtyl',$rap,'404 not found');}
 
 function plug_suggest($t){if($t)$ret.=btn('txtcadr',$t).br();
 $r=msq_where('',ses('qb').'_suggest',4,ses(iq),1);
-$ret.=lj('popsav','sug_plug__3_suggest_suggest*j_1_2_sugurl|sugnam',nms(126)).br();
-$ret.=input(1,'sugurl" size="26','url','',1).br();
-$ret.=input(1,'sugnam" size="26','mail','',1).' ';//nms(38)
+$ret=input(1,'sugurl" size="26','url','',1).br();
+$ret.=input(1,'sugnam" size="26','mail','',1).br();//nms(38)
+$ret.=lj('popsav','sug_plug__3_suggest_suggest*j_1_2_sugurl|sugnam',nms(126)).' ';
 $ret.=hlpbt('suggest').' ';
 if(auth(4))$ret.=msqlink('',$_SESSION['qb'].'_suggest');
 $rec=sugg_recall();

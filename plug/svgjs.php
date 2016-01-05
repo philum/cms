@@ -16,12 +16,12 @@ return $ret;}
 
 //plugin('svgjs',$p,$o)
 function plug_svgjs($p,$o){$rid='plg'.randid();
-//header_add('js','/js/svg.min.js');
-header_add('js','/js/svg.js');
+//Head::add('js','/js/svg.min.js');
+Head::add('js','/js/svg.js');
 //$js="var draw = SVG('drawing').size(300, 300); var rect = draw.rect(100, 100).attr({ fill: '#f06' })";
 //$js='cree_rectangle(event);';
 //$_SESSION['onload']=$js;
-//header_add('jscode',$js);
+//Head::add('jscode',$js);
 $ret=svgjs_menu($p,$o,$rid);
 return $ret.divd($rid,svgjs_j($p,$o));}
 //$ret.=msqlink('',ses('qb').'_svgjs').' ';

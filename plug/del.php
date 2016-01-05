@@ -1,8 +1,5 @@
 <?php
-//philum_plugin_delfiles
-session_start();
-ini_set('display_errors','1');
-error_reporting(6135);//E_ALL//
+//philum_plugin_del
 
 function delj($p,$o,$res){list($f)=ajxr($res);
 if(!auth(7))return 'no';

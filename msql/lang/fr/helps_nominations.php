@@ -100,7 +100,7 @@ $r[96]=array('défaut');
 $r[97]=array('rafraîchir');
 $r[98]=array('dupliquer');
 $r[99]=array('créer');
-$r[100]=array('tout');
+$r[100]=array('Tout');
 $r[101]=array('reload');
 $r[102]=array('canal');
 $r[103]=array('prédéfinis');
@@ -140,5 +140,7 @@ $r[136]=array('Courier électronique');
 $r[137]=array('Mot de passe');
 $r[138]=array('relié');
 $r[139]=array('Merci');
+$r[140]=array('reclasser');
+$r[141]=array('avec');
 
 ?>

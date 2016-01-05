@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_phi
-session_start();
-error_reporting(6135);
-if(!function_exists('p'))require('../progb/lib.php');
 
 function phi($float){static $i; $i++;
 if($i==$float)return 1;

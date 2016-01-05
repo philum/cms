@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_coreflush
-session_start();
-if(!function_exists('p'))require_once('../progb/lib.php');//always_progb
 
 function recup_func($dr,$p){
 $d=read_file($dr.$p.'.php');
@@ -33,7 +31,7 @@ function detect_interface($f,$v){$d=read_file($f);
 if(strpos($d,$v.'input'))return 1;}
 
 function update_table_lang($r,$d,$lg,$rh){//update_table in msql
-$ret["_menus_"]=$r["_menus_"]; $rb=msql_read_b('lang/'.$lg,$d);
+$ret["_menus_"]=$r["_menus_"]; $rb=msql_read_b('lang/'.$lg,$d);//
 foreach($r as $k=>$v)
 $ret[$k]=$rb[$k]?$rb[$k]:array_pad(array(),count($rb["_menus_"]),"");
 msql_save('lang/'.$lg,$d,$ret,$rh);
@@ -51,7 +49,7 @@ foreach($rec as $k=>$v){
 	if(is_file($f) && $v && $vb)$rd[$vb]=array($rc[0]);
 	}
 //$rb=msq_reorder($rb);//p($rb);
-ksort($rb); p($rf);
+ksort($rb); //p($rf);
 $rh=array('usage','dir','loadable','callable','interface','state','private');//'vars',
 msql_save('system','program_plugs',$rb,$rh);//,'input','output'
 ///?msql=lang/eng/program_plugs&update==

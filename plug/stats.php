@@ -1,31 +1,5 @@
 <?php
 //philum_plugin_stats
-session_start();
-error_reporting(6135);
-//set_time_limit(60);
-
-/*function update_stats(){
-$now=date("ymd",$_SESSION['dayx']); $qdl=$_SESSION['qdl'];
-$sql="SELECT id,iq FROM $qdl";  
-$req=mysql_query($sql) or die(mysql_error());
-echo chrono(select);
-while($data=mysql_fetch_array($req)){$donn="";}}*/
-
-/*function stats_sql_z($d,$n,$b=''){
-$dt='date_format(time,"%m%d") as day'; $tm='to_days(now())-to_days(time)<='.$n.'';
-switch($d){
-case('nbv')://if($b)$gr=', group_concat(id) as ids';
-	$slct=',count(id) as nbv'.$gr; $wh=$tm; break;
-case('nbu'): $slct=',count(distinct(iq)) as nbu'; $wh=$tm; break;
-case('nbp'): $slct='page, count(id) as nbv'; 
-	if($n)$wh='and page like "%read='.$n.'%"'; break;
-case('nbpu'): if($n)$wh='and page like "%read='.$n.'%"';
-	$slct=$dt.', count(distinct(iq)) as nbu'; break;//88674
-case('nbf'): $slct=', count(id) as nbv'; $wh='iq='.$n; break;//187925
-}
-$slct=$slct?$slct:$dt; $wh=$wh?$wh:'';
-$ret='select '.$slct.' from '.ses('qdv').' where qb="'.ses('qbd').'" and '.$wh.' group by day';
-return $ret;}*/
 
 //sq
 function stats_sql($d,$n,$b=''){
@@ -51,7 +25,7 @@ return $ret;}
 
 function stat_datas($c,$n){
 $sql=stats_sql($c,$n);
-$ret=sql_b($sql,'kv',0); //p($ret);
+$ret=sql_b($sql,'kv',0);
 return $ret;}
 
 function stat_boot($c,$n,$res){
@@ -119,7 +93,7 @@ if($c=='nbf')$ret='user: '.$n.br();
 elseif($c=='nbp')$ret='article: '.$n.br();
 $sql=stat_list_sql($c,$n); $r=sql_b($sql,'',0); //p($r);
 if($c=='nbv' or $c=='nbu' or $c=='nbf'){foreach($r as $k=>$v){
-	$id=substr(split_only('&',$v[0]),5); 
+	$id=substr(str_extract('&',$v[0]),5); 
 	if(is_numeric($id)){$suj=suj_of_id($id); //else $suj=$id;
 	$flw=lj('','popup_popart___'.$id,picto(articles));
 	$ret.=$v[1].' '.lj('txtx',$j.'nbp_'.$id,$suj).' '.$flw.br();}}}
@@ -128,20 +102,6 @@ elseif($c=='nbp')foreach($r as $k=>$v)
 return $ret;}
 
 //com
-/*function stat_board($c,$n,$res){$rs=split('_',ajxg($res)); $bt='nbj'; //p($rs);
-$ja='socket_plug__exec_stats_canvas*j_'; $jb='stt_plug___stats_stat*board_';
-$jbb='stat_plugin___stats_';
-$r=array('nbv'=>'hits','nbu'=>'users');//,'nbp'=>'pag','nbpu'=>'pagu','nbf'=>'ip'
-foreach($r as $k=>$v){$kb=$k.'_'.$n; $pv='p'.$v;
-	if(substr($v,0,3)=='pag')$bt='id'; 
-	elseif($v=='ip')$bt='iq'; 
-	if(ses('png')){$ret.=lj($k==$c?'active':'',$jbb.$kb,$v).' ';
-		if($c==$k)$inp=input(1,$pv,$w,'').' '.lj('popbt',$jbb.$kb.'__'.$pv,$bt);}
-	else{$ret.=ljb($k==$c?'active':'','SaveJb',$ja.$kb.'\',\''.$jb.$kb,$v).' ';
-	if($c==$k)$inp=input(1,$pv,$w,'').' '.lj('popbt',$ja.$kb.'_'.$pv,$bt);}}
-$op=lj('','popup_plup___stats_stat*list_'.$c.'_'.$n,picto('popup'));
-return divb('nbp|stt',$ret.$inp.' '.$op);}*/
-
 function stat_board($c,$n,$res){//p($rs);
 $ret=lj($c=='nbv'?'active':'','stat_plugin___stats_nbv_'.$n,'nbv').' ';
 $ret=lj($c=='nbv'?'active':'','stat_plugin___stats_nbu_'.$n,'nbu').' ';
@@ -153,18 +113,8 @@ return divb('nbp|stt',$ret);}
 function stat_daytime($d){
 return mktime(0,0,0,substr($d,2,2),substr($d,4,2),substr($d,0,2));}
 
-function stat_upd(){
-//$d=sql('day','qdt','v','qb="'.ses('qb').'" order by id desc limit 1');
-//echo stat_daytime($d);
-//1
-list($r,$w,$h)=stat_boot('nbv',7,'');
-//4
-//$r=stat_datas('nbv',7);
-//p($r);
-}
-
 //plug
-function plug_stats($c,$n,$res=''){connect();
+function plug_stats($c,$n,$res=''){
 static $i; $i++; if($i==2)return;
 $c=$c?$c:'nbv'; $n=$n?$n:7; ses('png',1);
 list($w,$h)=split('_',$res); ses('stw',$w?$w:550); ses('sth',$h=$h?$h:100);

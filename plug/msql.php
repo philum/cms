@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_msql
-session_start();
-error_reporting(6135);
 
 //class msql
 function msq_modif($r,$act,$n,$ra,$nb=''){switch($act){

@@ -1,9 +1,7 @@
 <?php 
-//philum_plugin_index 
-session_start();
+//philum_plugin_index
 
-function plug_index(){$ico=picto('editxt');
-if(!$_GET['plug'] && !$_GET['admin'])$dir='../'; $dir='plug/';
+function plug_index(){$ico=picto('editxt'); $dir='plug/';
 $plug=msql_read('system','program_plugs','');
 $help=msql_read('lang','program_plugs','');
 $mt=msql_read_prep('system','program_plugs_types'); 

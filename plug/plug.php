@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_plug
-session_start();
-error_reporting(6135);
 
 function plug_slct(){
 $r=msql_read('system','program_plugs','',1); //p($r);

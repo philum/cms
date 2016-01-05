@@ -8,9 +8,9 @@ require_once('../progb/lib.php');
 
 function upim_h(){
 $_SESSION['uproot']='users/'.ses('qb').'/downloads';//destination folder
-$r[]['css']='../css/_admin.css';
-//$r[]['js']='../js/upload.js';
-$r[]['csscode']='
+Head::add('csslink','../css/_admin.css');
+//Head::add('jslink','../js/upload.js');
+Head::add('csscode','
 .upload_form_cont {border:1px solid transparent; color:#000;}
 .info {background:#eee; border:1px solid #ddd; font-weight:bold; margin:20px;}
 .info > div {padding:10px 15px;}
@@ -20,10 +20,9 @@ $r[]['csscode']='
 #result .success, #result .failure {font-size:12px; margin-bottom:10px; padding:5px; border-radius:5px;}
 #result .success {background-color:#77fc9f;}
 #result .failure {background-color:#fcc577;}
-}';
-echo headers_balises($r);
-//echo headers_r('',$r);upim_h()
-}
+}');}
+upim_h();
+echo Head::get();
 
 function fsize_b($d){$u=array('B','KB','MB');
 	return @round($d/pow(1024,($i=floor(log($d,1024)))),1).' '.$u[$i];}

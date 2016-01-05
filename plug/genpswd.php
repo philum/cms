@@ -8,7 +8,7 @@ foreach($r as $k=>$v)if(strlen($v)<4 or in_array($v,$ra) or strpos($v,"'"))unset
 return $r;}
 
 function gp_signs(){
-$r=array('&','$','^','§','?',':','(','{','[','°','+',')',']','}'); $n=count($r);
+$r=array('$','^','§',':','(',')','[',']','{','}','°','+','-','/','*'); $n=count($r);
 return $r[rand(0,$n)];}
 
 function addwords($d,$ret){
@@ -18,8 +18,9 @@ foreach($r as $k=>$v)$ret[$v]+=1;
 arsort($ret); //p($ret);
 return $ret;}
 
-function natwords(){connect();
-$r=sql_c('msg','qdm','vr','inner join '.ses('qda').' on '.ses('qda').'.id='.ses('qdm').'.id where '.ses('qda').'.day>"'.calc_date(1).'"');
+function natwords(){
+$r=sql_inner('msg','qdm','qda','id','vr',' '.ses('qda').'.day>"'.calc_date(1).'"');
+
 foreach($r as $k=>$v)$ra=addwords($v,$ra); //p($ra);
 $ra=array_flip($ra);
 return $ra;}

@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_addfonts
-session_start();
-error_reporting(6135);
 
 function calltar(){
 include_once('plug/tar/pclerror.lib.php');
@@ -40,7 +38,7 @@ list($attrb,$value)=split_right(':',$ra[$i],0);
 	if($attrb=='font-family')$rb['name']=$value;
 	$rab=explode(',',$ra[$i]); if($rab)foreach($rab as $k=>$va){
 		$rt=embed_detect($va,'url(',')',''); //echo $rt.br().br();
-		if($rt && !$rk[$rb['name']]){$rs=split_only('#',$rt,0,0); $xt=strrchr_b($rt,'.');
+		if($rt && !$rk[$rb['name']]){$rs=str_extract('#',$rt,0,0); $xt=strrchr_b($rt,'.');
 			if($xt && substr($rs,0,4)=='http' && $xt!='eot?')$rb[$xt]=$rs;
 			else $noturl=1;}}}
 if($rb[0])$rb=msq_reorder($rb); //p($rb);

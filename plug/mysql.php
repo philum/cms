@@ -1,8 +1,5 @@
 <?php
 //philum_plugin_mysql
-session_start();
-error_reporting(6135);
-require_once('params/_connectx.php');
 
 //class mysql
 function mysq_modif($r,$act,$n,$ra,$nb=''){switch($act){
@@ -36,9 +33,9 @@ return implode(',',$ret);}
 function array_diff_b($ra,$rb){
 foreach($rb as $k=>$v)if(!in_array($v,$ra))$ret[$k]=$v;
 return $ret;}
-function array_diff_c($ra,$rb){
+/*function array_diff_c($ra,$rb){
 foreach($ra as $k=>$v)if(!in_array($v,$rb))$ret[$k]=$v;
-return $ret;}
+return $ret;}*/
 
 function mysql_init($p,$r,$ok=''){
 $msq=new mysql(''); $msq->table($p);
@@ -83,7 +80,7 @@ function drop(){mysql_query('drop table '.$this->t);}
 function save($d){insert($this->b,$d);}}
 
 //
-function plug_mysql($p,$o,$res=''){//connect();
+function plug_mysql($p,$o,$res=''){
 $msq=new mysql(''); 
 if($p)$msq->table($p);
 //$msq->create($r);

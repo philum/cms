@@ -1,25 +1,25 @@
 <?php
 //philum_clrset
 session_start();
-require('../prog/lib.php');
-require('../prog/styl.php');
+require('../'.prog().'/lib.php');
+require('../'.prog().'/styl.php');
 
 function clrpckr_js_r(){$f='../js/colorpicker/';
-$r[]['css']=$f.'css/colorpicker.css';
-$r[]['css']=$f.'css/layout.css';
-$r[]['js']=$f.'js/jquery.js';
-$r[]['js']=$f.'js/colorpicker.js';
-$r[]['js']=$f.'js/eye.js';
-$r[]['js']='../prog/ajx.js';
-$r[]['js']='../prog/utils.js';
-$r[]['jscode']=clrpckr_layout();
-return $r;}
+Head::add('csslink',$f.'css/colorpicker.css');
+Head::add('csslink',$f.'css/layout.css');
+Head::add('csslink',$f.'js/jquery.js');
+Head::add('jslink',$f.'js/colorpicker.js');
+Head::add('jslink',$f.'js/eye.js');
+Head::add('jslink','../'.prog().'/ajx.js');
+Head::add('jslink','../'.prog().'/utils.js');
+Head::add('jscode',clrpckr_layout());}
 
-$r=clrpckr_js_r();
-$r[]['css']='../css/_global.css';
-$r[]['css']='../css/_admin.css';
-	$rhead[]['js']='../prog'.$g.'/ajx.js';
-$r[]['js']='../js/live.js#css';
-echo headers_r('css_builder',$r);
+Head::add('tag',array('title','css_builder'));
+clrpckr_js_r();
+Head::add('jslink','../css/_global.css');
+Head::add('jslink','../css/_admin.css');
+Head::add('jslink','../prog'.$g.'/ajx.js');
+Head::add('jslink','../js/live.js#css');
+echo Head::get();
 echo div('panel',f_inp_clr_manage_j());
 ?>

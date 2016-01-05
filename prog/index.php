@@ -18,7 +18,6 @@ else{
 	$ret.=meta('name','title',$meta["title"]);
 	$ret.=meta('name','image',$meta["img"]);
 	$ret.=meta('name','description',$meta["descript"]);}
-//$ret.=meta('name','keywords',$_SESSION['opts']['tags']);
 //$ret.=meta('name','author',$_SESSION['rqt'][$read][7]);
 //$ret.=meta('name','language',$_SESSION['opts']['lang']);
 $ret.=meta('name','category',$_SESSION['frm']);
@@ -36,14 +35,12 @@ if($_SESSION['prma']['cssfonts'])$ret.=define_fonts(randid());
 if($_SESSION['prma']['csscode'])$ret.=css_code($_SESSION['prma']['csscode']);
 if($_SESSION['prma']['jscode'])$ret.=js_code($_SESSION['prma']['jscode']);
 $ret.=js_code('cutat='.$_SESSION['jbuffer'].'; fixpop="'.$_SESSION['mobile'].'"; 
-fulpop="1"; read="'.$read.'";');
+fulpop="1"; read="'.$read.'"; flow="'.$flow.'";');
 $ret.=js_link('/prog'.$g.'/ajx.js');//ajax
 $ret.=js_link('/prog'.$g.'/utils.js');//js
 if(rstr(100))$ret.=js_link('http://code.jquery.com/jquery-1.9.1.min.js');
-if($_SESSION['jscode'])$ret.=js_code($_SESSION['jscode']);
 if($_SESSION['desgn'])$ret.=js_link('/js/live.js#css');
-if($_SESSION['head_r'])$ret.=headers_balises($_SESSION['head_r']);
-if($_SESSION['headr'])$ret.=$_SESSION['headr'];
+$ret.=Head::get();
 $ret.='</head>'."\n";
 if($_GET['admin'])$sp=' spellcheck="false"';
 $ret.='<body'.atb('onload',$onload).' onclick="clpop(event)" onmousemove="popslide(event)"'.$sp.'>'."\n";//

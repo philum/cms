@@ -1,7 +1,5 @@
 <?php
 //philum_plugin_model
-session_start();
-error_reporting(6135);//E_ALL/E_NOTICE/NULL/2147483647/30719/6135
 
 #pour joindre un plugin:
 #connecteur: [model§param:plug] or : [param:model]
@@ -15,14 +13,13 @@ error_reporting(6135);//E_ALL/E_NOTICE/NULL/2147483647/30719/6135
 //lj('txtbox','popup_call___pop-tri-spe_format*txt*r___textarea'),'ok');
 
 #headers
-//$r[]['name']=array('description','model');
-//$rh[]['css']='../css/_global.css';
-//$rh[]['css']='../css/'.ses('qb').'_design_'.ses('prmd');
-//$rh[]['js']='../progb/ajx.js';
-//$rh[]['js']='../progb/utils.js';
-//$rh[]['csscode']='';
-//$rh[]['jscode']='';
-//$_SESSION['head_r']=$rh;
+//Head::add('name',array('description','model'));
+//Head::add('csslink','../css/_global.css');
+//Head::add('csslink','../css/'.ses('qb').'_design_'.ses('prmd'));
+//Head::add('jslink','../progb/ajx.js');
+//Head::add('jslink','../progb/utils.js');
+//Head::add('csscode','');
+//Head::add('jscode','');
 
 /*$msq=new msql;
 $msq->def('','public_mods_1');

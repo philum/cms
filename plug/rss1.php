@@ -73,7 +73,6 @@ function flux_xml($id,$data){
 return $xml;}
 
 //
-
 if($_GET['preview'])$data=flux_data();
 else $data=msql_read('',$_SESSION['qb'].'_cache','',1); 
 
