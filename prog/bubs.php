@@ -73,7 +73,7 @@ return $ret;}
 //seek
 //tag find arts
 function bub_seek_art($d){req('mod'); list($cat,$tag)=explode('-',$d);
-$r=tag_arts($tag,$cat); unset($r[ses('read')]);
+$r=tag_arts($tag,$cat,7); unset($r[ses('read')]);
 if($r)foreach($r as $k=>$v)
 	$ret[]=array(suj_of_id($k),'art','',$k,$d,'',$d,'article');
 return $ret;}

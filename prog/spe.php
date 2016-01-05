@@ -690,9 +690,10 @@ function art_tags($id){
 $wh='and '.ses('qda').'.id='.$id.' order by '.ses('qdta').'.id';
 return artags('cat,tag',$wh,'kk');}
 
-function tag_arts($tag,$cat='',$nbday='7',$pday=''){
-if($cat)$ct=' and cat="'.$cat.'"';
-$wh='and tag="'.$tag.'"'.$ct.' and day>"'.calc_date($nbday).'"';
+function tag_arts($tag,$cat='',$nbday='',$pday=''){
+$wh='and tag="'.$tag.'"';
+if($cat)$wh.=' and cat="'.$cat.'"';
+if($nbday)$wh.=' and day>"'.calc_date($nbday).'"';
 if($pday)$wh.=' and day<"'.calc_date($pday).'"';
 return artags('idart',$wh,'k');}
 
@@ -704,7 +705,7 @@ return artags('tag',$wh,'k');}
 function define_load(){$rech=good_rech();//active console
 $days=getorpost('dig',ses('nbj')); $dayb=calc_date($days); 
 $pday=time_prev($days); if($pday==1)$pday=0; $daya=calc_date($pday);
-if(get('tag'))$load=tag_arts(get('tag'),'',$days,$pday);
+if(get('tag'))$load=tag_arts(get('tag',ses('nbj')),'',$days,$pday);
 elseif($rech){$_SESSION['frm']=''; if(!get('search'))$load=$_SESSION["recache"][$vrf]; 
 	if(!$load){require('plug/search.php'); $load=rech($rech,$days);}
 	if(is_array($load))if(get('bydate'))krsort($load);

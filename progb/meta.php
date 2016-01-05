@@ -111,7 +111,7 @@ return divc('nbp',$picto.$auto.$inp.btd($rid,$ret).divd('slctfrm'.$id,''));}
 function slct_frm($id,$frm){
 $r=sql('frm','qda','k','nod="'.ses('qb').'" and frm!="_system" and frm!="_trash" AND day>"'.calc_date("360").'" order by frm');
 if($r)foreach($r as $k=>$v){
-	$ret.=lja(atj('jumpvalue','frm1'.$id.'_'.ajx($k)).atj('Close','popup'),$k).' ';}
+	$ret.=lja(atj('jumpvalue','frm1'.$id.'_'.ajx($k)),$k).' ';}
 return divc('nbp',$ret);}
 
 //translations
@@ -293,7 +293,12 @@ $ret=del_tag_btn($r,$idart,$cat);
 $js='" onkeyup="autocomp(\''.$idart.'_'.$cat.'\');';//addtag
 $js.='" onclick="autocomp(\''.$idart.'_'.$cat.'\');';
 $inp=input('','inp'.$rid,$cat.$js,'',1,12).'';
-return divc('nbP',$picto.$auto.$inp.btd($rid,$ret).divd('slct'.$rid,''));}
+return divc('nbp',$picto.$auto.$inp.btd($rid,$ret).divd('slct'.$rid,''));}
+
+function meta_all($id){$r['tag']='tag';
+$ica=explode(' ',prmb(18)); $ico=explode(' ',prmb(19)); $r+=array_combine($ica,$ico); 
+foreach($r as $cat=>$ico)$ret.=edit_tags($id,$cat,$ico);
+return $ret;}
 
 //list_tags
 function list_tags($idart,$cat){//tag_list()

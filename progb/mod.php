@@ -23,7 +23,7 @@ if($r)foreach($r as $k=>$v){if(!$v[7]){//hide
 			$_SESSION['tab'][$k]=$re[$k];}
 		else $re[$k]=$_SESSION['tab'][$k];}
 //elseif($v[11])$re[$k]=divd('mod'.$k,js_code('SaveJ(\'mod'.$k.'_modj___'.$k.'_'.$va.'\')'));
-	elseif($v[11])$re[$k]=divd('mod'.$k,lj('txtcadr','mod'.$k.'_modj___'.$k.'_'.$va,$v[2]));
+	elseif($v[11])$re[$k]=divd('mod'.$k,lj('txtcadr','mod'.$k.'_modj__3_'.$k.'_'.$va,$v[2]));
 	else $re[$k]=build_mods($v);
 if($re[$k])$ret.=$re[$k].(!$v[9]&&!$v[11]?br():'')."\n";}}
 $_SESSION['cur_div']='content';
@@ -138,7 +138,7 @@ case('tags_cloud'): $p=$p?$p:'tag'; $ret=btn($ptit_css,lkc('',"/plug/tags",$p));
 	$line=tags_list($p,ses('nbj')); $in=tags_cloud($line,10,22,' ',$p); 
 	$ret.=divc($pbdy_css,$in); break;
 case('tag_arts'): list($p,$o)=split_one(':',$p); $load=tag_arts($p,$o); break;
-case('classtag_arts'): $load=classtag_arts($p,''); break;//class find id
+case('classtag_arts'): $load=classtag_arts($p); break;//class find id
 case('see_also-tags'): $r=see_also_tags($p?$p:'tag'); 
 	if($r)$ret=see_also($r,$p,$d,$o,$tp); break;
 case('see_also-rub'): $t=$p!=1?$p:$_SESSION['frm'];
@@ -263,15 +263,13 @@ function pluginside($t,$d,$p,$o){return title($t).plugin($d,$p,$o);}
 function pub_art($id){$rst=$_SESSION['rstr'];
 list($day,$frm,$suj,$amg,$nod,$thm,$lu,$re)=pecho_arts($id);
 $panout['url']=urlread($id); $panout['suj']=$suj; 
-//if($_SESSION[$id]){$panout['video']=$_SESSION[$id]; $_SESSION[$id]='';}
 $panout['jurl']='content_ajxlnk2__2_art_'.$id;
 $panout['purl']='popup_popart__3_'.$id.'_3';
 if($rst[32]!=1 && $amg)$panout['img1']=first_img($amg);
 if($rst[36]!=1){$panout['back']=art_back($id,$ib,$frm); $panout['cat']=$frm;}
 if($rst[7]!=1)$panout['date']=mkday($day);
-if($rst[4]!=1)$panout['tag']=tag_maker($id);
-//$c=$id==$_SESSION['read']?'active':'';
-if($re)return divc('pubart',template($panout,'pubart'));}//balc('li',$c,)
+if($rst[4]!=1)$panout+=tag_maker($id,1);
+if($re)return divc('pubart',template($panout,'pubart'));}
 
 function m_pubart($r,$o,$p){
 if(is_array($r)){foreach($r as $k=>$v)$re[$k]=pub_art($k);
@@ -662,20 +660,21 @@ foreach($r as $kb=>$pb){$t=lka(htac(eradic_acc($p)).$kb,$kb);
 if(count($rc)>1)$ret=make_tabs($rc,'mod'.randid()); else $ret=$rc[$kb];
 return $ret;}
 
-function see_also_tags($cat,$nbdays=''){$id=ses('read');
+function see_also_tags($cat,$nbdays='30'){$id=ses('read');
 $r=ses('artags'); $r=$r?$r:art_tags($id); $rtag=$r[$cat];
-if($rtag)foreach($rtag as $tag=>$v){$r=tag_arts($tag,$cat,$nbdays);
+if($rtag)foreach($rtag as $tag=>$v){
+	$r=tag_arts($tag,$cat,$nbdays); if(!$r)$r=tag_arts($tag,$cat);
 	if($r)foreach($r as $k=>$v)if($k!=$id)$ret[$tag][$k]+=1;}
-if($rtag && !$ret && !$nbdays)return see_also_tags($cat,30);
 return $ret;}
 
 function see_also_source($o=''){$o=$o?$o:10;
-$src=$_SESSION['rqt'][ses('read')][9];
+$id=ses('read'); $src=$_SESSION['rqt'][$id][9];
 if(!$src)$src=sql('mail','qda','v','id='.ses('read'));
 if($src){$src=preplink($src);
 foreach($_SESSION['rqt'] as $k=>$v)if(preplink($v[9])==$src)$ret[$k]+=1;
 if(!$ret && $src)$ret=sql('id','qda','k','mail LIKE "%'.$src.'%" limit '.$o);
-return array($ret,lka(htac('source').strdeb($src,'.'),$src));}}
+if($ret){unset($ret[$id]);
+return array($ret,lka(htac('source').strdeb($src,'.'),$src));}}}
 
 function rub_tags($t){$t=$t?btn('txtcadr',$t):'';//not tested
 $dayb=$_GET['dig']?calc_date($_GET['dig']):$_SESSION['dayb'];

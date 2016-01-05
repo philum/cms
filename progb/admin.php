@@ -157,9 +157,9 @@ return $ret;}
 //clbasic_preview
 function clview_basic_j($t,$s,$res){
 list($p,$re)=ajxr($res); $re=ajx($re,1);//ajxr(
-if(!$re)$re=msql_read('users',$_SESSION['qb'].'_'.$t,$s); chrono('');
+if(!$re)$re=msql_read('users',$_SESSION['qb'].'_'.$t,$s); //chrono('');
 if($t=='template' && $re)$ret=correct_txt($re,'','codeline');//connectors
-else $ret=cbasic($re,$p); $tim=chrono('chrono');
+else $ret=cbasic($re,$p); //$tim=chrono('chrono');
 if(strpos($ret,'<br')===false)$ret=nl2br($ret);
 return divc('track',$ret).br().txarea('',$ret,40,5).$tim;}
 

@@ -50,6 +50,7 @@ case("chday"):req('meta'); $ret=edit_day($id,$va); break;
 case("upload"):$ret=plugin('upload',$id,$va); break;
 case("upimg"):if($id)write_file('users/'.ses('qb').'/'.$va,base64_decode($id)); break;
 //meta::new
+case("metall"):req('meta'); $ret=meta_all($id); break;
 case("editag"):req('meta'); $ret=edit_tags($id,$va,$opt); break;
 case("addtag"):req('meta'); $ret=addtag($id,$va,$opt,$optb); break;
 case("deltag"):req('meta'); $ret=deltag($id,$va,$opt,$optb); break;

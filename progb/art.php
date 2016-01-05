@@ -24,22 +24,21 @@ _THUMB[_PRICE:div][_ADD2CART§[imgr txtsmall:class]:div]
 §[float:left; width:142px; margin:2px; padding:5px; border:1px solid black;:style]:div]';}
 
 function template_vars(){
-$arr=array("artedit","pid","id","url","jurl","purl","edit","title","suj","cat","msg","img1","video","btim","back","avatar","author","date","day","nbarts","tag","priority","words","search","parent","rss","social","open","tracks","source","lenght","player","lang","artlang","opt","css","sty","addclr","thumb","trkbk","float");//,"img","artmod","add2cart","price"
-$arb=explode(" ",eradic_acc(prmb(18))); $arr=array_merge($arr,$arb);
-foreach($arr as $v)if($v)$ret[$v]='_'.strtoupper($v);
+$d='artedit pid id url jurl purl edit title suj cat msg img1 video btim back avatar author date day nbarts tag priority words search parent rss social open tracks source lenght player lang artlang opt css sty addclr thumb trkbk float '.prmb(18); $r=explode(' ',$d);
+foreach($r as $v)if($v)$ret[$v]='_'.strtoupper($v);
 return $ret;}
 
 //template
-function template_build($ret,$p){$arr=sesmk('template_vars',0,1);//tmp_vars($p);
-foreach($arr as $k=>$v)if(!isset($p[$k]))$rb[]=$v; else{$rc[]=$v; $rd[]=$p[$k];}
+function template_build($ret,$p){$r=sesmk('template_vars');
+foreach($r as $k=>$v)if(!isset($p[$k]))$rb[]=$v; else{$rc[]=$v; $rd[]=$p[$k];}
 $ret=str_replace($rb,'',$ret);//del_empty
 $ret=str_replace(array('_DAY','_IMG1'),array($p['day'],$p['img1']),$ret);
 $p['social']=str_replace('_ID',$p['id'],$p['social']);
-$ret=correct_txt($ret,"",'codeline');//build 
+$ret=correct_txt($ret,'','codeline');//build
 return str_replace($rc,$rd,$ret);}//place
 
 function template($p,$tpl){
-if(!$tpl)$tpl=@$_SESSION['opts']['template'];
+if(!$tpl)$tpl=@$_SESSION['opts']['template'];//article
 if(!$tpl)$tpl=$_SESSION['prma']['template'];//module
 if($tpl){$tmp=msql_read('users',$_SESSION['qb'].'_template',$tpl);
 if(!$tmp)$tmp=msql_read('','public_template',$tpl);}
@@ -65,6 +64,7 @@ if(get('search') && $auth>4)
 	//$ret.=togbub('call','meta_tag*slct_'.$id.'_'.ajx(get('search')),picto('paste')).' ';
 	$ret.=lj('','popup_callp___meta_tag*slct_'.$id.'_'.ajx(get('search')),picto('paste')).' ';
 if(($USE==$kem) or $auth>3){
+	$ret.=togbub('metall',$id,picto('editxt',24)).' ';
 	$ret.=lj('','popup_tit___'.$id.'_'.$prw,picto('tag',24)).' ';
 	$ret.=lj('','popup_artedit___'.$id,picto('edit',24)).' ';}
 return btd('artmnu'.$id,$ret);}
@@ -97,18 +97,15 @@ if($rl)foreach($rl as $k=>$v){$lg=$r['lang'.$v];
 return $ret;}
 
 //tags
-function tag_maker($id){//if(!$rst[42])
-$r=ses('artags'); $r=$r?$r:art_tags($id); if(!$r)return; $sep=sep(); 
+function tag_maker($id,$o=''){//if(!$rst[42])
+$r=ses('artags'); $r=$r?$r:art_tags($id); if(!$r)return; $sep=sep();
 $ica=explode(' ',prmb(18)); $ico=explode(' ',prmb(19));
 $rico=array_combine($ica,$ico); $rico['tag']='tag';
 if($r)foreach($r as $cat=>$vr){$rt=''; 
 	foreach($vr as $ka=>$va)
 		$rt.=lj('','popup_getcontent___'.$cat.'_'.ajx($ka),$ka).' ';
-	if(auth(4))$edt=togbub('editag',$id.'_'.$cat.'_'.$rico[$cat],picto($rico[$cat],16),'','');
-	else $edt=picto($rico[$cat],16);
-	if($rt)$ret[$cat]=$edt.$sep.$rt;}
-if(auth(4) && $ica)foreach($ica as $v)if(!$r[$v])$ret[$v]=togbub('editag',$id.'_'.$v.'_'.$rico[$v],picto($rico[$v],16),'','');
-if($ret)return implode(' ',$ret);}
+	if($rt)$ret[$cat]=picto($rico[$cat],16).$sep.$rt;}
+if($ret)return $o?$ret:implode(' ',$ret);}
 
 function art_back($id,$ib,$frm){
 if($frm!=$_SESSION['frm'] && $frm && rstr(43)){
