@@ -268,7 +268,7 @@ $panout['purl']='popup_popart__3_'.$id.'_3';
 if($rst[32]!=1 && $amg)$panout['img1']=first_img($amg);
 if($rst[36]!=1){$panout['back']=art_back($id,$ib,$frm); $panout['cat']=$frm;}
 if($rst[7]!=1)$panout['date']=mkday($day);
-if($rst[4]!=1)$panout+=tag_maker($id,1);
+if($rst[4]!=1){$r=tag_maker($id,1); if($r)$panout+=$r;}
 if($re)return divc('pubart',template($panout,'pubart'));}
 
 function m_pubart($r,$o,$p){
@@ -318,7 +318,7 @@ $wh.='AND day < "'.($vaba).'" '; $wh.='AND day > "'.$vabb.'" ';
 $ordr=$ordr?$ordr:(prmb(9)?prmb(9):"id DESC");
 //if($_SESSION['lang']!='all')$inner=lang_req();//
 $sql=$inner.' WHERE nod="'.$_SESSION['qb'].'" AND re>0 AND substring(frm,1,1)!="_" '.$wh.' ORDER BY '.$ordr.' '.$whb;
-$rq=res('id,re,frm',$_SESSION['qda'].$sql);//thm,
+$rq=sq('id,re,frm','qda',$sql);//thm,
 if($rq){while($data=mysql_fetch_row($rq)){$stop=false;
 	if($prx)$prw=$data[2]>2?2:1; $id=$data[0];
 	if(!$stop)$ret[$id]=$prw;}
@@ -495,8 +495,8 @@ return divc("txtcadr",lkc("",$lnk,$suj)).divc("panel",read_msg($id,$o?$o:2));}
 
 function pub_img($id){
 list($dy,$frm,$suj,$amg)=$_SESSION['rqt'][$id];
-if(!$dy){$amg=rse("img",$_SESSION['qda']." WHERE id='$id'");}
-return lkc("",urlread($id),minimg($amg,"ban"));}
+if(!$dy){$amg=sql('img','qda','v','id='.$id);}
+return lkc("",urlread($id),minimg($amg,'ban'));}
 
 function read_art($n,$t){$in=read_msg($n,"");
 if(strlen($in)>1000)$nbc=array("1","1");
@@ -715,7 +715,8 @@ function login_btn_p($p,$o){$t=$p?$p:"login";
 $jx='popup_loged___'.ses('USE').'_'.$_SESSION['iq'].'_'.ajx(nms(54)).'_1';
 return lj('txtcadr',$jx,$t);}//if(!ses('USE'))
 
-function search_conn($ra,$min,$cn){$req=res('id,msg',$_SESSION['qdm'].' WHERE id>="'.$min.'" AND msg LIKE "%'.$cn.'%" ORDER BY id DESC');
+function search_conn($ra,$min,$cn){
+$req=sq('id,msg','qdm','where id>="'.$min.'" AND msg LIKE "%'.$cn.'%" ORDER BY id DESC');
 while($rq=mysql_fetch_row($req)){if(in_array($rq[0],$ra)){
 	$r=explode($cn,$rq[1]); $n=count($r); if(!$r[1])return; 
 	else{for($i=0;$i<$n-1;$i++){$s=strrpos($r[$i],'['); 
@@ -800,7 +801,7 @@ $r=val_to_mod_b($p); foreach($r as $k=>$v)$ret[]=array($m,$p,$d);
 return $ret;}
 
 function usited_words($p){$p=$p?$p:ses('read');
-$msg=rse("msg",$_SESSION['qdm'].' WHERE id="'.$p.'"');
+$msg=sql('msg','qdm','v','id="'.$p.'"');
 $r=explode(' ',$msg); foreach($r as $k=>$v){$ret[$v]+=1;}
 arsort($ret); return $ret;}
 

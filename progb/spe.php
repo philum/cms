@@ -15,7 +15,7 @@ if($auth>1){
 	if($auth>3 && rstr(76))$ret['batch']=popbub('call','batch',$ico[4],$top,$hv);}
 if($auth>2){
 	if(rstr(79))$ret['addurl']=popbub('call','addart',$ico[7],$top,$hv);
-	else $ret['addart']=li(ljb('',sj('popup_addArt____1').' closebub(this);','',$ico[7]));}
+	else $ret['addart']=li(lja('',sj('popup_addArt____1').' closebub(this);',$ico[7]));}
 if(rstr(80))$ret['arts']=popbub('','arts',$ico[6],$top,$hv);//arts
 if(rstr(81))$ret['favs']=llj('','popup_modpop___favs:plug',picto('like'));//favs
 if($_SESSION['lang']!='all' or rstr(82))$ret['lang']=popbub('lang','lang',$ico[9],$top,$hv);//lang
@@ -83,8 +83,7 @@ function data_val($v,$id,$val,$m=''){$sq=$id?'ib="'.$id.'" and ':'';
 $sq.='qb="'.ses('qb').'" and val="'.$val.'"';
 return sql($v,'qdd',$m?$m:'v',$sq);}
 function count_art($suj,$frm){return sql('COUNT(id)','qda','v','nod="'.ses('qb').'" AND suj="'.$suj.'" AND frm="'.$frm.'" AND re>="1"');}
-function cache_art($id){$ret=rse('day,frm,suj,img,nod,thm,lu,author,ip,mail,ib,re',$_SESSION['qda'].' WHERE id="'.$id.'" LIMIT 1');//if(substr($ret[2],0,1)!='_')
-$_SESSION['rqt'][$id]=$ret;}
+function cache_art($id){$ret=sql('day,frm,suj,img,nod,thm,lu,author,ip,mail,ib,re','qda','v','id="'.$id.'"'); $_SESSION['rqt'][$id]=$ret;}
 
 function find_meta($type,$nbj){$w='nod="'.ses('qb').'"';
 if($_SESSION['prmb'][16])$w.=' AND day>'.calc_date($nbj?$nbj:30);
@@ -263,7 +262,7 @@ if($r)foreach($r as $k=>$v)$ret.=sj($v);//is_array($v)?sj($v[0]):
 return $ret;}
 
 function poplist(){$rid='ppl'.randid();
-$_SESSION['popm']=ljb('philum','poplist(\''.$rid.'\')','',btd($rid,'l')).' ';}
+$_SESSION['popm']=ljb('philum','poplist',$rid,btd($rid,'l')).' ';}
 
 //mimes
 function msqmimes(){return msql_read('system','edition_mimes');}
@@ -477,14 +476,14 @@ $n_pages=nb_page($i,$npg,$page);
 return $n_pages.$ret.$n_pages;}
 
 function import_art($d,$m){
-list($dy,$nod,$frm,$suj)=ser("day,nod,frm,suj,img",$_SESSION['qda'].' WHERE id="'.$d.'"');
+list($dy,$nod,$frm,$suj)=sql('day,nod,frm,suj,img','qda','r','id="'.$d.'"');
 $nde=$_SESSION['mn'][$nod];//.'#'.$id
 $ret=lkc("txtsmall",urlread($d),$nde.' ('.$frm.') '.mkday($dy)).' ';
 if($_GET['read']==$d)$m=3; $msg=read_msg($d,$m);
 $msg=str_replace("<br />","",$msg);//if(rstr(13))
 return $ret.$msg;}
 
-function id_of_urlsuj($d){return rse('id',$_SESSION['qda'].' WHERE nod="'.ses('qb').'" AND re>="1" AND suj LIKE "%'.$d.'%" LIMIT 1');}
+function id_of_urlsuj($d){return sql('id','qda','v','nod="'.ses('qb').'" AND re>="1" AND suj LIKE "%'.$d.'%" LIMIT 1');}
 function id_is_public($id){return sql('id','qda','v','id="'.$id.'" AND re>="1"');}
 
 //trackback
@@ -498,7 +497,8 @@ function tri_rqt_d($vrf,$tri,$dya,$dyb){if(!$dyb)$dyb=1; if(!$vrf)return;
 if($dya)$wh=' AND day < '.$dya.' AND day > '.$dyb.'';
 if($tri=='thm' or $tri=='mail')$wh.=' AND '.$tri.' LIKE "%'.$vrf.'%"'; 
 else $wh.=' AND '.$tri.'="'.$vrf.'"';
-$ret=sql('id,'.$tri,'qda','kv','nod="'.ses('qb').'"'.$wh.' ORDER BY '.prmb(9).' LIMIT 1000');
+if(prmb(9))$wh.=' order by '.ses('qda').'.'.prmb(9);
+$ret=sql('id,'.$tri,'qda','kv','nod="'.ses('qb').'"'.$wh.' LIMIT 1000');
 return $ret;}
 
 //tri_cache
@@ -533,20 +533,20 @@ foreach($_SESSION['rqt'] as $k=>$v)$ret[$v[$p]]+=1; return $ret;}
 # utils
 function find_navigation($id){$ib=ib_of_id($id);
 if(is_numeric($ib) && $ib!=$id){
-list($idb,$suj)=ser("id,suj",$_SESSION['qda'].' WHERE id="'.$ib.'"');
+list($idb,$suj)=sql('id,suj','qda','r','id="'.$ib.'"');
 if($suj)$nav=bal('h4',lka(urlread($idb),pictxt('paste',$suj)).' '.popart($idb));
 if($idb!=ses('read'))return find_navigation($idb).$nav;}}
 
 function find_art_link($d){
-if(is_numeric($d))$wh='WHERE id="'.$d.'"'; else $wh='WHERE suj="'.$d.'"';
-return rse('id',$_SESSION['qda'].' '.$wh.' AND nod="'.ses('qb').'"');}
+if(is_numeric($d))$wh='id="'.$d.'"'; else $wh='suj="'.$d.'"';
+return sql('id','qda','v',$wh.' AND nod="'.ses('qb').'"');}
 
 function send_user_mail($id,$lgtxt){//send_to_author
 $sender=$_SESSION['qbin']["adminmail"];
-list($kem,$suj)=ser('name,suj',$_SESSION['qda'].' WHERE id="'.$id.'"');
+list($kem,$suj)=sql('name,suj','qda','r','id="'.$id.'"');
 if($kem!=$_SESSION['USE']){
 $nmsg=helps($lgtxt);//.br().br().$suj
-	$kmail=rse('mail',$_SESSION['qdu'].' WHERE name="'.$kem.'"');
+	$kmail=sql('mail','qdu','v','name="'.$kem.'"');
 	if($kmail!=$_SESSION['qbin']["adminmail"])
 		send_mail_html($kmail,$suj,nl2br($nmsg),$sender,urlread($id));}}
 
@@ -651,8 +651,8 @@ imagepng($im,$out);}
 #loads
 function define_digr(){
 if($_SESSION['digr'])return $_SESSION['digr'];
-else{$day=rse("day",$_SESSION['qda'].' WHERE nod="'.$_SESSION['qb'].'" AND re>="1" ORDER BY id ASC LIMIT 1');//msqstorage
-$dy=round(time()-$day)/86400;//$dy=$dy/10;
+else{$day=sql('day','qda','v','nod="'.$_SESSION['qb'].'" AND re>="1" ORDER BY id ASC LIMIT 1');
+$dy=round(time()-$day)/86400;
 $r=array(1,7,30,90,365); for($i=5;$i<20;$i++)$r[]=$r[$i-1]+365;
 for($i=0;$i<15;$i++){if($r[$i]<$dy)$_SESSION['digr'][$r[$i]]=$r[$i]<365?$r[$i]:$r[$i]/365;}
 return $_SESSION['digr'];}}
@@ -683,7 +683,7 @@ $qdt=ses('qdt'); $qdta=ses('qdta'); $qda=ses('qda');
 $sql='select '.$slct.' from '.$qdt.' 
 inner join '.$qdta.' on '.$qdt.'.id='.$qdta.'.idtag
 inner join '.$qda.' on '.$qda.'.id='.$qdta.'.idart
-where nod="'.ses('qb').'" '.$wh;
+where nod="'.ses('qb').'" '.$wh.'';
 return sql_b($sql,$how,$z);}
 
 function art_tags($id){
@@ -695,10 +695,11 @@ $wh='and tag="'.$tag.'"';
 if($cat)$wh.=' and cat="'.$cat.'"';
 if($nbday)$wh.=' and day>"'.calc_date($nbday).'"';
 if($pday)$wh.=' and day<"'.calc_date($pday).'"';
+if(prmb(9))$wh.=' order by '.ses('qda').'.'.prmb(9);
 return artags('idart',$wh,'k');}
 
 function tags_list($cat='tag',$nbday='30'){
-$wh='and cat="'.$cat.'" and day>"'.calc_date($nbday).'" order by tag';
+$wh='and cat="'.$cat.'" and day>"'.calc_date($nbday).'" group by tag order by tag';
 return artags('tag',$wh,'k');}
 
 //load
@@ -729,7 +730,8 @@ $days=getorpost('dig',ses('nbj')); $daybb=calc_date($days);
 $rech=good_rech(); $nms=ses('nms'); $frm=ses('frm'); $read=ses('read');
 list($utg,$utv)=detect_uget();
 if($rech){$ico=btn("txtcadr",pictxt('search',$rech)); if(get('targ'))return;
-	if(is_array($load))$p['nbarts']=nbof(count($load),1).' ('.nbof(array_sum($load),16).') / '.nbof($days,3); $p['opt']=lj('','popup_search___'.$rech,picto('popup'));
+	if(is_array($load))$p['nbarts']=nbof(count($load),1).' '.nbof($days,3);
+	$p['opt']=lj('','popup_search___'.$rech,picto('popup'));
 	if($pg=$_SESSION['page']>1)$p['opt']=btn('txtsmall','page '.$pg);
 	$p['suj']=$rech; $p['url']='search/'.$rech.'/'.$days;}
 elseif(get('rub_tag'))$rub_t=get('rub_tag'); 
@@ -786,7 +788,7 @@ function prep_calend($ref){
 $month=date("m",$ref);$year=date("y",$ref);
 $deb=mktime(0,0,0,$month,1,$year);$end=mktime(0,0,0,$month,$nb_j,$year);
 $qda=$_SESSION['qda'];$qb=ses('qb');
-$day=res("day",$qda.' WHERE nod="'.$qb.'" AND day < '.$end.' AND day >= '.$deb.'');
+$day=sql('day','qda','vr','nod="'.$qb.'" AND day<'.$end.' AND day>='.$deb);
 for($i=1;$i<=$nb_j;$i++){$debd=mktime(0,0,0,$month,$i,$year);$endd=$debd+86400;
 if($day[$i]>$dedb && $day[$i]<=$endd){$io[$i]+=1;}}
 return $io;}
@@ -808,8 +810,8 @@ $ret.='</tr></table>';
 return $ret;}
 
 function is_arts($frm,$daya,$dayb){
-if($frm)$fr='AND frm="'.$frm.'" '; if($dayb)$df='AND day > "'.$dayb.'" ';
-$n=rse("id",$_SESSION['qda'].' WHERE nod="'.ses('qb').'" '.$fr.' AND day < "'.$daya.'" '.$df.' ORDER BY day DESC LIMIT 1'); 
+if($frm)$fr='AND frm="'.$frm.'" '; if($dayb)$df='AND day>"'.$dayb.'" ';
+$n=sql('id','qda','v','nod="'.ses('qb').'" '.$fr.' AND day<"'.$daya.'" '.$df.' ORDER BY day DESC LIMIT 1'); 
 if($n)return true;}
 
 function nb_arts($daya,$dayb){return sql('COUNT(id)','qda','v','nod="'.ses('qb').'" AND re>0 AND day<'.$daya.' AND day>'.$dayb.'');}

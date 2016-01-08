@@ -385,7 +385,7 @@ return $ret;}
 
 function clean_br_lite($ret){
 $ret=str_replace("\n","µ",$ret);
-$ret=mb_ereg_replace("[µ]{2,}","µµ",$ret);
+$ret=ereg_replace("[µ]{2,}","µµ",$ret);
 if(substr($ret,0,1)=='µ')$ret=substr($ret,1);
 if(substr($ret,0,1)=='µ')$ret=substr($ret,1);
 $ret=str_replace('µ',"\n",$ret);
@@ -466,7 +466,7 @@ return $ret;}
 //clean_mail
 function convertmail($ret){
 $ret=clean_prespace($ret);
-$ret=str_replace("M.\n",'. ',$ret);
+$ret=str_replace("M.\n",'M. ',$ret);
 $ret=str_replace(".\n",'.µµ',$ret);
 $ret=str_replace("\n",'µ',$ret);
 $ret=mb_ereg_replace('µµ',"\n\n",$ret);

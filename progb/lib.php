@@ -44,9 +44,9 @@ function lkh($oc,$ov,$v,$c=''){
 return '<a'.atc($c).atb('onclick',$oc).atb('onmouseover',$ov).'>'.$v.'</a>';}
 function llk($c,$l,$v){return balc("li",$c,lka($l,$v));}
 function submitj($c,$id,$v){return button($c,'document.forms[\''.$id.'\'].submit();',$v);}
-function lja($j,$v,$c=''){return '<a onclick="'.$j.'"'.atc($c).'>'.$v.'</a>';}
 function lj($c,$j,$v,$o=''){if($o)return ljh($c,$j,$v);
 return '<a onclick="'.atj('SaveJ',$j).'"'.atc($c).$o.'>'.$v.'</a>';}
+function lja($c,$j,$v){return '<a onclick="'.$j.'"'.atc($c).'>'.$v.'</a>';}
 function ljb($c,$p,$j,$v,$a=''){$on=$a?'onmouseover':'onclick';
 return '<a '.$on.'="'.atj($p,$j).'"'.atc($c).'>'.$v.'</a>';}
 function ljc($c,$d,$j,$v,$o='',$p=''){return lj($c,$d.'_call'.$p.'__'.($o?$o:3).'_'.$j,$v);}
@@ -68,7 +68,7 @@ foreach($r as $k=>$v)$ret[]=atb($ra[$k]?$ra[$k]:$k,$v); return implode('',$ret);
 #action_j
 function toggle($c,$j,$v,$n=''){static $i; $i++; if($n=='x')$i=0;
 $cl=$c.'" id="'.strdeb($j,'_').'bt'.$i;
-return ljb($cl,'Toggle(\''.$j.'\',\'bt'.$i.'\','.($n?$n:'\'\'').')','',$v);}
+return ljb($cl,'tog_j',$j.'\',\'bt'.$i.'\',\''.$n,$v);}
 function bubble($c,$ja,$j,$v){$id=randid();//rename
 return lj($c.'" id="bt'.$id,'popup_'.$ja.'__'.$id.'_'.$j,$v);}
 function popbub($d,$j,$v,$c='',$o=''){$id=randid();//apps+dir or call+predir//j=pre-rendered
@@ -177,24 +177,24 @@ public static function generate(){return header_html().bal('head',self::get());}
 function connect(){require('params/_connectx.php');}
 function rcptb($db){if($db)return mysql_query('SHOW TABLES FROM `'.$db.'`');}
 function lstrc($rq){if($rq)while($d=mysql_fetch_row($rq))$qp[]=$d[0];return $qp;}
-function msq($ph,$bz){return 'SELECT '.$ph.' FROM '.$bz;}
-function qr($r){if($r)return mysql_fetch_array($r);}
+//function qw($p,$b){return 'select '.$p.' from '.$_SESSION[$b];}
+function qrr($r){if($r)return mysql_fetch_array($r);}
 function qra($r){if($r)return mysql_fetch_assoc($r);}
 function qrw($r){if($r)return mysql_fetch_row($r);}
-function res($ph,$bz){return mysql_query(msq($ph,$bz));}
-function ser($ph,$bz){return qr(res($ph,$bz));}
-function rse($ph,$bz){$req=res($ph,$bz); $d=qrw($req); return $d[0];}
-function msquery($sql){$req=mysql_query($sql) or die(mysql_error());
-return mysql_insert_id();}
+function res($p,$b){return mysql_query('select '.$p.' from '.$b);}
+//function ser($p,$b){return qrr(res($p,$b,$q));}
+function rse($p,$b){$r=qrw(res($p,$b,$q)); return $r[0];}//codeview//master_params
+function msquery($sql,$o=''){$req=mysql_query($sql) or die(mysql_error());
+if($o)return mysql_insert_id();}
 function mysql_values($r,$d){$ra=sesmk($d); $i=0;
 foreach($ra as $k=>$v){$rb[$k]=$r[$i]; $i++;} return $rb;}
-function insert($b,$d){return msquery('insert into '.$_SESSION[$b].' values '.$d);}
+function insert($b,$d){return msquery('insert into '.$_SESSION[$b].' values '.$d,1);}
 function update($bs,$in,$v,$col,$id){msquery('update '.$_SESSION[$bs].' set '.$in.'="'.$v.'" where '.$col.'="'.$id.'"');}
 function delete($bs,$id,$o=''){msquery('delete from '.$_SESSION[$bs].' where id="'.$id.'" limit 1'); if($o)reflush($bs,1);}
 function reflush($bs,$o=''){msquery('alter table '.$_SESSION[$bs].' order by id');
-if($o)msquery('alter table '.$_SESSION[$bs].' AUTO_INCREMENT='.(lastid($bs)+1).'');}
-function lastid($bs){if($bs=='qda')$wh=' where id>="'.last_art_rqt().'"';
-return rse('id',$_SESSION[$bs].$wh.' order by id DESC limit 1');}
+if($o)msquery('alter table '.$_SESSION[$bs].' AUTO_INCREMENT='.(lastid($bs)+1));}
+function lastid($bs){if($bs=='qda')$wh='id>="'.last_art_rqt().'"';
+return sql('id',$bs,'v',$wh.' order by id DESC limit 1');}
 
 function atmres($v){return mysql_real_escape_string(stripslashes($v));}
 function atm($v){return '"'.atmres($v).'"';}
@@ -203,8 +203,11 @@ function atmrup($r){foreach($r as $k=>$v)$ret[]=$k.'='.atm($v); return $ret;}
 function mysqlra($r){$rb=atmr($r); return '("",'.implode(',',$rb).')';}
 function mysqlrb($r){foreach($r as $k=>$v)$rb[]=mysqlra($v); return implode(',',$rb);}
 
+function sq($d,$b,$q=''){return mysql_query('select '.$d.' from '.$_SESSION[$b].' '.$q);}
+
 function sqlformat($rq,$p){
-if($p=='r')return qr($rq);//ser
+if($p=='q')return $rq;//res
+if($p=='r')return qrr($rq);//ser
 if($p=='a')return qra($rq);
 if($p=='v'){$r=qrw($rq); return $r[0];}//rse
 while($r=mysql_fetch_row($rq))if($r[0])switch($p){
@@ -224,12 +227,12 @@ return $ret;}
 
 //sql('id','qda','r','id=""');
 function sql($d,$b,$p,$q,$z=''){
-$sql=$_SESSION[$b].($q?' WHERE '.$q:''); $rq=res($d,$sql); if($z)echo msq($d,$sql);
-if($p=='q')return $rq;//res
+$sql='select '.$d.' from '.$_SESSION[$b].($q?' where '.$q:'');
+$rq=mysql_query($sql); if($z)echo $sql;
 if($rq){$ret=sqlformat($rq,$p); mysql_free_result($rq);}
 return $ret;}
 
-function sql_b($sql,$p,$z=''){
+function sql_b($sql,$p,$z=''){//$sql=qw($s,$b).$q
 if(!$z)$rq=mysql_query($sql); else $rq=mysql_query($sql) or die(mysql_error());
 if($rq){$ret=sqlformat($rq,$p); if($rq)mysql_free_result($rq);}
 if($z)echo $sql;
@@ -790,8 +793,8 @@ if($posb!==false)return substr($v,$posa,$posb-$posa);}
 //titles
 function clean_title($d){$nb="&nbsp;";
 $d=clean_acc($d); $d=utflatindecode($d); $d=html_entity_decode_b($d);
-$d=str_replace('«'.$nb,'"',$d); $d=str_replace('»'.$nb,'"',$d); 
-$d=lowercase($d); $d=clean_punct_b($d);
+$d=str_replace('«'.$nb,'"',$d); $d=str_replace('»'.$nb,'"',$d); $d=str_replace($nb,' ',$d);
+$d=clean_punct_b($d); $d=lowercase($d);
 if(substr($d,-1)=='"')$d=substr($d,0,-1).$nb.'»';
 if(substr($d,0,1)=='"')$d='«'.$nb.substr($d,1);
 $d=str_replace(' "',' «'.$nb,$d);
@@ -1053,7 +1056,7 @@ return call_user_func($p?$p:$f,$v1,$v2,$v3,$v4);}
 #actions
 function loadjs($f,$d,$t=''){$v=$_SESSION['offon'];
 $h=hidden('','offon'.$d,$v); $t=$t?'" title="'.$t:'';
-return ljb($t.'" id="offonbt'.$d,'offon(\''.$f.'\',\''.$d.'\')','',offon($v)).$h;}
+return ljb($t.'" id="offonbt'.$d,'offon',$f.'\',\''.$d,offon($v)).$h;}
 function lj_tog($n,$d,$v){return toggle('',$n.$d.'_'.$n.'_'.$d,$v).btd($n.$d,'');}
 function ljbub($v,$lk,$oc='',$ov='',$id='',$tg=''){$tg=$tg?atb('target','_blank'):'';
 $ocb='closebub(this);'; $ovb='closepbub(this,\''.$id.'\'); clbubtim(this);';
@@ -1175,7 +1178,7 @@ if($_POST)foreach($_POST as $k=>$v)$_POST[$k]=utfb($v);}
 
 function alert($d){Head::add('jscode',sj('popup_alert___'.ajx($d)));}
 function patch_replace($bs,$in,$wh,$repl){
-$rq=res("id",$_SESSION[$bs].' WHERE '.$in.'="'.$wh.'"');//LIKE "%'.$wh.'%"
+$rq=sql('id',$bs,'q',$in.'="'.$wh.'"');
 while($data=mysql_fetch_row($rq)){//delete($bs,$data['id']);
 echo $data[0].'_'; update($bs,$in,$repl,"id",$data[0]);}}
 

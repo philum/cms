@@ -278,10 +278,10 @@ $dr=explode('/',$dir); $nd=$dir?count($dr):0;
 if($r)foreach($r as $k=>$v){$rc=array_flip(explode(' ',' '.$v[5]));
 if($rc[$cond?$cond:'menu'] or !$v[5]){
 	$rv=explode('/',$v[6]); $nv=$v[6]?count($rv):0; $t=$v[0]; 
-	$ico=$v[7]?picto($v[7]).'&nbsp;':''; $rvb=$rv[$nv-1];
+	$ico=$v[7]?picto($v[7],'min-width:20px;').'&nbsp;':''; $rvb=$rv[$nv-1];
 	if($dir==$v[6])$is=true; else $is=match_vdir($dr,$nd,$rv);
 	if($is && $nv==$nd+1 && !$v[8] && auth($v[9])){//dirs
-		$rb[$rvb]=popbub($v[4]?$v[4]:$d,$v[6],picto('kright').'&nbsp;'.$rvb,$dd,1);}
+		$rb[$rvb]=popbub($v[4]?$v[4]:$d,$v[6],picto('kright','20px').'&nbsp;'.$rvb,$dd,1);}
 	if($is && $nv>$nd)$is=false;
 	if($is && !$v[8] && (!$v[9] or auth($v[9]))){//noj
 		if($v[1]=='link')$rb[$t]=ljbub($ico.$t,$v[3],'','','','');

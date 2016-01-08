@@ -295,9 +295,9 @@ $arr=array('ib','name','mail','day','nod','frm','suj','re','lu','img','thm','hos
 $arb=array('id','msg');
 	$bckup='INSERT INTO `'.$pba.'` (id,'.implode(',',$arr).') VALUES ';
 	$bckub='INSERT INTO `'.$pbt.'` ('.implode(',',$arb).') VALUES ';
-$rq=res('*',$_SESSION['qda'].' WHERE '.$wh.'id > '.$bkf.'');
-	while($row=mysql_fetch_array($rq)){$part='';  
-	$row['msg']=rse('msg',$_SESSION['qdm'].' WHERE id = '.$row['id'].'');
+$rq=sql('*','qda','q',$wh.'id>'.$bkf);
+while($row=mysql_fetch_array($rq)){$part='';  
+	$row['msg']=sql('msg','qdm','v','id='.$row['id']);
 	foreach($arr as $val){$part.=str_replace("'","''",$row[$val])."', '";}
 	if($_POST['no_id']!='ok')$rid=$row['id'];
 	$bckup.="('$rid', '".substr($part,0,-3)."),"."\n";
@@ -469,7 +469,7 @@ if($auth>=6){
 	if($_GET['publish']){
 		if($_GET['publish']=='off')$actv=0; else $actv=1;
 			update('qdu','active',$actv,'name',$qb);}
-		$opened=rse('active',$qdu.' WHERE name="'.$qb.'"');
+		$opened=sql('active','qdu','v','name="'.$qb.'"');
 		if($opened=='1'){$ere='off';$st=nms(130);}else{$ere='on';$st=nms(131);}
 	$ret.=lkc('popsav',$goto.'&publish='.$ere.'#'.$id,offon($opened).' '.$st).' ';
 	$ret.=lkc('popsav',$goto.'&reinit==',nms(95).' '.nms(103)).' ';}
@@ -667,7 +667,7 @@ $arr=affect_auth($auth); $mmbrs=$_SESSION['qbin']['membrs'];
 $qdu=ses('qdu'); $qb=ses('qb'); $USE=ses('USE'); 
 if($_POST['newuser'] && $_POST['newuser']!='newuser'){
 	$usrd=adduser($qb,$_POST['newuser'],$_POST['pass'],$_POST['mail']);
-	$tosave=rse('mbrs',$qdu.' WHERE name="'.$qb.'"'); 
+	$tosave=sql('mbrs','qdu','v','name="'.$qb.'"'); 
 	$tosave.=$_POST['adlv'].'::'.$_POST['newuser'].',';
 	$_SESSION['qbin']['membrs']=tab_members($tosave);
 	update('qdu','mbrs',$tosave,'name',$qb);
@@ -713,7 +713,7 @@ return $ret;}
 function adm_members_b(){$mmbrs=$_SESSION['qbin']['membrs'];
 $qdu=ses('qdu'); $qb=ses('qb'); $USE=ses('USE'); 
 if($_GET['register']=='=' && prmb(11)>=2){//register
-	$tosave=rse('mbrs',$qdu.' WHERE name="'.$qb.'"'); 
+	$tosave=qsl('mbrs','qdu','v','name="'.$qb.'"'); 
 	$tosave.='2::'.$_SESSION['USE'].','; update('qdu','mbrs',$tosave,'name',$qb);} 
 if($mmbrs[$USE])$ret.=btn('txtblc','registered_user as level: '.$mmbrs[$USE]);
 else $ret.=lkc('txtblc','/?admin=members&register==','become member');
@@ -761,7 +761,7 @@ return popup('article '.$id,$ret);}
 
 function admin_art_sav($res,$id){
 	$ret=mysql_real_escape_string(stripslashes($res));
-if($id && $ret && $_SESSION['auth']>5)msquery('UPDATE '.$_SESSION['qdm'].' SET msg="'.$ret.'" WHERE id='.$id.' LIMIT 1');}
+if($id && $ret && $_SESSION['auth']>5)update('qdm','msg',$ret,'id',$id);}
 
 function admin_articles($r){
 $ye=btn('" style="color:green;',picto('true')).' '; 
@@ -868,7 +868,7 @@ $qb=ses('qb'); $qda=ses('qda'); $qdu=ses('qdu'); $USE=ses('USE'); $auth=ses('aut
 $admin=$_GET['admin']?$_SESSION['admin']=$_GET['admin']:$_SESSION['admin'];
 if($_GET['set'])$_SESSION['set']=$_GET['set'];
 if($USE!=""){
-$hubname=rse("hub",$qdu.' WHERE name="'.$qb.'"');
+$hubname=sql('hub','qdu','v','name="'.$qb.'"');
 if(!$hubname)$hubname=$qb;
 list($autologok,$userhub)=sql('name,hub','qdu','r','ip="'.hostname().'"');}
 $rep="params";
@@ -895,7 +895,7 @@ if($USE){
 	$w.=lkc('popw',htac('module').'Home',pictxt('home',$hubname)).' ';
 	$w.=btn("popbt",pictxt('user',$USE.' '.asciinb($auth)).' ('.nameofauthes($auth).')');}
 //fastmenu
-$fmn=array('console','params','restrictions','apps','css','finder','templates','connectors','plugin','msql','tools','pictos','stats','update');
+$fmn=array('console','params','restrictions','apps','tags','css','templates','connectors','plugin','msql','finder','pictos','stats','update');
 foreach($raf as $v){if(in_array($v,$fmn))
 	$tit.=lkc(active($admin,$v),htac('admin').$v,pictit(mimes_types($v),$v)).' ';}
 $reta.=divc('right',$w.$alert); $tit.=lkc('txtit',htac('admin').$admin,$admin).' ';
@@ -935,7 +935,7 @@ case('avatar'):if($USE)$ret=adm_avatar(0); break;
 case('mail'):
 	if($_POST['amail']){if($USE==$qb)$_SESSION['qbin']['adminmail']=$_POST['amail'];
 		update('qdu','mail',$_POST['amail'],'name',$USE);}
-	$ml=rse('mail',$qdu.' WHERE name = "'.$USE.'"');
+	$ml=sql('mail','sql','v','name="'.$USE.'"');
 	if($ml)$valu=input2('text','amail',$ml.'" size="35" maxlength="50').' '.input2('submit','Submit','modif_mail','');
 	$ret=form($goto,$valu); break;
 case('password'):$ret=set_password($USE); break;
@@ -961,7 +961,7 @@ case('templates'):$ret=data_brain('template'); break;
 case('plugin'):$ret=adm_plugin(); break;
 case('msql'):$ret=adm_msql(); break;
 case('dev'):$ret=plugin('dev','',''); break;
-case('editags'):req('meta'); $ret=admin_tags(get('set')); break;
+case('tags'):req('meta'); $ret=admin_tags(get('set')); break;
 case('finder'):$ret=call_finder($qb,'disk'); break;
 case('backup'):$ret=adm_backup($qb,$auth,$goto,$rep); break;
 case('update_notes'):$ret.=adm_update_notes('',1); break;

@@ -12,13 +12,13 @@ list($n,$id,$va,$opt,$optb)=ajxr($_GET['callj']); $sz=$_GET['sz']; $pp=$_GET['po
 $ar=array('plug'=>1,'plup'=>1,'plugin'=>1,'plupin'=>1,'titsav'=>1,'popbub'=>1,'call'=>1,'callp'=>1);
 if(!$ar[$n])require_once('prog'.$b.'/ajxf.php');//
 
-//ljb('','expand()','',picto('expand')).' './/fsopen
-function popbt($o){return ljb('','Close','popup',picto('close')).' '.ljb('','poprepos()','',picto('ktop')).' '.ljb('','reduce()','',picto('less')).' '.ljb('','fixelem()','',picto('fix')).' '.$o.$_SESSION['popm'];}
-//function popbt($o){return ljb('','Close','popup','&#9209;').' '.ljb('','poprepos()','','&#9899;').' '.ljb('','reduce()','','&#9650;').' '.ljb('','fixelem()','','&#9660;').' '.$o.$_SESSION['popm'];}
+//ljb('','expand','',picto('expand')).' './/fsopen
+function popbt($o){return ljb('','Close','popup',picto('close')).' '.ljb('','poprepos','',picto('ktop')).' '.ljb('','reduce','',picto('less')).' '.ljb('','fixelem','',picto('fix')).' '.$o.$_SESSION['popm'];}
+//function popbt($o){return ljb('','Close','popup','&#9209;').' '.ljb('','poprepos','','&#9899;').' '.ljb('','reduce','','&#9650;').' '.ljb('','fixelem','','&#9660;').' '.$o.$_SESSION['popm'];}
 function popa($t,$o='',$s=''){return div(atd('popa').atc('popa'),popbt($o).balb('small',ats('cursor:move;').atb('onmouseup','stop_drag(event); noslct(1);').atb('onmousedown','noslct(0);'),$t?etc($t,70):'popup'));}
 function popup($t,$d,$w='',$p=''){if($w)$s='max-width:'.($w+16).'px;';
 if($p==1)$p=lj('','page_deskbkg',picto('desktop')).' ';
-if($p==2)$p=ljb('','pagrepos()','',picto('expand')).' ';
+if($p==2)$p=ljb('','pagrepos','',picto('expand')).' ';
 $popa=popa($t,$p,$s); $_SESSION['popm']='';// onresize="poprepos()"
 return div(atc('popup').ats($s).atb('onmouseup','stop_drag(event)'),$popa.div(atd('popu').atc('popu'),$d));}
 function pagup($d){$x=ljb('','Close','popup',picto('close'));
@@ -139,7 +139,7 @@ case("filters"):req('tri'); $msg=$id;
 	//if($va=='table'){$rt=ajxg($res);}
 	if($va=='randim'){$_POST['randim']=1; $_GET['continue']=1; $read=$_SESSION['read'];
 		$id=mysql_real_escape_string(stripslashes($id));
-		msquery('UPDATE '.$_SESSION['qdm'].' SET msg="'.$id.'" WHERE id="'.$read.'"');
+		if(is_numeric($read))update('qdm','msg',$id,'id',$read);
 		req('spe'); req('pop'); $ret=format_txt($id,3,$read);
 		$rt=sql('msg','qdm','v','id='.$read);}
 	if($va=='revert')$rt=sql('msg','qdm','v','id='.$_SESSION['read']);

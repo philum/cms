@@ -5,12 +5,12 @@
 function master_params($fb,$qd,$aqb,$subd){$filname=$fb.'_config.txt';
 if(is_file($filname))$prms=explode("#",read_file($filname));
 //else restore_mprm($filname);
-if(!$qd){if($prms[0]=="")$qd="pub"; else $qd=$prms[0];}//master_of_puppets
-if($_GET['qd']){$qdb=$_GET['qd']; $bqd=rse("id",$qdb.'_user'," LIMIT 1");//master_node
+if(!$qd){if(!$prms[0])$qd='pub'; else $qd=$prms[0];}//master_of_puppets
+if($_GET['qd']){$qdb=$_GET['qd']; $bqd=rse('id',$qdb.'_user',' LIMIT 1');//master_node
 	if(!$bqd && !$_POST['create_hub'] && !$_POST['create_node'])
 	$qd=$prms[0]; else $qd=$qdb;}
 $_SESSION['qd']=$qd; $_SESSION['qds']='_sys'; 
-$r=array('qda'=>'art','qdm'=>'txt','qdd'=>'data','qdu'=>'user','qdi'=>'idy','qdp'=>'ips','qdv'=>'live','qdt'=>'meta','qdta'=>'meta_art');//,'qds'=>'stat','qdtag'=>'tag'
+$r=array('qda'=>'art','qdm'=>'txt','qdd'=>'data','qdu'=>'user','qdi'=>'idy','qdp'=>'ips','qdv'=>'live','qds'=>'stat','qdt'=>'meta','qdta'=>'meta_art');
 foreach($r as $k=>$v)$_SESSION[$k]=$qd.'_'.$v;
 $_SESSION['htacc']=$prms[1]=="yes"?1:'';
 sesr('prms','create_hub',$prms[2]=='yes'?'on':'off');
@@ -31,11 +31,10 @@ $d=sql('struct','qdu','v','id="'.ses('USE').'"');
 write_file($f,$d);}
 
 function define_hubs(){
-$_SESSION['mn']=''; $qdu=$_SESSION['qdu']; $USE=$_SESSION['USE'];
-$exists=rse('id',$qdu.' WHERE id=1');
+$_SESSION['mn']=''; $USE=$_SESSION['USE'];
+$exists=sql('id','qdu','v','id=1');
 if(!$exists){$_SESSION['stsys']='no'; $_SESSION['first']=1; alert(loged('','','superadmin'));}
-$wh=' WHERE active="1" '; //if(!auth(7))else $wh='';
-$req=res('name,hub,id,active',$qdu.$wh.' ORDER BY nbarts DESC');
+$req=sq('name,hub,id,active','qdu','where active="1" order by nbarts DESC');
 if($req)while($r=mysql_fetch_row($req)){// && ($r[3] or auth(6))
 	$hub=$r[1]?$r[1]:$r[0]; $ret[$r[0]]=$hub; $rtb[$r[0]]=$r[2];}
 $_SESSION['mn']=$ret; $_SESSION['mnd']=$rtb;
@@ -100,7 +99,7 @@ $_SESSION['ip']=sesmk('hostname');}
 
 function alternate_design($node_clr){$_SESSION['switch']=1; 
 $_SESSION['tab']=''; define_mods($node_clr);
-$qbinb=ser("rstr,config",$_SESSION['qdu'].' WHERE name="'.$node_clr.'"');
+$qbinb=sql('rstr,config','qdu','r','name="'.$node_clr.'"');
 $prmb=explode('#',$qbinb["config"]); $_SESSION['prmb']=prmb_defaults($prmb); 
 $_SESSION['node_clr']=$node_clr;
 $_SESSION['rstr']=strsplit($qbinb['rstr']);}
@@ -130,7 +129,7 @@ return $cache;}
 function dayslenght($qb,$limit){
 $r=array(1,7,10,90,365,720,1440,2920,5840);//16y
 for($i=0;$i<9;$i++){$nbj=$r[$i];
-	$nb=rse('count(id)',$_SESSION['qda'].' WHERE day>"'.calc_date($nbj).'"');
+	$nb=sql('count(id)','qda','v','day>"'.calc_date($nbj).'"');
 	if($nb>$limit)$i=9;}
 return $nbj;}
 
@@ -358,9 +357,6 @@ if($nbarts!=$lastnb)update('qdu','nbarts',$nbarts,'name',ses('qb'));
 if($last!=$lastdy)update('qdu','struct',$last,'name',ses('qb'));}
 
 #utils
-function umem(){$r=array('_menus_','type','value');//$r=sesmk('umem');
-return read_vars('/users/',ses('qb').'_visitors_'.ses('iq'),$r);}
-
 function block_crawls(){$ip=ses('hostname');//proxad
 $r=array('msnbot','googlebot','spider','wowrack','netestate','tralex'); $n=count($r);
 for($i=0;$i<$n;$i++)if(strpos($ip,$r[$i]!==false))exit;}

@@ -64,7 +64,8 @@ if(get('search') && $auth>4)
 	//$ret.=togbub('call','meta_tag*slct_'.$id.'_'.ajx(get('search')),picto('paste')).' ';
 	$ret.=lj('','popup_callp___meta_tag*slct_'.$id.'_'.ajx(get('search')),picto('paste')).' ';
 if(($USE==$kem) or $auth>3){
-	$ret.=togbub('metall',$id,picto('editxt',24)).' ';
+	//$ret.=togbub('metall',$id,picto('tag',24)).' ';
+	//$ret.=togbub('tit',$id.'_'.$prw,picto('editor',24)).' ';
 	$ret.=lj('','popup_tit___'.$id.'_'.$prw,picto('tag',24)).' ';
 	$ret.=lj('','popup_artedit___'.$id,picto('edit',24)).' ';}
 return btd('artmnu'.$id,$ret);}
@@ -92,7 +93,7 @@ if($d && $d!=prmb(25))return ' '.flag($d).'';}
 
 function lang_rel_arts($id,$r){$rl=explode(' ',prmb(26)); $sp=sep();
 $t=array('eng'=>'english','fr'=>'français','esp'=>'español','de'=>'deutsch'); 
-if($rl)foreach($rl as $k=>$v){$lg=$r['lang'.$v];
+if($rl)foreach($rl as $k=>$v){if($v)$lg=$r['lang'.$v];
 	if($lg)$ret.=lka($lg,flag($v).$sp.$t[$v]).' ';}
 return $ret;}
 
@@ -127,14 +128,14 @@ function prepare_tits($id,$r,$rear,$nbtrk,$nl,$prw){$ib=trim($r['ib']);
 $nl=$nl?$nl:$_SESSION['nl']; $rst=$_SESSION['rstr']; $USE=$_SESSION['USE'];
 $read=$_SESSION['read']; $page=$_SESSION['page']; if($nl=='nlpop'){$nl='';$nlp=1;}
 $out['jurl']='content_ajxlnk2__2_art_'.$id; $out['purl']='popup_popart__3_'.$id.'_3';
-$out['day']=$r['day']; $out['artedit']=' '; $nlb=substr($nl,0,2);
+$out['day']=$r['day']; $out['artedit']=' '; $nlb=substr($nl,0,2);// pr($nl);
 if($nlb=="nl")$http=host(); $out['url']=$http.good_url($id,$r['suj']);//urlread($id);
 if(!$rst[19])$out['img1']=first_img($r['img']);//img1
 if(!$rst[68] && $r['img'] && strpos($r['img'],'/'))//gallery
 	$out['btim']=lj('','popup_callp___spe-ajxf_art*gallery_'.$id.'_gallery',picto('img'));
 if($_SESSION['prma']['art_mod']){
 	if($read==$id && $prw>2 && !$nl && !$nlp && rstr(60))$out['float']=build_art_mod(1);
-//	$out['float']=mkbub(popbub('seek','',picto('list'),'c'),'inline','position:relative; display:inline-block;','');//seek
+	//$out['float']=mkbub(popbub('seek','',picto('list'),'c'),'inline','position:relative; display:inline-block;','');//seek
 	$out['open'].=lj('','popup_popartmod__3_'.$id,picto('virtual')).' ';}
 if(!$rst[31]){$out['back']=art_back($id,$ib,$r['frm']);}//back
 if(!$rst[6] && $r['name']!=ses('qb')){//author
@@ -187,9 +188,9 @@ $out['sty']='';
 return $out;}
 
 //subarts
-function nb_ib_arts($id){$wh=$_SESSION['qda'].' WHERE ib="'.$id.'"';
+function nb_ib_arts($id){$wh='ib="'.$id.'"';
 if(!auth(1))$wh.=' and re>="1" and substring(frm,1,1)!="_"';
-return $ids=rse('COUNT(id)',$wh);}
+return $ids=sql('COUNT(id)','qda','v',$wh);}
 
 function ib_arts($id,$prw){//child
 if($_GET['order']){$ordr='DESC'; $ret=lkc('txtbox','/?read='.$id.'#pages',nms(41));}
@@ -240,8 +241,7 @@ if($_GET['look'])$msg=str_detect($msg,$_GET['look'],0);
 $panout['msg']=$msg;
 return $panout;}
 
-function str_detect($v,$d,$c){$sz=strlen($d); $nd=0;
-$n=substr_count(strtolower($v),strtolower($d));
+function str_detect($v,$d,$c,$n){$sz=strlen($d); $nd=0;
 for($i=0;$i<$n;$i++){if($nd<strlen($v)){$pos=strpos(strtolower($v),strtolower($d),$nd);
 	if($pos!==false){$part=substr($v,$pos,$sz); 
 		if(!$c)$repl='<a name="look'.$i.'"></a>'.btn('stabilo',$part).''; 
@@ -253,9 +253,12 @@ function prepare_msg_rech($id,$msg,$r='',$n){$rech=good_rech();
 if($_GET['bool'])$parts=explode(' ',trim($rech)); $nbp=count($parts);
 $msg=strip_tags($msg); $msg=clean_internaltag($msg); $r=explode('.',$msg);
 if(!$_GET['titles'])foreach($r as $k=>$v){
-	if($nbp>1){foreach($parts as $kb=>$vb)if($v && $vb)$va=str_detect($v,$vb,$id); else $va='';
-		if($va)$ret.=divc('track',$va.'.');}
-	else{$res=str_detect($v,$rech,$id); if($res)$ret.=divc('track',$res.'.');}}
+	if($nbp>1){foreach($parts as $kb=>$vb)if($v && $vb){
+		$na=substr_count(strtolower($v),strtolower($vb)); $panout['count']+=$na;
+		$va=str_detect($v,$vb,$id,$na);}
+	else $va=''; if($va)$ret.=divc('track',$va.'.');}
+	else{$na=substr_count(strtolower($v),strtolower($rech)); $panout['count']+=$na;
+		$res=str_detect($v,$rech,$id,$na); if($res)$ret.=divc('track',$res.'.');}}
 if($_GET['titles'])$panout['msg']=''; else $panout['msg']=clean_br_lite($ret);
 return $panout;}
 
@@ -275,11 +278,11 @@ $r['opts']=$_SESSION['opts']?$_SESSION['opts']:art_opts($id);
 $panout['id']=$id; $panout['suj']=$r['suj']; //$prw=slct_media($prw);
 if($r['re']==0)$panout['css']="hide"; else $panout['css']="";
 //if($_GET['module']=="agenda")$panout['suj']=strftime("%A %d %B %Y",$r['day']).' :: ';
-$panout+=prepare_tits($id,$r,$rear,$otp,$n,$prw);//count($otp)
 if($prw<3)$panout['thumb']=prepare_thumb($r['img']);
 if(good_rech() && $n)$panout+=prepare_msg_rech($id,$msg,$r,$n);
 elseif($msg){$panout+=prepare_msg($id,$msg,$r,$prw);//corps && $prw!=1
 	if(!$_SESSION['nl'])$trk=prepare_tracks($id,$otp);}
+$panout+=prepare_tits($id,$r,$rear,$otp,$panout['count'],$prw);//count($otp)
 return balb('section',atd($id).atn($id),template($panout,$tp)).$trk;}
 
 #load
@@ -328,12 +331,12 @@ if($prw>1)$msg=sql('msg','qdm','v','id="'.$r['id'].'"');//msg
 return art_read_mecanics($r['id'],$r,$msg,'',$prw,$tp);}
 
 //all
-function play_arts($frm,$prw,$tp){$prw=slct_media($prw);
+function play_arts($frm,$pr,$tp){$pr=slct_media($pr);
 $page=$_SESSION['page']; $npg=$_SESSION['prmb'][6]; $min=($page-1)*$npg;
 $r=load_arts($frm,$prw); //pr($r);
-$nbarts=count($r); if(!$r)return; //$rb=req_load($r);
+$nbarts=count($r); if(!$r)return;
 foreach($r as $k=>$v){$i++;
-	if($prw=='auto')$prw=$rb[$k]['re']>=2?2:1;
+	if($pr=='auto')$prw=$v['re']>=2?2:1; else $prw=$pr;
 	if($i>=$min && $i<$npg*$page && $v)
 		$ret.=batch_load($v,$prw,$tp);
 	elseif(rstr(39))$ret.=div(atd($k).atc($prw),'');}
@@ -357,7 +360,7 @@ function art_read($tp='read'){
 $qb=$_SESSION['qb'];$qda=$_SESSION['qda'];$USE=$_SESSION['USE']; $id=$_SESSION['read'];
 $r=sql('ib,name,mail,day,nod,frm,suj,re,lu,img,thm,host','qda','a','id='.$id);
 $_SESSION['imgrel']=first_img($r['img']);
-$msg=rse('msg',$_SESSION['qdm'].' WHERE id="'.$id.'"');//msg
+$msg=sql('msg','qdm','v','id="'.$id.'"');//msg
 if($id && ($r['re']>='1' or $_SESSION['auth']>=3 or $USE==$r['name'])){
 	if($_GET['page'])$prw=2; else $prw=3;
 	$ret=art_read_mecanics($id,$r,$msg,'',$prw,$tp);}
@@ -369,7 +372,7 @@ if($prw>2){$_GET['read']=$id; $tp=$tp?$tp:'read';}
 if($id=='last')$id=last_art_rqt(); elseif(!is_numeric($id))$id=id_of_suj($id);
 $r=art_datas($id);
 if(rstr(5) or $prw>2 or $_GET['search']) 
-	$msg=rse('msg',$_SESSION['qdm'].' WHERE id='.$id);//1.2.3.nl
+	$msg=sql('msg','qdm','v','id='.$id);//1.2.3.nl
 if($prw=='vd')$msg=search_conn_video($id,$msg);
 $ret=art_read_mecanics($id,$r,$msg,$n,$prw,$tp);
 if($prw>2)$ret.=ib_arts($id,$prw);//affiliates
@@ -378,7 +381,7 @@ return $ret;}
 function art_read_c($id,$prw,$rstr35){//4ajax: only_content
 if($prw>2)$_SESSION['read']=$id; else $_SESSION['read']='';
 $r=art_datas($id); //$prw=slct_media($prw);
-if(rstr(5) or $prw>2)$msg=rse('msg',$_SESSION['qdm'].' WHERE id="'.$id.'"');
+if(rstr(5) or $prw>2)$msg=sql('msg','qdm','v','id="'.$id.'"');
 $ret=implode('',prepare_msg($id,$msg,$r,$prw)); $ret.=divc('clear','');
 if(rstr(35) && !$rstr35)$ret=scroll_b(strlen($ret),$ret,1000,'','400',$id);//navig($id).
 if($prw==3)$ret.=lj('" href="#'.$id,'art'.$id.'_art___'.$id.'_1',picto('ktop'));
@@ -419,7 +422,7 @@ if($id){$panout['id']=$id;
 	if($_GET['read'])$purl='/?read='.$_GET['read'];
 	if($host==$ip && ($_SESSION['dayx']-$day)<600 or auth(6))//redit
 		$panout['edit'].=lj('','popup_trkedit___'.$id,picto('edit')).' ';
-	$sender=rse("id",$_SESSION['qdu'].' WHERE name="'.$name.'"');
+	$sender=sql('id','qdu','v','name="'.$name.'"');
 	if($sender)$panout['author']=lj('','popup_track___'.$name,$name);
 	elseif($mail!='mail')$panout['author']=lj('','popup_plupin___mail_'.$mail,$name);
 	else $panout['author']=$name;

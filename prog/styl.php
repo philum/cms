@@ -311,7 +311,7 @@ $clrn=array('',"bkg","border","bloc","identity","active","art_bkg","art_txt","tx
 for($i=1;$i<=$nb;$i++){$name=$i.($clrn[$i]?':'.$clrn[$i]:'');
 $inp=input2('text','" size="5" id="colorpickerField'.$i,$clr[$i],'');
 $ret.=div(atc('clrp').atd('colorpick'.$i).ats('color:#'.invert_color($clr[$i],1)),divs('background-color: #'.$clr[$i].';',$name.$inp));}
-return $ret.br().ljb("txtbox","SaveClr",$nb,nms(57)).divd("clrreponse",'');}
+return $ret.br().ljb('txtbox','SaveClr',$nb,nms(57)).divd("clrreponse",'');}
 
 #editor
 

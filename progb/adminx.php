@@ -490,7 +490,7 @@ if($r){foreach($r as $k=>$v)$ra[$v[3]]+=1;
 foreach($ra as $k=>$v){list($ka,$kb)=split_r($k,3);
 if($kb)$kc=str_replace(array('cat','art'),'',$k); else $kc=$k;
 if($k)$ret.=ljb($k==$cnd[0]||$k==$cnd[1]?'active':'','SaveBb','modules_'.$vl.'__'.$k,$kc);}
-if($ret){$all=ljb($cnd[0]?'':'active','SaveBb','modules_'.$vl.'__all',nms(100));
+if($ret){$all=ljb($cnd[0]?'':'active','SaveBb','modules_'.$vl.'__all','-');
 return divc('nbp',$all.$ret);}}}
 
 #console_nav

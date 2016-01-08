@@ -290,7 +290,7 @@ function bubble(res,id){clbub(1,'');//onclickout //// clpop('','bb'+id);
 function togbub(res,id){popnb+=1; popz+=100; clpop('','pub'+id);
 	var div=getbyid('bt'+id); var pid='pop'+popnb; var pos=get_dim(div);
 	var bub=document.createElement('div'); bub.innerHTML=res; bub.style.zIndex=popz;
-	bub.className='popup'; bub.style.position='absolute'; //bub.style.maxWidth='440px';
+	bub.className='popup'; bub.style.position='absolute'; bub.style.maxWidth='440px';
 	bub.style.padding='4px'; bub.style.marginRight='4px'; bub.id='pub'+id;
 	div.appendChild(bub); bub.style.left='0px';
 	var pob=getPosition(bub); bub.style.top=(pos.y+pos.h+2)+'px';
@@ -500,7 +500,8 @@ function Search2(){
 	var tit=getbyid('srtit').value;
 	var cat=ajxget(getbyid('srcat').value);
 	var tag=ajxget(getbyid('srtag').value);
-	var cll=src+'_'+dig+'_'+bol+'-'+ord+'-'+tit+'&res='+cat+(tag?'_'+tag:'');
+	//var tag2=ajxget(getbyid('srtag2').value);
+	var cll=src+'_'+dig+'_'+bol+'-'+ord+'-'+tit+'&res='+cat+'_'+tag;
 	var ajax=new AJAX(jurl()+'search_'+cll,'popup',3);
 	Close('popup');}
 function Search(old,id){

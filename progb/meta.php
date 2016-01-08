@@ -45,7 +45,7 @@ if($r)foreach($r as $k=>$v){
 
 function same_suj($suj){
 $r=sql('id','qda','k','suj="'.$suj.'" AND nod="'.$_SESSION['qb'].'" ORDER BY id DESC');
-foreach($r as $k=>$v){if($k!=$_SESSION["read"])$ret.=lka('/?read='.$k,$k).' ';}
+foreach($r as $k=>$v){if($k!=$_SESSION['read'])$ret.=lka('/?read='.$k,$k).' ';}
 if($ret)return btn('txtsmall','with_same_title: '.$ret);}
 
 function prior_sav($v,$id){update('qda',"re",$v,"id",$id); cache_value($id,11,$v);
@@ -68,7 +68,7 @@ function edit_day($d,$id){
 if($id && auth(5)){$r=explode('-',$d); 
 $day=mktime($r[3],$r[4],0,$r[1],$r[2],$r[0]); update("qda","day",$day,"id",$id);
 return lj('popw','chday'.$id.'_chday___'.$id,'date');}
-else{$day=date('Y-m-d-H-i',rse("day", $_SESSION['qda'].' WHERE id="'.$d.'"'));
+else{$day=date('Y-m-d-H-i',sql('day','qda','v','id="'.$d.'"'));
 return input(1,'chd'.$d,$day,'').lj('popw','chday'.$d.'_chday_chd'.$d.'__'.$d,'ok');}}
 
 function edit_dpl($id,$css){$use=$_SESSION['USE'];
@@ -77,7 +77,7 @@ if(auth(5)){$ret.=lj($css,'popup_deploy___'.$id,picto('mail')).'';
 return $ret;}
 
 function edit_tits($id,$prw){$css='poph';
-list($ib,$day,$src,$suj,$frm,$img,$thm,$re)=sql('ib,day,mail,suj,frm,img,thm,re','qda','r','id="'.$id.'" LIMIT 1'); $csb='';
+list($ib,$day,$src,$suj,$frm,$img,$thm,$re)=sql('ib,day,mail,suj,frm,img,thm,re','qda','r','id="'.$id.'"');
 $nk='checkEnter(event,\'formtit'.$id.'\');';
 $ret.=submitj('','formtit'.$id,pictxt('save',nms(57)));//save
 $ret.=select_j('ib'.$id,'parent',$ib,'',picto('topo'),1);
@@ -87,8 +87,8 @@ $ret.=lj($css,'popup_track___'.$id,picto('forum')).'';
 $ret.=edit_dpl($id,$css).'';//deploy
 if(auth(2))$ret.=btd('chday'.$id,lj('','chday'.$id.'_chday___'.$id,picto('time'))).'';
 $ret.=balise('textarea',array(3=>'suj'.$id,5=>'editor',16=>'height:34px; width:100%;'),$suj).br();//suj
-$ret.=lj('poph','popup_placeim___'.$id,picto('img')).balise("input",array('','text','','img'.$id,$img,$csb,'36',255,$nk),'').lj('poph','img'.$id.'_recenseim__4_'.$id,picto('up',14)).br();//img
-$ret.=lj('poph','',picto('link')).balise("input",array('','text','','src'.$id,$src,$csb,'36',255,$nk),'').br();//src
+$ret.=lj('poph','popup_placeim___'.$id,picto('img')).balise("input",array('','text','','img'.$id,$img,'','36',255,$nk),'').lj('poph','img'.$id.'_recenseim__4_'.$id,picto('up',14)).br();//img
+$ret.=lj('poph','',picto('link')).balise("input",array('','text','','src'.$id,$src,'','36',255,$nk),'').br();//src
 $ret.=edit_frm($id,$frm);
 $ret.=edit_tags($id,'tag','tag');
 if(prmb(18)){//user_tags
@@ -111,7 +111,7 @@ return divc('nbp',$picto.$auto.$inp.btd($rid,$ret).divd('slctfrm'.$id,''));}
 function slct_frm($id,$frm){
 $r=sql('frm','qda','k','nod="'.ses('qb').'" and frm!="_system" and frm!="_trash" AND day>"'.calc_date("360").'" order by frm');
 if($r)foreach($r as $k=>$v){
-	$ret.=lja(atj('jumpvalue','frm1'.$id.'_'.ajx($k)),$k).' ';}
+	$ret.=lja('',atj('jumpvalue','frm1'.$id.'_'.ajx($k)),$k).' ';}
 return divc('nbp',$ret);}
 
 //translations
@@ -172,7 +172,7 @@ return $ret;}
 function slct_folder($id){
 $r=sql('msg','qdd','k','qb="'.ses('qb').'" AND val="folder"');
 if($r)foreach($r as $k=>$v)
-	$ret.=ljb('','jumpvalue(\'folder'.$id.'_'.addslashes($k).'\'); Close(\'popup\');','',$k);
+	$ret.=lj('jumpvalue(\'folder'.$id.'_'.addslashes($k).'\'); Close(\'popup\');',$k);
 return divc('list',$ret);}
 
 //words
@@ -203,7 +203,6 @@ function add_tag($cat,$tag){
 $idtag=idtag($cat,$tag);
 if(!$idtag && $cat && $tag)
 	$idtag=insert('qdt','("","'.$cat.'","'.$tag.'")');
-//else echo 'idtag exists-';
 return $idtag;}
 
 function idartag($idart,$idtag){
@@ -214,7 +213,6 @@ function add_artag($idart,$idtag,$cat,$tag){
 $idartag=idartag($idart,$idtag);
 if(!$idartag && $idart && $idtag)
 	$idartag=insert('qdta','("","'.$idart.'","'.$idtag.'")');
-//else echo 'idartag exists-';
 return $idartag;}
 
 function add_tag_btn($r,$idart,$cat,$curtag=''){
@@ -229,7 +227,7 @@ function del_tag_btn($r,$idart,$cat){
 $rid=$cat.$idart;
 if($r)foreach($r as $idtag=>$tag){
 	$j=$rid.'_deltag___'.$idtag.'_'.$idart.'_'.$cat;
-	$ret.=lj('',$j,'&#10006;&nbsp;'.$tag).' ';}
+	$ret.=lj('nbp',$j,'&#10006;&nbsp;'.$tag).' ';}
 return $ret;}
 
 function sav_tag($idtag,$idart,$cat,$tag){
@@ -245,11 +243,6 @@ $ret=del_tag_btn($r,$idart,$cat);
 return $ret;}
 
 //del tag
-function arts_by_tag($idtag){
-$order='order by '.ses('qdta').'.id ASC';
-$r=sql_inner('idart','qdt','qdta','idtag','vr','idtag="'.$idtag.'" '.$order); //p($r);
-return $r;}
-
 function deltag($idtag,$idart,$cat,$action=''){
 $rid=$cat.$idart;
 if($action=='remove')$removed=removetag($idtag);
@@ -257,7 +250,7 @@ $idartag=idartag($idart,$idtag);
 if($idartag)delete('qdta',$idartag);
 $r=read_tags($idart,$cat);
 $ret=del_tag_btn($r,$idart,$cat);
-if(!$removed){$rb=arts_by_tag($idtag);//remove if unused tag
+if(!$removed){$rb=sql('idart','qdta','vr','idtag="'.$idtag.'"');//remove if unused tag
 	if(!$rb)$ret.=lj('txtred',$rid.'_deltag___'.$idtag.'_'.$idart.'_'.$cat.'_remove','remove tag '.$idtag).' ';}
 return $ret;}
 
@@ -286,19 +279,20 @@ return $r;}
 //edit_tags
 function edit_tags($idart,$cat,$ico){
 $rid=$cat.$idart;
-$auto=lj('','slct'.$rid.'_matchtag__3_'.$idart.'_'.ajx($cat),'&#9660;').'';
-$picto=lj('','slct'.$rid.'_call__3_meta-spe_list*tags_'.$idart.'_'.ajx($cat),picto($ico)).'';
+$auto=lj('','slct'.$rid.'_matchtag__3_'.$idart.'_'.ajx($cat),'&#9660;').' ';
+$picto=lj('','slct'.$rid.'_call__3_meta-spe_list*tags_'.$idart.'_'.ajx($cat),picto($ico,'min-width:22px;')).'';
 $r=read_tags($idart,$cat);
 $ret=del_tag_btn($r,$idart,$cat);
 $js='" onkeyup="autocomp(\''.$idart.'_'.$cat.'\');';//addtag
 $js.='" onclick="autocomp(\''.$idart.'_'.$cat.'\');';
 $inp=input('','inp'.$rid,$cat.$js,'',1,12).'';
-return divc('nbp',$picto.$auto.$inp.btd($rid,$ret).divd('slct'.$rid,''));}
+return divc('small',$picto.$inp.$auto.btd($rid,$ret).divd('slct'.$rid,''));}
 
 function meta_all($id){$r['tag']='tag';
+$ret=btd('rdbt'.$id,prior_edit($_SESSION['rqt'][$id][11],$id)).' ';//priority
 $ica=explode(' ',prmb(18)); $ico=explode(' ',prmb(19)); $r+=array_combine($ica,$ico); 
 foreach($r as $cat=>$ico)$ret.=edit_tags($id,$cat,$ico);
-return $ret;}
+return divs('min-width:340px;',$ret);}
 
 //list_tags
 function list_tags($idart,$cat){//tag_list()
@@ -306,7 +300,7 @@ $wh='and cat="'.$cat.'" and day>"'.calc_date(30).'" order by tag';
 $r=artags('idtag,tag',$wh,'kv');
 return add_tag_btn($r,$idart,$cat);}
 
-//match
+#match
 function each_words($d){$r=explode(' ',$d); $n=count($r);
 for($i=0;$i<$n;$i++)$ret[$r[$i]]+=1;
 return $ret;}
@@ -350,7 +344,7 @@ return add_tag_btn($rd,$idart,$cat);}
 //remove
 function removetag($idtag){//from editor
 if(!auth(6))return;
-$rb=arts_by_tag($idtag);//existing
+$rb=sql('idart','qdta','vr','idtag="'.$idtag.'"');//existing
 if(!$rb)delete('qdt',$idtag);
 return 'ok';}
 
@@ -382,22 +376,35 @@ function recat_tag($idtag,$newcat=''){
 if(!auth(6))return;
 $rid=randid('recat');
 list($tag,$cat)=sql('tag,cat','qdt','r','id='.$idtag);
-$ret=divc('txtcadr',nms(140).': '.$tag);
+$ret=divc('txtcadr',nms(140).': '.$tag.' in '.$cat);
 $ret.=divc('small',helps('tag_rename'));
 $utags=explode(' ','tag '.prmb(18));//cats
-foreach($utags as $v){$c=$cat==$v?'active':'';
-	$ret.=lj($c,$rid.'_call___meta_recat*tag_'.$idtag.'_'.ajx($v),$v).br();}
+foreach($utags as $v){if($v!=$cat)
+	$ret.=lj('popbt',$rid.'_call___meta_recat*tag_'.$idtag.'_'.ajx($v),$v).br();}
 if($newcat){
 	$ex=sql('id','qdt','v','tag="'.$tag.'" and cat="'.$newcat.'"');
 	if(!$ex){update('qdt','cat',$newcat,'id',$idtag); 
 		$ret=divc('txtalert',$cat.' => '.$newcat);}
-	else{update('qdta','idtag',$ex,'idtag',$idtag); $ret=divc('txtalert',$tag.'/'.$cat.' is erased and references are linked to '.$tag.'/'.$newcat);
+	else{update('qdta','idtag',$ex,'idtag',$idtag); $ret=divc('txtalert',$tag.' in '.$cat.' is erased and references are linked to '.$tag.' in '.$newcat);
 		if($idtag)delete('qdt',$idtag);}}
+return divd($rid,$ret);}
+
+//transcat
+function trans_tag($idtag,$p='',$res=''){
+if(!auth(6))return;
+$rid=randid('trnsct');
+$tag=sql('tag','qdt','v','id='.$idtag);
+$ret=divc('txtcadr',nms(140).' '.nms(142).' '.nms(9).' '.nms(2).' '.nms(141).': '.$tag);
+$ret.=input('','trsct',$tag);
+$ret.=lj('popbt',$rid.'_call___meta_trans*tag_'.$idtag.'_'.$cat.'_trsct','ok').br();
+if($res){$r=sql('idart','qdta','vr','idtag="'.$idtag.'"');
+	foreach($r as $k=>$id)update('qda','frm',$res,'id',$id);
+	$ret.=divc('txtalert','All the articles with tag "'.$tag.'" are put in category: '.$res);}
 return divd($rid,$ret);}
 
 //list_artag
 function list_artag($idtag,$cat){
-$rb=arts_by_tag($idtag);//existing
+$rb=sql('idart','qdta','vr','idtag="'.$idtag.'"');//existing
 if($rb)foreach($rb as $idart)$ret.=lj('popbt','popup_callp___meta-spe_edit*tags_'.$idart.'_'.$cat,pictxt('tag',$idart)).' '.popart($idart,'',suj_of_id($idart)).br();
 return divc('small',$ret);}
 
@@ -410,6 +417,7 @@ $tg='cbk'.$rid.'_call___meta'; $tp='popup_callp__3x_meta';
 $ret.=lj('popbt',$tp.'-spe_list*artag_'.$idtag.'_'.ajx($cat),pictxt('view',nms(2))).' ';
 $ret.=lj('popsav',$tp.'_rename*tag_'.$idtag.'_'.$cat,pictxt('edit',nms(87))).' ';
 $ret.=lj('popsav',$tp.'_recat*tag_'.$idtag,pictxt('edit',nms(140))).' ';
+$ret.=lj('popsav',$tp.'_trans*tag_'.$idtag,pictxt('edit',nms(9))).' ';
 $ret.=lj('txtyl',$tg.'_remove*tag_'.$idtag,pictxt('del',nms(43).' '.nms(100)));
 $ret.=divd('cbk'.$rid,'');
 return divd($rid,$ret);}

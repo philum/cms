@@ -63,13 +63,13 @@ return $xf;}
 
 #motor
 function add_im_img($nnw){
-	$dejm=rse("img",$_SESSION['qda'].' WHERE id="'.$_SESSION['read'].'"');
+	$dejm=sql('img','qda','v','id="'.$_SESSION['read'].'"');
 	if($dejm){$djm=$dejm;}
 	if(strpos($djm,$nnw)===false){msquery('UPDATE '.$_SESSION['qda'].' SET img="'.$djm.'/'.$nnw.'" WHERE id="'.$_SESSION['read'].'"');}}
 
 function add_im_msg($or,$mg){
 $mg=str_replace(array('users/','img/'),'',$mg);
-$nmsg=addslashes(rse("msg",$_SESSION['qdm'].' WHERE id="'.$_SESSION['read'].'"'));
+$nmsg=addslashes(sql('msg','qdm','v','id="'.$_SESSION['read'].'"'));
 if($or){$nmsg=str_replace($or.':img',$or,$nmsg);
 	$nmsg=str_replace($or.'\n\n',$mg,$nmsg);
 	$nmsg=str_replace($or.'\n',$mg,$nmsg); 
@@ -443,7 +443,7 @@ return array($dc,$l,$h);}
 function decide_source($doc,$id){
 $doc=str_replace("\n",'',$doc); if(is_numeric($doc)){$id=$doc; $doc='';}
 if(strpos($doc,",")!==false){$r=explode(",",$doc);}
-elseif(!$doc){$d=rse("img",$_SESSION['qda'].' WHERE id="'.$id.'"');
+elseif(!$doc){$d=sql('img','qda','v','id="'.$id.'"');
 	$r=explode("/",substr($d,1)); $src='img/';}
 else{if(substr($doc,-1)!='/')$doc.='/'; $src='users/'.$doc; $r=explore($src,'files',1);}
 return array($r,$src);}
@@ -478,7 +478,7 @@ $t=$t?$t:suj_of_id($id); $p='['.$id.':read]'; if($c)$p='['.$id.']';
 return toggle('','jop'.$p.'_conn_'.$p,$t).' '.btd('jop'.$p,'');}
 
 function mk_bkg($v,$id){list($d,$p)=good_param($v); if(!$p){$p=$d; $d='';}
-if($p)$mg=$p; else $mg=first_img(rse("img",$_SESSION['qda'].' WHERE id='.$id));
+if($p)$mg=$p; else $mg=first_img(sql('img','qda','v','id='.$id));
 $f=goodroot($mg,1);
 if(file_exists($f))list($w,$h)=getimagesize($f);
 return divs('background-image: url(/img/'.$mg.'); background-repeat:no-repeat;  background-position:center center; background-size:cover; background-attachment:fixed; height:90%;',$d);
@@ -1072,7 +1072,7 @@ return $iq;}//if($ip==hostname())
 
 function isgoodhubname($user){$dir="users/"; //$user=normalize($user);
 if($_SESSION['qbin']['membrs'][$user])return true;
-$iq=ser("id",$_SESSION['qdu'].' WHERE name="'.$user.'"'); if($iq)return true;
+$iq=sql('id','qdu','v','name="'.$user.'"'); if($iq)return true;
 $r=explore($dir,'dirs',1); if($r[$user])return true;}
 
 function log_result($Use,$iq,$qb,$rl,$ck){
@@ -1097,9 +1097,9 @@ if($iq){list($ip,$userhub)=sql('ip,hub','qdu','r','name="'.$user.'"');
 //autolog
 elseif($user=='login'){//is_numeric($ath[$user])
 	if(!rstr(73))return loged($user,'','');
-	list($iq,$ip)=ser("id,ip",$qdu.' WHERE name="'.$qb.'"');
+	list($iq,$ip)=sql('id,ip','qdu','r','name="'.$qb.'"');
 	if($ip==$host){return log_result($qb,$iq,$qb,'',$cook);}
-	else{list($iq,$USE)=ser("id,name",$qdu.' WHERE ip="'.$host.'"');
+	else{list($iq,$USE)=sql('id,name','qdu','r','ip="'.$host.'"');
 		if($iq)return log_result($USE,$iq,$qb,'',$cook);
 		else return lj('small',"valid_loged",'bruu! '.helps('log_no'));}}
 //bad passw
@@ -1149,7 +1149,7 @@ $txt.="\n\n".prep_host(ses('qb'));
 send_mail_html($mail,$subj,nl2br($txt),$from,prep_host($user));}
 
 function alert_user($user){
-list($qmail,$pss)=ser("mail,pass",$_SESSION['qdu'].' WHERE name="'.$user.'"');
+list($qmail,$pss)=sql('mail,pass','qdu','r','name="'.$user.'"');
 $subj="$qb - tentative de login";
 $txt='rappel de vos identifiants:
 login: '.$user.', passw: '.$pss.'
@@ -1162,9 +1162,9 @@ return lj('small',"valid_loged","password sent to user $user $qmail");}
 
 #newuser
 function add_member($qb,$user,$ath){$qdu=$_SESSION['qdu'];
-$mbrs=rse("mbrs",$qdu.' WHERE name="'.$qb.'"');
+$mbrs=sql('mbrs','qdu','v','name="'.$qb.'"');
 $mbrs.=$ath.'::'.$user.','; $_SESSION['auth']=$ath;
-msquery("UPDATE $qdu SET mbrs='$mbrs' WHERE name='$qb'");
+update('qdu','mbrs',$mbrs,'name',$qb);
 $_SESSION['qbin']["membrs"]=tab_members($mbrs);}
 
 function adduser($qb,$user,$pasw,$mail){$dayx=$_SESSION['dayx'];
@@ -1174,7 +1174,7 @@ if(prmb(11)>=6 or $_POST['create_hub']){
 	list($rstr,$config)=ndprms_defaults();
 	if(!$_SESSION['line'])$mbrs.='7::'.$qb.','; else $mbrs.='6::'.$qb.',';}//first
 elseif(prmb(11)>=1)add_member($qb,$user,prmb(11));
-$ex=rse("id",$_SESSION['qdu'].' WHERE id=1');
+$ex=sql('id','qdu','v','id=1');
 if(!$ex)echo plugin('install','pub');
 return insert('qdu',"('','$user',PASSWORD('$pasw'),'$mail','".$dayx."','$clr','$ip','$rstr','$mbrs','$hub','','$config','$strct','$dscrpt','$menus','$open')");}
 

@@ -63,7 +63,7 @@ return $ret;}
 //footnotes
 function nbp($id,$read){
 $t=lkc('popbt',urlread($read).'#nb'.$id.'" name="#nh'.$id,$id);
-$d=rse('msg',$_SESSION['qdm'].' WHERE id="'.$read.'"');
+$d=sql('msg','qdm','v','id="'.$read.'"');
 $pos=strpos($d,'['.$id.':nb]'); $posb=strpos($d,'['.($id+1).':nb]');
 if($posb===false)$posb=strpos($d,"\n",$pos);
 	$ret=subtopos($d,$pos,$posb);
@@ -76,7 +76,7 @@ function mbd_footnotes($n,$a){
 $txt=helps('anchor_select').' "'.$n.'":';
 if(!$a)$ret.=ljb('popbt','insert_mbd','[\',\''.$n.'\',\':nb]',$txt).br().btn('txtsmall',helps('anchor_dbclic')).br().br();
 else{$ret.=lj('txtx','txarea_filters_txtarea__addanchors','auto_anchors').' ';
-$ret.=ljb('','embed_slct','(\',\')','()').br();
+$ret.=ljb('','embed_slct','\',\'','()').br();
 $ret.=btn('txtsmall',helps('anchor_auto')).br();
 $ret.=ljb('txtbox','embed_slct','[\',\':nh]',':nh').' ';
 $ret.=ljb('txtbox','embed_slct','[\',\':nb]',':nb').' ';
@@ -106,14 +106,14 @@ return menuder_jb($r,$id,$rid,$opt);}
 
 function menuder_inp($id,$rid,$v,$pre,$o){//assistant($id,$j,$jv,$va,$chk);
 if($o==1 or $o==3)$bt='getbyid(\''.$pre.$rid.'\').innerHTML=val;';
-return input(1,'adc'.$rid,'').ljb('popbt','var val=getbyid(\'adc'.$rid.'\').value; 
-if(val){'.$bt.' getbyid(\''.$id.'\').value=ajxget(val);} Close(\'popup\');','','ok');}
+return input(1,'adc'.$rid,'').lja('popbt','var val=getbyid(\'adc'.$rid.'\').value; 
+if(val){'.$bt.' getbyid(\''.$id.'\').value=ajxget(val);} Close(\'popup\');','ok');}
 
 function slct_r($d,$o,$vrf=''){
 switch($d){case('parent'):$r=newartparent(); break;
-	case('category'):$r=$_SESSION['line']; if($r)ksort($r); break;
-	case('tag'):$r=find_meta($o,30); if($r)ksort($r); break;
-	case('lang'):$r=array_flip(explode(" ",prmb(26))); $cl=1; break;
+	case('category'):$r=$_SESSION['line']; if($r)ksort($r); break;//$r=array(nms(9)=>1); 
+	case('tag'):$r=find_meta($o,30); if($r)ksort($r); break;//$r=array('tag'=>1); 
+	case('lang'):$r=array_flip(explode(' ',prmb(26))); $cl=1; break;
 	case('msql'):req('msql'); list($dr,$nd,$vn)=murl_vars($o); $r=msql_read($dr,$nd,'',1);
 		//echo $o.'-'.$vrf.':'.$dr.'/'.$nd.'='.$vn.br(); 
 		if($r)ksort($r); if($r)$r=array_flip(array_keys($r)); break;
@@ -223,7 +223,7 @@ function vmailsend($id,$res){
 $http=host(); $htacc=urlread($id);
 list($from,$to,$txt,$suj)=ajxr($res);
 if(strpos($to,"@")!==false){
-$suj=rse("suj",$_SESSION['qda'].' WHERE id="'.$id.'"');
+$suj=sql('suj','qda','v','id="'.$id.'"');
 $msg=divc("panel justy",$txt);
 $msg.=lkc("",$http.$htacc,bal("h2",$suj));
 $msg.=divc("panel justy",read_msg($id,"nlb"));
@@ -259,7 +259,7 @@ return $ret;}
 
 //transport
 function import($node,$part,$use,$frm,$qb,$suj){$tim=$_SESSION['dayx'];
-$mmb=rse("members",$_SESSION['qdu'].' WHERE name="'.$node.'"'); $r=explode(",",$mmb); 
+$mmb=sql('members','qdu','v','name="'.$node.'"'); $r=explode(",",$mmb); 
 foreach($r as $k=>$v){list($ath,$muser)=explode("::",$v); if($muser==$use)$auth=$ath;}
 list($name,$mail,$tit,$thm,$hst,$img)=sql('name,mail,suj,thm,host,img','qda','r','id="'.$part.'"'); $re=$auth>4?1:0;
 if($suj!="ok")$ib=$suj; else $ib='/'; if(!$node)$node=$qb; if(!$suj)return;
@@ -424,7 +424,7 @@ $ims=sql('img','qda','v','id='.$id); $r=explode('/',$ims); foreach($r as $k=>$v)
 return popup('place images',$ret,440);}
 
 function art_gallery($id){
-if(!$d)$d=rse("img",$_SESSION['qda'].' WHERE id='.$id); $r=explode("/",$d);
+if(!$d)$d=sql('img','qda','v','id='.$id); $r=explode('/',$d);
 if($r)foreach($r as $v)if($v)$ret.=popim(goodroot($v),make_thumb($v,$id),$id);
 return $ret;}
 
@@ -617,7 +617,7 @@ if(trim($f) && $f!='1' && $d!='1' && $f!='x' && $d!='x' && !@$_SESSION['vacuum']
 	if(joinable($f))$_SESSION['vacuum'][$fb]=read_file($f);//
 if($d=='x')unset($_SESSION['vacuum'][$fb]); //echo $f; //p($_SESSION['vacuum']);
 if($d=='p')return 'ok';
-if($d=='c')$ret=ljb('',sj('popup_batch').' closebub(this);','',picto('get'));
+if($d=='c')$ret=lj(sj('popup_batch').' closebub(this);',picto('get'));
 $ret.=lj('',$idt.'_batch____in_'.$d,picto('reload'));
 $ret.=lj('',$idt.'_batch___x_1',picto('del'));
 $ret.=lj('','popup_rssjb___rssurl_1',picto('rss'));

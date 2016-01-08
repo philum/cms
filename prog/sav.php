@@ -25,8 +25,8 @@ if($stoop==""){
 	$msg=mysql_real_escape_string(stripslashes($msg)); $siz=strlen($msg);
 	$suj=mysql_real_escape_string(stripslashes($suj));
 	$frm=mysql_real_escape_string(stripslashes($frm));
-	$nid=msquery("INSERT INTO $base VALUES ('','$ib','$name','$mail','$pdt','$qb','$frm','$suj','$re','$lu','$img','$kywk','$siz')");
-	$nid=msquery("INSERT INTO $qdm VALUES ('$nid','$msg')");}
+	$nid=msquery("INSERT INTO $base VALUES ('','$ib','$name','$mail','$pdt','$qb','$frm','$suj','$re','$lu','$img','$kywk','$siz')",1);
+	$nid=msquery("INSERT INTO $qdm VALUES ('$nid','$msg')",1);}
 if($nid && $USE!=$qb && $_SESSION["auth"]<6){
 	mail($_SESSION['qbin']["adminmail"],'new article: '.stripslashes($suj),'
 	'.host().'/'.$nid.',
@@ -46,8 +46,8 @@ $lnk=mysql_real_escape_string(stripslashes($k));
 $frm=mysql_real_escape_string(stripslashes($frm));
 $suj=mysql_real_escape_string(stripslashes($suj));
 $msg=mysql_real_escape_string(stripslashes($msg));
-$nid=msquery("INSERT INTO $base VALUES ('','/','$name','$lnk','$pdt','$qb','$frm','$suj','$re','$lu','$img','$kywk','')"); 
-$nid=msquery("INSERT INTO $qdm VALUES ('$nid','$msg')");
+$nid=msquery("INSERT INTO $base VALUES ('','/','$name','$lnk','$pdt','$qb','$frm','$suj','$re','$lu','$img','$kywk','')",1); 
+$nid=msquery("INSERT INTO $qdm VALUES ('$nid','$msg')",1);
 $msg=correct_txt($msg,$nid,'savimg');
 $_SESSION['rqt'][$nid]=array($pdt,stripslashes($frm),stripslashes($suj),'',$qb,'','','',$s,$lnk,$ib,$re); $_SESSION['daya']=$_SESSION['dayx'];
 return divc('txtx',lka(htac('read').$nid,$suj));}

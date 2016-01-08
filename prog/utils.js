@@ -341,7 +341,7 @@ function active_tg(val,nb,nob){//tabs
 	getbyid(val+nb).className=css;
 	return ret;}
 
-function Toggle(val,nb,nob){var dn=val.split("_"); //dn=undefiner(dn);
+function tog_j(val,nb,nob){var dn=val.split("_"); //dn=undefiner(dn);
 	if(nob)var ac=active_tg(dn[0],nb,nob); else var ac=active(dn[0]+nb);
 	dn[2]=undefine(dn[2]); dn[3]=undefine(dn[3]); dn[4]=undefine(dn[4]); dn[5]=undefine(dn[5]); 
 	if(ac){var URL=jurl()+dn[1]+'_'+dn[2]+'_'+dn[3]+'_'+dn[4]+'_'+dn[5];

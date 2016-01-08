@@ -12,7 +12,7 @@ if(!$_SESSION['qb'] or !$_SESSION['qd'] or !$_SESSION['qda'] or $_GET['qd'] or $
 if($_GET['dev']){$_SESSION['dev']=$_GET["dev"]; relod('/?id==');}
 //master_params
 if(!$_SESSION['qd'] or $cache)master_params('params/_'.$db,$qd,$aqb,$subd);
-if(!$_SESSION['master'])$_SESSION['master']=rse('name',$_SESSION['qdu'].' WHERE id="1"');
+if(!$_SESSION['master'])$_SESSION['master']=sql('name','qdu','v','id="1"');
 if(!$_SESSION['philum'])$_SESSION['philum']=msql_read('system','program_version',1);//philum
 date_default_timezone_set(prms('timez'));
 if($_SESSION['dev'])error_report();

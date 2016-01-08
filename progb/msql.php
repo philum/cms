@@ -192,7 +192,7 @@ foreach($r as $k=>$v){$ra='';$i++;
 	if($k=='_menus_' && $ra){
 		foreach($ra as $ka=>$va)$ra[$ka]=lka(sesm('url').$murl.'&sort='.$ka,$ka.':'.$va);
 		array_unshift($ra,lka(sesm('url').$murl.'&sort=k','keys')); 
-		if(auth(4))array_unshift($ra,ljb('','chkall()','','²'));}
+		if(auth(4))array_unshift($ra,ljb('','chkall','','²'));}
 	elseif(is_array($ra)){
 		foreach($ra as $ka=>$va)$ra[$ka]=medit_shot_bt($va,$k,$ka,$dr,ajx($nd));
 		if(auth(4))array_unshift($ra,$edit.lj($css,'popup_editmsql___'.$jurl,$k));
