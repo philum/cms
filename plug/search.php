@@ -22,59 +22,72 @@ function except_words($d){
 $r=array('de','des','du','dans','le','les','la','un','a','à','ou','où','on','en','y',"«","»","'",'"',":","-","!","?");
 if(!in_array($d,$r))return true;}
 
-function rech_lower($d,$o){
-return $o?strtolower($d):$d;}
+function rech_prep_suj($rch,$cp,$parts){
+	if($cp>1){foreach($parts as $k=>$v)
+		if(except_words($v))
+			$r[]='suj LIKE "%'.($v).'%"';
+		$wh='('.implode(' or ',$r).')';}
+	else $wh='suj LIKE "%'.$rch.'%" ';
+return $wh;}
 
-//rech->load
-function rech($rch,$days=''){$low=1;
-if(get('bool'))$bool=1; if(get('titles'))$titl=1;
-if(substr($rch,0,1)=='*'){$rch=substr($rch,1); $titl=1;}
-if(substr($rch,-1)=='*'){$rch=substr($rch,0,-1); $bool=1;}
-$rch=str_replace("’","'",$rch); $rchb=rech_lower($rch,$low);
-if(!$days)$days=$_SESSION["nbj"];
-if($days){$sqlm='AND day > '.calc_date($days);//limit
-$dayba=time_prev($days); $dayba=$dayba?calc_date($dayba):$_SESSION["daya"];
-$sqlm.=' AND day < '.$dayba;}
-	//if(get('pho'))$rch=soundex($rch);
-	$wh='suj LIKE "%'.($rch).'%" ';
-	if($bool)$parts=explode(' ',$rchb); $cp=count($parts);
-	if($cp>1){foreach($parts as $k=>$v){if(except_words($v)){
-		if($titl)$whb.='suj LIKE "%'.($v).'%" OR ';
-		else $whb.='msg LIKE "%'.($v).'%" OR ';}}
-		$whb=substr($whb,0,-4);}
-	elseif(!$titl)$whb='msg LIKE "%'.$rch.'%" ';
-	if($_SESSION['rstr'][3]=="1")$sqlm="";
-	if($_GET['cat'])$sqlm.=' AND frm="'.$_GET['cat'].'"';
-	if($_GET['tag'])$sqlm.=' AND thm LIKE "%'.$_GET['tag'].'%"';
-$rte=sql('id','qda','k','nod="'.$_SESSION['qb'].'" AND frm!="_system" AND re>="1" '.$sqlm.' '); 
-	if($rte){$rtk=array_keys($rte); $dif=max($rtk)-min($rtk); 
-	if($dif)$rtp=count($rte)/$dif;
-		if($rtp<0.5)$whc='id="'.implode('" OR id="',$rtk).'"'; 
-		else $whc='id>="'.min($rtk).'" AND id<="'.max($rtk).'"';}
-	$rq=res("id,suj",$_SESSION['qda'].' WHERE '.$wh.' AND nod="'.$_SESSION['qb'].'" '.$sqlm.'');
-	if($rq)while($data=mysql_fetch_row($rq)){$nbc=""; $suj=rech_lower($data[1],$low);
-	if($cp>1){foreach($parts as $k=>$v){$n=0; 
-		$nbd[$k]=substr_count($suj,trim($v)); if($nbd[$k])$n+=1;}
-		if($n==$cp)$ret[$data[0]]+=array_sum($nbd);}
-	else{$nbc=substr_count($suj,$rchb); if($nbc)$ret[$data[0]]+=$nbc;}}
-if($titl)$rq=res("id,suj",$_SESSION['qda'].' WHERE ('.$whb.') AND ('.$whc.')');
-else $rq=res("id,msg",$_SESSION['qdm'].' WHERE ('.$whb.') AND ('.$whc.')'); 
-	if($rq)while($data=mysql_fetch_row($rq)){$nbc="";
-	if($rte[$data[0]]){
+function rech_prep_msg($rch,$cp,$parts){
+	if($cp>1){foreach($parts as $k=>$v)
+		if(except_words($v))
+			$r[]='msg LIKE "%'.($v).'%"';
+		$wh='('.implode(' or ',$r).')';}
+	else $wh='msg LIKE "%'.$rch.'%" ';
+return $wh;}
+
+function rech_count($titl,$wh,$cp,$parts,$ret){
+if($titl)$rq=sq('id,suj','qda',$wh); else $rq=sq('id,msg','qdm',$wh);
+if($rq)while($data=mysql_fetch_row($rq)){$nbc='';
+if($rte[$data[0]]){
 	if(strpos($data[1],":import")!==false)$msg=format_txt($data[1],"","");
-	else $msg=$data[1]; $msg=rech_lower($msg,$low);
+	else $msg=$data[1]; $msg=strtolower($msg);
 	if($cp>1){
-		foreach($parts as $k=>$v){$n=0; 
-			if(trim($v))$nbd[$k]=substr_count($msg,trim($v));}
-		foreach($parts as $k=>$v){if($nbd[$k])$n+=1;} 
+		foreach($parts as $k=>$v){$n=0; if(trim($v))$nbd[$k]=substr_count($msg,trim($v));}
+		foreach($parts as $k=>$v)if($nbd[$k])$n+=1; 
 		if($n==$cp)$ret[$data[0]]+=array_sum($nbd);}
 	else{$nbc=substr_count($msg,$rchb); if($nbc)$ret[$data[0]]+=$nbc;}}}
-if($rch && !$ret && (rstr(62) or ses('rstr62'))){$ndig=next_sptime($days);
-	if($ndig)return rech($rch,$ndig);}
+return $ret;}
+
+function rech($rch,$days=''){
+if(get('bool'))$bool=1; if(get('titles'))$titl=1;
+if(substr($rch,-1)=='*'){$rch=substr($rch,0,-1); $bool=1;}
+$rch=str_replace("’","'",$rch); $rch=str_replace(array("&nbsp;",'«','»'),'',$rch);
+$rch=trim($rch); $rchb=strtolower($rch);
+$cat=$_GET['cat']; if($cat==nms(9))$cat=''; $tag=$_GET['tag']; if($tag=='tag')$tag='';
+$qb=ses('qb'); $qda=ses('qda'); $qdm=ses('qdm'); $qdt=ses('qdt'); $qdta=ses('qdta');
+if($bool){$parts=explode(' ',$rchb); $cp=count($parts);}
+if(rstr(3))$sq['daymin']='day>'.calc_date($days?$days:ses('nbj'));
+$daya=time_prev($days); $daya=$daya?calc_date($daya):ses('daya');
+//sql
+$sq['daymax']='day<'.$daya;
+$sqnd['suj']=rech_prep_suj($rch,$cp,$parts);
+$sq['nod']='nod="'.$qb.'"';
+$sq['frm']='substring(frm,1,1)!="_"';
+$sq['re']='re>0';
+if(!$titl)
+$sqin['msg']='
+	inner join '.$qdm.' on '.$qdm.'.id='.$qda.'.id';
+if(!$titl)$sq['msg']=rech_prep_msg($rch,$cp,$parts);
+if($cat)$sq['cat']='frm="'.$cat.'"';
+if($tag)$sqin['tag']='
+	inner join '.$qdta.' on '.$qda.'.id='.$qdta.'.idart
+	inner join '.$qdt.' on '.$qdt.'.id='.$qdta.'.idtag and tag="'.$tag.'"';
+//req
+$wh=implode(' and ',$sq); if($sqnd['suj'])$wh.=' or '.$sqnd['suj'];
+$inner=implode('',$sqin);
+$ret=sql_b('select '.$qda.'.id from '.$qda.' '.$inner.' where '.$wh,'k');
+//count
+//if($ret)$ret=rech_count($titl,$wh,$cp,$parts,$ret);
+//reload
+if(!$ret && $rch && (rstr(62) or ses('rstr62'))){
+	$ndig=next_sptime($days); if($ndig)return rech($rch,$ndig);}
 return $ret;}
 
 //titles
-function rech_titles($rech,$dig='',$opt='',$cac='',$cat='',$tag=''){
+function rech_titles($rech,$dig,$opt,$cac,$cat,$tag,$tag2){
 list($bol,$ord,$tit,$pho)=split("-",$opt);
 $load=$_SESSION['load']; $days=geta('dig',$dig);
 $bol=substr($rech,-1)=='*'?1:get('bool',$bol); $_GET['bool']=$bol; //$_GET['pho']=$pho;
@@ -82,19 +95,19 @@ $ret.=btn('search',input(1,'search',$rech.'" size="32" maxlength="150','')).' ';
 $ret.=ljb('popsav','Search2();','',nms(24)).' ';
 $ret.=hlpbt('search').' ';
 if($cac)$ret.=blj('popbt','srcac','plug___search_rech*reset_'.$cac,picto('del'));
-if($load)$ret.=btn("popw",nbof(count($load),1).', '.nbof(array_sum($load),19)).' ';
+if($load)$ret.=btn("popw",nbof(count($load),1));//.', '.nbof(array_sum($load),19).' '
 if(rstr(3))$ret.=br().dig_h($days); else $ret.=hidden('','srdig',1000);//days
 if(!isset($_SESSION['rstr62']))sesr('rstr62',rstr(62)); 
 if(rstr(3))$ret.=togses('rstr62',pictit('right',nms(134))).' ';//dig
 $urg=mkurl(array('bool','titles','cat','tag'));
-if($rech)$ret.=lkc('',htac('search').$rech.'/'.$dig.$urg,picto('link')).' ';
+if($rech)$ret.=lkc('',htac('search').$rech.'/'.$dig,picto('link')).' ';//.$urg
 $ret.=br().checkact('srord',$ord,nms(18)).' ';
 $ret.=checkact('srtit',$tit,nms(72)).' ';
 //$ret.=checkact('srpho',get('pho'),'').' ';//nms(123)
 $ret.=checkact('srbol',$bol,nms(70)).''.hlpbt('bool').' ';
-$ret.=select_j('srcat','category',$cat,1).' ';//hidslct_j
-$ret.=select_j('srtag','tag',$tag,'tag');
-$ret.=select_j('srtag2','tag',$tag2,'thèmes');
+$ret.=select_j('srcat','category',$cat?$cat:nms(9),1).' ';//hidslct_j
+$ret.=select_j('srtag','tag',$tag?$tag:'tag','tag');
+//$ret.=select_j('srtag2','thèmes',$tag3,'thèmes');
 return divc('titles',$ret).br();}
 
 function array_intersect_b($a,$b){$load=$a+$b;
@@ -117,7 +130,7 @@ return array_intersect_b($ra,$rb);}
 
 function rech_script($d){$sp=strpos($d,';')?';':' '; $r=explode($sp,$d); $n=count($r);
 for($i=0;$i<$n;$i++){list($o,$p)=split(':',$r[$i]); if($p=='tag')$tag=$o; 
-	elseif($p=='cat')$cat=$o; elseif(!$p)$rech.=$o.' '; elseif($p)$utg=$p.':'.$o;}
+	elseif($p=='cat')$cat=$o; elseif($p)$utg=$p.':'.$o; elseif(!$p)$rech.=$o.' ';}
 return array($rech,$cat,$tag,$utg);}
 
 function rech_reset($p){unset($_SESSION['recache'][$p]);}
@@ -134,7 +147,7 @@ elseif(strpos($rech,'='))$load=make_list_arts($rech);
 elseif($rech)$load=rech($rech,$n); if($load && !is_array($load))$load='';
 if(!$load && ($cat or $tag or $utg))$load=rech_catag($rch,$cat,$tag,$utg,$n);
 $_SESSION['load']=$load; $_SESSION['recache'][$vrf]=$load; save_get();
-$ret=rech_titles($rech,$n,$opt,$cac,$cat,$tag); $_SESSION['page']=1;
+$ret=rech_titles($rech,$n,$opt,$cac,$cat,$tag,$tag2); $_SESSION['page']=1;
 if($load[0])unset($load[0]); if($load[1])unset($load[1]);
 if($load){if($o)krsort($load); else arsort($load); //$_GET['targ']=$vrf;
 $ret.=scroll($load,divd($vrf,output_pages($load,'flow','')),1,400);}
