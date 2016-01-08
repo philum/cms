@@ -38,19 +38,6 @@ function rech_prep_msg($rch,$cp,$parts){
 	else $wh='msg LIKE "%'.$rch.'%" ';
 return $wh;}
 
-function rech_count($titl,$wh,$cp,$parts,$ret){
-if($titl)$rq=sq('id,suj','qda',$wh); else $rq=sq('id,msg','qdm',$wh);
-if($rq)while($data=mysql_fetch_row($rq)){$nbc='';
-if($rte[$data[0]]){
-	if(strpos($data[1],":import")!==false)$msg=format_txt($data[1],"","");
-	else $msg=$data[1]; $msg=strtolower($msg);
-	if($cp>1){
-		foreach($parts as $k=>$v){$n=0; if(trim($v))$nbd[$k]=substr_count($msg,trim($v));}
-		foreach($parts as $k=>$v)if($nbd[$k])$n+=1; 
-		if($n==$cp)$ret[$data[0]]+=array_sum($nbd);}
-	else{$nbc=substr_count($msg,$rchb); if($nbc)$ret[$data[0]]+=$nbc;}}}
-return $ret;}
-
 function rech($rch,$days=''){
 if(get('bool'))$bool=1; if(get('titles'))$titl=1;
 if(substr($rch,-1)=='*'){$rch=substr($rch,0,-1); $bool=1;}
@@ -67,10 +54,9 @@ $sqnd['suj']=rech_prep_suj($rch,$cp,$parts);
 $sq['nod']='nod="'.$qb.'"';
 $sq['frm']='substring(frm,1,1)!="_"';
 $sq['re']='re>0';
-if(!$titl)
-$sqin['msg']='
-	inner join '.$qdm.' on '.$qdm.'.id='.$qda.'.id';
-if(!$titl)$sq['msg']=rech_prep_msg($rch,$cp,$parts);
+if(!$titl && $rch){
+	$sqin['msg']='inner join '.$qdm.' on '.$qdm.'.id='.$qda.'.id';
+	$sq['msg']=rech_prep_msg($rch,$cp,$parts);}
 if($cat)$sq['cat']='frm="'.$cat.'"';
 if($tag)$sqin['tag']='
 	inner join '.$qdta.' on '.$qda.'.id='.$qdta.'.idart
@@ -79,8 +65,6 @@ if($tag)$sqin['tag']='
 $wh=implode(' and ',$sq); if($sqnd['suj'])$wh.=' or '.$sqnd['suj'];
 $inner=implode('',$sqin);
 $ret=sql_b('select '.$qda.'.id from '.$qda.' '.$inner.' where '.$wh,'k');
-//count
-//if($ret)$ret=rech_count($titl,$wh,$cp,$parts,$ret);
 //reload
 if(!$ret && $rch && (rstr(62) or ses('rstr62'))){
 	$ndig=next_sptime($days); if($ndig)return rech($rch,$ndig);}
@@ -116,17 +100,15 @@ foreach($b as $k=>$v)$r[$k]+=1;
 if($r)foreach($r as $k=>$v)if($v>1)$ret[$k]=$load[$k];
 return $ret?$ret:$load;}
 
-function rech_catag($d,$cat,$tag,$utg,$n){
-$rr=array(); if($d)$ra=rech($d,$n,$b);
+function rech_catag($cat,$tag,$utg,$n){
 $wh='select '.ses('qda').'.id from '.ses('qda').'';
-if($tag)$wh.=' inner join '.ses('qdta').' on '.ses('qdta').'.idart='.ses('qda').'.id
-inner join '.ses('qdt').' on '.ses('qdta').'.idtag='.ses('qdt').'.id and tag="'.$tag.'"';
+if($tag){$idtag=sql('id','qdt','v','tag="'.$tag.'"');
+$wh.=' inner join '.ses('qdta').' on '.ses('qdta').'.idart='.ses('qda').'.id and '.ses('qdta').'.idtag="'.$idtag.'"';}
 $wh.=' where nod="'.ses('qb').'" and re>0 and day>"'.calc_date($n).'"'; 
 if($n>7)$wh.=' and day<"'.calc_date(time_prev($n)).'"'; 
 if($cat)$wh.=' and frm="'.$cat.'"';
-if($cat or $tag)$rb=sql_b($wh,'k'); //p($rb); p($ra);
-if(!$ra)$ra=$rr; if(!$rb)$rb=$rr;
-return array_intersect_b($ra,$rb);}
+if($cat or $tag)$rb=sql_b($wh,'k');
+return $rb;}
 
 function rech_script($d){$sp=strpos($d,';')?';':' '; $r=explode($sp,$d); $n=count($r);
 for($i=0;$i<$n;$i++){list($o,$p)=split(':',$r[$i]); if($p=='tag')$tag=$o; 
@@ -135,7 +117,7 @@ return array($rech,$cat,$tag,$utg);}
 
 function rech_reset($p){unset($_SESSION['recache'][$p]);}
 
-function plug_search($d,$n,$opt='',$res=''){list($b,$o,$t,$ph)=split("-",$opt);
+function plug_search($d,$n,$opt='',$res=''){list($b,$o,$t,$ph)=split("-",$opt); chrono();
 $rech=good_rech($d); $_GET['search']=$rech; list($cat,$tag)=ajxr($res);
 if(!$n)$n=$_SESSION['nbj']; $_GET['dig']=$n; $_GET['cat']=$cat; $_GET['tag']=$tag; 
 $_GET['bool']=$b; $_GET['titles']=$t; //$_GET['pho']=$ph; 
@@ -145,9 +127,10 @@ if(isset($_SESSION['recache'][$vrf])){$load=$_SESSION['recache'][$vrf]; $cac=$vr
 elseif(strpos($rech,';') && strpos($rech,':'))list($rch,$cat,$tag,$utg)=rech_script($rech);
 elseif(strpos($rech,'='))$load=make_list_arts($rech);
 elseif($rech)$load=rech($rech,$n); if($load && !is_array($load))$load='';
-if(!$load && ($cat or $tag or $utg))$load=rech_catag($rch,$cat,$tag,$utg,$n);
+if(!$load && ($cat or $tag or $utg))$load=rech_catag($cat,$tag,$utg,$n);
 $_SESSION['load']=$load; $_SESSION['recache'][$vrf]=$load; save_get();
 $ret=rech_titles($rech,$n,$opt,$cac,$cat,$tag,$tag2); $_SESSION['page']=1;
+$_SESSION['popm']=chrono('search');
 if($load[0])unset($load[0]); if($load[1])unset($load[1]);
 if($load){if($o)krsort($load); else arsort($load); //$_GET['targ']=$vrf;
 $ret.=scroll($load,divd($vrf,output_pages($load,'flow','')),1,400);}

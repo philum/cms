@@ -2,7 +2,7 @@
 //philum_plugin_installation 
 session_start();
 
-function plug_install($qd){if(!$qd)return;
+function install_db($qd){
 $table["art"]='
 CREATE TABLE IF NOT EXISTS `'.$qd.'_art` (
   `id` mediumint(6) NOT NULL auto_increment,
@@ -159,7 +159,7 @@ $table["_meta_art-ai"]='
 ALTER TABLE `'.ses('qd').'_meta_art`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;';
 
-//relationnal
+//todo
 /*$table["_cat"]='
 CREATE TABLE IF NOT EXISTS `'.$qd.'_cat` (
   `id` tinyint(4) NOT NULL,
@@ -190,17 +190,16 @@ CREATE TABLE IF NOT EXISTS `'.$qd.'_opt` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
 */
+return $table;}
 
-
+function plug_install($qd){
+if(!$qd)return;
+$table=install_db($qd);
 if($_SESSION['auth']>6 or $_SESSION['first'])
 foreach($table as $k=>$sql){
 	$req=mysql_query($sql) or die(mysql_error()); 
 	$ret.=divc('',$qd.'_'.$k.': ok');}
 $_SESSION['first']='';
 return $ret;}
-
-//require('../params/_connectx.php');
-//require('../prog/lib.php');
-//echo plug_install('pub');
 
 ?>

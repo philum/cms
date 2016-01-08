@@ -68,9 +68,9 @@ if($_SESSION["mtg"]!="All"){$cate.=' and thm LIKE "%'.$_SESSION["mtg"].'%"';}
 if($_SESSION["prmb"][9]==""){$ordr="day DESC";}else{$ordr=$_SESSION["prmb"][9];}
 if($_GET["req"]){$r=make_list_arts($_GET["req"]); $plg.='req='.$_GET["req"].'&';
 //echo 'req=cat=futur|present|dream|politic~from=01-01-11~until=31-12-12';
-if($r)foreach($r as $k=>$v){$sq.='id='.$k.' OR ';} $sq=substr($sq,0,-4);
-$rq=res("id,day,mail,frm,suj,img,nod,thm,re,lu,host",$qda.' WHERE '.$sq);}
-else{$rq=res("id,day,mail,frm,suj,img,nod,thm,re,lu,host",$qda.' WHERE nod = "'.$_SESSION['qb'].'" and day < '.$daya.' and day > '.$daybb.' '.$cate.' ORDER BY '.$ordr.'');}
+if($r)foreach($r as $k=>$v)$sq.='id='.$k.' OR '; $sq=substr($sq,0,-4);
+$rq=sq('id,day,mail,frm,suj,img,nod,thm,re,lu,host','qda','WHERE '.$sq);}
+else{$rq=sq('id,day,mail,frm,suj,img,nod,thm,re,lu,host','qda','WHERE nod="'.$_SESSION['qb'].'" and day < '.$daya.' and day > '.$daybb.' '.$cate.' ORDER BY '.$ordr.'');}
 $rqt=tri_cache($rq);
 
 //print_r($rqt);
@@ -109,7 +109,7 @@ $rtr.=lkt('','/'.$id,'>');
 $rtr.=br().br();
 $rtr.='</div>';
 $rtr.='<div class="justy">';
-$msg=rse("msg",$_SESSION["qdm"].' WHERE id="'.$id.'"');
+$msg=sql('msg','qdm','v','id="'.$id.'"');
 	$msg=correct_txt($msg,'striplink','correct');
 	$msg=format_txt($msg,"nl",$id);
 $rtr.=$msg;

@@ -14,10 +14,9 @@ switch($vaa){
 	case("notag"):if($vab)$notag[$vab]=true; break;
 	case("order"):if($vab)$ord=$vab; break;}}
 $ordr='day '.($ord?$ord:"DESC");
-$sql=' WHERE nod="'.$_SESSION['qb'].'" AND frm!="_system" AND re=1 '.$wh.' ORDER BY '.$ordr.' '.$whb;
-$rq=res('id,frm,thm',$_SESSION['qda'].$sql);
-if($rq){
-while($data=mysql_fetch_array($rq)){$stop=false;
+$sql='WHERE nod="'.$_SESSION['qb'].'" AND frm!="_system" AND re=1 '.$wh.' ORDER BY '.$ordr.' '.$whb;
+$rq=sq('id,frm,thm','qda',$sql);
+if($rq){while($data=mysql_fetch_array($rq)){$stop=false;
 	$tags=explode(",",$data["thm"]); $id=$data["id"];
 	if($tags) foreach($tags as $vb){if($notag[trim($vb)]==true){$stop=true;}}
 	if(!$stop)$ret[$id]=$prw;}
@@ -26,8 +25,8 @@ return $ret;}}
 function arts_menus($dya,$dyb){$cs='txtblc';
 $ret.=divc('txtcadr','build_pdf_book').br();
 $dya=$dya?$dya:time(); $dyb=$dyb?$dyb:0;
-$sq=$_SESSION['qda'].' WHERE nod = "'.$_SESSION['qb'].'" and day < '.$dya.' and day > '.$dyb.' AND re="1"';
-$rq=res("id,frm,thm,day",$sq);
+$sq='WHERE nod="'.$_SESSION['qb'].'" and day<'.$dya.' and day>'.$dyb.' AND re="1"';
+$rq=sq('id,frm,thm,day','qda',$sq);
 while($data=mysql_fetch_array($rq)){
 	$dt['cat'][ajx($data['frm'],'')]+=1;
 	//$tags=explode(',',ajx($data['thm'],''));
@@ -53,7 +52,7 @@ return $ret.br().br();}
 
 function data_arts($r){
 $wh=implode('" or id="',array_keys_b($r));//echo 
-$rq=res("id,suj,day,frm,thm",$_SESSION['qda'].' WHERE id = "'.$wh.'"');
+$rq=sq('id,suj,day,frm,thm','qda','where id="'.$wh.'"');
 while($data=mysql_fetch_array($rq)){$ret[$data['id']]=array($data['suj'],date('ymd',$data['day']),$data['frm'],$data['thm']);} //p($ret);
 return make_table($ret,'','');}
 

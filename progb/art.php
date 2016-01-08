@@ -371,7 +371,7 @@ function art_read_b($id,$n,$prw,$tp){//local_call/search/mod_load/popart
 if($prw>2){$_GET['read']=$id; $tp=$tp?$tp:'read';}
 if($id=='last')$id=last_art_rqt(); elseif(!is_numeric($id))$id=id_of_suj($id);
 $r=art_datas($id);
-if(rstr(5) or $prw>2 or $_GET['search']) 
+if(rstr(5) or $prw>2 or $_GET['search'])
 	$msg=sql('msg','qdm','v','id='.$id);//1.2.3.nl
 if($prw=='vd')$msg=search_conn_video($id,$msg);
 $ret=art_read_mecanics($id,$r,$msg,$n,$prw,$tp);

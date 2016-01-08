@@ -793,7 +793,7 @@ if($posb!==false)return substr($v,$posa,$posb-$posa);}
 //titles
 function clean_title($d){$nb="&nbsp;";
 $d=clean_acc($d); $d=utflatindecode($d); $d=html_entity_decode_b($d);
-$d=str_replace('«'.$nb,'"',$d); $d=str_replace('»'.$nb,'"',$d); $d=str_replace($nb,' ',$d);
+$d=str_replace('«'.$nb,'"',$d); $d=str_replace('»'.$nb,'"',$d); $d=str_replace($nb,'',$d);
 $d=clean_punct_b($d); $d=lowercase($d);
 if(substr($d,-1)=='"')$d=substr($d,0,-1).$nb.'»';
 if(substr($d,0,1)=='"')$d='«'.$nb.substr($d,1);
@@ -1189,11 +1189,11 @@ function active($d,$n){return $d==$n?'active':'';}
 
 function error_report(){//prms('error')//ini_set("memory_limit","1512M");
 ini_set('display_errors',1); error_reporting(6135);}//E_ALL
-function chrono($d){static $t; static $start; static $cum;
+function chrono($d=''){static $t; static $start; static $cum;
 $top=round((mtime()-$start)*1000,5); $start=mtime(); 
 if($d!=$t){$ret=$d.': '.$top.'ms'; $t=$d; $cum=0;} 
 elseif($t && $t==$d){$cum+=$top; $ret.='start: '.$cum.'ms';}
-if($ret)echo bal('small',$ret).br();}
+if($ret)return btn('txtsmall2',$ret).' ';}
 function pr($r){echo '<pre>'; print_r($r); echo '</pre>';}
 function window($d){return div(atb('contenteditable','true').atc($c).ats('overflow:auto; height:300px;'),$d);}
 function eco($d,$o=''){if(is_array($d))p($d); elseif($o=='d')echo window($d);

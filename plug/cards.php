@@ -2,7 +2,7 @@
 //philum_plugin_cards
 
 function plug_cards(){req('pop');
-$data=rse("msg",$_SESSION['qdm'].' WHERE id="'.$_GET['cards'].'"');
+$data=sql('msg','qdm','v','id="'.$_GET['cards'].'"');
 $data=str_replace('[cards:plug]','',$data);
 $obj=format_txt($data,3,$_SESSION['read']); $obj=nl2br($obj); 
 $size=msql_read('system','edition_cards',''); //p($size);

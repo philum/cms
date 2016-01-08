@@ -8,11 +8,11 @@ if($_GET['open']) $ar[]=array("name","date","msg");
 else $ar[]=array("title","msg","nb","name","date");
 $otp=sql('suj,id','qdi','kr',"nod='$qb' AND frm='forum$cht' ORDER BY id desc");
 if($otp){foreach($otp as $suj=>$r){$mx=count($r); $bid=$r[0];
-	list($id,$name,$day,$msg)=ser("id,name,day,msg","$qdi WHERE id='$bid'");
+	list($id,$name,$day,$msg)=sql('id,name,day,msg','qdi','r','id='.$bid);
 	$suj=lkc('','/?read='.$_SESSION['read'].'&suj='.$suj.'&open='.$bid,$suj);
 	if($_GET['open']==$bid){
 		for($i=0;$i<$mx;$i++){$cid=$r[$i];
-		list($id,$name,$day,$msg)=ser("id,name,day,msg","$qdi WHERE id='$cid'");
+		list($id,$name,$day,$msg)=sql('id,name,day,msg','qdi','r','id='.$cid);
 		$ar[]=array($name,time_ago($day),$msg);}}
 	elseif(!$_GET['open']){
 		$ar[]=array($suj,$msg,$mx,$name,time_ago($day));}}}//$answ

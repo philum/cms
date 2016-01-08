@@ -2,7 +2,7 @@
 //philum_plugin_gallery
 
 function plug_gallery($q){if($q=="gl")$q="";
-$img_d=rse("img",$_SESSION['qda'].' WHERE id="'.$_SESSION['read'].'"');
+$img_d=sql('img','qda','v','id="'.$_SESSION['read'].'"');
 $img_d=substr($img_d,0,1)=='/'?substr($img_d,1):$img_d;
 $img_d=str_replace("/",",",$img_d); 
 if($q=="auto")$s="";

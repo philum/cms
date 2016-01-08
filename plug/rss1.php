@@ -23,7 +23,7 @@ if($_SESSION['dayb'] && $_GET['read']=="")$sqlimit='AND day > '.$_SESSION['dayb'
 	$sql="SELECT id,mail,day,suj,frm,thm,img,re FROM $qda $qba $frma $sqlimit ORDER BY $ordr";
 	$rq=mysql_query($sql) or die('Erreur SQL !<br>'.$sql.'<br>'.mysql_error());
 	while($data=mysql_fetch_array($rq)){if($data['re']){
-		if($prw){$msg=rse("msg",$qdm.' WHERE id = "'.$data["id"].'"');
+		if($prw){$msg=sql('msg','qdm','v','id="'.$data["id"].'"');
 		if($_GET['brut'] && strpos($msg,':import'))
 			$msg=sql('msg','qdm','v','id="'.embed_detect($msg,'[',':import]','').'"');
 		if(!$_GET['brut'])$msg=format_txt_r($msg,"nlb","");

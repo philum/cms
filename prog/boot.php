@@ -338,9 +338,9 @@ if((!is_array($main[$lastart]) && $lastart) or get('refresh') or $_GET['nbj']){
 	list($slct,$in,$wh,$ord)=play_req(' and re>0');
 	$sq=sqlmk($slct,'qda',$in,$wh,$ord); $rq=$req=mysql_query($sq);
 	$ret["_menus_"]=array('date','cat','title','img','hub','tag','lu','author','lenght','url','ib','re'); $rtb=tri_cache($rq); if($rtb)$ret+=$rtb; if($rq)mysql_free_result($rq);
-	if(!$_GET["lang"] && count($ret)<500){//!$_GET["timetravel"] && !$_GET["nbj"] && 
-	$ok='cache reloaded'; msql_save('',$nod,$ret);
-	maj_nbarts($last[0]);}}
+	if(!$_GET['lang'] && count($ret)<500){//!$_GET["timetravel"] && !$_GET["nbj"] && 
+	$ok='cache reloaded'; msql_save('',$nod,$ret); //maj_nbarts($last[0]);
+	}}
 else $_SESSION['rqt']=$main;
 //if($ok && $rtb)alert($ok);
 return lka('/reload/'.ses('qb'),'reload');}
@@ -350,11 +350,12 @@ function tri_cache($rq){
 if($rq)while($r=mysql_fetch_row($rq))if(substr($r[4],0,1)!='_')$ret[$r[0]]=array($r[2],$r[4],$r[5],first_img($r[6]),$r[7],$r[8],$r[10],$r[9],$r[12],$r[3],$r[1],$r[11]); //$ret[1]=error_art();
 $_SESSION['rqt']=$ret; return $ret;}
 
-function maj_nbarts($last){
+/*function maj_nbarts($last){
 list($lastnb,$lastdy)=sql('nbarts,struct','qdu','r','name="'.ses('qb').'"');
-$newnb=sql('COUNT(id)','qda','v','nod="'.ses('qb').'" AND re>0 AND day>'.($lastdy?$lastdy:0)); $nbarts=lastnb+$newnb;
+$newnb=sql('COUNT(id)','qda','v','nod="'.ses('qb').'" AND re>0 AND day>'.($lastdy?$lastdy:0)); 
+$nbarts=lastnb+$newnb;
 if($nbarts!=$lastnb)update('qdu','nbarts',$nbarts,'name',ses('qb'));
-if($last!=$lastdy)update('qdu','struct',$last,'name',ses('qb'));}
+if($last!=$lastdy)update('qdu','struct',$last,'name',ses('qb'));}*/
 
 #utils
 function block_crawls(){$ip=ses('hostname');//proxad

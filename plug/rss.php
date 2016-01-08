@@ -15,7 +15,7 @@ foreach($main as $k=>$v){
 if($v[1]!="user" && $v[7]!=""){
 	$url=$http.htacc('read').$k;
 	if($preview){//require_once('../progb/mod.php');
-		$msg=rse("msg",$_SESSION['qdm'].' WHERE id = "'.$k.'"');
+		$msg=sql('msg','qdm','v','id="'.$k.'"');
 		$msg=correct_txt($msg,'b i h c l /2 /3','corrfast');
 		if($preview!="full")$msg=substr($msg,0,kmax_nb(400,$msg));
 		$msg=format_txt($msg,"nlc",$k);//nlb=nl+noimages//nlc=absurl

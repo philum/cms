@@ -9,7 +9,7 @@ $p["thumb"]=make_thumb(first_img($img),"no");
 $p["id"]=$v; $p["sty"]="panel";
 $chsup=explode(" ",$_SESSION['prmb'][18]);
 foreach($chsup as $cat){
-	$va=rse("msg",$_SESSION['qdd'].' WHERE ib="'.$v.'" AND val="'.$cat.'"');
+	$va=sql('msg','qdd','v','ib="'.$v.'" AND val="'.$cat.'"');
 	$ct=$cat=='prix'?'price':$cat;
 	if($va) $p[$ct]=$cat.': '.trim($va);}
 $p["add2cart"]=ljb("txtbox","SaveJ",'cart_shop___'.$v,"add");

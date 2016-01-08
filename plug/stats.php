@@ -11,6 +11,9 @@ from '.ses('qdv').' where qb="'.ses('qbd').'" and '.$tm.' group by day'; break;
 case('nbu'):
 $ret='select '.$dt.',count(distinct(iq)) as nbu
 from '.ses('qdv').' where qb="'.ses('qbd').'" and '.$tm.' group by day'; break;
+case('nbuv'): 
+$ret='select qb,date_format(time,"%y%m%d") as day,count(distinct(iq)) as nbu,count(id) as nbv
+from '.ses('qdv').' where date_format(time,"%y%m%d")>"'.$n.'" and date_format(time,"%y%m%d")<"'.date('ymd').'" group by day'; break;
 case('nbp'):if($n)$wh='and page like "%read='.$n.'%"';
 $ret='select page, count(id) as nbv
 from '.ses('qdv').' where qb='.ses('qbd').' '.$wh.' group by day'; break;
@@ -101,13 +104,46 @@ elseif($c=='nbp')foreach($r as $k=>$v)
 	$ret.=$v[0].' '.$v[3].' '.lj('txtx',$j.'nbf_'.$v[1],$v[2]).' '.br();
 return $ret;}
 
+function stat_solid($day_max_known){
+$sql=stats_sql('nbuv',$day_max_known);
+$r=sql_b($sql,'',0); //pr($r);
+$mnd=array_flip($_SESSION['mnd']);
+if($r)foreach($r as $k=>$v){
+	$sql='("","'.$mnd[$v[0]].'","'.$v['1'].'","'.$v['2'].'","'.$v['3'].'")';
+	$ex=sql('id','qds','v','day="'.$v['1'].'"');
+	if(!$ex)insert('qds',$sql);}
+if($r)$ret=count($r).' days of stats were consolidated'.br();
+return $ret;}
+
+//read_stats
+function stat_read($c,$n){
+$r=sql('day,'.$c,'qds','kv','day>"'.date('ymd',calc_date($n)).'"',0);
+$w=ses('stw')?ses('stw'):550; $h=ses('sth')?ses('sth'):100;
+return graph_mk($r,$w,$h);}
+
+function stat_score($c,$n){
+$r=sql($c,'qds','vr','day>"'.date('ymd',calc_date($n)).'"',0);
+return divc('panel','Total of '.($c=='nbv'?'views pages':'visitors').': '.array_sum($r));}
+
+//freespace
+function light_live(){$table=ses('qd').'_live2'; ses('qdv2',$table);
+$db=plugin_func('install','install_db',ses('qd'));
+$sql=str_replace('_live','_live2',$db['live']); mysql_query($sql);
+$tim=calc_date(30); $day=date('Y-m-d H:i:s',$tim);
+$lastid=sql('id','qdv','v','time>"'.$day.'" order by id limit 1');
+if(is_numeric($lastid)){
+msquery('insert into '.$table.' select * from '.ses('qdv').' where id<'.$lastid);
+msquery('delete from '.ses('qdv').' where id<"'.$lastid.'"'); reflush('qdv');}
+return ses('qdv').' was cleaned from id '.$lastid;}
+
 //com
 function stat_board($c,$n,$res){//p($rs);
-$ret=lj($c=='nbv'?'active':'','stat_plugin___stats_nbv_'.$n,'nbv').' ';
-$ret=lj($c=='nbv'?'active':'','stat_plugin___stats_nbu_'.$n,'nbu').' ';
-if($c=='nbv')$ret.=lj('popbt','stat_plugin___stats_nbv_30','30').' ';
-if($c=='nbv')$ret.=lj('popbt','stat_plugin___stats_nbv_180','180').' ';
-$ret.=lj('','popup_plup___stats_stat*list_'.$c.'_'.$n,picto('popup'));
+$ret=lj($c=='nbv'?'active':'','stat_plugin__3_stats_nbv_'.$n,'nbv').' ';
+$ret.=lj($c=='nbu'?'active':'','stat_plugin__3_stats_nbu_'.$n,'nbu').' ';
+$nbr=array(7,30,90,180,365);
+foreach($nbr as $v)$ret.=lj($v==$n?'active':'','stat_plugin__3_stats_'.$c.'_'.$v,$v).' ';
+$ret.=lj('','popup_plup__3_stats_stat*list_'.$c.'_'.$n,picto('list'));
+$ret.=lj('','popup_plup__3_stats_light*live','cleaner');
 return divb('nbp|stt',$ret);}
 
 function stat_daytime($d){
@@ -118,8 +154,13 @@ function plug_stats($c,$n,$res=''){
 static $i; $i++; if($i==2)return;
 $c=$c?$c:'nbv'; $n=$n?$n:7; ses('png',1);
 list($w,$h)=split('_',$res); ses('stw',$w?$w:550); ses('sth',$h=$h?$h:100);
-if(ses('png'))$ret.=stat_graph($c,$n,$res).br().br();
-else $ret.=divd('graph',stat_canvas($c,$n,$res)).br().br();
+
+$day_max_known=sql('day','qds','v','day<"'.date('ymd').'" order by id desc limit 1');
+if($day_max_known<date('ymd',calc_date(1)))$ret=stat_solid($day_max_known);
+//if(ses('png'))$ret.=stat_graph($c,$n,$res).br().br();
+//else $ret.=divd('graph',stat_canvas($c,$n,$res)).br().br();
+$ret.=stat_read($c,$n).br();
+$ret.=stat_score($c,$n).br();
 $ret.=stat_board($c,$n,$res);
 //stat_upd();
 return divd('stat',$ret);}

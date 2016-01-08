@@ -14,7 +14,7 @@ function jimg($d,$t){$d=correct_internal_url_b($d);
 function slider_build($dir,$id,$opt){//$dir.'+'.$id.'+'.$opt;
 $hub=$_SESSION["qb"].'_'; //$ret.=divd('popslide',''); 
 if($id=='base')$nod=$dir;
-elseif(!$dir && $id){$r=rse("img",$_SESSION["qda"].' WHERE id="'.$id.'"');
+elseif(!$dir && $id){$r=sql('img','qda','v','id="'.$id.'"');
 	$re=explode("/",$r); $predir='img/'; $nod=$hub.$id;}
 elseif($id=='manual'){// or (strpos($dir,'manual')!==false && $opt=='rebuild')
 	$predir='img/'; $nod=$hub.$_SESSION['read'].'manual';

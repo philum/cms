@@ -9,11 +9,11 @@ if($o)$r=array('²1234567890°+','AZERTYUIOP¨£','QSDFGHJKLM%µ','WXCVBN?./§','~#{[|
 else $r=array('&é"\'(-è_çà)=','azertyuiop^$','qsdfghjklmù*','wxcvbn,;:!');
 $cap=lj($o?'active':'','kbd_plug___keyboard_kb*build_'.$id.'_'.yesno($o),picto('up'));
 foreach($r as $v){$ra=strsplit($v); $i++;
-foreach($ra as $va)$ret.=lja('insert_b(\''.$va.'\',\''.$id.'\')',$va,'popbt').' ';
+foreach($ra as $va)$ret.=lja('popbt','insert_b(\''.$va.'\',\''.$id.'\')',$va).' ';
 if($i==1)$ret.=ljb('popw','conn',$id.'_del',picto('no'));
 if($i==2)$ret.=ljb('popw','insert_b','\n\',\''.$id,picto('back'));
 if($i==3)$ret.=$cap;
-if($i==4)$ret.=lja('insert_b(\' \',\''.$id.'\')','--','popbt');
+if($i==4)$ret.=lja('popbt','insert_b(\' \',\''.$id.'\')','--');
 $ret.=br();}
 return $ret;}
 

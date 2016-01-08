@@ -64,8 +64,8 @@ $nmsg.=nms(68).': '.$name.', '.mkday($pdt).br().br().format_txt($msg,'','');
 $admail=$_SESSION['qbin']['adminmail'];//to_admin
 if($name!=$_SESSION['USE'])send_mail_html($admail,$suj,$nmsg,$mail,urlread($id));
 if($local)$rmails=sql('mail','qdi','k','frm="'.$id.'" AND re>="1"');//deploy
-$kem=rse('name',$_SESSION['qda'].' WHERE id="'.$id.'"');//send_to_author
-if($kem!=$name){$kmail=rse('mail',$_SESSION['qdu'].' WHERE name="'.$kem.'"');
+$kem=sql('name','qda','v','id="'.$id.'"');//send_to_author
+if($kem!=$name){$kmail=sql('mail','qdu','v','name="'.$kem.'"');
 	if($admail!=$kmail)$rmails[$kmail]=1;} //send_track_to_user
 if($rmails && $op==1)send_mail_r(array_keys_b($rmails),'html',$suj,$nmsg,$mail,$id);
 if(!$local)return popup(nms(34),divc('',helps('formail')),'');

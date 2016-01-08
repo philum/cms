@@ -12,11 +12,11 @@ function prod_from_art($id){
 $chsup=$_SESSION['prmb'][18];
 	if(strpos($chsup,'price')!==false)$ch='price';
 	elseif(strpos($chsup,'prix')!==false)$ch='prix';
-if($ch)$prx=rse("msg",$_SESSION['qdd'].' WHERE ib="'.$id.'" AND val="'.$ch.'"');
+if($ch)$prx=sql('msg','qdd','v','ib="'.$id.'" AND val="'.$ch.'"');
 	if(strpos($chsup,'ref'!==false)){$ch='ref';
-$ref=rse("msg",$_SESSION['qdd'].' WHERE ib="'.$id.'" AND val="'.$ch.'"');}
+$ref=sql('msg','qdd','v','ib="'.$id.'" AND val="'.$ch.'"');}
 	if(strpos($chsup,'stock'!==false)){$ch='stock';
-$stock=rse("msg",$_SESSION['qdd'].' WHERE ib="'.$id.'" AND val="'.$ch.'"');}
+$stock=sql('msg','qdd','v','ib="'.$id.'" AND val="'.$ch.'"');}
 return array($prx,$ref,$stock);}
 
 function plug_cart(){

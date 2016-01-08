@@ -6,7 +6,7 @@ $qb=$_SESSION['qb']; $USE=$_SESSION['USE']; $raed=$_SESSION["raed"];
 $nl=$_GET['nl']?$_GET['nl']:"nl";
 if($deploy && $USE){//prep
 	list($qauth,$subj)=sql('name,suj','qda','r','id="'.$deploy.'"');
-	$msg=rse("msg",$_SESSION['qdm'].' WHERE id="'.$deploy.'"');
+	$msg=sql('msg','qdm','v','id="'.$deploy.'"');
 	if($USE==$qauth or auth(5)){$http=host();
 		if($_POST['dpl']==""){ 
 		$qmail=recup_mails_tosend();
@@ -21,7 +21,7 @@ if($deploy && $USE){//prep
 			$msg=clean_internaltag($msg); $msg=html_entity_decode($msg);}
 		$_SESSION['nl']="";
 	//send  
-	$sender=rse("mail",$_SESSION['qdu'].' WHERE name="'.$USE.'"');
+	$sender=sql('mail','qdu','v','name="'.$USE.'"');
 	$lstm=str_replace("\n",",",$_POST['dpl']);
 	$lstm=str_replace("\r",",",$lstm);
 	$listmail=explode(",",trim($lstm));
