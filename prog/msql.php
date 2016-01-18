@@ -16,7 +16,7 @@ function msqm_lnk($r,$nurl,$vf,$cs1,$cs2,$kv){
 foreach($r as $k=>$v){
 	if($kv=="k")$v=$k; elseif($kv=="v")$k=$v;
 	$lk=str_replace('#',$k,$nurl); $cs=$vf==$k?$cs1:$cs2; 
-	if($k==$_SESSION['qb'] && $vf!=$k)$cs='txtblc';
+	if($k==$_SESSION['qb'] && $vf!=$k)$cs='txtnoir';
 	if($v=='lang' && strpos($lk,'lang'))$lk=str_replace('lang','lang/'.prmb(25),$lk);
 	if($v)$ret.=lkc($cs,$lk,$v).' ';}
 return $ret;}

@@ -200,10 +200,15 @@ $see=lj('','popup_callp___ajxf_seesrc_'.ajx($u),pictit('view','code'));
 if($id)return lj('','popup_editmsql___users/'.$b.'*defcons_'.$id,pictit('txt','defs')).' '.$see;
 else return msqlink('',$b.'_defcons',http_domain(strtolower($u))).hlpbt('defcons').' '.$see;}
 
-function seesrc($f){//return highlight_file($f,true);
-$d=@file_get_contents($f); $enc=mb_detect_encoding($d);
-if($enc=='UTF-8')$d=utf8_decode($d); //$d=delbr($d,"\n"); //$d=entities($d);
-return highlight_string($d,true);}
+function seesrc($f){//return $d=highlight_file($f,true);
+$d=@file_get_contents($f); 
+$enc=mb_detect_encoding($d); if($enc=='UTF-8')$d=utf8_decode($d); 
+$d=delbr($d,"\n");
+$d=substr($d,strpos($d,'<body')); //$d=addslashes($d);
+$d=highlight_string($d,true);
+//$d=entities($d);
+//$d=nl2br($d);
+return $d;}
 
 #transports
 //deploy
@@ -249,7 +254,7 @@ if($topic!="" && !$sub){//topic
 	$sqlt=$_SESSION['sqlimit'];
 	$lk=$go.$pub.'_'.$node.'_'.$topic.'_';
 	$ret.=lj("popdel",$lk.'ok','save in: '.$topic);
-	$req=sql('id,suj','qda','q',"nod='$node' AND frm='$topic' $sqlt ORDER BY id DESC LIMIT 100");
+	$req=sq('id,suj','qda',"where nod='$node' AND frm='$topic' $sqlt ORDER BY id DESC LIMIT 100");
 	while($data=mysql_fetch_array($req)){
 		$rte.=lj('',$lk.$data["id"],$data["suj"]).br();}
 	if($rte) $ret.=' '.btn('txtx','or affiliate to:').br().divc('nbp',$rte);}
@@ -404,7 +409,7 @@ if($im)return '['.$im.']';}
 function mbd_upload($id){$id=ses('read');
 $id=$id?$id:lastid('qda')+1;
 $ret=input(1,'upim','Url" size="40','',1).' ';
-$ret.=ljc('','popb','pop_uplim___upim',"ok",5).br();//?
+$ret.=ljc('','popb','pop-ajxf_uplim___upim',"ok",5).br();//?
 $ret.=upload_btn('upl','read='.$id.'_1','upload').' ';
 $ret.=lj('txtx','popup_placeim___'.$id,'portfolio');
 return $ret;}
@@ -617,7 +622,7 @@ if(trim($f) && $f!='1' && $d!='1' && $f!='x' && $d!='x' && !@$_SESSION['vacuum']
 	if(joinable($f))$_SESSION['vacuum'][$fb]=read_file($f);//
 if($d=='x')unset($_SESSION['vacuum'][$fb]); //echo $f; //p($_SESSION['vacuum']);
 if($d=='p')return 'ok';
-if($d=='c')$ret=lj(sj('popup_batch').' closebub(this);',picto('get'));
+if($d=='c')$ret=lj('',sj('popup_batch').' closebub(this);',picto('get'));
 $ret.=lj('',$idt.'_batch____in_'.$d,picto('reload'));
 $ret.=lj('',$idt.'_batch___x_1',picto('del'));
 $ret.=lj('','popup_rssjb___rssurl_1',picto('rss'));

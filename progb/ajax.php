@@ -14,7 +14,6 @@ if(!$ar[$n])require_once('prog'.$b.'/ajxf.php');//
 
 //ljb('','expand','',picto('expand')).' './/fsopen
 function popbt($o){return ljb('','Close','popup',picto('close')).' '.ljb('','poprepos','',picto('ktop')).' '.ljb('','reduce','',picto('less')).' '.ljb('','fixelem','',picto('fix')).' '.$o.$_SESSION['popm'];}
-//function popbt($o){return ljb('','Close','popup','&#9209;').' '.ljb('','poprepos','','&#9899;').' '.ljb('','reduce','','&#9650;').' '.ljb('','fixelem','','&#9660;').' '.$o.$_SESSION['popm'];}
 function popa($t,$o='',$s=''){return div(atd('popa').atc('popa'),popbt($o).balb('small',ats('cursor:move;').atb('onmouseup','stop_drag(event); noslct(1);').atb('onmousedown','noslct(0);'),$t?etc($t,70):'popup'));}
 function popup($t,$d,$w='',$p=''){if($w)$s='max-width:'.($w+16).'px;';
 if($p==1)$p=lj('','page_deskbkg',picto('desktop')).' ';
@@ -27,7 +26,7 @@ return divc('popup',$x.divd('popu',$d));}
 #private
 if($_SESSION['auth']>1)switch($n){
 //art
-case("tit"):req('meta,spe'); $t='meta:'.$id; $s=480; 
+case("tit"):req('meta,spe'); $s=480; //$t='meta:'.$id; 
 	if($_GET['frm1'])save_tits_j($id); $ret=edit_tits($id,$va); break;
 case("titsav"):req('art,pop,spe,mod,tri,meta'); save_tits_j($id); 
 	$ret=art_read_d($id,'',$va,$opt); break;
@@ -161,7 +160,8 @@ case("artone"):req('art,pop,spe,tri'); $ret=art_read_b($id,'',$va,$opt); break;
 case("load"):req('art,pop,spe,tri'); $ret=play_arts('','','',$id); break;
 case("popart"):req('pop,spe,art,tri,mod,boot'); //$_SESSION['read']=$id;
 	$_SESSION['cur_div']='content'; deductions_from_read($id,''); $p=2;
-	if(auth(6))ses('popm',lj('','popup_tit___'.$id,picto('tag')).' '.lj('','popup_artedit___'.$id,picto('edit'))); $t=suj_of_id($id); $s=prma('content')+20;
+	//togbub('tit',$id.'_'.$prw,picto('tag',24))
+	if(auth(6))ses('popm',togbub('tit',$id,picto('tag')).' '.lj('','popup_artedit___'.$id,picto('edit'))); $t=suj_of_id($id); $s=prma('content')+20;
 	$nl='nlpop'; $ret=art_read_b($id,'',3,''); break;
 case("popartmod"):req('mod,spe,art,pop,tri,boot'); deductions_from_read($id,'');
 	$ret=build_art_mod(''); $t=nms(39); $s=440; break;
@@ -199,7 +199,7 @@ case("iframe"):$s=strdeb($res,'-'); $s=is_numeric($s)?$s:720;
 //nav
 case("search"):req('pop,spe,art,tri,mod'); require('plug/search.php'); 
 	$ret=plug_search($id,$va,$opt,$res); $t=nms(24); $s=640; break;
-case("words"):req('pop,spe,tri,meta'); $ret=u_words($id); $t=nms(47); $s=440; break;
+case("words"):req('pop,spe,tri,meta'); $ret=u_words($id); $s=440; break; //$t=nms(47);
 //case("meta"):req('pop,spe,tri,meta'); $ret=u_words($id); $t=nms(47); $s=440; break;//
 //tracks
 case("track"):req('pop,spe'); $ret=plugin_func('tracks','f_inp_track',$id,$va);
@@ -223,7 +223,7 @@ case("delconn"):req('tri'); $rt=sql('msg','qdm','v','id='.$id);
 	$rt=html_entity_decode($rt,true,$_SESSION['enc']);
 	$ret=correct_txt($rt,'','delconn'); $ret=clean_firstspace($ret); break;
 case("navs"):$ret=navs($id); if(!$va)$tt=$id; $s=500; break;
-case("vmail"):$ret=vmail($id); $t='mail article:'.$id; $s=320; break;
+case("vmail"):$ret=vmail($id); $s=360; break; //$t='mail article:'.$id;
 case("vmailsend"):req('pop,spe,tri,mod'); $ret=vmailsend($id,$res); break;
 case("extractid"):req('tri'); $ret=auto_video($id,$va,$opt,$optb); break;
 //medias
@@ -242,8 +242,8 @@ case("embed"):$ret=input2('text','" size="40',$id,'txtblc'); $tt=$va; break;
 case("url"):$ret=mbd_url(); $tt='url'; break;
 case("emdpop"):$ret=mbd_conn($id,$va,$opt); $tt=$id?$id:'edit'; break;
 //conn
-case("text"):$msg=substr($id,0,4)=='bpop'?sesr('temp',$va):$id; $t=$va;
-	$ret=divb($opt.'||'.$optb.' max-width:440px;',$msg); break;
+case("text"):$msg=substr($id,0,4)=='bpop'?sesr('temp',$va):$id; $t='text'; $s=440;
+	$ret=divb($opt.'||'.$optb,$msg); break;
 case("image"):$ret=image($id,$va,$opt,$optb); break;
 case("overim"):$ret=overim($id,$va); $t=$id; break;
 case("video"):req('pop,spe'); list($w,$h)=explode('-',$sz); $s=$w;

@@ -45,7 +45,7 @@ $name=utf8_decode($q['in_reply_to_screen_name']);
 $link=lkt('txtx','https://twitter.com/'.$name.'/status/'.$id,pictxt('url',$name)).' ';
 $thread=lj('txtx','popup_plup__3_twit_twit*thread_'.ajx($q['id']),pictxt('up','thread')).' ';
 $previous=lj('txtx','popup_plup__3_twit_twit*build_'.ajx($q['in_reply_to_status_id']),pictxt('back','last')).' ';
-return btn('txtsmall2','reply-to:').' '.$link.$thread.$previous;}}
+return btn('txtsmall2',nms(91).' '.nms(36)).' '.$link.$thread.$previous;}}
 function twit_date($q){$date=date('d/m/Y H:i:s',strtotime($q['created_at']));
 return btn('txtsmall2',$date);}
 function twit_from($q){$name=utf8_decode($q['user']['name']);

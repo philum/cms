@@ -108,7 +108,8 @@ function checkact($id,$v,$t){$c=$v?'popw':'popbt';
 function label($id,$c,$s,$t){
 	return '<label'.atb('for',$id).atc($c).ats($s).'>'.$t.'</label>';}
 function radiobtn($r,$h,$n){if($r)foreach($r as $k=>$v){$ck=$v==$h?' checked="checked"':'';
-	$ret.='<input type="radio"'.atd($n).atv($v).$ck.'/>'.btn('txtsmall2',$v).' ';} return $ret;}
+	$ret.='<input type="radio"'.atd($n).atv($v).$ck.'/>'.btn('txtsmall2',$v).' ';} 
+	return $ret;}
 function radiobtj($r,$vrf,$id,$o=''){$rid='rdio'.randid(); if($o)$r=array_keys($r);
 if(is_array($r))foreach($r as $k=>$v){$c=$v==$vrf?'active':'';
 	$ret.=ljb($c,'radioj',$rid.'\',\''.$id.'\',\''.ajx($v).'\',\''.$k,$v);}
@@ -203,7 +204,9 @@ function atmrup($r){foreach($r as $k=>$v)$ret[]=$k.'='.atm($v); return $ret;}
 function mysqlra($r){$rb=atmr($r); return '("",'.implode(',',$rb).')';}
 function mysqlrb($r){foreach($r as $k=>$v)$rb[]=mysqlra($v); return implode(',',$rb);}
 
-function sq($d,$b,$q=''){return mysql_query('select '.$d.' from '.$_SESSION[$b].' '.$q);}
+function sq($d,$b,$q='',$z=''){
+$sql='select '.$d.' from '.$_SESSION[$b].' '.$q; if($z)echo $sql;
+return mysql_query($sql);}
 
 function sqlformat($rq,$p){
 if($p=='q')return $rq;//res
@@ -588,6 +591,7 @@ function select_j($id,$f,$v='',$o='',$t='',$ty=''){$rid=randid();//hidslct_j
 $hid='bt'.$id; $j=$id.'_'.$f.'_'.ajx($v).'_'.ajx($o).'_'.$id; 
 $c=$v&&!$t?'popw':'popbt'; $t=$t?$t:($v?$v:picto('wait')); 
 if($ty==1)$h=input1($id,$v,3); elseif($ty!=2)$h=hidden($id,$id,$v);
+//return togbub('hidden',$j,$t).$h;
 return lj($c.'" id="'.$hid,'popup_hidden__'.$hid.'_'.$j,$t).$h;}//$hid déclenche bub
 
 function msql_slct($id,$k,$murl){
@@ -680,10 +684,10 @@ $max=is_numeric($r)?$r:count($r); if($w)$wa='min-width:'.$w.'px; ';
 $cb='id="scroll" style="overflow-y:scroll; '.$wa.'max-height:'.($h?$h:400).'px;"';
 if($max>$n)return div($cb,$d); else return $d;}
 
-function scroll_b($r,$d,$n,$w='',$h='',$id=''){$h=$h?$h:400;
+function scroll_b($r,$d,$n,$w='',$h='',$id=''){$h=$h?$h.'px':'calc(100vh - 140px)';
 $max=is_numeric($r)?$r:count($r); $w=$w?$w:prma('content');
 $ca='width:calc(100% + 1px); height:'.$h.'px; overflow:hidden; padding-right:1px;';
-$cb='id="scrll'.$id.'" style="width:calc(100% + 16px); overflow:auto; height:'.$h.'px;"';
+$cb='id="scrll'.$id.'" style="width:calc(100% + 16px); overflow:auto; height:'.$h.';"';
 if($max>$n)return divs($ca,div($cb,$d)); else return $d;}
 
 function iframe($d,$w='',$h=''){
@@ -1190,7 +1194,7 @@ function active($d,$n){return $d==$n?'active':'';}
 function error_report(){//prms('error')//ini_set("memory_limit","1512M");
 ini_set('display_errors',1); error_reporting(6135);}//E_ALL
 function chrono($d=''){static $t; static $start; static $cum;
-$top=round((mtime()-$start)*1000,5); $start=mtime(); 
+$top=round((mtime()-$start)*1000,3); $start=mtime(); 
 if($d!=$t){$ret=$d.': '.$top.'ms'; $t=$d; $cum=0;} 
 elseif($t && $t==$d){$cum+=$top; $ret.='start: '.$cum.'ms';}
 if($ret)return btn('txtsmall2',$ret).' ';}

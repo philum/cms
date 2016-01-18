@@ -3,12 +3,12 @@
 
 #templates
 function template_art(){return '[_EDIT§right:css]
-[[_PARENT§h4:balise]_THUMB[[_URL§_SUJ_ARTLANG:url]§h2|fixit|:balise] 
+[[_PARENT§h4:balise]_THUMB[[_URL§[_SUJ§[fixit:id]:span]_ARTLANG:url]§h2:balise] 
 [[_SEARCH§popw:css] [_SOCIAL _WORDS _OPEN§grey:css]§right:css]
 [_BACK§txtbox:css] _AVATAR [_AUTHOR _DATE§txtsmall2:css] [_NBARTS§txtnoir:css] [_LENGHT _PRIORITY _SOURCE _TAG _BTIM _RSS _TRACKS _OPT _PID _LANG§txtsmall2:css]§div|meta_ID:balise]
 _FLOAT[_MSG[:clear]§article|art_ID|justy:balise]';}//_TRKBK
 function template_read(){return '[_EDIT§right:css]
-[[_PARENT§h4:balise]_THUMB[_SUJ_ARTLANG§h2|fixit|:balise] 
+[[_PARENT§h4:balise]_THUMB[[_SUJ§[fixit:id]:span]_ARTLANG§h2|fixit|:balise] 
 [[_SEARCH§popw:css][_SOCIAL _WORDS _OPEN [_URL§[url:picto]:url]§grey:css]§right:css]
 [_BACK§txtbox:css] [_AUTHOR _DATE§txtsmall2:css] [_NBARTS§txtnoir:css] [_LENGHT _PRIORITY _SOURCE _TAG _BTIM _RSS _TRACKS _OPT _PID _LANG§txtsmall2:css]§header|meta_ID:balise]
 _FLOAT[_MSG[:clear]§article|art_ID|justy:balise]';}//_TRKBK
@@ -61,12 +61,12 @@ if($re==0){if(($USE==$kem && $auth>2) or $auth>3)//publish
 	$ret.=ljb('txtyl" id="pba'.$id,'publishart',$id,picto('forbidden')).' ';
 	elseif($USE==$kem && $auth==2)$ret.=btn("txtyl",nms(53)).' ';}
 if(get('search') && $auth>4)
-	//$ret.=togbub('call','meta_tag*slct_'.$id.'_'.ajx(get('search')),picto('paste')).' ';
-	$ret.=lj('','popup_callp___meta_tag*slct_'.$id.'_'.ajx(get('search')),picto('paste')).' ';
+	$ret.=togbub('call','meta_tag*slct_'.$id.'_'.ajx(get('search')),picto('paste')).' ';
+	//$ret.=lj('','popup_callp___meta_tag*slct_'.$id.'_'.ajx(get('search')),picto('paste')).' ';
 if(($USE==$kem) or $auth>3){
-	//$ret.=togbub('metall',$id,picto('tag',24)).' ';
-	//$ret.=togbub('tit',$id.'_'.$prw,picto('editor',24)).' ';
-	$ret.=lj('','popup_tit___'.$id.'_'.$prw,picto('tag',24)).' ';
+	//$ret.=lj('','popup_tit___'.$id.'_'.$prw,picto('tag',24)).' ';
+	$ret.=togbub('tit',$id.'_'.$prw,picto('tag',24)).' ';//SaveTits
+	//$ret.=togbub('metall',$id,picto('editor',24)).' ';
 	$ret.=lj('','popup_artedit___'.$id,picto('edit',24)).' ';}
 return btd('artmnu'.$id,$ret);}
 
@@ -86,6 +86,7 @@ function pub_link($m){return lkt('',http($m),picto('url',16)).' '.lj('','popup_g
 function art_opts($id){
 $ret=sql('val,msg','qdd','kv','ib="'.$id.'"');
 if(!$ret['lang'])$ret['lang']=prmb(25);
+if(rstr(17))$ret['2cols']=1;
 return $ret;}
 
 function lang_art($id,$r){$d=$r['lang']; 
@@ -128,7 +129,7 @@ function prepare_tits($id,$r,$rear,$nbtrk,$nl,$prw){$ib=trim($r['ib']);
 $nl=$nl?$nl:$_SESSION['nl']; $rst=$_SESSION['rstr']; $USE=$_SESSION['USE'];
 $read=$_SESSION['read']; $page=$_SESSION['page']; if($nl=='nlpop'){$nl='';$nlp=1;}
 $out['jurl']='content_ajxlnk2__2_art_'.$id; $out['purl']='popup_popart__3_'.$id.'_3';
-$out['day']=$r['day']; $out['artedit']=' '; $nlb=substr($nl,0,2);// pr($nl);
+$out['day']=$r['day']; $out['artedit']=' '; $nlb=substr($nl,0,2);
 if($nlb=="nl")$http=host(); $out['url']=$http.good_url($id,$r['suj']);//urlread($id);
 if(!$rst[19])$out['img1']=first_img($r['img']);//img1
 if(!$rst[68] && $r['img'] && strpos($r['img'],'/'))//gallery
@@ -171,15 +172,16 @@ if(!$rst[71] && $nlb!="nl")
 if($nlb!="nl"){$root=host().urlread($id);//social//&via=philum_info
 	$rsoc=array(44=>'http://www.facebook.com/sharer.php?u='.$root,45=>'http://twitter.com/intent/tweet?original_referer='.$root.'&url='.$root.'&text='.utf8_encode($r['suj']).'&title='.utf8_encode($r['suj']),46=>'http://wd.sharethis.com/api/sharer.php?destination=stumbleupon&url='.$root);
 	if(auth(6) && !$rst[45])
-		$out['social'].=lj('','popup_plup___twit_twit*share_'.$id,callico('tw'));
+		$out['social'].=togbub('plug','twit_twit*share_'.$id,callico('tw'));
 	if(!$rst[45])$out['social'].=lkt('',$rsoc[45],callico('tw'));
 	if(!$rst[44])$out['social'].=lkt('',$rsoc[44],callico('fb'));
 	if(!$rst[46])$out['social'].=lkt('',$rsoc[46],icon('stumble'));
 	if(!$rst[52])$out['social'].=favs_edt($id).' ';
+	if(!$rst[90] or ses('dev'))$out['social'].=togbub('editag',$id.'_utag_tag',picto('tag')).' ';
 //	if(!$rst[86])$out['social'].=lj($css,'popup_track___'.$id,picto('forum')).' ';
-	if(!$rst[47])$out['social'].=lj('','popup_vmail___'.$id,callico('mail')).' ';
+	if(!$rst[47])$out['social'].=togbub('vmail',$id,callico('mail')).' ';
 	if(!$rst[12])$out['social'].=lkt('','/plug/read/'.$id,picto('print')).' ';
-	if(!$rst[49])$out['words']=lj('','popup_words___'.$id,picto('search'));}
+	if(!$rst[49])$out['words']=togbub('words',$id,picto('search'));}
 if($_SESSION['plgs'] && $nlb!="nl")$out['social']=$_SESSION['plgs'];
 $out['artlang']=lang_art($id,$r['opts']);
 $out['lang']=lang_rel_arts($id,$r['opts']);
@@ -238,6 +240,8 @@ elseif($id!=$read or $prw==2){
 	$msg=kmax($msg); $msg=format_txt($msg,"noimages",$id);
 	$msg=clean_br_lite($msg);}//if(rstr(9))
 if($_GET['look'])$msg=str_detect($msg,$_GET['look'],0);
+if(($r['opts']['2cols']) && $prw>2 && strlen($msg)>2000 && $r['re']>1)
+	$msg=divc('cols',$msg);// or $r['re']>3
 $panout['msg']=$msg;
 return $panout;}
 
@@ -411,7 +415,7 @@ return $ret;}
 
 function tracks_read($id,$page='',$n=''){
 $USE=$_SESSION['USE']; $qb=$_SESSION['qb']; $read=$_SESSION['read'];
-$ip=hostname(); $panout['css']='track'; $panout['sty']='margin:8px 0;';
+$ip=hostname(); $panout['css']='track'; $panout['sty']='';
 if($id){$panout['id']=$id;
 	list($ib,$name,$mail,$day,$nod,$frm,$suj,$msg,$re,$lu,$img,$thm,$host)=sql('ib,name,mail,day,nod,frm,suj,msg,re,lu,img,thm,host','qdi','r','id='.$id);}
 	$panout['date']=mkday($day,'y/m/d H:i');//time_ago($day);
@@ -431,7 +435,7 @@ if($id){$panout['id']=$id;
 		if(is_file($f))$panout['avatar'].=image($f,48,48,ats('vertical-align:bottom;'));
 		if($re!="0" or auth(3) or $host==$ip){//$msg=format_txt($msg,'','');
 			$msg=correct_br($msg); $msg=miniconn($msg);
-			$msg=correct_txt($msg,'','sconn'); $msg=embed_p($msg); $msg=nl2br($msg);}
+			$msg=correct_txt($msg,'','sconn'); $msg=nl2br($msg);}
 		else $msg=divc('txtalert',helps('trackbacks'));}
 	else{$state='show'; $msg='';}
 if(auth(4) && $frm!=$qb){$j='trk'.$id.'_plug___tracks_trk*publish_'.$id;

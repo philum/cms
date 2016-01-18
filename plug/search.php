@@ -46,9 +46,10 @@ $rch=trim($rch); $rchb=strtolower($rch);
 $cat=$_GET['cat']; if($cat==nms(9))$cat=''; $tag=$_GET['tag']; if($tag=='tag')$tag='';
 $qb=ses('qb'); $qda=ses('qda'); $qdm=ses('qdm'); $qdt=ses('qdt'); $qdta=ses('qdta');
 if($bool){$parts=explode(' ',$rchb); $cp=count($parts);}
-if(rstr(3))$sq['daymin']='day>'.calc_date($days?$days:ses('nbj'));
-$daya=time_prev($days); $daya=$daya?calc_date($daya):ses('daya');
 //sql
+$days=$days?$days:ses('nbj');
+if(rstr(3))$sq['daymin']='day>'.calc_date($days);
+$daya=time_prev($days); $daya=$daya?calc_date($daya):ses('daya');
 $sq['daymax']='day<'.$daya;
 $sqnd['suj']=rech_prep_suj($rch,$cp,$parts);
 $sq['nod']='nod="'.$qb.'"';
@@ -56,15 +57,17 @@ $sq['frm']='substring(frm,1,1)!="_"';
 $sq['re']='re>0';
 if(!$titl && $rch){
 	$sqin['msg']='inner join '.$qdm.' on '.$qdm.'.id='.$qda.'.id';
-	$sq['msg']=rech_prep_msg($rch,$cp,$parts);}
+	$sqnd['msg']=rech_prep_msg($rch,$cp,$parts);}
 if($cat)$sq['cat']='frm="'.$cat.'"';
 if($tag)$sqin['tag']='
 	inner join '.$qdta.' on '.$qda.'.id='.$qdta.'.idart
 	inner join '.$qdt.' on '.$qdt.'.id='.$qdta.'.idtag and tag="'.$tag.'"';
 //req
-$wh=implode(' and ',$sq); if($sqnd['suj'])$wh.=' or '.$sqnd['suj'];
-$inner=implode('',$sqin);
-$ret=sql_b('select '.$qda.'.id from '.$qda.' '.$inner.' where '.$wh,'k');
+$wh=implode(' and ',$sq); 
+if($sqnd['suj'] && $sqnd['msg'])$wh.=' and ('.$sqnd['msg'].' or '.$sqnd['suj'].')';
+elseif($sqnd['suj'])$wh.=' and '.$sqnd['suj']; elseif($sqnd['msg']) $wh.=' and '.$sqnd['msg'];
+if($sqin)$inner=implode('',$sqin);
+$ret=sql_b('select '.$qda.'.id from '.$qda.' '.$inner.' where '.$wh,'k',0);//auth(6)?1:
 //reload
 if(!$ret && $rch && (rstr(62) or ses('rstr62'))){
 	$ndig=next_sptime($days); if($ndig)return rech($rch,$ndig);}
@@ -133,7 +136,7 @@ $ret=rech_titles($rech,$n,$opt,$cac,$cat,$tag,$tag2); $_SESSION['page']=1;
 $_SESSION['popm']=chrono('search');
 if($load[0])unset($load[0]); if($load[1])unset($load[1]);
 if($load){if($o)krsort($load); else arsort($load); //$_GET['targ']=$vrf;
-$ret.=scroll($load,divd($vrf,output_pages($load,'flow','')),1,400);}
+$ret.=scroll($load,divd($vrf,output_pages($load,'','')),1,400);}
 return $ret;}
 
 ?>

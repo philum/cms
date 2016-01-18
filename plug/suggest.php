@@ -24,7 +24,7 @@ return $ret;}
 
 function sugg_recall(){
 $nod=$_SESSION['qb'].'_suggest';
-$r=msql_read('',$nod,''); $js='popup_call__3__batch*preview_';
+$r=msql_read('',$nod,''); $js='popup_call__3_ajxf_batch*preview_';
 if($r)foreach($r as $k=>$v){$j=ajx($v[1]); $lnk=lka($v[1],picto('url'));
 if(!$v[3])$ret.=br().lj('popbt',$js.$j.'_'.$k,$v[0].' '.preplink($v[1])).' '.$lnk;}
 return $ret;}
@@ -57,11 +57,12 @@ else return lj('txtyl',$rap,'404 not found');}
 
 function plug_suggest($t){if($t)$ret.=btn('txtcadr',$t).br();
 $r=msq_where('',ses('qb').'_suggest',4,ses(iq),1);
-$ret=input(1,'sugurl" size="26','url','',1).br();
+$ret=btn('txtcadr',nms(126)).' ';
+if(auth(4))$ret.=msqlink('',$_SESSION['qb'].'_suggest').' ';
+$ret.=hlpbt('suggest').br();
+$ret.=input(1,'sugurl" size="26','url','',1).br();
 $ret.=input(1,'sugnam" size="26','mail','',1).br();//nms(38)
-$ret.=lj('popsav','sug_plug__3_suggest_suggest*j_1_2_sugurl|sugnam',nms(126)).' ';
-$ret.=hlpbt('suggest').' ';
-if(auth(4))$ret.=msqlink('',$_SESSION['qb'].'_suggest');
+$ret.=lj('popsav','sug_plug__3_suggest_suggest*j_1_2_sugurl|sugnam',nms(28)).' ';
 $rec=sugg_recall();
 return $ret.divd('sug','').$rec.br();}
 

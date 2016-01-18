@@ -111,6 +111,7 @@ elseif($media!="nlc"){//rss
 	if(rstr(9)){// && $com=''
 		if($w<$largb)$p['style']='float:left; margin-right:10px;'; else $br="\n\n";}
 	else $br="\n\n";
+	if($w && $w<($largb*0.6)){$p['style'].=' width:'.$w.'px;'; $br="\n\n";}
 	$p['src']=$http.$dca;
 	$re='<img '.atr($p).' />';
 	$send='photo_'.str_replace("_","*",$dca).'_'.$w.'_'.$h;
@@ -358,7 +359,7 @@ case('div'): if(trim($v))return div($p,$v); break;
 case('css'): if(trim($v))return btn($p,$v); break;
 case('clear'): return divc($c,$v); break;
 //attributs
-case('id'): return atd($c,$v); break;
+case('id'): return atd($v); break;
 case('class'): return atb($c,$v); break;
 case('style'): return atb($c,$v); break;
 case('name'): return atb($c,$v); break;
@@ -547,7 +548,7 @@ return plugin('imgtxt',$p,$o,'');}
 //j
 function call_j($f,$d){list($lf,$lk)=good_param($f); 
 $lk=$lk?$lk:suj_of_id($lf).' '.picto('get');
-return lj('','popup_'.$d.'___'.$lf,$lk);}
+return lj('','popup_'.$d.'___'.ajx($lf),$lk);}
 
 function call_pop($d){list($v,$k)=good_param($d); $id='bpop'.randid(); 
 if(strpos($k,"\n"))$k=strdeb($k,"\n"); sesr('temp',$k,$v);

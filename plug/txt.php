@@ -44,7 +44,7 @@ if($d && !$ra && $nd)msql_modif('users',$nd.'_txt_'.$d,array('title',''),'','one
 $ret.=st_paste($d).' ';
 if($d)$ret.=input('text','tit',stripslashes($ra[1][0])).' ';
 $ret.=stx_btn($d,$nd,$tx).br();
-if(!$tx)$ret.=txarea('txtarea',$msg,'" style="width:100%; height:90%; font-size:large; padding:16px;','');
+if(!$tx)$ret.=txarea('txtarea',$msg,'" style="width:100vw; height:90vh; font-size:large; padding:16px;','');
 return btd('plgtxt',$ret);}
 
 ?>

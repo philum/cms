@@ -313,7 +313,7 @@ return uicon($fa,'picol/16');}
 #blocks
 function build_content(){$gmd=$_GET['module'];
 	if($gmd && $gmd!='Home')$content=build_mod_r($gmd);
-	elseif($_SESSION['load'] or $_GET['search'])
+	elseif($_SESSION['load'] or $_GET['search'] or $_GET['tag'])
 		$content.=page_titles(0).output_pages($_SESSION['load'],'','');
 	else $content=build_modules('content','');
 return $content;}
@@ -349,13 +349,6 @@ return lka('/reload/'.ses('qb'),'reload');}
 function tri_cache($rq){
 if($rq)while($r=mysql_fetch_row($rq))if(substr($r[4],0,1)!='_')$ret[$r[0]]=array($r[2],$r[4],$r[5],first_img($r[6]),$r[7],$r[8],$r[10],$r[9],$r[12],$r[3],$r[1],$r[11]); //$ret[1]=error_art();
 $_SESSION['rqt']=$ret; return $ret;}
-
-/*function maj_nbarts($last){
-list($lastnb,$lastdy)=sql('nbarts,struct','qdu','r','name="'.ses('qb').'"');
-$newnb=sql('COUNT(id)','qda','v','nod="'.ses('qb').'" AND re>0 AND day>'.($lastdy?$lastdy:0)); 
-$nbarts=lastnb+$newnb;
-if($nbarts!=$lastnb)update('qdu','nbarts',$nbarts,'name',ses('qb'));
-if($last!=$lastdy)update('qdu','struct',$last,'name',ses('qb'));}*/
 
 #utils
 function block_crawls(){$ip=ses('hostname');//proxad

@@ -121,6 +121,11 @@ return preg_replace('#color="(.*?)"#', 'style="color: \\1"',$str);}*/
 
 function function_aff($v,$t=''){
 if(substr($v,0,2)!='<'.'?')$v='<'.'?php '.$t."\n".$v."\n".'?'.'>';
+/*ini_set("highlight.comment", "#008000");
+ini_set("highlight.default", "#000000");
+ini_set("highlight.html", "#808080");
+ini_set("highlight.keyword", "#0000BB; font-weight: bold");
+ini_set("highlight.string", "#DD0000");*/
 $ret=highlight_string($v,true);
 $ret=str_replace(array('FF8000','007700','0000BB','DD0000','0000BB'),array('FF8000','00ee00','afafff','eeeeee','ffbf00'),$ret);
 return '<div class="console" style="max-width:100%; max-height:400px; overflow:auto; wrap:true; padding:10px; border:1px solid black; font-size:medium;">'.$ret.'</div>';}

@@ -51,7 +51,6 @@ function TarWriteContents($f,$fa){
 // f: file resource
 function TarAddFooter($f){fwrite($f,pack('a1024',''));}
 
-//
 function tar($f,$r){$fp=fopen($f,'w+');
 foreach($r as $v){$vb=str_replace(array('../','_public/'),'',$v);
 TarAddHeader($fp,$v,$vb); TarWriteContents($fp,$v);} 

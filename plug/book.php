@@ -1,8 +1,8 @@
 <?php
 //philum_plugin_book
 
-function scroll_c0($d,$id){$h=$h?$h:400;;
-$cb='id="scrll'.$id.'" style="overflow:auto; padding-right:10px; max-height:400px;"';
+function scroll_c0($d,$id){$h=$h?$h.'px':'calc(100vh - 140px)';
+$cb='id="scrll'.$id.'" style="overflow:auto; padding-right:10px; max-height:'.$h.';"';
 return div($cb,$d);}
 
 function scroll_c($msg,$rid){
@@ -15,12 +15,13 @@ return '[[_BACK[_TITLE§h1:balise][_OPT _DATE _TAG _USERTAGS _LENGHT §txtnoir:css
 
 function book_css(){
 return '
+.book {height:calc(100vh - 70px);}
 .book a {text-decoration:none;}
 .book a .philum {color:white;}
 .book a:hover .philum {color:white;}
 .book h2 {color:white;}
 .book h3 {color:silver;}
-.book .panel {text-align:left; border-style:solid; border-width:1px; padding:10px; margin:10px 0 0; border-radius:2px; box-shadow:0px 0px 4px #_7 inset;}
+.book .panel {text-align:left; border-style:solid; border-width:1px; padding:10px; margin:10px 0 0; border-radius:2px; box-shadow:0px 0px 4px #_7 inset; height:calc(100vh - 140px);}
 .book blockquote {background:gray;}
 ';}
 
@@ -78,7 +79,7 @@ return $ret;}
 function book_reload(){bk_rq();
 return plug_book($_SESSION['book'],$_SESSION['read']);}
 
-function plug_book($d,$id){if($_GET['callj'])bk_rq();
+function plug_book($d,$id){bk_rq();
 $here='book'; $id=$id?$id:$_SESSION['read']; $rid=randid();//if(!$id)
 Head::add('csscode',book_css());
 Head::add('jscode',book_js());

@@ -1,7 +1,7 @@
 <?php
 //philum_plugin_ifre
 
-function ifrgz($dr){$r=explore($dr);//p($r);
+function ifrgz($dr){//$r=explore($dr);//p($r);
 $f='users/public/ifr'.date('ymd').'.tar';
 if(!is_file($f))$ret=plugin('tar',$f,$dr); rmdir_r($dr);
 return $ret;}

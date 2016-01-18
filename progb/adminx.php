@@ -79,7 +79,7 @@ return $ret;}
 
 //comline (submod normaux)
 function comline_sav($na,$res){$ra=ajxr($res);
-for($i=3;$i<9;$i++){$prm.=$ra[$i].'/';} $prm.=':';
+for($i=3;$i<15;$i++)$prm.=$ra[$i].'/'; $prm.=':';
 $prm=str_replace(array('/////:','////:','///:','//:','/:'),':',$prm);
 $prm.=$ra[1].'§'.$ra[2]; if(substr($prm,0,1)==':')$prm=substr($prm,1);
 $r=explode(',',str_replace("\n",'',$ra[0])); $r[$na]=$prm;
@@ -103,16 +103,16 @@ $arb=msql_read('system',"admin_modules",$mod);
 $rb['module']=input(0,'medm'.$rid,$mod).submod_comline('medm'.$rid,$mod); 
 $hlp=msql_read('lang','admin_modules',$mod);
 $rb['usage']=divc('small',$hlp['description']);
-$rk=array('param','title','command','option');
+$rb['button']=input(1,'medb'.$rid,$t,'txtblc');
+$rk=array('param','title','command','option','cache','hide','template','nobr','div','ajxbtn');
 foreach($rk as $k=>$v){$ids.='med'.$k.$rid.'|'; $jmp=''; $com=$arb[$v];
 	if($com && $v!='param')$jmp=select_j('med'.$k.$rid,$com);
 	//$jmp=jump_btns('med'.$k.$rid,str_replace(' ','|',$com),'');
 	$rb[$v]=input(1,'med'.$k.$rid,$r[$k]).$jmp;
 	if($v=='param')$rb[$v].=' '.admhlp('grey',ajx($mod),'help');}
-$rb['button']=input(1,'medb'.$rid,$t);
 $sv=$id.'_submds__4x_'.$na.'__cmdel__'.$id.'\',\'sbm'.'_submds____'.$id.'_cmlin__'.$id;
 $bt=ljb('popdel','SaveJb',$sv,nms(43)).' ';
-$sv=$id.'_comline__4x__'.$na.'___'.$ids.'\',\'sbm'.'_submds____'.$id.'_cmlin__'.$id;
+$sv=$id.'_comline__4x__'.$na.'___'.$ids.'\',\'sbm_submds____'.$id.'_cmlin__'.$id;
 $bt.=ljb('popbt','SaveJb',$sv,nms(66));
 $ret=on2cols($rb,300,4).$bt.br();
 return popup('comline',$ret,320);}

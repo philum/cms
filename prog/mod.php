@@ -5,14 +5,14 @@
 
 function build_mod_r($sets){$r=val_to_mod($sets);
 $_SESSION['cur_div']='content';
-foreach($r as $k=>$v){$ret.=build_mods($v); if(!$v[9])$ret.=br();}
+foreach($r as $k=>$v)$ret.=build_mods($v);
 return $ret;}
 
 //param/title/command/option:module[,]
 function val_to_mod($d){$r=explode(",",$d);
 foreach($r as $k=>$v){list($val,$conn)=split_right(':',$v,1);
-	if(strpos($val,'/')!==false)list($val,$t,$d,$o,$ch,$hd,$tp,$br)=explode("/",$val);
-	$ret[]=array($conn,$val,$t,'',$d,$o,$ch,$hd,$tp,$br);}
+	if(strpos($val,'/')!==false)list($val,$t,$d,$o,$ch,$hd,$tp,$br,$dv,$aj)=explode("/",$val);
+	$ret[]=array($conn,$val,$t,'',$d,$o,$ch,$hd,$tp,$br,$dv,$aj);}
 return $ret;}
 
 function build_modules($va,$cr){
@@ -25,14 +25,14 @@ if($r)foreach($r as $k=>$v){if(!$v[7]){//hide
 //elseif($v[11])$re[$k]=divd('mod'.$k,js_code('SaveJ(\'mod'.$k.'_modj___'.$k.'_'.$va.'\')'));
 	elseif($v[11])$re[$k]=divd('mod'.$k,lj('txtcadr','mod'.$k.'_modj__3_'.$k.'_'.$va,$v[2]));
 	else $re[$k]=build_mods($v);
-if($re[$k])$ret.=$re[$k].(!$v[9]&&!$v[11]?br():'')."\n";}}
+if($re[$k])$ret.=$re[$k]."\n";}}//.(!$v[9]&&!$v[11]?br():'')
 $_SESSION['cur_div']='content';
 return $ret;}
 
 function build_mods($r){//p($r);
 $ptit_css="txtcadr"; $pbdy_css="panel"; $smcss="txtsmall2";
-//mod,param,title,condition,command,option,(bloc),hide,template,nobr
-list($m,$p,$t,$c,$d,$o,$ch,$hd,$tp,$nbr,$dv)=$r; $t=stripslashes($t);
+//mod,param,title,condition,command,option,(bloc),hide,template,nobr,div,ajxbtn
+list($m,$p,$t,$c,$d,$o,$ch,$hd,$tp,$nbr,$dv,$jbt)=$r; $t=stripslashes($t);
 switch($m){
 //main
 case('LOAD'): if($_SESSION['read'])$ret=art_read($tp);
@@ -92,9 +92,8 @@ case('video_viewer'): $ret=videoboard($p,$c,$o); break;
 //txt
 case('text'): $ret=stripslashes(urldecode($p)); if($o)$ret=divc($o,$ret); break;
 case('connector'): if(substr($p,0,1)!="[" && substr($p,-1,1)!="]")$p='['.$p.']';
-	$ret=nl2br(format_txt_r($p,"","")); 
-	if($o=='article')$ret=balc('article','justy',format_txt($p,"",""));
-	if(!$nbr)$ret.=br(); break;
+	$ret=nl2br(format_txt_r($p,'','')); 
+	if($o=='article')$ret=balc('article','justy',format_txt($p,'','')); break;
 case('codeline'): if($p)$ret=correct_txt($p,"",'codeline'); break;
 case('clear'):$ret=divc("clear",""); break;
 case('hr'):$ret='<hr'.atc($p).' />'; break;
@@ -212,7 +211,8 @@ $ret=mod_load($load,$ret,$t,$d,$o,$obj,$prw,$tp,$id);
 if(!$ret && !$lin && !$load && $p && $m){//user_mods
 	$func=msql_read("",$_SESSION['qb'].'_modules',$m);
 	if($func && !is_array($func))$ret=cbasic($func,$p);}
-if($ret){if($dv)return divc('mod',$ret); else return $ret;}}
+if(!$nbr)$br=br();
+if($ret){if($dv)return divc('mod',$ret).$br; else return $ret.$br;}}
 
 function mod_lin($lin,$d,$o){//mod_link_r
 if($lin)foreach($lin as $k=>$v){//$va=str_replace(' ',"&nbsp;",$v[3]);
@@ -222,12 +222,12 @@ if($lin)foreach($lin as $k=>$v){//$va=str_replace(' ',"&nbsp;",$v[3]);
 	if($v[1]=='j')$re[]=lj($css,$v[2],$v[3]);
 	elseif($v[1]=='SaveJc')$re[]=ljb($css,$v[1],$v[2],$v[3]);
 	else $re[]=lk($v[1].$v[2],atc($css).atb('title',$v[2]),$v[3]).($o=='nospace'?'':' ');}//todo:innocent menu
-if($d=='cols')foreach($re as $k=>$v)$re[$k]=li($v);
+//if($d=='cols')foreach($re as $k=>$v)$re[$k]=li($v);
 return $re;}
 
 function mod_lin_build($re,$t,$d,$o){$limit=is_numeric($o)?50*$o:50;
 if($_SESSION['cur_div']=='menu' or $d=='inline')$ret=implode('',$re);
-elseif($d=='cols')$ret=scroll_b($re,colonize($re,$o,'','menus','',1),(int)$limit);
+elseif($d=='cols')$ret=divc('menus',scroll_b($re,columns($re,$o,'','menus','','mall'),(int)$limit));
 elseif($d=='pictos')$ret=desktop_build_ico($re,'');//
 elseif($d=='icons')$ret=desktop_build_ico($re,'icones');//
 elseif($d=='scroll')$ret=$t.scroll_b($re,implode('',$re),(is_numeric($o)?$o:17));
@@ -246,7 +246,7 @@ elseif($d=='multi'){foreach($load as $id=>$md){$i++; $_POST['flow']=1;
 elseif($load) return $t.m_pubart($load,$d,$o);
 if($o=='scroll')$ret=scroll_b($load,$ret,10);
 elseif($o=='scrold')$ret=scroll($load,$ret,10);
-elseif($o=='cols')$ret=colonize($rt,$o,'','');
+elseif($o=='cols')$ret=columns($rt,$o,'','');
 elseif($o=='icons')$ret=desktop_build_ico($load,'icones');//
 //else $ret=m_pubart($load,$d,$o);//echo $ret;
 if($ret)return $t.$ret;}
@@ -275,11 +275,9 @@ function m_pubart($r,$o,$p){
 if(is_array($r)){foreach($r as $k=>$v)$re[$k]=pub_art($k);
 if($o=='scroll'){$ret=scroll_b($r,implode('',$re),$p?$p:10);}
 elseif($o=='scrold')$ret=scroll($r,implode('',$re),$p);
-elseif($o=='cols')return colonize($re,$p,'board','pubart');
+elseif($o=='cols')return columns($re,$p,'board','pubart');
 else $ret=implode('',$re);
 if($ret)return divc('panel',$ret)."\n";}}
-
-function art_title_popup($day,$frm,$thm){return "$day\n$frm\n$thm";}
 
 #mods
 function mk_rq_sub($d,$p){$r=explode('|',$d); $n=count($r); 
@@ -318,11 +316,11 @@ $wh.='AND day < "'.($vaba).'" '; $wh.='AND day > "'.$vabb.'" ';
 $ordr=$ordr?$ordr:(prmb(9)?prmb(9):"id DESC");
 //if($_SESSION['lang']!='all')$inner=lang_req();//
 $sql=$inner.' WHERE nod="'.$_SESSION['qb'].'" AND re>0 AND substring(frm,1,1)!="_" '.$wh.' ORDER BY '.$ordr.' '.$whb;
-$rq=sq('id,re,frm','qda',$sql);//thm,
-if($rq){while($data=mysql_fetch_row($rq)){$stop=false;
-	if($prx)$prw=$data[2]>2?2:1; $id=$data[0];
-	if(!$stop)$ret[$id]=$prw;}
-return $ret;}}
+$rq=sq('id,re','qda',$sql);//thm,
+if($rq)while($data=mysql_fetch_row($rq)){
+	if($prx)$prw=$data[1]>2?2:1; $id=$data[0];
+	$ret[$id]=$prw;}
+return $ret;}
 
 function channel($p,$t,$d,$o){
 if($d=='cols')$o=$o?$o:3; $ra=explode(" ",$p);
@@ -345,7 +343,7 @@ if($load){
 		foreach($load as $k=>$v){
 		$re[]=llk('',$site.'/'.$k,html_entity_decode($v[2]));}
 		if($d=="scroll")$ret=scroll_b($re,implode("",$re),$o);
-		elseif($d=="cols")return $t.colonize($re,$o,'','pubart');
+		elseif($d=="cols")return $t.columns($re,$o,'','pubart');
 		else $ret=implode('',$re);
 		$ret=balc('ul','panel pubart',$ret);}}
 return $t.$ret;}
@@ -745,17 +743,17 @@ if($one){foreach($one as $id=>$nb){
 	if($_SESSION['rqt'][$id][1]==$frm or $frm=="Home"){
 		if($_SESSION['rqt'][$id][0]>=$dad){$v=pub_art($id); if($v)$re[$id]=$v;}}}
 if($re){krsort($re); $ret.=build_titl($re,'24h',1);
-$ret.=colonize($re,$prm,'board','panel pubart').br();}}
+$ret.=columns($re,$prm,'board','panel pubart').br();}}
 if($two){$re=""; foreach($two as $id=>$nb){
 	if($_SESSION['rqt'][$id][1]==$frm or $frm=="Home"){
 		if($_SESSION['rqt'][$id][0]<$dad){$v=pub_art($id); if($v)$re[$id]=$v;}}}
 if($re){krsort($re); $ret.=build_titl($re,nbof($_SESSION['nbj'],3),1);
-	$ret.=colonize($re,$prm,'board','pubart').br();}}
+	$ret.=columns($re,$prm,'board','pubart').br();}}
 if($thr){$re=""; foreach($thr as $id=>$nb){
 	if($_SESSION['rqt'][$id][1]==$frm or $frm=="Home"){
 		$v=pub_art($id); if($v)$re[$id]=$v;}}
 	if($re){krsort($re); $ret.=build_titl($re,'***',1);
-	$ret.=colonize($re,$prm,'board','pubart').br();}}
+	$ret.=columns($re,$prm,'board','pubart').br();}}
 if($ret){return $ret;}}
 
 function icotag(){
@@ -775,12 +773,12 @@ if($d=='tabmods')return tab_mods($p);
 elseif($d=='menusJ')return ajxlink($p,'mjx',0,0);
 elseif($d=='togup')return ajxlink($p,'mjx',0,'togup');
 $r=val_to_mod_b($p);
-foreach($r as $k=>$v)$ret.=build_mods($v).br();
+foreach($r as $k=>$v)$ret.=build_mods($v);
 return $ret;}
 
 function mod_columns($p,$o){$r=val_to_mod($p);
 foreach($r as $k=>$v)$re[]=build_mods($v);
-return colonize($re,count($re),'','');}
+return columns($re,count($re),'','');}
 
 function rartmod(){$r=$_SESSION['modc']['system'];
 foreach($r as $k=>$v)if($v[0]=='art_mod')return $v;}
@@ -790,7 +788,7 @@ list($m,$p,$t,$c,$d,$o,$ch,$hd,$tp,$nbr)=$ra;//$o=$o?$o:140;
 $ret=art_mod(ajx($p,1),$d,$o);
 if(trim(strip_tags($ret))){
 	if($t)$reb=divc('txtcadr',stripslashes($t));
-	$ret=$reb.$ret.($nbr?br():'');}
+	$ret=$reb.$ret.($nbr?br():'');}//
 $_SESSION['cur_div']='content';
 if($in)return divb('right|artmod|width:'.$o.'px; margin-left:10px;',$ret);
 else return divs('width:100%',$ret);}
@@ -820,7 +818,7 @@ foreach($load as $mrf=>$ids){$i++;
 	$ret[$i]=lkc('txtcadr',$got,$mrf).' '.$nbrt.br();
 	$ret[$i].=divc("tab",scroll($ids,$re,$nib)).br();}}
 if($ret){if(count($ret)<2 or $n==2) $prm=1; else $prm=2;
-return colonize($ret,$prm,'board','pubart');}}}
+return columns($ret,$prm,'board','pubart');}}}
 
 function arts_plan($conn,$v){$t=$v!=1?$v:$conn; 
 if($conn=="plan" or $conn=="hubs")$n=1; else $n=2;

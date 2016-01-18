@@ -549,9 +549,7 @@ if($patch){$pok=msql_read('server','program_patches',$patch);
 	if($pok==0 or $_GET['force']){
 		if($_GET['patch']){$uret.=plugin('patchs',$ptch['function']);
 			if($uret)modif_vars('server','program_patches',array(1),$patch);}
-		else $uret.=divc('txtalert',lkc('txtyl',$goto.'&patch==',stripslashes($ptch['function'])).' '.$ptch['explics']).br();}
-	else $uret.=divc('txtalert',lkc('txtyl',$goto.'&patch==&force==','force patch')).br();
-	}
+		else $uret.=divc('txtalert',lkc('txtyl',$goto.'&patch==',stripslashes($ptch['function'])).' '.$ptch['explics']).br();}}
 //files
 $uret.=$plug_output;
 return $uret;}
@@ -724,8 +722,8 @@ return $ret;}
 function make_artlist($qr){
 $sqlm=$_SESSION['sqlimit']; $admin=$_GET['admin'];
 $dig=$_GET['dig']?$_GET['dig']:$_SESSION['nbj'];
-$sqlm='AND day <'.$_SESSION['daya'].'';
-if($dig)$sqlm.=' AND day>"'.calc_date($dig).'" AND day<"'.calc_date(time_prev($dig)).'"';
+if($dig)$sqlm='AND day>"'.calc_date($dig).'" AND day<"'.calc_date(time_prev($dig)).'"';
+else $sqlm='AND day <"'.$_SESSION['daya'].'" ';
 if($admin=='all_arts')$wh='';
 elseif($admin=='my_arts')$wh.='AND name="'.$_SESSION['USE'].'"' ;// AND re>='1'
 elseif($admin=='users_arts')$wh.='AND name!="'.$_SESSION['USE'].'"' ;
@@ -739,7 +737,7 @@ else $tri.=' DESC';
 $ordr=$tri?' ORDER BY '.$tri:'';
 if($admin=='categories'){$sqlm=''; $ordr='';}
 $sql='nod="'.ses('qb').'" '.$wh.' '.$sqlm.$ordr;
-$req=sql(implode(',',$qr),'qda','q',$sql); 
+$req=sq(implode(',',$qr),'qda','where '.$sql); 
 while($data=mysql_fetch_array($req))
 	foreach($qr as $v)$ret[$data['id']][$v]=$data[$v];
 return $ret;}
@@ -782,12 +780,12 @@ $ret[$id][$k]=$v;}}
 return $ret;}
 
 function make_table_titles($r){
-$ordr='&triorder=1'; $ret[]='';
+$ordr='&triorder=1';
 foreach($r as $k=>$v){
 	if($_GET["cat"]) $cat='&cat='.$_GET["cat"];
-	if($_GET["triart"]==$k && $_GET["triorder"]==1) $ordr='&triorder=2';
+	if($_GET["triart"]==$k && $_GET["triorder"]==1)$ordr='&triorder=2';
 	$goto='/?admin='.$_GET["admin"].$ordr.$cat.'&triart='.$k;
-	$ret[]=lkc("",$goto,$v);}
+	$ret[]=lkc('',$goto,$v);}
 return $ret;}
 
 function make_tables_pages($otp,$qrt){
@@ -795,10 +793,9 @@ list($p,$page)=explode('/',$_GET['set']);
 $rtt=make_table_titles($qrt);
 $npg=41; $page=$page?$page:1;
 $min=($page-1)*$npg; $max=$page*$npg;
-	if(is_array($otp)){foreach($otp as $id=>$va){$i++;
-	if($i>=$min && $i<$max){$rtr[]=$va;}}}
+if(is_array($otp))foreach($otp as $id=>$va){$i++; if($i>=$min && $i<$max)$rtr[]=$va;}
 $n_pages=nb_page($i,$npg,$page);
-$ret=make_tables($rtt,$rtr,'txtblc',"");
+$ret=make_tables($rtt,$rtr,'bkg','');
 return $n_pages.$ret.$n_pages;}
 
 function edit_categories(){

@@ -13,7 +13,7 @@ $ret='select '.$dt.',count(distinct(iq)) as nbu
 from '.ses('qdv').' where qb="'.ses('qbd').'" and '.$tm.' group by day'; break;
 case('nbuv'): 
 $ret='select qb,date_format(time,"%y%m%d") as day,count(distinct(iq)) as nbu,count(id) as nbv
-from '.ses('qdv').' where date_format(time,"%y%m%d")>"'.$n.'" and date_format(time,"%y%m%d")<"'.date('ymd').'" group by day'; break;
+from '.ses('qdv').' where date_format(time,"%y%m%d")>"'.$n.'" and date_format(time,"%y%m%d")<"'.date('ymd').'" group by day,qb'; break;
 case('nbp'):if($n)$wh='and page like "%read='.$n.'%"';
 $ret='select page, count(id) as nbv
 from '.ses('qdv').' where qb='.ses('qbd').' '.$wh.' group by day'; break;
@@ -117,7 +117,7 @@ return $ret;}
 
 //read_stats
 function stat_read($c,$n){
-$r=sql('day,'.$c,'qds','kv','day>"'.date('ymd',calc_date($n)).'"',0);
+$r=sql('day,'.$c,'qds','kv','qb="'.ses('qb').'" and day>"'.date('ymd',calc_date($n)).'"');
 $w=ses('stw')?ses('stw'):550; $h=ses('sth')?ses('sth'):100;
 return graph_mk($r,$w,$h);}
 
@@ -128,6 +128,7 @@ return divc('panel','Total of '.($c=='nbv'?'views pages':'visitors').': '.array_
 //freespace
 function light_live(){$table=ses('qd').'_live2'; ses('qdv2',$table);
 $db=plugin_func('install','install_db',ses('qd'));
+if(!$db['live'])return 'er';
 $sql=str_replace('_live','_live2',$db['live']); mysql_query($sql);
 $tim=calc_date(30); $day=date('Y-m-d H:i:s',$tim);
 $lastid=sql('id','qdv','v','time>"'.$day.'" order by id limit 1');
@@ -154,7 +155,6 @@ function plug_stats($c,$n,$res=''){
 static $i; $i++; if($i==2)return;
 $c=$c?$c:'nbv'; $n=$n?$n:7; ses('png',1);
 list($w,$h)=split('_',$res); ses('stw',$w?$w:550); ses('sth',$h=$h?$h:100);
-
 $day_max_known=sql('day','qds','v','day<"'.date('ymd').'" order by id desc limit 1');
 if($day_max_known<date('ymd',calc_date(1)))$ret=stat_solid($day_max_known);
 //if(ses('png'))$ret.=stat_graph($c,$n,$res).br().br();

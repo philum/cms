@@ -35,14 +35,18 @@ function fav_export(){
 $d=msql_read('users',$_SESSION['qb'].'_fav',$_SESSION['iq']);
 return popup('export',txarea('',$d,60,4));}
 
+function fav_art($v){
+$im=minimg(sql('img','qda','v','id='.$v),'h'); 
+if(!$im)$im=image('imgc/'.ses('qb').'_empty.jpg',36,36,atc('imgl'));
+if($v)return divc('clear',$im.$del.lj('txtcadr','popup_popart__3_'.$v.'_3',suj_of_id($v)));}
+
 function fav_read($d){
 req('pop,art,spe,tri');
-$r=explode(' ',trim($d));
+$r=explode(' ',trim($d)); rsort($r);
 if($r)foreach($r as $v){
 	$del=lj('','plgfavs_plug___favs_fav*del_'.$v,picto('sclose')).' ';//'(x)'
 	$_SESSION['plgs']=$del;
-	//if($v)$li.=balc('li','',$del.lkc('',htac('read').$v,suj_of_id($v)));
-	//if($v)$arts.=$del.lj('txtcadr','popup_popart__3_'.$v.'_3',suj_of_id($v)).br();
+	//if($v)$ret.=fav_art($v);
 	if($v)$arts.=art_read_d($v,'','1','fastart');}
 if($arts){$ret=lj('txtx','plgfavs_plug___favs_fav*read_'.$d,picto('reload')).' ';
 	$ret.=lj('txtx','popup_plup___favs_fav*read*content',picto('view')).' ';
@@ -52,7 +56,7 @@ if($arts){$ret=lj('txtx','plgfavs_plug___favs_fav*read_'.$d,picto('reload')).' '
 		$ret.=lj('txtx','popup_plug___favs_fav*export',picto('txt')).' ';
 		$ret.=msqlink('',$_SESSION['qb'].'_fav').' ';}}
 $ret.=br().br(); $_SESSION['plgs']='';
-return $ret.$arts;}
+return $ret.divc('cols2',$arts);}
 
 function fav_read_content(){req('spe,art,tri,pop,mod');
 $da=msql_read('',$_SESSION['qb'].'_fav',$_SESSION['iq']);

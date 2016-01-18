@@ -258,7 +258,8 @@ if(count($ter)>count($re)/$ratio){return $t;}}
 
 #cut_words
 
-function ecart($v,$a,$b){return substr($v,$a+1,$b-$a-1);}
+function ecart($v,$a,$b){$min=$a+1; $max=$b-$a-1; //if($max>$min)
+return substr($v,$min,$max);}
 function findroot($u){$nb=substr_count($u,"/"); $nu=explode("/",$u);
 for($i=0;$i<$nb;$i++){$ret.=$nu[$i].'/';}
 return ''.$ret;}
@@ -508,7 +509,7 @@ if(is_numeric($r[0]) && is_numeric($r[1]) && is_numeric($r[2]))return substr($d,
 return $d;}
 
 function defcon_generic(){
-$r['philum']=array('<article','</article>','<h2 id="fixit">','</h2>');
+$r['philum']=array('<article','</article>','<h2>','</h2>');
 $r['blogspot']=array("<div class='post-body entry-content'",'',"<h3 class='post-title entry-title' itemprop='name'>",'</h3>','',1);
 $r['over-blog']=array('<div class="contenuArticle">','','<div class="divTitreArticle">','</div>','',1);
 $r['wordpress']=array('<div class="post-text">','<div id="jp-post-flair" class="sharedaddy sd-rating-enabled sd-like-enabled sd-sharing-enabled">','<h1 class="post-title">','</h1>','','','linewith:About these ads');
@@ -630,7 +631,9 @@ else $rec=embed_detect_c($reb,'<body');
 if($defs[8]){if(!$defs[9])$opt=embed_detect_c($reb,$defs[8]);//opt
 	elseif($defs[9])$opt=embed_detect($reb,$defs[8],$defs[9]);
 	if($opt)$opt.=br().br();}
-if($defs[4] && $defs[4]!=1){$end=embed_detect_c($reb,$defs[4]); if($end)$end=br().br().$end;}
+if($defs[4] && $defs[4]!=1){
+	if(strpos($reb,$defs[4])!==false)
+		$end=embed_detect_c($reb,$defs[4]); if($end)$end=br().br().$end;}
 if($auv)$ret=$auv;//video
 elseif(strpos($f,'twitter.com'))//twit
 	list($suj,$ret,$day)=plugin_func('twit','twit_vacuum',$f);
@@ -666,20 +669,20 @@ write_file('img/'.$f,base64_decode(substr($d,strpos($d,',')+1)));
 return $f;}
 
 //link-img
-function treat_link($balise,$txa){
+function treat_link($aa_inner,$txa){
 if($txa){$tag='href='; $len=6; 
-	if(substr($txa,0,1)==" ")$sp=' ';
+	if(substr($txa,0,1)==' ')$sp=' ';
 	$txt=clean_internaltag($txa);///testing
 	if(strpos($txt,'>'))$txt=substr($txt,strpos($txt,'>')+1);}
 else{$tag='src='; $len=5; $im="ok";}
 $root=findroot($_GET['urlsrc']?$_GET['urlsrc']:$_POST['urlsrc']);
-$imnb=strpos(strtolower($balise),$tag); 
-	if($imnb!==false){$imnc=substr($balise,$imnb+$len-1,1);
-		if($imnc=='"' or $imnc=="'"){$bend=strpos($balise,$imnc,$imnb+$len); $nb=$len;}
-		else{$bend=strpos($balise," ",$imnb+$len-1); $nb=$len-1;}}
-if($bend===false){$bend=strpos($balise,'>',$imnb+$nb);}
-$src=substr($balise,$imnb+$nb,$bend-$imnb-$nb);
-if(strpos($balise,'popup_nbp'))$mid='['.$txt.':nh]';//philum_anchor
+$imnb=strpos(strtolower($aa_inner),$tag); 
+	if($imnb!==false){$imnc=substr($aa_inner,$imnb+$len-1,1);
+		if($imnc=='"' or $imnc=="'"){$bend=strpos($aa_inner,$imnc,$imnb+$len); $nb=$len;}
+		else{$bend=strpos($aa_inner," ",$imnb+$len-1); $nb=$len-1;}}
+if($bend===false){$bend=strpos($aa_inner,'>',$imnb+$nb);}
+$src=substr($aa_inner,$imnb+$nb,$bend-$imnb-$nb);
+if(strpos($aa_inner,'popup_nbp'))$mid='['.$txt.':nh]';//philum_anchor
 if(strpos($src,'base64'))$mid='['.b64img($src).']';
 elseif($src){
 	$src=utmsrc($src); $txt=utmsrc($txt);
@@ -695,16 +698,16 @@ elseif($src){
 	$src=str_replace('../','',$src);
 	//if(!is_image($rot.$src,xt($src)) && $im)$ext=":img";
 	if(strpos($src,"javascript")!==false)$src="";
-	//if(strpos($balise,'cs_glossaire')!==false)$mid='['.($txa).':pop]';//dico
-	if(strpos($balise,'cs_glossaire')!==false)$mid=$src;//strrchr_b($txa,'§')
+	//if(strpos($aa_inner,'cs_glossaire')!==false)$mid='['.($txa).':pop]';//dico
+	if(strpos($aa_inner,'cs_glossaire')!==false)$mid=$txa;//strrchr_b($txa,'§')
 	elseif($txt && $txt!=' '){$posdiez=strpos($src,'#');
 		//if($tag=='src='){}
 		$rt=array('youtube','youtu','dailymotion','vimeo','rutube');
 		if($posdiez!==false){//$mid=$txt; //skip_anchors
-			$id=prop_detect($balise,'name');
-			if(!$id)$id=prop_detect($balise,"name='","'");
-			if(!$id)$id=prop_detect($balise,'id');
-			if(!$id)$id=embed_detect($balise,"id='","'");
+			$id=prop_detect($aa_inner,'name');
+			if(!$id)$id=prop_detect($aa_inner,"name='","'");
+			if(!$id)$id=prop_detect($aa_inner,'id');
+			if(!$id)$id=embed_detect($aa_inner,"id='","'");
 			if(substr($src,$posdiez+1,2)=="nb") $mid='['.$txt.':nh]';//spip
 			elseif(substr($src,$posdiez+1,2)=="nh") $mid='['.$txt.':nb]';
 			if(substr($src,$posdiez+1,4)=="_ftn") $mid='['.$txt.':nh]';//symfony
@@ -764,12 +767,19 @@ function trap_v_id($v,$s){$e=strpos($v,'?');
 	$e=strpos($d,'&'); if($e!==false)$d=substr($d,0,$e); return $d;}
 //function trap_video($v,$s){$d=trap_v_id($v,$s); if($d)return '['.$d.':popvideo]';}
 
-function dico($aa_inner,$balise){//echo $aa_inner.'- ';//dico de cadtm
+/*function dico($aa_inner,$balise){//dico de cadtm
 $cl=embed_detect($aa_inner,'class="','"');
-if($cl=='gl_mot')$_POST['popa']=$balise;
-elseif($cl=='gl_dt')$_POST['popdt']=$balise;//substr($balise,0,strlen()/2)
-elseif($cl=='gl_dd')$balise=str_replace('Cliquez pour plus.','',$balise);
-elseif($cl=='gl_dl')$balise.='§'.($_POST['popa']?$_POST['popa']:$_POST['popdt']);
+if($cl=='gl_mot'){$_POST['popmot']=$balise; $balise='';}
+elseif($cl=='gl_dt'){$_POST['popdt']='['.$balise.':h4]'; $balise='';}
+elseif($cl=='gl_dd'){$_POST['popdd']=$balise; $balise='';}
+elseif($cl=='gl_dl')$balise='['.$_POST['popdt'].$_POST['popdd'].'§'.$_POST['popmot'].':pop]';
+return $balise;}*/
+
+function dico($aa_inner,$balise){//dico de cadtm
+$cl=embed_detect($aa_inner,'class="','"');
+if($cl=='gl_dt')$balise='';
+elseif($cl=='gl_dd')$balise='';
+elseif($cl=='gl_dl')$balise='';
 return $balise;}
 
 function balise_converter($aa_balise,$aa_inner,$bb_balise,$balise){$br="\n";
@@ -876,9 +886,10 @@ if($nb>0){for($i=0;$i<$nb;$i++){$ba=strpos($v,'</'.$aa_balise,$ba+1);}
 return $ba;}
 
 function embed_detect_c($v,$aa_inner){//balise entière
-	$aa_end=strpos($aa_inner," ");
-	if($aa_end!==false)$aa_balise=substr($aa_inner,1,$aa_end-1);
-	else $aa_balise=strip_tags($aa_inner);
+//if(strpos($v,$aa_inner)===false)return;
+$aa_end=strpos($aa_inner,' ');
+if($aa_end!==false)$aa_balise=substr($aa_inner,1,$aa_end-1);
+else $aa_balise=strip_tags($aa_inner);
 $aa=strpos($v,$aa_inner); 
 if($aa===false){$vb=str_replace("\n",' ',$v); $aa=strpos($vb,$aa_inner);}
 $ab=strpos($v,'>',$aa); 
@@ -886,7 +897,7 @@ if(strpos($v,'</'.$aa_balise.'>'))$ba=strpos($v,'</'.$aa_balise.'>',$ab);
 if($ba)$balise=ecart($v,$ab,$ba);
 $aab=strpos($v,'<'.$aa_balise,$ab);
 if($aab!==false && $ba){
-	$ba=recursearch_b($v,$ab,$ba,$aa_balise);
+	$ba=recursearch_b($v,$ab,$ba,$aa_balise);//!
 	$balise=ecart($v,$ab,$ba);}
 return $balise;}
 
