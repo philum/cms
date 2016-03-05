@@ -41,9 +41,9 @@ legend {border-color:#a3a3a3; padding:0 4px; border-radius:2px; border-width:1px
 .active {color:#bd0000;}
 .active a:hover {color:#bd0000;}
 .menu {margin:0 5px 5px 5px; padding:5px; background:#ddd; border:1px solid #ccc;}
-.table {border-collapse:separate; border-spacing:5px;}
+.table {border-collapse:separate; border-spacing:2px;}
 .row {display:table-row;}
-.cell {display:table-cell; padding:5px; border:1px solid #ccc; background:#ddd;}
+.cell {display:table-cell; padding:2px; border:1px solid #ccc; background:#ddd;}
 #editmsql td {word-wrap:break-word; vertical-align:middle;}
 .txtit {color:#000000; font-family:Museo700-Regular, Trebuchet MS;}
 .txtit a {color:#000000;}
@@ -86,8 +86,6 @@ legend {border-color:#a3a3a3; padding:0 4px; border-radius:2px; border-width:1px
 .txtab:hover {/*tabs*/}
 .txtac {/*spaces*/}
 .popbt {color:#000000; background-color:#e7e7e7; box-shadow: 0 0 2px #a3a3a3, 0 0 2px #3 inset;}
-.popbt a {background-color:#e7e7e7;}
-.popbt a:hover {background-color:#f4f4f4;}
 .popbt:hover {background-color:#ffffff;}
 .popw {color:#000000; background-color:#ffffff; box-shadow: 0 0 2px #a3a3a3, 0 0 2px #3 inset;}
 .popw a:hover {background-color:#c2c2c2;}
@@ -105,5 +103,5 @@ li .popbt:hover, li .popw:hover {box-shadow: 0px 3px 4px #ffffff inset, 0px 0px 
 .nb_pages a:hover {border-color:#a3a3a3;}
 .taxonomy li a {color:#000000;}
 .taxonomy li a:hover {color:#bd0000;}
-.popup {background-color:#f4f4f4;}
+.popup {background-color:#e7e7e7;}
 .philum a:hover {color:#bd0000;}

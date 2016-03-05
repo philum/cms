@@ -99,6 +99,7 @@ case("video"):return popvideo($d); break;
 case("room"):return call_plug('','popup','chatxml',$d,pictxt('chat',$d)); break;
 case("twitter"):return plugin_func('twit','twit_build',ajx($d)); break;
 case('poptwit'):return poptwit($d);break;
+case('popimg'):return make_mini_c($d);break;
 //case("track"):return tracks_read($d); break; //plugin_func('tracks','track_quote',$d);
 case("track"):return plugin_func('tracks','track_answer',$d); break;
 case("picto"):return picto($d); break;}}
@@ -324,7 +325,7 @@ array("a`","a^","A`","e´","e`","e^","e¨","o^","i^","E´","´´","´"),//,"é"
 array("à","â","A","é","è","ê","ë","ô","î","E",'"',"'"),$v);}//,"é"
 
 function antipuces($v){req('spe');
-if(forbidden_img($v)!==false && (strpos($v,"puce")===false))return $v;}
+if(forbidden_img($v)!==false && (strpos($v,'puce')===false))return $v;}
 
 function clean_spaces($ret){
 $ret=str_replace("&nbsp;"," ",$ret);
@@ -516,13 +517,66 @@ $r['wordpress']=array('<div class="post-text">','<div id="jp-post-flair" class="
 $r['default']=array('<meta name="description" content="','"','<title>','</title>','','','');
 return $r;}
 
+function defcon_known_tx(){
+$r[]='<div class="entry-content">';
+$r[]='<div class="entry">';
+$r[]='<div class="texte">';
+$r[]='<div class="contenuArticle">';
+$r[]='<div class="post-content">';
+$r[]='<div class="content">';
+$r[]='<div class="post-body entry-content">';
+$r[]='<div class="post-body entry-content"';
+$r[]='<div id="content">';
+$r[]='<div class="article">';
+$r[]='<div class="post">';
+$r[]='<div class="entry-content clearfix">';
+$r[]='<div class="article-body">';
+$r[]='<div class="surlignable">';
+$r[]='<div class="chapo">';
+$r[]='<div class="article-content">';
+$r[]='<div class="post-header">';
+$r[]='<div class="entrytext">';
+$r[]='<section class="entry-content clearfix" itemprop="articleBody">';
+$r[]='<div class="content clearfix">';
+$r[]='<div class="main">';
+$r[]='<div class="post-body">';
+$r[]='<div class="post hentry">';
+$r[]='<div align="justify">';
+$r[]='<div class="text">';
+$r[]='<div class="entry-body">';
+return $r;}
+
+function defcon_known_tt(){
+$r[]='<h1 class="entry-title">';
+$r[]='<title>';
+$r[]='<h1 class="title">';
+$r[]="<h3 class='post-title entry-title'>";
+$r[]="<h3 class='post-title entry-title' itemprop='name'>";
+$r[]='<h2 class="post-title">';
+$r[]='<h1 class="post-title">';
+$r[]='<h1 class="titre">';
+$r[]='<h2 class="entry-title">';
+$r[]='<h1 itemprop="headline">';
+$r[]='<h3>';
+$r[]='<h1 itemprop="name">';
+$r[]='<h1 class="titre-article">';
+$r[]='<div class="divTitreArticle">';
+$r[]='<h3 class="entry-title">';
+$r[]='<h3 id="p1">';
+$r[]='<h1 class="title" id="page-title">';
+$r[]='<h2 class="title">';
+return $r;}
+
 function known_defcon($f,$d){$r=defcon_generic();
 if(strpos($d,'name="generator" content="philum'))return $r['philum'];
 if(strpos($f,'blogspot'))$ret=$r['blogspot'];
 if(strpos($f,'over-blog'))$ret=$r['over-blog'];
 //if(strpos($f,'wordpress'))$ret=$r['wordpress'];
 if(strpos($d,$ret[0]) && strpos($d,$ret[2]))return $ret;
-if(strpos($d,$r['default'][0]))return $r['default'];}
+if(strpos($d,$r['default'][0]))return $r['default'];
+$rx=defcon_known_tx(); foreach($rx as $v)if(strpos($d,$v))$tx=$v;
+$rt=defcon_known_tt(); foreach($rt as $v)if(strpos($d,$v))$tt=$v;
+return array($tx,'',$tt,'','','','');}
 
 function auto_video($f,$o='',$t='',$op=''){if($t)$t='§'.$t; $fb=$f;
 if(strpos($f,'/')===false)return '['.$f.$t.':'.$o.'video]';
@@ -604,8 +658,12 @@ return $ret;}
 function readmeta($f){$d=get_file($f);
 $enc=mb_detect_encoding($d); if(strtolower($enc)=='utf-8')$d=utf8_decode_b($d);
 $tit=embed_detect($d,'<meta property="og:title" content="','"');
+if(!$tit)$tit=embed_detect($d,'<meta property="title" content="','"');
+if(!$tit)$tit=embed_detect($d,'<title>','</title>');
 $txt=embed_detect($d,'<meta property="og:description" content="','"');
+if(!$txt)$txt=embed_detect($d,'<meta property="description" content="','"');
 $img=embed_detect($d,'<meta property="og:image" content="','"');
+if(!$img)$img=embed_detect($d,'<meta property="og:image" content="','"');
 return array($tit,$txt,$img);}
 
 function vaccum_ses($f){$fb=nohttp($f);//if(joinable($f))
@@ -701,8 +759,7 @@ elseif($src){
 	//if(strpos($aa_inner,'cs_glossaire')!==false)$mid='['.($txa).':pop]';//dico
 	if(strpos($aa_inner,'cs_glossaire')!==false)$mid=$txa;//strrchr_b($txa,'§')
 	elseif($txt && $txt!=' '){$posdiez=strpos($src,'#');
-		//if($tag=='src='){}
-		$rt=array('youtube','youtu','dailymotion','vimeo','rutube');
+		$rt=array('youtube.com/watch','youtu.be','dailymotion','vimeo','rutube');
 		if($posdiez!==false){//$mid=$txt; //skip_anchors
 			$id=prop_detect($aa_inner,'name');
 			if(!$id)$id=prop_detect($aa_inner,"name='","'");
@@ -716,9 +773,9 @@ elseif($src){
 			elseif(substr($txt,0,1)=='[' or substr($txt,0,1)=='(')$mid=$txt;
 			else $mid='['.$txt.']';}}//'.$rot.$src.'§
 //		elseif(http_root($src)=='t')$mid='['.$rot.$src.'] ';
-		elseif(in_array(http_root($src),$rt)){
-			if(!is_image($txt) && !ishttp($txt)){$txb=$txt; $pop='pop';}
-			$mid=auto_video($src,$pop,$txb);}
+		elseif(in_array_p($src,$rt)){
+			if(!is_image($txt) && !ishttp($txt)){$txb=$txt; $pop='';}
+			$mid="\n".auto_video($src,$pop,$txb)."\n";}
 //		elseif(in_array(http_root($txt),$rt))$mid=auto_video($txt,'pop',$src);
 		elseif(strpos($src,"mailto:")!==false)$mid='['.substr($src,7).'] ';
 		elseif(is_image($src) && is_image($txt))$mid='['.$rot.$src.'] ';
@@ -753,27 +810,19 @@ if($deb===false){$deb=strrpos(substr($v,0,$pos),"=");}
 if($deb!==false){$bal=subtopos($v,$deb,$pos);}}
 if($bal) return "\n".'['.$bal.$end.']'."\n";}
 
-function piege_utube($v){$d=trap_v_id($v,'youtube.com/v/'); if($d)return '['.$d.':popvideo]';}
-function piege_rutube($v){$d=trap_v_id($v,'rutube.ru/'); if($d)return '['.$d.':popvideo]';}
+function piege_utube($v){$d=trap_v_id($v,'youtube.com/v/'); if($d)return '['.$d.':video]';}
+function piege_rutube($v){$d=trap_v_id($v,'rutube.ru/'); if($d)return '['.$d.':video]';}
 function piege_daily($v){$d=trap_v_id($v,'video/'); if(!$d)$d=trap_v_id($v,'swf/');
-	$d=str_extract('_',$d,0,0); if($d)return '['.$d.':popvideo]';}
+	$d=str_extract('_',$d,0,0); if($d)return '['.$d.':video]';}
 function piege_googv($v){$d=embed_detect($v,'docid=','&');
-	if($d)return '['.$d.':popvideo]';}
-function piege_ted($v){$d=embed_detect($v,'vu=','&'); if($d)return '['.$d.':popvideo]';}
+	if($d)return '['.$d.':video]';}
+function piege_ted($v){$d=embed_detect($v,'vu=','&'); if($d)return '['.$d.':video]';}
 function piege_mp3_b64($v){$d=embed_detect($v,'soundFile=','&');
 	if(strpos($d,'.mp3')===false)return base64_decode($d); else return $d;}
 function trap_v_id($v,$s){$e=strpos($v,'?'); 
 	if($e!==false)$d=embed_detect($v,$s,'?'); else $d=embed_detect($v,$s,'"');
 	$e=strpos($d,'&'); if($e!==false)$d=substr($d,0,$e); return $d;}
-//function trap_video($v,$s){$d=trap_v_id($v,$s); if($d)return '['.$d.':popvideo]';}
-
-/*function dico($aa_inner,$balise){//dico de cadtm
-$cl=embed_detect($aa_inner,'class="','"');
-if($cl=='gl_mot'){$_POST['popmot']=$balise; $balise='';}
-elseif($cl=='gl_dt'){$_POST['popdt']='['.$balise.':h4]'; $balise='';}
-elseif($cl=='gl_dd'){$_POST['popdd']=$balise; $balise='';}
-elseif($cl=='gl_dl')$balise='['.$_POST['popdt'].$_POST['popdd'].'§'.$_POST['popmot'].':pop]';
-return $balise;}*/
+//function trap_video($v,$s){$d=trap_v_id($v,$s); if($d)return '['.$d.':video]';}
 
 function dico($aa_inner,$balise){//dico de cadtm
 $cl=embed_detect($aa_inner,'class="','"');
@@ -842,12 +891,12 @@ else{
 	else $balise='<'.correct_widths($aa_inner).'>';} break; //<'.$bb_balise.'>
 case("iframe"):
 	if(strpos($aa_inner,'youtube.com')!==false){$d=trap_v_id($aa_inner,'embed/');
-		if(!$d)$d=embed_detect($aa_inner,'/v/','&'); $balise=$br.$br.'['.$d.':popvideo]';}
+		if(!$d)$d=embed_detect($aa_inner,'/v/','&'); $balise=$br.$br.'['.$d.':video]';}
 	elseif(strpos($aa_inner,'dailymotion.com')!==false)$balise=piege_daily($aa_inner);
 	elseif(strpos($aa_inner,'vimeo.com')!==false){
-		$d=trap_v_id($aa_inner,'video/'); $balise='['.$d.':popvideo]';}
+		$d=trap_v_id($aa_inner,'video/'); $balise='['.$d.':video]';}
 	/*elseif(strpos($aa_inner,'vk.com')!==false){
-		$d=trap_v_id($aa_inner,'oid='); $balise='['.$d.':popvideo]';}*/
+		$d=trap_v_id($aa_inner,'oid='); $balise='['.$d.':video]';}*/
 	else $balise='['.embed_detect($aa_inner,'src="','"').$sz.':iframe]'; break;
 case("center"): $taga=$tagb=$br; break;//$balise=' ['.$balise.':center]';
 case("p"): $taga=$tagb=$br; break;

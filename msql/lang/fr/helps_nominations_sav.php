@@ -1,5 +1,5 @@
 <?php
-//philum_microsql_helps_nominations
+//philum_microsql_helps_nominations_sav
 $r["_menus_"]=array('title');
 $r[1]=array('article');
 $r[2]=array('articles');
@@ -9,7 +9,7 @@ $r[5]=array('mois');
 $r[6]=array('mois');
 $r[7]=array('an');
 $r[8]=array('ans');
-$r[9]=array('categorie');
+$r[9]=array('catégorie');
 $r[10]=array('catégories');
 $r[11]=array('Aucun');
 $r[12]=array('Articles majeurs');
@@ -100,7 +100,7 @@ $r[96]=array('défaut');
 $r[97]=array('rafraîchir');
 $r[98]=array('dupliquer');
 $r[99]=array('créer');
-$r[100]=array('tout');
+$r[100]=array('Tout');
 $r[101]=array('reload');
 $r[102]=array('canal');
 $r[103]=array('prédéfinis');
@@ -138,5 +138,10 @@ $r[134]=array('creuser');
 $r[135]=array('Utilisateur');
 $r[136]=array('Courier électronique');
 $r[137]=array('Mot de passe');
+$r[138]=array('relié');
+$r[139]=array('Merci');
+$r[140]=array('reclasser');
+$r[141]=array('avec');
+$r[142]=array('dans');
 
 ?>

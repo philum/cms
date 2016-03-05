@@ -132,7 +132,6 @@ $r["webpage"]=array('embed','','tools');
 $r["mktable"]=array('embed_slct','\',\'\',\'\',\'mktable','filters');
 $r["svgcode"]=array('embed','','tools');
 $r["popmsql"]=array('embed','','arts');
-$r[1]=array('','','');
 $r[":pre"]=array('conn','_delconn_pre','del');
 
 ?>

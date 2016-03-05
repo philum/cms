@@ -337,7 +337,7 @@ foreach($r as $k=>$v){if(is_array($v)){$np=$p.'/'.$k; $i++;
 	$j='active_list_finder(\'fdirs\','.$i.'); ';
 	$j.=sj('ffils_fifunc___fi*flapf_'.ajx($np).'_'.$o);
 	$lk=ljb('',$j,'',$k);
-	$ul=balb('ul','style="display:none;"',finder_flap_dirs($v,$np,$o));
+	$ul=balb('ul',' style="display:none;"',finder_flap_dirs($v,$np,$o));
 	$ret.=li($lk.$ul);}}
 return $ret;}
 

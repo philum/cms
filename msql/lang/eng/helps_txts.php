@@ -159,8 +159,8 @@ $r["htaccess"]=array('The file named \'.htaccess\' must have enough permissions.
 The htaccess is designed to use the url as a console of commands for actions.
 
 Verify the specific defs for each server.');
-$r["favs"]=array('The symbol \"+\" add articles in your list ;
-<br>This panel must be opened to activate this function.');
+$r["favs"]=array('The symbol Like add articles in your favorites.
+Later you can build a book of your favs.');
 $r["icons"]=array('They are the existing icons from the typo \'pictos\', and the sockets for used icons by the system.
 Affect a connector to the sockets, who say the type of icon : typo, image or svg. 
 The existing icons are in the editor.');
@@ -174,7 +174,10 @@ $r["finder"]=array('Finder is for navigate in directories, virtual directories, 
 - virtual/real : shared files mode
 - picto/mini : pictos or thumbnails');
 $r["comline"]=array('Commande-line:  Some modules need as parameter a command of module (MenusJ, Apps,...), also like the connector \':module\'.');
-$r["mod_cond"]=array('We ca add precision to the condition adding the ID of article or name of category after it, like this : \'art123\' or \'catpublic\'.');
+$r["mod_cond"]=array('Default contexts are (nothing), home, cat, art.
+[0-9] : context of a article (id)
+[a-z] : context of a targeted category
+[a-z] : context given by url /context/name');
 $r["updfonts"]=array('after download a typo, go to admin/fonts and do \'inject\' ; that will unzip file, copy it, and add an entry in the server table, who is not aware of the update, unlike the table \'system\'.');
 $r["updpictos"]=array('The system need pictograms, download the font \'philum\' in the tab \'pictos\'');
 $r["breadcrumb"]=array('The Breadcrumb display the name of the category and other infos.
@@ -193,7 +196,6 @@ $r["newsletter_uns"]=array('unsubscribe');
 $r["conn_pub"]=array('The connectors are used in place of html and let write commands for applications');
 $r["search"]=array('Tips: 
 - bolean search : add * at end
-- titles only : add * at start
 - empty search : only on parameters
 - numerical search : call an article from it\'s ID
 - filters : ex: \"word1;word2:tag;word3:author\" (\'author is an usertag, separator: \';\')
@@ -209,9 +211,9 @@ $r["trackhelp"]=array('- links, images and vidéos (youtube etc...) are automatic
 - #public : call the room \'public\' of the Chat');
 $r["suggest"]=array('The article will have the mention \'proposed by\' [prefix of the mail]');
 $r["suggest_ok"]=array('Your article have been published');
-$r["console_cond"]=array('Conditions : The states are \'cat\' and \'art\' (category and article),
+$r["console_cond"]=array('[Context:b]: The states are \'cat\' and \'art\' (category and article),
 in addition of \'home\' and \'all\'.
-The modules can be activated only while the state is corresponding.
+The modules are activated while the state is corresponding.
 The console present a simulation of the site at this moment.');
 $r["console_mods"]=array('Here are the number of versions of the table of mods.
 This menu does not affect the configuration. 
@@ -243,7 +245,7 @@ $r["tracks_error2"]=array('please give your name');
 $r["tracks_error3"]=array('empty message');
 $r["retape"]=array('Some old connectors have been replaced');
 $r["prmb5"]=array('the param \'auto_design\' (5) is activated : it works instead of the user design');
-$r["flog"]=array('remember your \"flog\" and retrieve yours datas without login');
+$r["flog"]=array('fast-log: remember your ID and retrieve yours datas');
 $r["memstorage"]=array('contents are stored in local vars of your own browser');
 $r["blocmenu"]=array('this div is linked to css to display correctly the ul<li');
 $r["bloctest"]=array('will not be rendered, it\'s used for testing modules');
@@ -254,5 +256,10 @@ $r["meta_lang"]=array('ID of articles in others languages');
 $r["tracks_moderation"]=array('tracks are moderated');
 $r["twitter_oAuth"]=array('parameters of twitter API (https://apps.twitter.com/)');
 $r["tag_rename"]=array('Rename a tag could delete and associate articles to an existing tag');
+$r["usertags"]=array('Add tags to this article and retrieve themes in your favorites');
+$r["api"]=array('The API give datas from a query.
+- /module/api/{command} : display result
+- /api/{command] : json stream');
+$r["like"]=array('The Likes are public');
 
 ?>

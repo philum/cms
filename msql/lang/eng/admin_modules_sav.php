@@ -21,14 +21,13 @@ $r["apps"]=array('Apps','software buttons','','');
 $r["archives"]=array('navigate in time!','Give a title','','');
 $r["art_mod"]=array('attached modules to articles','commands of modules :  param/title/command/option:module(§button)[,]
 ex: :related_arts§linked to, :related_by§linked by','The rstr60 let display the result into the article. In this case the option specify the width of this column and modify the maximum width of the images.','');
-$r["articles"]=array('list of articles from params','separator: tild (~), example: tag=Une~nbdays=1~preview=true~lasts=1-10
-- cat/tag : specify a category / a tag ;
-- nocat/notag : exit a category / a tag ;
-- nbdays : time system ;
-- preview : true, false, full;
-- lasts : most read (lasts=1 for the first, lasts=1-10 for the nine left)
+$r["articles"]=array('list of articles from params','parameters of the Api: tag:word,nbdays:1,preview:auto
 
-The Command \'multi\' is needed if you use a ponctual template, but dont segment the result by pages.','','');
+- cat/tag : specify a category / a tag
+- nocat/notag : exit a category / a tag
+- nbdays : time system
+- preview : 1, 2, 3, auto
+','','');
 $r["ban_art"]=array('ID_article used as banner : the first image of catalog is used as background and all the article is one link','ID_article','','');
 $r["blocks"]=array('each word is a DIV, which is a block of module','list of blocks of modules','','');
 $r["br"]=array('add a line','','','');
@@ -102,11 +101,10 @@ $r["jscode"]=array('add js in the header','','','');
 $r["last"]=array('most recent article','','','');
 $r["leftbar"]=array('filled by css_builder after doing \'save_width\'','max width of leftbar for images or videos','','');
 $r["link"]=array('return a link (protocol)','predefined links :
-- key: Home, ID, category, module
-- /plug/index
+- key: Home, ID, category
+- /plug/index, /module/...
 - title: Home§Accueil
-- picto : Home§home:picto
-- url: /?plug=myplug§name_of_plug','not space after','not in a li');
+title: word, picto: Home§home:picto','not space after','not in a li');
 $r["log-out"]=array('disconnect','','','');
 $r["login"]=array('login','Give a title','float on right','');
 $r["login_popup"]=array('login in a popup','Give a title','','');
@@ -156,7 +154,7 @@ three
 $r["suggest"]=array('let the visitor purpose an article from his Url','','','');
 $r["tab_mods"]=array('tabs of modules','param/title/command/option:module§button[,]','','');
 $r["tag_arts"]=array('articles with Tag :','specify the tag (+ the class if needed, ex: tag:class)','','');
-$r["tags"]=array('list of tags','specify the class of tags','nb cols or scroll limit','');
+$r["tags"]=array('list of tags','specify the class of tags','nb/size of cols or scroll limit','');
 $r["tags_cloud"]=array('cloud of tags','specify the class of tags','','');
 $r["taxo_arts"]=array('articles from a parent article','specify 1 (=current/All), category, or ID_art','','');
 $r["taxo_nav"]=array('list of nodes with openable menu','','','');
@@ -181,5 +179,9 @@ $r["desktop"]=array('params ofdesktop','background : html color,gradient or imag
 $r["popart"]=array('open article (local or distant) in a popup','','','');
 $r["video"]=array('embed video','id of video','','');
 $r["classtag_arts"]=array('Display articles from a class of tags ','','','');
+$r["api_arts"]=array('Api using Load builder','command type get','','');
+$r["api_mod"]=array('Api using Api builders','command type json','','');
+$r["api"]=array('Application to serve datas','enter a command','','');
+$r["rssin"]=array('channels of rss received','','','');
 
 ?>

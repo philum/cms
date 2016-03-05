@@ -33,7 +33,7 @@ return $ret;}
 
 function edit_msql_j_defcons(){return 'line:1|line:last|line:title|del:|linewith:|boldline:1|linenolink:1|del-link:|striplink:|delconn:s|deltables|delqmark|delblocks|cleanmail|-??|???';}
 function clean_code($d){if(strpos($d,'<')!==false)$d=parse($d); return stripslashes_b($d);}
-function imput_good($k,$v){$v=clean_code($v); return goodarea_b($v,$k,'','',44,20);}
+function imput_good($k,$v){$v=clean_code($v); return goodarea_b($v,$k,'','',40,20);}
 
 function edit_msql_j($nod,$va,$o,$ob){$qb=$_SESSION['qb']; $tg=$ob?'socket':'editmsql';
 list($dir,$node)=node_decompil($nod); $nod=ajx($nod);
@@ -67,7 +67,7 @@ if(auth(6)){
 	$btn.=lj('popbt',$tg.'_savmsql__x_'.$nod.'_'.$nxtk.'___'.$keys,nms(44)).' ';//new
 $btn.=$pn;
 $ret=divs('padding-bottom:4px',btd('bts','').$btn).$ret;
-return popup($dir.'/'.$node.'§'.$key,$ret,'','auto');}
+return popup($dir.'/'.$node.'§'.$key,$ret,550);}
 
 #editbrain
 function editbrain($brd){//descript//goog
@@ -232,7 +232,7 @@ $ret.=lj('popsav','dtb_call__xd_admin_data*brain*sav_'.$bs.'_'.$type.'_titl|txar
 if($slct!='default')$ret.=lkc('txtyl',$goto.'&slct='.$slct.'&erase==','x').br();
 $ret.=jmp_btn_cb().br(); 
 $sj=sj('clva_call___admin,pop,tri,mod,spe,art_clview*basic*j_'.$type.'_'.$slct.'_clvb|txarea');
-$ret.=txarea($type.'" class="console" id="txarea" onkeyup="'.$sj.'" onclick="'.$sj,stripslashes($msg),44,14);}
+$ret.=txarea('txarea',stripslashes($msg),44,14,atc('console').atb('onclick',$sj));}
 return divd('',$ret);}
 
 function jmp_btn_cb(){
@@ -309,7 +309,7 @@ $fb=$rep.'/'.$qb.'_backup_'.$_SESSION['qdm'].'_from_'.$bkf.'.txt';
 //chmod($fa,0777); 
 $err=write_file($fa,$bckup); 
 $erb=write_file($fb,$bckub); 
-//$ret=txarea('insertsql',$bckup,'70','15','console');
+//$ret=txarea('insertsql',$bckup,'70','15',atc('console'));
 if(!$err){$ret=lkc('txtyl',$fa,$fa).br();}
 if(!$erb){$ret.=lkc('txtyl',$fb,$fb);}
 return $ret;}
@@ -354,7 +354,7 @@ $ret.=ljc('txtbox',$id,$jv.'_inp'.$i,'ok');}
 else $ret=ljc('txtblc',$id,$jv.'_zero',$p);
 return hidden('','zero','init').btd($id,$ret);}
 
-function adm_colors(){return balb('iframe','src="plug/clrset.php" frameborder="0" width="700" height="220"','');}
+function adm_colors(){return balb('iframe',' src="plug/clrset.php" frameborder="0" width="700" height="220"','');}
 function adm_finder($p,$o){if(!$p){$p=ses('qb'); $o='disk';}
 	return divs('min-width:550px;',call_finder($p,$o));}
 function adm_share(){return plugin('share','','');}
@@ -442,7 +442,7 @@ $qb=ses('qb'); $qdu=ses('qdu'); $USE=ses('USE');
 	//if($mna)$ret.=balc('ul','panel',m_nodes_b($mna,1));
 	$ret.=hublist().br();
 	if(($auth>=6 && prms('create_hub')=='on') or $auth>=7){
-	$ret.=loged('','','create new hub','10').br();}
+	$ret.=loged('','','create new hub').br();}
 if($_GET['rename_hub'] && $auth>=5){//renmae_hub
 	if($_POST['hub_name']){
 		$newname=trim($_POST['hub_name']);
@@ -584,14 +584,10 @@ $sty='" style="width:200px;';//read
 foreach($arr as $t=>$ak){foreach($ak as $i=>$v){if($i!=22){
 	if($valmax<$i)$valmax=$i; $attr=array('name'=>'pms'.$i,'style'=>'width:200px;');
 	if($i==11 && !$_GET['m_cnfg'])
-		//$r[$t].=menuder_form_kv(affect_auth($auth),'pms'.$i.$sty,$prms[$i],'kv');
 		$r[$t].=select($attr,affect_auth($auth),'kv',$prms[$i]);
-	//elseif($i==5)$r[$t].=menuder_form_kv($gdfonts,'pms'.$i.$sty,$prms[$i],'vv');
 	elseif($i==25){$lc='msql/lang/'; $dirs=explore($lc,'dirs',1); 
 		$dirs=str_replace($lc,'',$dirs); 
-		//$r[$t].=menuder_form_kv($dirs,'pms'.$i.$sty,$prms[$i],'vv').' ';
-		$r[$t].=select($attr,$dirs,'vv',$prms[$i]);
-		}
+		$r[$t].=select($attr,$dirs,'vv',$prms[$i]);}
 	elseif($i==21)$r[$t].=txarea('pms'.$i,$prms[$i],31,5).' ';
 	else $r[$t].=input2('text" size="34','pms'.$i,$prms[$i],'').' ';
 	$r[$t].=btn('txtblc',$v).' '.btn('txtsmall2',bubble('grey','popmsqt',$hl.$i,$i)).br();}}}
@@ -636,7 +632,7 @@ else{$bkf=$_POST['from']; if(!$bkf){$bkf=1;} //echo $qb;
 if($auth==7 && $_POST['xtend']!='ok'){$wh='nod="'.$qb.'" AND ';}
 $ret.=backups($wh,$bkf,$rep,$qb);}
 if($auth>6){
-	if($_GET['bkp_sql'])$ret.=form($goto.'&bkp_sql==&save=ok',balb('textarea','name="insertsql" cols="50" rows="10"','').input2('submit','Submit','insert',''));
+	if($_GET['bkp_sql'])$ret.=form($goto.'&bkp_sql==&save=ok',balb('textarea',' name="insertsql" cols="50" rows="10"','').input2('submit','Submit','insert',''));
 	if($_GET['save']=='ok'){$toinsert=stripslashes($_POST['insertsql']);
 	$verif=msquery($toinsert);
 	if(!$verif)$ret.='error'; else $ret.=btn('txtyl','saved');}
@@ -754,7 +750,7 @@ $ret.=lj('txtbox','pop_editbrut___'.$id,'connectors').' ';
 $ret.=lj('txtbox','edit'.$id.'_delconn__4_'.$id,'text').' ';
 $ret.=lj('txtbox','edit'.$id.'_conn2__4_'.$id,'html').' ';
 $ret.=hlpbt('conn_pub').br();
-$ret.=txarea('edit'.$id,$msg,64,20,'console');
+$ret.=txarea('edit'.$id,$msg,64,20,atc('console'));
 return popup('article '.$id,$ret);}
 
 function admin_art_sav($res,$id){
@@ -775,7 +771,7 @@ case("img"):$v=""; break;
 case("re"):
 	if($v)$v=lkc("",'/?'.$goto.'off'.$cid,$ye);
 	else $v=lkc("",'/?'.$goto.'on'.$cid,$no); break;
-case("host"):$v=art_lenght($v); break;}
+case("host"):$v=art_length($v); break;}
 $ret[$id][$k]=$v;}}
 return $ret;}
 
@@ -805,18 +801,13 @@ if($_SESSION['auth']>=6){//save
 	if($_POST['hide']){$rub='_'.$_POST['old_rub'];}
 	elseif($_POST['publish'] && substr($old_rub,0,1)=="_"){$rub=substr($old_rub,1);}
 	elseif($_POST['modif']){$rub=$_POST['modif'];}
-	if($_POST['hide'] or $_POST['publish'] or $_POST['modif'])msquery('UPDATE '.$_SESSION['qda'].' SET frm="'.$rub.'" WHERE nod="'.ses('qb').'" and frm="'.$old_rub.'"');
-	if($_POST['mktag']){$r=sql('id,thm','qda','q','frm="'.$old_rub.'"'); $rid=randid();
-		while($data=mysql_fetch_array($r)){
-		$repl=str_replace(array(', '.$old_rub,$old_rub.', ',$old_rub),'',$data['thm']);
-		update('qda','thm',$repl.', '.$old_rub,"id",$data['id']);}}}
+	if($_POST['hide'] or $_POST['publish'] or $_POST['modif'])msquery('UPDATE '.$_SESSION['qda'].' SET frm="'.$rub.'" WHERE nod="'.ses('qb').'" and frm="'.$old_rub.'"');}
 if($rub){//champs
 	$valu=input2('text" size="15" maxlength="255','modif',$rub,"").hidden('old_rub','',$rub).' '.input2('submit','Submit','modif',"").' ';
 	if(substr($rub,0,1)!="_")$valu.=input2('submit','hide','hide',"").' '; 
 	else $valu.=input2('submit','publish','publish').' ';
-	$valu.=input2('submit','mktag','mktag');
 	$inp=br().btn("",$valu);
-	$ret.=lkc('txtx',htac('section').$rub,'go_to').' ';
+	$ret.=lkc('txtx',htac('cat').$rub,'go_to').' ';
 	$ret.=lkc('txtx','/?admin=all_arts&cat='.$rub,'all_arts_of:'.$rub).br();
 	$ret.=form('/?admin=categories&modif='.$rub,$inp);}
 return $ret.br();}
@@ -826,7 +817,7 @@ if($_SESSION['auth']>=6)$ret=edit_categories();
 $csa='txtbox" align="center'; $css='txtx';
 $r=sql('frm','qda','k','nod="'.ses('qb').'" ORDER BY frm');
 $rt=balc("tr","",balc("td",$csa,nms(9)).balc("td",$csa,'nb'));
-if($_SESSION['auth']>=6)$lk='/?admin=categories&modif='; else $lk='/section/';
+if($_SESSION['auth']>=6)$lk='/?admin=categories&modif='; else $lk='/cat/';
 if($r)foreach($r as $k=>$v){$lnkcat=lka($lk.$k,$k);
 $rt.=bal("tr",balc("td",$css,$lnkcat).balc("td",$css,$v));}		
 $ret.=bal("table",$rt);
@@ -875,7 +866,7 @@ elseif($USE!=$qb && $USE!="" && $autologok!=$USE && $autologok)
 	$alert.=lkc('txtx','/?log=on','autolog').' ';
 elseif($USE==$qb && !$userhub && prmb(11)>=4)
 	$alert.=lkc("txtred","/?log=create_hub","create_hub!");
-elseif($USE=="")$reta=lkc('txtx',htac('module').'Home',$qb).br().br().loged($USE,$_SESSION['iq'],"",7).br();
+elseif($USE=="")$reta=lkc('txtx',htac('module').'Home',$qb).br().br().loged($USE,$_SESSION['iq'],'').br();
 //admin_menu
 $aff=adminauthes();
 if($admin=="=")$_SESSION['set']=$_GET['set']=$USE?"Global":"User";

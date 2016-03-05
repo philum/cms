@@ -322,23 +322,6 @@ if($p[1])$t.=".".$p[1].' ';
 if($p[2])$t.=$p[2].' ';
 return $t;}
 
-function mnu_line_color($d,$p){$r['']='';
-$klr=$_SESSION['clrs'][$_SESSION['prmd']];
-$k=explode("|",$d); $nb=count($klr);
-for($i=0;$i<=3;$i++)if($k[$i]=='undefined')$k[$i]='';
-for($i=0;$i<=$nb;$i++){//$r[]=$i;
-	$sty='" style="background-color:#'.$klr[$i].';';
-	if($k[0]==$i && $i)$h1=$i.$sty; if($k[1]==$i && $i)$h2=$i.$sty;
-	if($k[2]==$i && $i)$h3=$i.$sty; $r[$i.$sty]=$i;}
-//$ret=menuder_form_kv($r,$p.'1" id="'.$p.'1',$h1,"vk").' ';
-//$ret.=menuder_form_kv($r,$p.'2" id="'.$p.'2',$h2,"vk").' ';
-//$ret.=menuder_form_kv($r,$p.'3" id="'.$p.'3',$h3,"vk");
-//$r=array_flip($r);
-$ret=select(atd($p.'1'),$r,'kv',$h1).' ';
-$ret.=select(atd($p.'2'),$r,'kv',$h2).' ';
-$ret.=select(atd($p.'3'),$r,'kv',$h3);
-return $ret;}
-
 function petit_clr($t,$clr){
 if(!$t)$t=0; $a=explode("|",$t);
 foreach($a as $v){if(!$v)$v="-";
@@ -503,9 +486,7 @@ if($v==3)return lkt('txtsmall2','http://new.myfonts.com/','myfonts').' ';}
 
 function font_set_cat($k,$v,$go){
 $ret=br(); $ml['-']=1; if($_SESSION['fntcat'])$ml+=$_SESSION['fntcat'];
-//$ret.=balise("select",array(5=>'',16=>"width:80px;",15=>'jumpslct(\'fntcat'.$k.'\',this)'),batch_defil($ml));
 $ret.=select('style="width:80px;" onchange="jumpslct(\'fntcat'.$k.'\',this)"',$ml,'kk');
-//$ret.=jump_btns('fntcat'.$k,addslashes(implode("|",array_keys_b($_SESSION['fntcat']))),'');
 $ret.=input2('text','fntcat" size="8" id="fntcat'.$k,$v,'');
 $ret.=lj('txtred',$go.'_cat___fntcat'.$k,'ok').' ';
 return $ret;}
@@ -673,20 +654,41 @@ $ret.=btn('txtsmall2','element:').input(1,'cl3'.$k.$sty,$defs[$k][2],'').' ';
 $ret.=lj('popbt','css'.$k.'_stylsav____'.$k.'_3__'.$ids,'save').br().br();
 return $ret;}
 
+function select_clr($p,$n){//stylclr
+$r=$_SESSION['clrs'][$_SESSION['prmd']]; $n=count($r);
+for($i=0;$i<=$n;$i++){$t=mnu_line_t($r[$i],$i);
+	$ret.=lj('','bt'.$p.'_stylsetclr___'.$r[$i].'_'.$i.'_'.$p,$t);}
+return $ret;}
+
+function mnu_line_t($clr,$t,$o=''){if($clr)$cb=invert_color($clr,1);
+if($o)$s='border:1px solid gray; ';
+return divs($s.'padding:2px 4px; color:#'.$cb.'; background-color:#'.$clr,$t);}
+
+function mnu_line_bt($clr,$n,$p){//stylsetclr
+$h=hidden('',$p,$n); $t=mnu_line_t($clr,$n);
+return togbub('stylclr',$p.'_'.$n,$t).$h;}
+
+function mnu_line_color($d,$p){$r=explode('|',$d);//txt|link|hover
+$kr=$_SESSION['clrs'][$_SESSION['prmd']]; $n=count($klr);
+for($i=0;$i<3;$i++){$clrn=$r[$i]=='undefined'||!$r[$i]?'0':$r[$i]; $nid=$i+1;
+	$ret.=span(atc('cell').atd('bt'.$p.$nid),mnu_line_bt($kr[$clrn],$clrn,$p.$nid));}
+return $ret;}
+
 function facil_colors($defs,$k,$url){
-$t=btn("txtsmall",'text').' | '.btn("txtsmall",'link').' | '.btn("txtsmall",'hover').br();
-$t.=btn("txtsmall",'color').' '.mnu_line_color($defs[$k][3],'clr'.$k).br();
-$t.=btn("txtsmall",'backg').' '.mnu_line_color($defs[$k][4],'bkg'.$k).br();
-$t.=btn("txtsmall",'border').' '.mnu_line_color($defs[$k][5],'bdr'.$k).' ';
+$t=divc('row',btn('cell','').btn('cell','text').btn('cell','link').btn('cell','hover'));
+$t.=divc('row',btn('cell','color').mnu_line_color($defs[$k][3],'clr'.$k));
+$t.=divc('row',btn('cell','backg').mnu_line_color($defs[$k][4],'bkg'.$k));
+$t.=divc('row',btn('cell','border').mnu_line_color($defs[$k][5],'bdr'.$k));
+$ret=divc('table',$t);
 foreach(array('clr','bkg','bdr') as $va){$rb.=$va.$k.'1|'.$va.$k.'2|'.$va.$k.'3|';}
-$t.=lj('popbt','css'.$k.'_stylsav____'.$k.'_1__'.$rb,'save').br();
-return form($url.'#'.$k,$t);}
+$ret.=lj('popbt','css'.$k.'_stylsav____'.$k.'_1__'.$rb,'save').br();
+return $ret;}
 
 function facil_css($k,$url,$v){//save_css_j//stylsav
 $v=str_replace("} ","}\n",$v);//smart_css
 $v=str_replace("; ",";\n",$v);
 $t=f_inp_edit_css($k);
-$t.=txarea('cssarea'.$k,$v,60,'10" class="console').' ';
+$t.=txarea('cssarea'.$k,$v,60,10,atc('console')).' ';
 return form($url.'#'.$k,$t);}
 
 function facil_globalc($k,$nc){$r=css_default(1);

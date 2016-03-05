@@ -14,5 +14,6 @@ $r["legal_msg"]=array('The submitted informations will not be sold or distribute
 $r["sign"]=array('Sign the petition');
 $r["actually"]=array('Actually _NB signatures');
 $r["entries"]=array('name,mail,web,city,country');
+$r[1]=array('');
 
 ?>

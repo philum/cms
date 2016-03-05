@@ -35,11 +35,8 @@ return $ret;}
 //plug
 //0:usage/1:dir/2:loadable/3:callable/4:interface/5:state/6:private
 function bub_plug($dr){$qb=ses('qb'); $ath=auth(6); $dr=strprm($dr);
-$r=msql_read('system','program_plugs','','1'); 
-foreach($r as $k=>$v){
-	//if($v[2])//loadable
-	//if($v[3])//callable
-	//if($v[4])//interface
+$r=msql_read('system','program_plugs','','1');
+foreach($r as $k=>$v){//if($v[2])//loadable //if($v[3])//callable //if($v[4])//interface
 	if(!$v[5] or $ath)//state
 	if(substr($v[1],0,6)!='system')//sys
 	if(!$v[6] or $ath or $v[6]==$qb or substr($v[1],0,6)=='public')//private
@@ -48,10 +45,11 @@ foreach($r as $k=>$v){
 	else $ret[]=array($k,'plug',$k,'','','',$dr.'/'.$v[1],'conn');}
 return $ret;}
 
+
 //dev
 function bub_dev(){$r=array('dev','lab','prod');
 //$ret[]=array('cache','ajax','popup','rebuild__3xx','','','dev','reload');
-foreach($r as $k=>$v)$ret[]=bub_l($v,'link','/dev/'.$v,'dev','phi2');
+if(auth(4))foreach($r as $k=>$v)$ret[]=bub_l($v,'link','/dev/'.$v,'dev','phi2');
 if(auth(6))$ret[]=bub_l('push','link','/?dev2prod==','dev','down');
 if(auth(7))$ret[]=bub_l('publish','linkt','/plug/publish_site','dev','export');
 return $ret;}
@@ -83,14 +81,14 @@ $r=classtag_arts($d);
 if($id && $r)$r=array_flip($r);
 if($r)foreach($r as $k=>$v)if($k)//id
 	//$ret[]=array($k,'bub','seekart',$d.'-'.$k,'','',$d,'tag');
-	$ret[]=array($k,'ajax','popup_getcontent___'.$d.'_'.$k,'','','',$d,'tag');
+	$ret[]=array($k,'ajax','popup_api___'.$d.':'.$k,'','','',$d,'tag');
 return $ret;}
 //id find classes
 function seek_merge($d,$ret){$id=ses('read');
 $r=art_tags($d); //p($r);
 if($r)foreach($r as $k=>$v)if($k)//id
 	$ret[]=array($k,'bub','seekart',$d.'-'.$k,'','','','tag');
-	//$ret[]=array($k,'ajax','popup_getcontent___'.$d.'_'.$k,'','','','','tag');
+	//$ret[]=array($k,'ajax','popup_api___'.$d.':'.$k,'','','','','tag');
 return $ret;}
 function bub_seek(){$r=explode(' ','tag '.prmb(18)); req('art');
 	foreach($r as $k=>$v)$ret=seek_merge($v,$ret);
@@ -143,7 +141,7 @@ case('helps'): $dir='lang/fr'; $nod='helps'; break;}
 return bub_msql($cat,$dir,$nod,$tabl);}
 
 function bub_msql_fast($r,$cat){$qb=ses('qb');
-$r[]=array('backoffice','link','blank','/msql/users','','',$cat,'link');
+$r[]=array('backoffice','linkt','','/msql/users','','',$cat,'link');
 $r[]=array('popup','ajax','popup','msql___users_'.ses('qb'),'','',$cat,'window');
 $r[]=array($qb,'ajax','bubble','popbub','msql','',$cat.'/'.$qb,'');
 $r[]=array('design','ajax','bubble','popbub','msql','',$cat.'/design','');
@@ -206,6 +204,13 @@ $r=msql_read('lang','admin_menus','',1);
 foreach($r as $k=>$v)$ret.=popbub('admin',$k,$arw.mimes($k).'&nbsp;'.$v,'',1);
 return $ret;}
 
+//login
+function bub_exec($d){
+if($d=='login'){req('pop'); return div(atd('nob'),loged('','',''));}
+if($d=='cache'){req('boot,spe,art'); $_SESSION['rqt']=''; $_GET['refresh']=1; 
+	return li(cache_arts());}
+}
+
 //user
 function bub_adm_user_fast(){
 if(ses('USE'))$ret=popbub('user','',mimes('login').'&nbsp;'.ses('USE'),'',1);
@@ -239,7 +244,7 @@ return $ret;}
 //admin-menu
 function bub_adm_admin($dir){//case:admin
 $r=sesmk('adminauthes','',1); $rm=msql_read('lang','admin_authes','',1);
-$ret[]=array('backoffice','link','blank','/admin/console','','','Global','link');
+$ret[]=array('backoffice','linkt','','/admin/console','','','Global','link');
 if($r)foreach($r as $k=>$v){
 if(strdeb($k,'/')==strdeb($dir,'/')){
 	if($k=='Microsql')$ret=bub_msql_fast($ret,$k);
@@ -335,6 +340,7 @@ case('addart'): return bub_addart_btn();break;
 case('ucom'): return bub_ucom_btn();break;
 case('arts'): return bub_adm_arts_fast(); break;
 case('user'): return bub_adm_user_fast(); break;
+case('exec'): return bub_exec($d); break;
 case('hubs'): $r=bub_hubs_fast(); break;
 case('bub'): $r=bub_slct($d); break;}
 if(!$r)$r=bub_root_slct($d,$dir); //if($d==navs)p($r);

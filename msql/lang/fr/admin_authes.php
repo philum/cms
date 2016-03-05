@@ -45,7 +45,7 @@ $r["messages"]=array('messages');
 $r["mail"]=array('mail admin');
 $r["password"]=array('mot de passe');
 $r["members"]=array('membres');
-$r["editags"]=array('outils de tags');
+$r["tags"]=array('outils de tags');
 $r["icons"]=array('iconographie');
 $r["pictos"]=array('pictographie');
 

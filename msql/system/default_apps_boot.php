@@ -2,7 +2,7 @@
 //philum_microsql_default_apps_boot
 $r["_menus_"]=array('button','type','process','param','option','condition','root','icon','hide','private');
 $r[1]=array('Accueil','link','','/module/Home','','','','home','','');
-$r[2]=array('cache','ajax','popup','rebuild__3xx','','','boot/reset','loading','','4');
+$r[2]=array('cache','ajax','ajax','rebuild__3xx','','','boot/reset','loading','','4');
 $r[3]=array('mini','link','','/?rebuild_img==','','','boot/reset','loading','','4');
 $r[4]=array('login','ajax','popup','loged______1','','','boot','logout','','0');
 $r[5]=array('reload','link','','/reload','','','boot','reload','','');

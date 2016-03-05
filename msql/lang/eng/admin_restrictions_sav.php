@@ -1,5 +1,5 @@
 <?php
-//philum_microsql_admin_restrictions
+//philum_microsql_admin_restrictions_sav
 $r["_menus_"]=array('name','description');
 $r[1]=array('trackbacks','comments opened to public');
 $r[2]=array('moderation','comments are moderated (auth 4)');
@@ -17,7 +17,8 @@ $r[13]=array('p_balise','use balise \'p\' or \'br\' (\'br\' make easier to copy 
 $r[14]=array('nb_arts','number of articles');
 $r[15]=array('captcha','captcha');
 $r[16]=array('mini limits','place limits of image outside the limits of thumbnail');
-$r[17]=array('2 cols','articles on 2 columns');
+$r[17]=array('2 cols','articles on multiples columns, as set by the css \'cols\' ;
+only long content is affected');
 $r[18]=array('public defcons','Définitions for importations of articles. 
 The public base represent a risk to loose his datas.
 Using private Defcon let upgrade from public base and informe it of new entries. (in 01L editor)');
@@ -44,7 +45,7 @@ $r[38]=array('explicit url','use explicits URL with title and not with ID_art');
 $r[39]=array('continuous scrolling','call pages in ajax');
 $r[40]=array('rss','article in rss format');
 $r[41]=array('full text','full article in category (pub3)');
-$r[42]=array('usertags','user_tags');
+$r[42]=array('usertags','tags of users ');
 $r[43]=array('category','category of artile');
 $r[44]=array('Facebook','export: Facebook');
 $r[45]=array('Twitter','export: Twitter');
@@ -54,7 +55,7 @@ $r[48]=array('login','display login button to everybody');
 $r[49]=array('words','detected knowns words');
 $r[50]=array('views','number of views');
 $r[51]=array('open admin','open admin menu to public');
-$r[52]=array('favorites','add to favorites');
+$r[52]=array('fav','add article to favs');
 $r[53]=array('save in ajax','save articles in ajax');
 $r[54]=array('date travel','displaye date witl link to timetravel');
 $r[55]=array('template pubs','activate the user template');
@@ -83,14 +84,16 @@ $r[77]=array('nbarts','nb of articles');
 $r[78]=array('affiliate titles','display parents articles in page_titles');
 $r[79]=array('addart','add fastly article from url');
 $r[80]=array('arts','menu of all articles in cache');
-$r[81]=array('favs','plugin favorites');
+$r[81]=array('favs','menu to favorites');
 $r[82]=array('lang','selector of languages');
 $r[83]=array('ucom','console for modules');
 $r[84]=array('timetravel','travel in archives');
 $r[85]=array('desktop','boot apps of desk type (load desktop)');
-$r[86]=array('comment','add comment');
+$r[86]=array('comment','open comments');
 $r[87]=array('empty thumbs','image of nothing');
 $r[88]=array('template read','activate a template dedicated to the read mode');
 $r[89]=array('meta','meta environment of current article');
+$r[90]=array('like','vote for an article');
+$r[91]=array('poll','system of polls');
 
 ?>

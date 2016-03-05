@@ -3,13 +3,14 @@
 //income:$g;$aqb;$db
 //tests();
 #Boot
-secure_inputs(); setget();
+$cache='';
+secure_inputs();
 $_SESSION['stime']=$stime; $_SESSION['dayx']=time();
-if($_GET['rl']=='=' && $_SESSION['sbdm'])//good_subdom
-	relod(subdom($_GET['id']).'/'.$_GET['id'].'/logon');
+//if($_GET['rl']=='=' && $_SESSION['sbdm'])//good_subdom
+//	relod(subdom($_GET['id']).'/'.$_GET['id'].'/logon');
 //reload
 if(!$_SESSION['qb'] or !$_SESSION['qd'] or !$_SESSION['qda'] or $_GET['qd'] or $_GET['id'] or $_GET['nbj'] or !$_SESSION['mods'] or $_GET['refresh']){$cache='ok'; reset_ses(); prog($g,1);}
-if($_GET['dev']){$_SESSION['dev']=$_GET["dev"]; relod('/?id==');}
+if($_GET['dev']){$_SESSION['dev']=$_GET["dev"]; relod('/reload');}
 //master_params
 if(!$_SESSION['qd'] or $cache)master_params('params/_'.$db,$qd,$aqb,$subd);
 if(!$_SESSION['master'])$_SESSION['master']=sql('name','qdu','v','id="1"');
@@ -17,9 +18,9 @@ if(!$_SESSION['philum'])$_SESSION['philum']=msql_read('system','program_version'
 date_default_timezone_set(prms('timez'));
 if($_SESSION['dev'])error_report();
 if(!$_SESSION['mn'] or $cache)define_hubs();//hubs
-if(!$_GET['nbj'] && $cache)define_qb();//qb::need $mn
-if(isset($_GET['rebuild_img']))$_GET['read']=$_SESSION['read'];
-$read=$_GET['read'];
+if($cache)define_qb();//qb::need $mn
+//if(isset($_GET['rebuild_img']))$_GET['read']=$_SESSION['read'];
+$read=get('read');
 $cache=deductions_from_read($read,$cache);//deductions
 if(!$_SESSION['qbin'] or $cache)define_config();//qb_in
 if($_SESSION['rstr'][22])block_crawls();//crawl
@@ -58,8 +59,6 @@ if($_SESSION['desgn']){if(!$_GET['admin'])$wth=' watch:'.$_SESSION['prmd'];
 //dev
 $_POST['popadm']['alert']=$_GET['dev2prod']?dev2prod():btd('alert','');
 if(ses('dev'))$_POST['popadm']['chrono']=btn('small',round(mtime()-$stime,3));
-#Load
-$_SESSION['load']=define_load();
 #Eye
 if($_SESSION['stsys']!='no')eye();
 #structure
@@ -71,9 +70,11 @@ elseif(rstr(85)){Head::add('jscode',desktop_js('boot'));//$_SESSION['desktop']=1
 else $out=build_blocks();
 //meta
 $host=host();
-$meta['favicon']='favicon.ico';//favicon();
-if($_GET["admin"])$meta["title"]=$_GET['admin'];
-elseif($_GET["msql"])$meta["title"]=$_GET['msql'];
+$meta['favicon']='favicon.ico';
+if($_GET["admin"]){$meta["title"]=$_GET['admin'];
+	$meta['favicon']=uicon('screen_4to3_16','picol/16');}
+elseif($_GET["msql"]){$meta["title"]=$_GET['msql'];
+	$meta['favicon']=uicon('database_16','picol/16');}
 elseif($_SESSION["read"]){$meta["title"]=$_SESSION["raed"];
 	$meta["descript"]=$_SESSION["descript"];
 	$meta["img"]=$host.'/imgc/'.$_SESSION["imgrel"];}

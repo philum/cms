@@ -80,7 +80,7 @@ relod('/?read='.$erz);}}
 function delete_art(){$erz=$_GET["delete_art"]; $USE=$_SESSION['USE'];
 if($erz && $USE && ($USE==$_SESSION['author'] or $_SESSION["auth"]>=4)){
 delete("qda",$erz); delete("qdm",$erz); unset($_SESSION['rqt'][$erz]); 
-relod('/?section='.$_SESSION['frm']);}}
+relod('/?cat='.$_SESSION['frm']);}}
 
 function save_img(){
 $qb=$_SESSION['qb']; $read=$_SESSION['read'];

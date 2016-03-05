@@ -1,9 +1,9 @@
 <?php
-//philum_microsql_admin_restrictions
+//philum_microsql_admin_restrictions_sav
 $r["_menus_"]=array('name','description');
 $r[1]=array('commentaires','ouverture des commentaires au public');
 $r[2]=array('modération','modération des commentaires (auth 4)');
-$r[3]=array('champ temporel','système de champ temporel (périodicité)');
+$r[3]=array('champ temporel','système de champ temporel (périodicité), d\'après param16');
 $r[4]=array('tags','affiche des infos sur l\'article');
 $r[5]=array('mode preview','affiche un article en mode \'preview\' (pub2)');
 $r[6]=array('publicateur','qui a publié l\'article');
@@ -17,7 +17,8 @@ $r[13]=array('balise p','utiliser les balises \'p\' ou \'br\' (\'br\' facilite l
 $r[14]=array('nombre d\'articles','affiche le nombre d\'articles');
 $r[15]=array('captcha','captcha');
 $r[16]=array('miniature pleine','place les limites de l\'image à l\'extérieur de la miniature');
-$r[17]=array('2 colonnes','article sur 2 colonnes (obsolète, désactivé, utiliser désormais css)');
+$r[17]=array('2 colonnes','article sur plusieurs colonnes, d\'après le css \'cols\' ; 
+seuls les longs contenus sont affectés');
 $r[18]=array('définitions publiques','Définitions d\'importation. Choisir la base \'public\' permet d\'obtenir une liste complétée par les utilisateurs, avec le risque de perdre les enregistrements qu\'on y a faits. Choisir la base privée permet d\'y importer la base publique régulièrement et d\'informer la base publique des ajouts. (dans l\'éditeur 01L)');
 $r[19]=array('_img1','injecte la variable _IMG (première image, qui sert de miniature) dans le template avant son traitement, afin que Codeline puisse produire une miniature personnalisée : [_IMG1§100/100:thumb]');
 $r[20]=array('home','affiche le menu admin home');
@@ -42,7 +43,7 @@ $r[38]=array('url explicite','utilise les URL explicites avec le titre au lieu d
 $r[39]=array('défilement continu','la navigation entre les pages se fait en ajax');
 $r[40]=array('rss','article au format rss');
 $r[41]=array('article entier','affiche l\'article en entier dans le déroulé (pub3) ');
-$r[42]=array('classes de tags','user_tables');
+$r[42]=array('tags utilisateur','tags ajoutés par l\'utilisateur ');
 $r[43]=array('categorie','rappel de la catégorie à laquelle appartient un article');
 $r[44]=array('facebook','export: Facebook');
 $r[45]=array('twitter','export: Twitter');
@@ -52,7 +53,7 @@ $r[48]=array('user','affiche le bouton login à tout le monde');
 $r[49]=array('mots connus','Mots connus détectés dans l\'article');
 $r[50]=array('vues','nombre de vues d\'une page');
 $r[51]=array('apps','ouvre le menu Apps au public');
-$r[52]=array('favoris','boutons favoris');
+$r[52]=array('fav','ajouter aux favoris');
 $r[53]=array('enregistrer en ajax','enregistrer les articles en ajax');
 $r[54]=array('date travel','affiche la date avec un lien vers timetravel');
 $r[55]=array('template pubs','pubs d\'articles :
@@ -85,14 +86,16 @@ $r[77]=array('nbarts','nombre d\'articles');
 $r[78]=array('parents','afficher articles parents dans le module page_titles');
 $r[79]=array('addurl','ajout rapide d\'article au lieu du formulaire');
 $r[80]=array('arts','menu déroulant des articles en cache');
-$r[81]=array('favs','plugin favoris');
+$r[81]=array('favs','menu des favoris');
 $r[82]=array('langues','menu des langues détectées');
 $r[83]=array('ucom','console pour les modules (dev)');
 $r[84]=array('timetravel','menu de voyage dans le temps');
 $r[85]=array('desktop','démarre des apps de type desk (affiche le bureau)');
-$r[86]=array('track','ajoute commentaire');
+$r[86]=array('track','ouvrir commentaire');
 $r[87]=array('miniature vide','permet d\'égaliser les colonnes');
 $r[88]=array('template read','active un template dédié au mode lecture');
 $r[89]=array('meta','environnement meta de l\'article en cours');
+$r[90]=array('like','appréciation publique');
+$r[91]=array('poll','système de votes');
 
 ?>

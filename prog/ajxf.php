@@ -8,13 +8,13 @@ $d=sql('img','qda','v','id='.$id); $r=explode('/',$d);
 foreach($r as $k=>$v)if($v==$p)$n=$k;
 $ima=$r[$n-1]?$r[$n-1]:$r[$k]; $imb=$r[$n+1]?$r[$n+1]:$r[1];
 if($ima){list($w,$h)=fwidth('img/'.$ima); $wd='_'.$w.'_'.$h.'_'.$sz;
-	$ret=lj('','pop_photo__15_'.ajx('img/'.$ima,'').$wd,picto('kleft')).' ';}
+	$ret=lj('','popup_photo__x_'.ajx('img/'.$ima,'').$wd,picto('kleft')).' ';}
 if($imb){list($w,$h)=fwidth('img/'.$imb); $wd='_'.$w.'_'.$h.'_'.$sz;
-	$ret.=lj('','pop_photo__15_'.ajx('img/'.$imb,'').$wd,picto('kright')).' ';}
+	$ret.=lj('','popup_photo__x_'.ajx('img/'.$imb,'').$wd,picto('kright')).' ';}
 if($k>1)return $ret;}
 
 function photo_screen($im,$w,$h,$sz){$ng=ses('negcss')?'_neg':'';
-$klr=$_SESSION['clrs'][$_SESSION['prmd'].$ng]; $clr=hexrgb($klr[1],9);
+$klr=$_SESSION['clrs'][$_SESSION['prmd'].$ng];
 list($sw,$sh,$ph,$id)=explode('-',$sz); $sw-=60; $sh-=40;
 $id=is_numeric($id)?$id:$_SESSION['read']; if(!$id)list($hub,$id,$nm)=explode('_',$im); 
 if(!$w && !$h)list($w,$h)=fwidth($im);
@@ -23,22 +23,15 @@ if($r1>$r2){if($w>$sw){$ml=0; $nw=$sw; $nh=$h*($sw/$w); $mt=($sh-$nh)/2;}}
 else{if($h>$sh){$mt=0; $nh=$sh; $nw=$w*($sh/$h); $ml=($sw-$nw)/2;}}
 if($id)$o=photos_art_bt(substr($im,4),$sz,$id); $rid='imz'.randid();
 $o.=lkt('',$im,picto('url')).' ';
-if($w>$nw or $h>$nh)$o.=lj('','popup_overim__x_'.ajx($im).'_'.$sz,picto('fullscreen')).' ';
-$cs1=atd('popu').ats('position:absolute; width:'.($nw).'px; height:'.($nh).'px; box-shadow:0 0 100px 10px #000; z-index:-1; background:'.$clr.';"');
-$popa=popa(' ',$o,'background:'.$clr.'; padding:0 4px;');//strrchr_b($im,'/')
+if($w>$nw or $h>$nh)$o.=lj('','pagup_overim__x_'.ajx($im).'_'.$sz,picto('fullscreen')).' ';
+$cs1=atd('popu').ats('position:absolute; width:'.($nw).'px; height:'.($nh).'px; box-shadow:0 0 100px 10px #000; z-index:-1;"');
+$popa=popa(' ',$o);//strrchr_b($im,'/')
 if(substr($im,0,4)!='http')$im='/'.$im;
 return $popa.div($cs1,divd($rid,image($im,round($nw),round($nh))));}
 
-function photo_viewer($im,$w,$h,$sz){list($sw,$sh)=explode('-',$sz);
-if(substr($im,0,4)=='http'){list($srv,$im)=split_one('/',str_replace('http://','',$im));}
-else $srv=$_SERVER['HTTP_HOST'];
-$ob='<embed src="fla/viewer.swf" width="'.$sw.'" height="'.$sh.'" FlashVars="&servr=http://'.$srv.'/&rot='.$im.'&imw='.$w.'&imh='.$h.'" quality="high" allowfullscreen="true" />';
-$cs1=atd('popu').ats('position:absolute; width:'.$sw.'px; height:'.$sh.'px; box-shadow:2px 2px 10px #555;"');
-$popa=popa(strrchr_b($im,'/'),photos_art_bt(substr($im,4,$id),$sz),'background:rgba(255,255,255,0.9); padding:0 4px;');
-return $popa.div($cs1,$ob);}
-
-function overim($im,$sz){list($sw,$sh)=explode('-',$sz);
-return div(ats('overflow:auto; width:'.$sw.'px; height:'.$sh.'px'),image($im));}
+function overim($im,$sz){//list($sw,$sh)=explode('-',$sz);
+$s='overflow:auto; text-align:center; width:100%; height:calc(100% - 28px);';
+return div(ats($s),img($im,''));}
 
 function video_viewer($iv,$cr_div,$n){
 $r=$_SESSION['iv'.$iv]; $_SESSION['cur_div']=$cr_div;
@@ -107,12 +100,12 @@ return menuder_jb($r,$id,$rid,$opt);}
 function menuder_inp($id,$rid,$v,$pre,$o){//assistant($id,$j,$jv,$va,$chk);
 if($o==1 or $o==3)$bt='getbyid(\''.$pre.$rid.'\').innerHTML=val;';
 return input(1,'adc'.$rid,'').lja('popbt','var val=getbyid(\'adc'.$rid.'\').value; 
-if(val){'.$bt.' getbyid(\''.$id.'\').value=ajxget(val);} Close(\'popup\');','ok');}
+if(val){'.$bt.' getbyid(\''.$id.'\').value=ajx(val);} Close(\'popup\');','ok');}
 
 function slct_r($d,$o,$vrf=''){
 switch($d){case('parent'):$r=newartparent(); break;
 	case('category'):$r=$_SESSION['line']; if($r)ksort($r); break;//$r=array(nms(9)=>1); 
-	case('tag'):$r=find_meta($o,30); if($r)ksort($r); break;//$r=array('tag'=>1); 
+	case('tag'):$r=tags_list_nb($o,30); break;//$r=array('tag'=>1); 
 	case('lang'):$r=array_flip(explode(' ',prmb(26))); $cl=1; break;
 	case('msql'):req('msql'); list($dr,$nd,$vn)=murl_vars($o); $r=msql_read($dr,$nd,'',1);
 		//echo $o.'-'.$vrf.':'.$dr.'/'.$nd.'='.$vn.br(); 
@@ -136,7 +129,8 @@ if($d=='msql')$o='1'; elseif($d=='msqlc')$o='';
 elseif($d=='pfuncb')$o=3; elseif($d=='pfunc')$o=1; elseif($d=='tag')$o=1; 
 if(is_array($r))foreach($r as $k=>$v){$c=$k==$vrf?'active':''; $k=addslashes($k);
 	if(is_array($v) or is_numeric($v))$v=$k; $v=stripslashes($v);
-	if(strpos($d,'|')===false)$t=$k?$k:$d; elseif($k)$t=$k; elseif($vrf)$t=$vrf; else $t='';//fix
+	if(strpos($d,'|')===false)$t=$k?$k:$d; elseif($k)$t=$k; elseif($vrf)$t=$vrf; else $t='';
+	if($t=='-')$t='...';
 	if($v)$ret.=ljb($c,'selectj',$id.'\',\''.$k.'\',\''.ajx($t).'\',\''.$o,$v);}
 if($o>=2)$ret.=menuder_inp($id,$id,$vrf,'bt',$o);
 return divc('list',$ret);}
@@ -148,7 +142,7 @@ if(substr($f,0,4)!='http' && $f)$f='http://'.$f; //$read=$_SESSION['read'];
 list($defid,$r)=verif_defcon($f); if($f)$auv=auto_video($f);
 if($defid or $auv){req('sav,boot'); //if(rstr(10))
 	$_POST['ib']=$ib; $_POST['pub']=$pub; save_art(); $ret=$_GET['read'];}//
-else $ret=popup('Article',f_inp("",$f));
+else $ret=popup('Article',f_inp('',$f));
 return $ret;}
 
 function addart_new($msg,$id,$res){req('boot');
@@ -185,7 +179,7 @@ foreach($r as $k=>$v)if($v!='/')$rb[$v]+=1; arsort($rb);
 foreach($rb as $k=>$v)$ret[$k]='('.$v.') '.suj_of_id($k);
 return $ret;}
 
-function newartcat($url){$r=find_meta('cat',30); ksort($r); $u=ajx($url);//saveiec
+function newartcat($url){$r=find_cat(30); ksort($r); $u=ajx($url);//saveiec
 $head=select_j('addib','parent',$v,0,picto('topo'),1).' '; //parent_slct('addib')
 $vrf=$_SESSION['vaccat'][$url];
 foreach($r as $k=>$v){if($k==$vrf)$c='active'; else $c='';
@@ -219,7 +213,7 @@ if($_SESSION['USE'])$ret.=hidden('','vmfrom'.$id,$_SESSION['qbin']['adminmail'])
 else{$ret.=label('vmfrom'.$id,'popw','',nms(68).':').' ';
 $ret.=input(1,'vmfrom'.$id,'','" size="24').br();}
 if(auth(0))$ret.=lj('txtbox','popup_plup___mail_mail*prep_vmto'.$id,nms(36));
-else $ret.=btn('txtbox',nms(36));
+else $ret.=btn('txtx',nms(36));
 $ret.=input(1,'vmto'.$id,'','" size="24').br();
 $ret.=txarea('vmsg'.$id,'',44,2);
 return divd('vsd'.$id,$ret);}
@@ -362,8 +356,6 @@ return $ret;}
 function mbd_forms($d){
 if($d=='microform')$r=array('button'=>'ok','input'=>'value','text'=>'message','mail'=>'mail','date'=>'day','list'=>'choice1/choice2','radio'=>'choice1/choice2','hidden'=>'value','uniqid'=>'uid');
 if($d=='formail')$r=array('check'=>'case','input'=>'Name','mail'=>'Email','text'=>'Message','button'=>'Send');
-//$opts=batch_defil_kv(array_flip($r),'','kv');
-//$ret=balise("select",array(3=>'cna',5=>"",15=>'jumpslct(\'cnb\',this)'),$opts);
 $ret=select(array('id'=>'cna','onchange'=>'jumpslct(\'cnb\',this)'),array_flip($r),'kv');
 $ret.=input(1,'cnb','','').' ';
 $ret.=ljb('popbt','jumpMenu_addtext','cnv_cna_cnb_=_,','add').br();
@@ -469,9 +461,11 @@ return $ret;}
 
 #admin
 //edit_art
-function artedit($id){req('art,tri'); 
+function artedit($id,$sz=''){
 $_SESSION['read']=$id; $_GET['continue']="edit";
-return f_inp('','');}
+//list($w,$h)=explode('-',$sz); $mxw=currentwidth(); if($w>$mxw)$w=$mxw;
+//if($w)$sty='width:'.($w-26).'px;';
+return divs($sty,f_inp('',''));}
 
 function artwedit($id){req('tri,pop');
 $clr=$_SESSION['clrs'][$_SESSION['prmd']];
@@ -547,7 +541,8 @@ return css_code('body {'.$ret.'}
 	#page {padding:0; margin:0 40px 0 0; border:0; box-shadow:none;}');}
 
 function desktop_root($id,$va,$opt,$optb){poplist();
-if($id=='varts' or $id=='arts' or $id=='files')req('mod');
+if($id=='varts' or $id=='files')req('mod');
+if($id=='arts')req('api,pop,spe,art,tri,mod');
 $r=desktop_apps($id,$va,$opt,$optb); $ret=desktop_build_ico($r,'icones');
 return $ret.divs('clear:left;','');}
 
@@ -605,7 +600,7 @@ elseif($op=="backup"){$id=$_SESSION["read"];
 elseif($op=='disk')$ret=call_finder(ses('qb'),'disk///disk/conn//mini');
 elseif($op=='icons')$ret=call_finder('','disk///icon/conn//mini');
 else $ret=conn_props_b($op);
-return $ret;}
+return divs('min-width:300px;',$ret);}
 
 //pdf
 function pdfreader_j($d,$t){
@@ -638,7 +633,7 @@ if($r)foreach($r as $k=>$v){$i++;
 	$kb=ajx($k,''); $cat=$_SESSION['vaccat'][$k];
 	$rid='bth'.randid(); 
 	$btb=ljc('','popup','ajxf_batch*preview_'.$kb,picto('view'));
-	$btb.=slct_cat($rid,$cat,$i);//menuder_jb
+	$btb.=slct_cat($rid,$cat,$i);
 	//$btb.=select_j($rid,'category',$cat,3,$cat?$cat:picto('list'));
 	$btb.=saveiec($kb,$cat,$rid);
 	$btb.=lj('','popup_search__3_'.ajx($suj).'_',picto('search'));
@@ -646,8 +641,8 @@ if($r)foreach($r as $k=>$v){$i++;
 	$btb.=lj('',$idt.'_batch___'.$kb.'_x',picto('del')).' ';
 	$btb.=btn('small',http_domain($k)).br();
 	$ret.=divc('small',$btb.$suj);}
-if($d!='in')$ret=div(atd($idt).ats('padding:2px;'),$ret);
-return scroll_b($i,$ret,10,'');}
+if($d!='in')$ret=div(atd($idt).ats('padding:2px; min-width:240px;'),$ret);
+return scroll_b($i,$ret,10);}
 
 function slct_cat($id,$t,$n){return hidden($id,$id,$t).lj('" id="adcat'.$id,'popup_addCat___'.$id.'_'.$id.'_'.$n,$t?$t:picto('list'));}//menuder_jb
 
@@ -671,12 +666,9 @@ $sty=atc('justy').ats('width:'.$w.'px;');
 if(strlen($msg)>400)$sty.=atd('scroll'); $titl=bal('h2',$suj);
 $_SESSION['sugm']=$sug; $rid='btch'.randid();
 $rel=lj('','popup_call__x_ajxf_batch*preview_'.ajx($f).'_',pictit('reload',nms(101))).' ';
-///$sav=saveiec(ajx($f),'',$rid,'','','x','',$suj);
-//$sav=blj('',$rid,'call___spe-ajxf_newartcat_'.ajx($f),picto('download'));
-if(auth(6))$titl.=$rel.urledt($f).' ';
-$titl.=lkt('',$f,picto('url'));
+if(auth(6))$titl.=$rel.urledt($f).' '; $titl.=lkt('',$f,picto('url'));
 if(auth(6))$titl.=newartcat($f);
-$ret.=bal('section',balc('article','',$titl.div($sty,$msg))); //$_SESSION['vacuum'][$f]='';
+$ret.=bal('section',bal('header',$titl).balb('article',$sty,$msg)); //$_SESSION['vacuum'][$f]='';
 return popup(preplink($f),$ret,$w);}
 
 function forbidden_sessions($d){if($d!='auth' && $d!='USE')return true;}

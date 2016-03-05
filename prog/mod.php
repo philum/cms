@@ -2,8 +2,13 @@
 //philum_mods 
 
 #modules
+function find_mod($n){
+foreach($_SESSION['mods'] as $k=>$v)if(key($v)==$n)return $v;}
 
-function build_mod_r($sets){$r=val_to_mod($sets);
+function build_mod_r($set){
+if(is_numeric($set)){$r=msql_read_b('',ses('qb').'_mods_'.prmb(1),$set);
+	if($r)array_shift($r); return build_mods($r);}
+else $r=val_to_mod($set);
 $_SESSION['cur_div']='content';
 foreach($r as $k=>$v)$ret.=build_mods($v);
 return $ret;}
@@ -22,10 +27,9 @@ if($r)foreach($r as $k=>$v){if(!$v[7]){//hide
 		if(!$_SESSION['tab'][$k] or $cr){$re[$k]=build_mods($v); 
 			$_SESSION['tab'][$k]=$re[$k];}
 		else $re[$k]=$_SESSION['tab'][$k];}
-//elseif($v[11])$re[$k]=divd('mod'.$k,js_code('SaveJ(\'mod'.$k.'_modj___'.$k.'_'.$va.'\')'));
 	elseif($v[11])$re[$k]=divd('mod'.$k,lj('txtcadr','mod'.$k.'_modj__3_'.$k.'_'.$va,$v[2]));
 	else $re[$k]=build_mods($v);
-if($re[$k])$ret.=$re[$k]."\n";}}//.(!$v[9]&&!$v[11]?br():'')
+if($re[$k])$ret.=$re[$k]."\n";}}
 $_SESSION['cur_div']='content';
 return $ret;}
 
@@ -36,19 +40,23 @@ list($m,$p,$t,$c,$d,$o,$ch,$hd,$tp,$nbr,$dv,$jbt)=$r; $t=stripslashes($t);
 switch($m){
 //main
 case('LOAD'): if($_SESSION['read'])$ret=art_read($tp);
-	else $ret=play_arts('',$o,$tp); break;
+	else $ret=api_arts($_SESSION['frm'],$o,$tp); break;
 case('Page_titles'): $ret=page_titles($o); break;
-case('All'): $ret=page_titles(1).play_arts($m,$o,$tp); break;
+case('All'): $api=api_arts_rq($p,$o); $api['t']=$t?$t:nms(100); break;
 case('category'): if($p==1 && $_SESSION['frm']=='Home')$p='All'; 
-	$ret=play_arts($p,$o,$tp); break;
+	$ret=api_arts($p,$o,$tp); break;
 case('Board'): $ret=collect_board($p); break;
 case('plan'): $ret=arts_plan($m,$p); break;
 case('Hubs'): $ret=arts_plan($m,$p); break;
 case('gallery'): $ret=arts_plan($m,$p); break;
 case('tracks'): $ret=trkarts($p); break;
 case('MenusJ'): $ret=ajxlink($p,'mjx',$o,$d); break;
-case('Wall'): $ret=wall_arts($t,$p); break;//
-case('articles'): $load=make_list_arts($p,$o); $obj=1; break;
+//case('Wall'): $ret=wall_arts($t,$p); break;
+case('api'): $ret=plugin('apicom',$p,$o); break;
+case('api_mod'): $api=api_defaults_rq(explode_k(str_replace(';',',',$p),',',':')); break;//:,
+case('api_arts'): $api=api_mod_arts($p,$t); break;//&=
+case('articles'): $load=api_mod_arts_row($p); $obj=1; break;//&=
+//case('articles'): $api=api_mod_rq($p.'&t=x'); break;//&=
 case('tab_mods'): $ret=tab_mods($p); break;
 case('last'): $ret=art_read_b('last',$n,3,''); break;
 case('player'): $ret=flash_prep('',$p); break;
@@ -67,6 +75,7 @@ case('pub_art'):$ret=pub_art_b($p,$o); break;
 case('pub_arts'):$load=array_flip(explode(" ",$p)); break;
 case('pub_img'):$ret=pub_img($p); break;
 case('taxo_arts'):$load=taxo_arts($p); if($t>1)$t=suj_of_id($t); break;
+case('taxo_nav'):$ret=plugin('taxonav',$p,$o); break;
 case('read_art'):$ret=read_art($p,$t); $t=''; break;
 case('short_arts'): $load=short_arts($p); if($o<=3)$prw=$o; break;
 case('most_read'): $ret=most_read_mod($p,$t,$d,$o,$m,$tp); $t=''; break;
@@ -78,14 +87,12 @@ case('disk'): require_once('ajxf.php'); $_SESSION['dlmod']=$p;if($p && $p!='/')$
 	$ret=divd('dsnavds',ds_nav('dl','users/'.ses('qb').$pb)); break;
 case('finder'):$ra=array('|','-');$p=str_replace($ra,'/',$p);$o=str_replace($ra,'/',$o);
 	req('finder'); $ret=finder($p,$o,$d); break;
-case('channel'): if($o){$n=$o*1000; $j='SaveD("chan_channel_'.$p.'_'.$t.'_'.$d.'_'.$o.'");';
-	$ret=temporize('channeltimer',$j,$n);}
-	$ret.=divd('chan',channel($p,$t,$d,$o)); $t=''; break;
+case('channel'): $ret=plugin('channel',$p,$t,$d,$o); $t=''; break;
 case('hour'): setlocale(LC_TIME,"fr_FR");//%A%d%B%G%T
 	if($p)$dat=strftime($p?$p:'%y%m%d:%H%M',$_SESSION['dayx']); else $dat=mkday('',1);
 	if(!$d)$ret=btn($o,$dat); else $ret=divc($o,$dat); break;
 case('cart'): $ret=lkc("txtcadr","/?plug=cart",$p!=1?$p:"Cart");
-	$ret.=divd('cart',m_pubart($_SESSION['cart'],'scroll',7)); break; 
+	$ret=divd('cart',m_pubart($_SESSION['cart'],'scroll',7)); break; 
 case('video'): $ret=video_auto($p,'','',3); break;
 case('video_playlist'): $load=videoplaylist($p); $obj=1; $prw='vd'; break;
 case('video_viewer'): $ret=videoboard($p,$c,$o); break;
@@ -101,9 +108,10 @@ case('br'):$ret=br(); break;
 //menus
 //case('ajax'): $ret=lj('',$p,$t); break;
 case('conn'): $ret=connectors($p,$o,''); break;
-case('link'): if(strpos($p,'§'))list($p,$t)=split_one('§',$p,0);
-	if($d=='noli')$ret=special_link($p,$o); else $lin[]=mod_link_r($p,$t); break;
-case('user_menu'): $ret=divb($o?$o:'usermenu',user_menu($p)); break; //mod_link
+case('link'): 
+	if($d=='noli')$ret=special_link($p,$o); else{
+	if(strpos($p,'§'))list($p,$t)=split_one('§',$p,0); $lin[]=mod_link_r($p,$t);} break;
+case('user_menu'): $ret=user_menu($p); break; //mod_link
 case('app_link'):$ret=read_apps_link($p,$d,$o); break;
 case('app_menu'):$r=build_apps($p,$d); $ra=m_apps($r,'menu','');
 	if($o=='icons')$ret=desktop_build_ico($ra,'icones'); 
@@ -112,7 +120,7 @@ case('categories'): $line=$_SESSION['line']; if($line){ksort($line);
 	$d=$d?$d:'lines'; if($d=='cols' && !$o)$o=4;
 	if($o=='home')$lin[]=array($_GET['module'],htac('module'),'Home','Home');
 	foreach($line as $k=>$va){if($o=='nb')$ka=$k.' ('.$va.')'; else $ka=$k;
-		$lin[]=array($_SESSION['frm'],htac('section'),$k,$ka);}} break;
+		$lin[]=array($_SESSION['frm'],htac('cat'),$k,$ka);}} break;
 case('timetravel'): return timetravel($p,$o); break;
 case('submenus'): return bubble_menus($p,$o); break;
 case('taxonomy'): $ret=taxonomy($p,$o); break;
@@ -137,12 +145,13 @@ case('tags_cloud'): $p=$p?$p:'tag'; $ret=btn($ptit_css,lkc('',"/plug/tags",$p));
 	$line=tags_list($p,ses('nbj')); $in=tags_cloud($line,10,22,' ',$p); 
 	$ret.=divc($pbdy_css,$in); break;
 case('tag_arts'): list($p,$o)=split_one(':',$p); $load=tag_arts($p,$o); break;
-case('classtag_arts'): $load=classtag_arts($p); break;//class find id
+case('classtag_arts'): $load=classtag_arts($p); $t=''; break;//class find id
 case('see_also-tags'): $r=see_also_tags($p?$p:'tag'); 
 	if($r)$ret=see_also($r,$p,$d,$o,$tp); break;
 case('see_also-rub'): $t=$p!=1?$p:$_SESSION['frm'];
 	if($_GET['read'])$load=see_also_rub($p); break;
-case('see_also-source'): list($load,$t)=see_also_source(); break;
+case('see_also-source'): list($load,$t)=see_also_source($o); break;
+case('siteclics'): $ret=siteclics($p); break;
 case('rub_tags'): $ret=rub_tags($p); break;
 case('sources'):if($t)$t=lkc('','/module/source',$t); $lin=art_sources($p); break;
 case('msql_links'): if($o=='rss')$l='/?plug=rssin&rssurl=';
@@ -156,8 +165,7 @@ case('stats'): $n=$p?$p:$_SESSION['nbj'];
 	require('plug/stats.php'); $ret=divd('graph',stat_canvas($o,$n,$res)); break;
 case('archives'): if($p==1)$p=$m; if($p)$ret=btn($ptit_css,$p);
 	$in=divd("archives",m_archives("")); $ret.=balc('ul',$pbdy_css,$in); break;
-case('agenda'): $load=tri_rqt_d("","day",10000000,ses('daya'));
-	if($load){ksort($load);} break;
+case('agenda'): $com='mintime='.ses('daya').'&maxtime='.(ses('daya')+1000000).'&nodig=1&order=day asc'; $api=api_mod_arts($com,'Agenda'); break;
 case('calendrier'):	$in=calendar(ses('daya')); if($p==1)$p=$m;
 	if($p)$ret=btn($ptit_css,$p); $ret.=divc($pbdy_css,$in); break;
 case('newsletter'):
@@ -173,7 +181,8 @@ case('columns'): $ret=mod_columns($p,$o); break;
 case('login'): $ret=login_btn($p,$o); break;
 case('login_popup'): $ret=login_btn_p($p,$o); break;
 case('log-out'): if(ses('USE'))$ret.=lkc($smcss,'/logout',picto('logout')).' '; break;
-case('search'): $ret=search_btn($p,$o,'',$d); break;
+case('search_form'): $ret=search_btn($p,$o,'',$d); break;
+case('search'): $load=plugin_func('search','rech',$p,$o); break;
 case('social'): $ret=plugin('social',$p,$o); break;
 //banner
 case('Banner'): $ret.=make_ban($here,$t); $t=''; break;
@@ -192,6 +201,7 @@ case('twitter'): if($p)$ret=plugin('twitter',$p,$o); break;
 case('profil'): $ret=plugin_func('profil',$p,$o); break;
 //special
 case('BLOCK'): $ret=build_modules($p,''); break;
+case('module'): $ret=build_mod_r($p); break;
 case('command'): $ret=com_mod($p); break;
 case('plug'): list($pp,$po)=split('-',$o); $ret=plugin($p,$pp,$po); break;
 case('pluf'): list($pp,$po)=split('-',$p); list($op,$oo)=split('-',$o); 
@@ -200,39 +210,38 @@ case('plup'): return lj('','popup_plupin___'.$p.'_'.$o.'_',$t?$t:$p); break;
 case('close'): $ret='';
 default: if($p && $m)$reb=connectors($p.($o?'§'.$o:'').':'.$m,"","");
 	if($reb && $reb!='['.$p.':'.$m.']')$ret=$reb; 
-	else{$reb=plugin($m,$p,$o); if($reb)$ret=build_titl('',$m,'').$reb;} break;}
+	else{$reb=plugin($m,$p,$o); if($reb)$ret=build_titl('',$t?$t:$m,'').$reb;} break;}
 //menus
-if($lin)$re=mod_lin($lin,$d,$o);
-if($re)$ret=mod_lin_build($re,$t,$d,$o);
+if($lin)$ret=mod_lin($lin,$t,$d,$o);
 //arts
-if($load)//command
-$ret=mod_load($load,$ret,$t,$d,$o,$obj,$prw,$tp,$id);
+if($load)$ret=mod_load($load,$ret,$t,$d,$o,$obj,$prw,$tp,$id);
+//api
+if($api)$ret=api_load($api);
 //umods
 if(!$ret && !$lin && !$load && $p && $m){//user_mods
-	$func=msql_read("",$_SESSION['qb'].'_modules',$m);
+	$func=msql_read('',$_SESSION['qb'].'_modules',$m);
 	if($func && !is_array($func))$ret=cbasic($func,$p);}
 if(!$nbr)$br=br();
 if($ret){if($dv)return divc('mod',$ret).$br; else return $ret.$br;}}
 
-function mod_lin($lin,$d,$o){//mod_link_r
-if($lin)foreach($lin as $k=>$v){//$va=str_replace(' ',"&nbsp;",$v[3]);
-	if(strpos($v[0],':')!==false)$v[0]=strprm($v[0],1,':');
-	if(strpos($v[2],'/')!==false)$vrf=strprm($v[2],0); else $vrf=$v[2];
-	if($v[2])$css=$v[0]==$vrf?'active':'';
-	if($v[1]=='j')$re[]=lj($css,$v[2],$v[3]);
-	elseif($v[1]=='SaveJc')$re[]=ljb($css,$v[1],$v[2],$v[3]);
-	else $re[]=lk($v[1].$v[2],atc($css).atb('title',$v[2]),$v[3]).($o=='nospace'?'':' ');}//todo:innocent menu
-//if($d=='cols')foreach($re as $k=>$v)$re[$k]=li($v);
-return $re;}
-
 function mod_lin_build($re,$t,$d,$o){$limit=is_numeric($o)?50*$o:50;
 if($_SESSION['cur_div']=='menu' or $d=='inline')$ret=implode('',$re);
-elseif($d=='cols')$ret=divc('menus',scroll_b($re,columns($re,$o,'','menus','','mall'),(int)$limit));
+elseif($d=='cols')$ret=divc('menus',columns($re,$o,'','menus','','mall'));//scroll_b($re,,(int)$limit)
 elseif($d=='pictos')$ret=desktop_build_ico($re,'');//
 elseif($d=='icons')$ret=desktop_build_ico($re,'icones');//
 elseif($d=='scroll')$ret=$t.scroll_b($re,implode('',$re),(is_numeric($o)?$o:17));
 else $ret=$t.divc('menus',implode('',$re));
 return $ret;}
+
+function mod_lin($lin,$t,$d,$o){//mod_link_r
+if($lin)foreach($lin as $k=>$v){
+	if(strpos($v[0],':')!==false)$v[0]=strprm($v[0],1,':');
+	if(strpos($v[2],'/')!==false)$vrf=strprm($v[2],0); else $vrf=$v[2];
+	if($v[2])$css=$v[0]==$vrf?'active':'';
+	if($v[1]=='j')$re[]=lj($css,$v[2],$v[3]);
+	elseif($v[1]=='SaveJc')$re[]=ljb($css,$v[1],$v[2],$v[3]);
+	else $re[]=lk($v[1].$v[2],atc($css).atb('title',$v[2]),$v[3]).($o=='nospace'?'':' ');}
+if($re)return mod_lin_build($re,$t,$d,$o);;}
 
 function mod_load($load,$ret,$t,$d,$o,$obj,$prw,$tp,$id){
 if(!$prw)$prw='prw'; if($t)$t=build_titl($load,$t,$obj); $mx=prmb(6);
@@ -240,23 +249,23 @@ if($d=='read'){foreach($load as $id=>$prw){
 	$ret.=divc('justy',read_msg($id,3)).br();}}
 elseif($d=='articles')$ret=output_pages($load,$prw,$tp);
 elseif($d=='viewer')$ret=art_viewer($load);
-elseif($d=='multi'){foreach($load as $id=>$md){$i++; $_POST['flow']=1;
-	if($i<$mx){$art=art_read_b($id,$_SESSION['nl'],$md,$tp); $rt[]=$art; $ret.=$art;}
+elseif($d=='multi'){$_POST['flow']=1; foreach($load as $id=>$md){$i++;
+	if($i<$mx)$ret.=art_read_b($id,$_SESSION['nl'],$md,$tp);
 	else $ret.=div(atd($id).atc($md),'');}}
-elseif($load) return $t.m_pubart($load,$d,$o);
+elseif($d=='api')$ret=api_mod_call($load);
+elseif($load)return $t.m_pubart($load,$d,$o);
 if($o=='scroll')$ret=scroll_b($load,$ret,10);
 elseif($o=='scrold')$ret=scroll($load,$ret,10);
 elseif($o=='cols')$ret=columns($rt,$o,'','');
-elseif($o=='icons')$ret=desktop_build_ico($load,'icones');//
-//else $ret=m_pubart($load,$d,$o);//echo $ret;
+elseif($o=='icons')$ret=desktop_build_ico($load,'icones');
 if($ret)return $t.$ret;}
 
-#Commands
+#commands
 function title($d){return divd('titles',bal('h3',$d));}
+
 function build_titl($load,$t,$n){
-if($load)$nb=count_r($load).' '; $p['suj']=$t!=1000000?$t:'';
-if(rstr(14) && $n)$p['nbarts']=' '.nbof($nb,$n?$n:1);
-if($t)return divd('titles',template($p,'titles'));}
+if($load)$na=count_r($load); if($n && $na)$nb=nbof($na,$n?$n:1);
+return divd('titles',bal('h3',$t).' '.btn('small',$nb));}
 function pluginside($t,$d,$p,$o){return title($t).plugin($d,$p,$o);}
 
 #pubart
@@ -279,94 +288,6 @@ elseif($o=='cols')return columns($re,$p,'board','pubart');
 else $ret=implode('',$re);
 if($ret)return divc('panel',$ret)."\n";}}
 
-#mods
-function mk_rq_sub($d,$p){$r=explode('|',$d); $n=count($r); 
-if($n<2)return 'AND '.$p.'="'.$d.'" ';
-else{for($i=0;$i<$n;$i++){$ret.=$p.'="'.$r[$i].'" OR ';}
-return 'AND ('.substr($ret,0,-4).') ';}}
-
-function make_list_arts($v,$o=''){
-$v=str_replace('~','&',$v); $der=explode("&",$v); $prw=2;
-foreach($der as $va){
-if(strpos($va,'STAR')!==false)$va=ajx($va,1);//why?
-list($vaa,$vab)=explode("=",$va);
-switch($vaa){
-case('id'):$wh.='AND id="'.$vab.'" '; break;
-case('priority'):$d=substr($vab,0,1); if($d=='>' or $d=='<')$vab=$d.'"'.substr($vab,1).'"'; 
-	elseif(is_numeric($vab))$vab='="'.$vab.'"'; $wh.='AND re'.$vab.' '; break;
-case('nopriority'):$wh.='AND re!="'.$vab.'" '; break;
-//case('tag'):$wh.='AND thm LIKE "%'.$vab.'%" '; $tag[]=$vab; break;//
-//case('notag'):$notag[$vab]=1; break;
-case('cat'):$wh.=mk_rq_sub($vab,'frm'); break;
-case('nocat'):$wh.='AND frm!="'.$vab.'" '; break;
-case('lenght'):$wh.='AND host"'.$vab.'" '; break;//<
-case('nbdays'): list($vaba,$vabb)=split_right('-',$vab,1); break;
-case('nbhours'): list($vaba,$vabb)=split_right('-',$vab,1); $vaba/=24; $vabb/=24; break;
-case('from'):$wh.='AND day > "'.dayref($vab).'" '; break;
-case('until'):$wh.='AND day < "'.dayref($vab).'" '; break;
-case('lasts'):$whb.='LIMIT '.str_replace("-",", ",$vab).' '; break;
-case('limit'):$whb.='LIMIT '.$vab.' '; break;
-case('list'):$wh.=mk_rq_sub($vab,'id'); break;
-case('orderby'):$ordr=$vab; break;
-case('preview'):if($vab=="false")$prw=1; elseif($vab=="full")$prw=3; 
-	elseif($vab=='auto')$prx=1; else $prw=$o?$o:$vab; break;}}
-$vaba=$vaba?calc_date($vaba):$_SESSION["daya"];
-$vabb=$vabb?calc_date($vabb):$_SESSION["dayb"];
-$wh.='AND day < "'.($vaba).'" '; $wh.='AND day > "'.$vabb.'" ';
-$ordr=$ordr?$ordr:(prmb(9)?prmb(9):"id DESC");
-//if($_SESSION['lang']!='all')$inner=lang_req();//
-$sql=$inner.' WHERE nod="'.$_SESSION['qb'].'" AND re>0 AND substring(frm,1,1)!="_" '.$wh.' ORDER BY '.$ordr.' '.$whb;
-$rq=sq('id,re','qda',$sql);//thm,
-if($rq)while($data=mysql_fetch_row($rq)){
-	if($prx)$prw=$data[1]>2?2:1; $id=$data[0];
-	$ret[$id]=$prw;}
-return $ret;}
-
-function channel($p,$t,$d,$o){
-if($d=='cols')$o=$o?$o:3; $ra=explode(" ",$p);
-foreach($ra as $ka=>$va){list($kab,$vab)=split(":",$va);$sc[$vab]=$kab;}
-if($sc['site']){require_once('plug/microxml.php');
-$site='http://'.$sc['site']; $t=lka($site,$sc['site'].'/'.$sc['hub']);
-$load=clkt($sc['site'].'/msql/users/'.$sc['hub'].'_cache');}
-else $load=msql_read("users",$sc['hub'].'_cache','',1);
-if($load){
-	if($sc['cat'])$load=channel_tri($load,$sc['cat'],1);
-	if($sc['parent'])$load=channel_tri($load,$sc['art'],10);
-	if($sc['art'])$load=channel_tri($load,$sc['art'],'');
-	if($sc['tag'])$load=channel_tri($load,$sc['tag'],5);
-	if($sc['last'])$load=splice($load,$sc['last']);
-	$t=build_titl($load,(!$t?$sc['hub']:$t),1);
-	if($d=='articles'){
-		if($site)$ret.=output_pages_from_cache($site,$load);
-		else $ret.=output_pages($load,2,'');}
-	elseif($load){
-		foreach($load as $k=>$v){
-		$re[]=llk('',$site.'/'.$k,html_entity_decode($v[2]));}
-		if($d=="scroll")$ret=scroll_b($re,implode("",$re),$o);
-		elseif($d=="cols")return $t.columns($re,$o,'','pubart');
-		else $ret=implode('',$re);
-		$ret=balc('ul','panel pubart',$ret);}}
-return $t.$ret;}
-
-function channel_tri($r,$d,$n){
-foreach($r as $k=>$v){
-	if(strpos($d,$v[$n])!==false or $k==$d)$ret[$k]=$v;}
-return $ret;}
-
-function output_pages_from_cache($http,$otp){
-$npg=$_SESSION['prmb'][6]; $page=$_SESSION["page"];
-$min=($page-1)*$npg; $max=$page*$npg;
-	if(is_array($otp)){foreach($otp as $id=>$nb){if(is_numeric($id)){$i++; 
-	if($i>=$min && $i<$max){$mg=$http.'/imgc/'.first_img($nb[3]);
-		if(is_link($mg))$ret.=btn('imgl',image($mg,'',50));
-		$ret.=bal("h2",lka($http.'/'.$id,$nb[2]));
-		$ret.=btn('txtx',$nb[1]).' ';
-		if(rstr(27))$ret.=btn("txtsmall",mkday($nb[0],1)).' '.pub_link($nb[9]).' ';
-		if(rstr(25))$ret.=btn("txtsmall",art_lenght($nb[8]));
-		$ret.=br().br();}}}}
-$n_pages=nb_page($i,$npg,$page);
-return $n_pages.$ret.$n_pages;}
-
 #links
 function mod_link_r($m,$v){//m§v:picto
 $qb=ses('qb'); list($va,$vb)=explode(':',$v);
@@ -381,7 +302,7 @@ case('folder'):return array('','j','popup_modpop__3_local|real//////folder2///1:
 case('art'):return array('','j','popup_popart__3_'.$va.'_3',picto('articles')); break;
 case('search'):return array('','j','popup_search',picto('search')); break;
 case('taxonav'):return array('','j','popup_plup___taxonav',picto('topo')); break;
-case('rss'):return array('','','/rss/'.$qb,picto('rss')); break;
+case('rss'):return array('','','/rss/'.$qb,$v?$v:picto('rss')); break;
 case('contact'):return array('','j','popup_track___'.$qb,picto('mail')); break;
 case('tablet'):return array('','j','socket_tog__self_tablet',picto('gsm')); break;
 case('hub'): return array('','',prep_host($m),($v?$v:prep_host($m)),''); break;
@@ -403,9 +324,10 @@ case('plug'):$v=$vb=='picto'?$v:strrchr_b($m,'/');
 	return array($_GET['plug'],htac('plug'),$lk,$v); break;
 case('plugin'):$v=$vb=='picto'?$v:strrchr_b($m,'/');
 	return array($_GET['plugin'],htac('plugin'),$lk,$v); break;
-case('app'):return array($_GET['app'],htac('app'),$lk,$v?$v:$m,''); break;}}
+case('app'):return array($_GET['app'],htac('app'),$lk,$v?$v:$m,''); break;
+default:return array($_GET[$action],htac($action),$lk,$v?$v:$m,''); break;}}
 elseif($_SESSION['line'][$m])
-	return array($_SESSION['frm'],htac('section'),$m,($v?$v:$m),'');
+	return array($_SESSION['frm'],htac('cat'),$m,($v?$v:$m),'');
 elseif(is_numeric($m)){if(!$v)$v=$_SESSION['rqt'][$v][2]; 
 	return array($_GET['read'],htacc('read'),$m,$v,'art');}
 elseif($m=='home' or $m=='all')return array(strtolower(get('module')),'',$m,($v?$v:$m),'');
@@ -413,6 +335,7 @@ else return array('','',$m,($v?$v:$m));}
 
 function special_link($d,$o=''){
 list($m,$v)=split_one('§',$d,0);
+$m=str_replace('*',' ',$m);
 switch($m){
 case('lang'): $ra=explode(' ',prmb(26).' all');
 	return slct_menus($ra,'/?lang=',$_SESSION['lang'],"active","","v"); 
@@ -456,7 +379,7 @@ elseif($m=='lang')foreach(explode(' ',prmb(26).' all') as $va)
 		$ret[]=array($v,'url','','lang/'.$va,'','menu','','flag');
 elseif(is_numeric($m)){if(!$o)$o=$_SESSION['rqt'][$m][2]; 
 	$ret[]=array($o,'art','',$m,'','menu','','articles');}
-elseif($_SESSION['line'][$m])$ret[]=array($m,'url','','/section/'.$m,'','menu','',$o?$o:'list');
+elseif($_SESSION['line'][$m])$ret[]=array($m,'url','','/cat/'.$m,'','menu','',$o?$o:'list');
 elseif($m=='module' && $o)$ret[]=array($o,'url','','/module/'.$o,'','menu','','link');
 elseif($m=='hub')$ret[]=array($o,'url','',$m?$m:prep_host($m),'','menu','','home');
 elseif($m=='mod')$ret[]=array($o,'url','','/?slct_mods='.$o,'','menu','','home');
@@ -464,7 +387,7 @@ elseif($m=='rss')$ret[]=array($o,'url','blank','/rss/'.ses('qb'),'','menu','','r
 elseif($m=='plug')$ret[]=array($o,'plug',ajx($o),'','','menu','','get');
 elseif($m=='categories'){$line=$_SESSION['line']; if($line){ksort($line);
 	foreach($line as $k=>$va){if($o=='nb')$ka=$k.' ('.$va.')'; else $ka=$k;
-		$ret[]=array($ka,'url','','/section/'.$k,'','menu','','list');}}}
+		$ret[]=array($ka,'url','','/cat/'.$k,'','menu','','list');}}}
 elseif(substr($m,0,1)=='/')$ret[]=array($o,'url','',$m,'','menu','','get');}
 return $ret;}
 
@@ -570,7 +493,7 @@ if(!$o or substr($v[0],0,strlen($o))==$o){list($dir,$nm)=split_one('/',$v[0],1);
 return $rc;}
 
 function apps_varts($cnd,$p){
-if($p){if($p=='cache')$ra=$_SESSION['rqt']; else $ra=make_list_arts($p);}
+if($p){if($p=='cache')$ra=$_SESSION['rqt']; else $ra=api_mod_arts_row($p);}
 $wh='qb="'.ses('qb').'" AND val="folder"';
 $rb=sql('ib,msg','qdd','kv',$wh); 
 if($rb)foreach($rb as $k=>$v){if(($p && $ra[$k]) or !$p)
@@ -578,7 +501,7 @@ if($rb)foreach($rb as $k=>$v){if(($p && $ra[$k]) or !$p)
 return $rc;}
 
 function apps_arts($cnd,$p,$o){
-if($p)$r=make_list_arts($p); else $r=$_SESSION['rqt'];
+if($p)$r=api_mod_arts_row($p); else $r=$_SESSION['rqt'];
 if($r)foreach($r as $k=>$v){list($day,$frm)=pecho_arts($k);
 	if(substr($frm,0,1)!='_')
 		$rb[]=array($k,'art','auto',$k,$cnd,'',$frm,'articles');}
@@ -602,7 +525,7 @@ function recup_srcs_b(){$r=$_SESSION['rqt'];
 if($r)foreach($r as $k=>$v)if($v[9] && $v[9]!="mail"){$purl=http_domain($v[9]); 
 	$purl=str_replace(array('.wordpress','.blogspot','.pagesperso-orange'),'',$purl);
 	if($purl)$ret[$purl]+=1;} return $ret;}
-function art_sources($o){$r=recup_srcs_b(); if($r){arsort($r);
+function art_sources($o){$r=recup_srcs_b(); if($r){ksort($r);
 foreach($r as $k=>$v){if($o)$ad=' ('.$v.')'; 
 $lin[]=array($k,htac('source').strdeb($k,'.'),'',$k.$ad);}}
 return $lin;}
@@ -634,9 +557,9 @@ function short_arts($p=4000){$dayb=$dyb?calc_date($dyb):$_SESSION['dayb'];
 return sql('id','qda','k','nod="'.ses('qb').'" AND re>="1" AND day>'.$dayb.' AND host<'.$p.' ORDER BY '.prmb(9));}
 
 function trkarts($t){
-$nbdays=$_SESSION['nbj']; $daybb=calc_date($nbdays); //getorpost('dig',)
+$nbdays=$_SESSION['nbj']; $daybb=calc_date($nbdays);
 $load=sql('frm','qdi','k','nod="'.ses('qb').'" AND day>'.$daybb.' AND day<'.ses('daya').' ORDER BY day DESC');
-if($load){$ret=build_titl($load,'Tracks',34); 
+if($load){$ret=build_titl($load,$t?$t:'Tracks',21); 
 	if($_GET['admin'])$ret.=dig_it($nbdays,'admin/trackbacks');
 	$ret.=output_pages_spe($load,1,'track');
 return $ret;}}
@@ -644,7 +567,7 @@ return $ret;}}
 function related_art(){$val=@$_SESSION['opts']['related'];
 if($val)return array_flip(explode(" ",$val));}
 
-function related_art_by(){if(ses('read'))return sql('ib','qdd','k','qb="'.ses('qb').'" AND val="related" AND msg="'.ses('read').'"');}
+function related_art_by(){if(ses('read'))return sql('ib','qdd','k','val="related" AND msg="'.ses('read').'"');}
 
 function same_title(){return sql('id','qda','k','suj="'.ses('read').'" AND nod="'.ses('qb').'" AND id!="'.ses('read').'" ORDER BY id DESC');}
 
@@ -654,7 +577,7 @@ return $frmline[$frm];}
 
 function see_also($r,$p,$d='',$o='',$tp=''){
 foreach($r as $kb=>$pb){$t=lka(htac(eradic_acc($p)).$kb,$kb);
-	if($pb)$rc[$kb]=mod_load($pb,'',$t,$d,$o,0,'',$tp,'');}
+	if($pb)$rc[$kb]=mod_load($pb,'',$t,$d,$o,0,'',$tp,'',$u);}
 if(count($rc)>1)$ret=make_tabs($rc,'mod'.randid()); else $ret=$rc[$kb];
 return $ret;}
 
@@ -672,7 +595,13 @@ if($src){$src=preplink($src);
 foreach($_SESSION['rqt'] as $k=>$v)if(preplink($v[9])==$src)$ret[$k]+=1;
 if(!$ret && $src)$ret=sql('id','qda','k','mail LIKE "%'.$src.'%" limit '.$o);
 if($ret){unset($ret[$id]);
-return array($ret,lka(htac('source').strdeb($src,'.'),$src));}}}
+return array($ret,lka(htac('source').strdeb($src,'.'),$src.' '.$n));}}}
+
+function siteclics($src){
+$id=ses('read'); if($id)$src=$_SESSION['rqt'][$id][9];
+$r=sql('lu','qda','rv','mail LIKE "%'.$src.'%"');
+foreach($r as $k=>$v)$n+=$v;
+return bal('h3',$src).divc('',$n.' vues');}
 
 function rub_tags($t){$t=$t?btn('txtcadr',$t):'';//not tested
 $dayb=$_GET['dig']?calc_date($_GET['dig']):$_SESSION['dayb'];
@@ -689,7 +618,7 @@ if($_SESSION['rqt']){krsort($_SESSION['rqt']);
 if($r)$rb=array_flip($r); //if(!in_array($id,$r))
 if(!$rb[$id]){$dt=sql('day','qda','v','id='.$id);
 	$w='nod="'.ses('qb').'" AND day>'.($dt-86400).' AND day<'.($dt+86400).' ORDER BY '.prmb(9);
-	$r=sql('id','qda','vr',$w);}
+	$r=sql('id','qda','rv',$w);}
 if($r)foreach($r as $k=>$v){if($v==$id){
 $k1=$r[$k+1]?$r[$k+1]:""; $k2=$r[$k-1]?$r[$k-1]:""; $prnx=array($k1,$k2,$v);}}
 $prevnext.=lkc(($prnx[0]?'':'hide'),$htacc.($prnx[0]?$prnx[0]:$prnx[2]),$ta).' ';
@@ -699,7 +628,7 @@ if($prevnext)return btn('nb_pages '.($o?$o:'right'),$prevnext);}
 function search_btn($va,$o,$id='',$d=''){
 if($id)$di='ada'; else $id='srch'; $t=$va!=1?$va:nms(24); 
 if($o>1)$s=$o; else{$s=10; if($o){if(strpos($o,';')===false)$c=atc($o); else $c=ats($o);}}
-$j='SearchT(\''.$id.'\')'; $js='onClick="'.$j.'" onkeyup="'.$j.'" onContextMenu="'.$j.'';
+$j='SearchT(\''.$id.'\')'; $js='onClick="'.$j.'" onkeyup="'.$j.'" onContextMenu="'.$j;
 $ret=autoclic($id.'" '.$js,$t,$s,'100','');
 if(!$d)$ret=div('id="'.$di.'"'.$c.'',$ret);
 return $ret;}
@@ -722,7 +651,7 @@ while($rq=mysql_fetch_row($req)){if(in_array($rq[0],$ra)){
 return $ret;}
 
 function videoplaylist($p=7){$qda=ses('qda'); $qdm=ses('qdm');//$ra=$_SESSION['rqt'];
-return sql_b('select '.$qda.'.id from '.$qda.' inner join '.$qdm.' on '.$qda.'.id='.$qdm.'.id where nod="'.ses('qb').'" and re>="1" and day>'.calc_date($p?$p:ses('nbj')).' and '.$qdm.'.msg like "%:video%" order by id desc','k');}
+return sql_b('select '.$qda.'.id from '.$qda.' inner join '.$qdm.' on '.$qda.'.id='.$qdm.'.id where nod="'.ses('qb').'" and re>="1" and day>'.calc_date($p?$p:ses('nbj')).' and (msg like "%:video%" or msg like "%:popvideo%") order by id desc','k');}
 
 function videoboard($p,$c,$o){static $iv; $iv++; $ra=array(); 
 require_once('ajxf.php'); list($pa,$pb)=split_right('-',$p,0);
@@ -813,7 +742,7 @@ foreach($load as $mrf=>$ids){$i++;
 	if($n==2)$re=outputimg($ids); else $re=m_pubart($ids,"scroll","10000");
 	if($mrf!="user" && $mrf!="_system" && $re && ($line or $mn)){
 		if($n==2)$nib=25; else $nib=7;
-		if($line)$got=htac('section').$mrf; else $got=subdom($mrf);
+		if($line)$got=htac('cat').$mrf; else $got=subdom($mrf);
 	$nbrt=btn("txtsmall2",nbof(count($ids),1));
 	$ret[$i]=lkc('txtcadr',$got,$mrf).' '.$nbrt.br();
 	$ret[$i].=divc("tab",scroll($ids,$re,$nib)).br();}}

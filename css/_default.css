@@ -8,14 +8,15 @@ h4 {font-size:16px; font-weight:normal; margin:0 0 4px 0;}
 td {padding:4px; margin:2px;}
 table {font-size:14px;}
 blockquote {margin:0; padding:8px 16px; border-style:solid; border-width:0 0 0 4px;}
-article {padding:0px;}
-section {margin:0 0 10px 0; padding:10px; border-bottom:0px solid rgba(119,119,119,0.4);}
+article {margin:12px 0 0;}
+section {margin:10px 0; padding:10px; border-bottom:0px solid rgba(119,119,119,0.4);}
+section .imgl {margin-right:10px;}
 ul {padding:0;}
 li {padding:0px 0;}
-input {border-width:1px; border-style:solid; border-radius:2px; font-size:small; transition: all 0.2s linear; -webkit-transition: all 0.2s ease; box-sizing:border-box; -moz-box-sizing:border-box; box-shadow: 0px 0px 2px #ededed;}
+input {border-width:1px; border-style:solid; border-radius:1px; font-size:small; transition: background 0.2s linear; box-sizing:border-box; margin:1px 3px; padding:1px 2px;}
 textarea {box-shadow: 0 0 4px #ffffff; padding:0 2px; margin:0px 0; border-radius:2px; box-sizing:border-box; -moz-box-sizing:border-box;}
 select {box-shadow:0 0 2px #ffffff;}
-button {font-size:smaller; padding:1px 6px 2px;}
+button {font-size:smaller;}
 fieldset {background:rgba(255,255,255,0.2); margin:4px 0; padding:10px; border:1px solid #777777; box-shadow:0;}
 legend {background:rgba(255,255,255,0.2); border:1px solid #777777;}
 #page {width:inherit; margin:0 auto; padding:0 20px; max-width:722px;}
@@ -40,72 +41,80 @@ legend {background:rgba(255,255,255,0.2); border:1px solid #777777;}
 #menu .panel :hover {border:0;}
 #artmod {display:none;}
 #board {padding:0;}
-#board li {box-shadow:0px 0px 4px #ededed; margin:4px 2px; padding:4px; font-size:small;}
-#board li a:hover {text-shadow:0px 0px 1px #ededed;}
+input#srch {padding:1px 4px 1px;}
+#board li {box-shadow:0px 0px 4px #e3e3e3; margin:4px 2px; padding:4px; font-size:small;}
+#board li a:hover {text-shadow:0px 0px 1px #e3e3e3;}
 .desk a {width:56px; padding:0 4px; margin:0 4px;}
 .tab {margin:0 0 10px 0;}
 ul.panel li {font-family:Arial; margin:4px 0; font-size:small;}
 ul.panel li a {word-wrap: break-word;}
-.justy {padding:0; font-size:1em;}
+.justy {padding:0; font-size:1em; font-family:Arial;}
+.justy p {margin:16px 0;}
 .justy a {text-decoration:none;}
 .justy a:hover {text-decoration:underline;}
 .justy img {border-width:0px; border-style:solid; max-width:auto;}
+.cols img#rez {width:100%;}
 .txtit {font-size:21px; text-shadow:inherit; font-weight:bold;}
-.txtcadr {font-size:12px; margin:10px 0; padding:4px 10px; line-height:30px;}
-.txtx, .txtred, .txtblc, .txtnoir, .txtyl {border-radius:4px; border-style:solid; border-width:0px; box-shadow:0px 0px 2px #ededed;}
+.txtcadr {font-size:12px; margin:10px 0; padding:6px 10px 5px 10px; line-height:23px;}
+.txtx, .txtred, .txtblc, .txtnoir, .txtyl {border-radius:4px; border-style:solid; border-width:0px; box-shadow:0px 0px 2px #e3e3e3;}
 .txtx {border-width:0;}
 .txtblc a:hover {box-shadow: 0px 3px 4px #ffffff inset, 0px 0px 4px #777777;}
 .txtred {border-color:red; border-width:0 0 1px 0; box-shadow: 0px 3px 4px #ffffff inset, 0px 0px 2px #777777;}
 .txtred a:hover {box-shadow: 0px 3px 4px #fff inset, 0px 0px 4px #777777;}
-.txtnoir {box-shadow: 0px 0px 4px #ededed;}
+.txtnoir {box-shadow: 0px 0px 4px #e3e3e3;}
 .txtnoir a:hover {box-shadow: 0px 0px 4px #777777;}
 .txtsmall {font-family:Arial; font-size:80%; padding:0px 1px; border-width: 1px 0 0 0;}
-.txtsmall2 {font-family:Arial; font-size:70%; padding:0px 1px;}
+.txtsmall2 {font-family:Arial; font-size:smaller; padding:0px 1px;}
 .txtsmall2 a {padding:0 2px; border-radius:2px;}
-.txtbox {box-shadow:0px 0px 0px #ededed;}
-.txtbox:hover {box-shadow:0px 0px 0px #ededed;}
-.txtaa, .txtab, .txtac {border:0;}
-.txtaa {border:1px solid #dddddd;}
-.txtab {border:1px solid #dddddd;}
-.txtac {border-bottom:1px solid #dddddd; background:linear-gradient(to bottom,rgba(119,119,119,0),rgba(119,119,119,0.3));}
-.popbt, .popw, .popsav, .popdel {text-decoration:none; font-size:smaller; padding:2px 6px; line-height:180%; background:linear-gradient(to bottom,#dedede,#ffffff) no-repeat;}
-.popbt {padding:2px 6px; margin:0 2px; background:#ededed;}
-.popw {padding:2px 6px; margin:0 2px; box-shadow:0px 0px 1px #333333 inset; background:linear-gradient(to bottom,#dddddd,#ffffff);}
+.txtbox {box-shadow:0px 0px 0px #e3e3e3;}
+.txtbox:hover {box-shadow:0px 0px 0px #e3e3e3;}
+.txtaa, .txtab, .txtac {border-width:0 0 1px 0; border-style:solid;}
+.txtac {border-width:0 0 1px 0; background:linear-gradient(to bottom,rgba(119,119,119,0),rgba(119,119,119,0.5));}
+.popbt, .popw, .popsav, .popdel {text-decoration:none; font-size:smaller; padding:2px 6px; line-height:180%; background:linear-gradient(to bottom,#f0edf0,#ffffff) no-repeat;}
+.popbt {padding:2px 6px; margin:0 2px; background:#e3e3e3;}
+.popw {padding:2px 6px; margin:0 2px; box-shadow:0px 0px 1px #333333 inset; background:linear-gradient(to bottom,#ffffff,#ffffff);}
 .popw a:hover {box-shadow:0px 0px 1px #333333 inset;}
 .popsav {padding:4px 8px 5px 8px; padding:2px 6px; box-shadow:0px 0px 1px #333333 inset;}
-.popsav:hover {background:linear-gradient(to bottom,#dddddd,#ffffff); box-shadow:0px 0px 4px #777777;}
+.popsav:hover {background:linear-gradient(to bottom,#ffffff,#ffffff); box-shadow:0px 0px 4px #777777;}
 .txtclr {font-weight:normal;}
-.search input {border-radius:0; margin:1px; box-shadow:0px 3px 5px rgba(119,119,119,0.4) inset;}
-.search:hover input {box-shadow:0px 3px 4px rgba(119,119,119,0.4) inset;}
-.track, .trkedit {padding:8px 12px; border:0; box-shadow:0px 0px 2px #777777; font-size:14px;}
+.cols div {display:inline-block;}
+.cols p {margin:0 0 20px;}
+.colsmall {columns:auto 140px; -moz-columns:auto 140px; font-size:90%; line-height:130%;}
+.colsmall a {display:block;}
+.search input {font-size:small; border-radius:2px;}
+.track, .trkmsg {font-size:13px; margin:0; border-width:10px; border-style:solid;}
+.trkmsg {border-width:0px;}
 .twitter {padding:10px 0;}
 .pubart {margin-bottom:10px;}
 .pubart h4 a {font-size:smaller; line-height:15px;}
 .pubart img {margin-right:5px;}
-.nbp {line-height:140%;}
+.nbp {line-height:140%; font-size:small;}
 .nbp a {background:0; border:0; padding:1px 3px;}
-.nb_pages a {text-shadow:1px 1px 1px #ededed; font-size:smaller; border-width:0px; margin:0 1px; padding:2px 6px; line-height:140%; border-radius:0px;}
+.nb_pages a {text-shadow:1px 1px 1px #e3e3e3; font-size:smaller; border-width:0px; margin:0; padding:2px 6px; line-height:140%; border-radius:0px;}
 .nb_pages a:hover {box-shadow:0px 0px 0px #777777;}
 .list a {padding:1px 2px;}
 .taxonomy li {padding:0;}
 .flapf {padding:0;}
 .fimnu a {border:0; background:inherit;}
-.imgl {margin:2px 10px 0 0; width:120px;}
+.imgl {margin:2px 2px 0 0; width:auto;}
 .left {float:left;}
 .right {float:right;}
 .center {text-align:center;}
+.inblock {display:inner-block;}
 .btp a {padding:2px 4px:}
 .bkg {background-color:rgba(119,119,119,0.5);}
 .icones {text-shadow:0 0 4px #777777;}
-.icones:hover {text-shadow:2px 2px 4px #777777; background:linear-gradient(to bottom,#ffffff,#dedede);}
+.icones:hover {text-shadow:2px 2px 4px #777777; background:linear-gradient(to bottom,#ffffff,#f0edf0);}
 .sicon {width:120px;}
-.admnu {height:26px;}
-.philum {font-size:16px; display:inline-block; min-width:16px;}
+.admnu {height:28px;}
+.philum {font-size:16px; display:inline-block;}
+.20px {min-width:20px;}
 .popup {border-width:0px; border-radius:0px; box-shadow:2px 2px 16px #777777; margin:0px;}
 .popa {border-radius:4px 4px 0 0; padding:0 4px;}
 .popa .philum {font-size:27px; padding:0 4px;}
 .popu {padding:0 4px 4px 4px;}
-.popu section {padding:0 10px;}
-@media only screen and (min-width: 1000px) {h2 {font-size:x-large;} #bub {font-size:normal;} #page {max-width:952px;} #content {width:712px;} .philum {font-size:22px;} #content .nb_pages a {padding:2px 4px;margin:0 2px;} .justy img#rez {max-width:702px;} .search input {font-size:medium;} #menu li a {font-size:medium;} #artmod {display:block;} #rightbar {display:block;} .imgl {width:auto;} .admnu {height:32px;} input {margin:0px 1px 3px 2px; padding:2px 3px 1px;}}
-@media only screen and (min-width: 1200px) {body {font-size:large;} #page {max-width:1152px;} h2 {font-size:28px;} .justy {font-size:1.1em;} #content {width:912px;} .justy img#rez {max-width:902px;}}
-@media only screen and (max-width: 440px) {#page {padding:0 10px;} h2{font-size:18px;} .justy {font-size:16px; line-height:20px;} .imgl {width:90px;}}
+#popup section {padding:0 10px; margin:0 0 10px 0;}
+@media only screen and (min-width: 1000px) {h2 {font-size:x-large;} #bub {font-size:normal;} #page {max-width:952px;} #content {width:712px;} #menu li a {font-size:medium;} #artmod {display:block;} #rightbar {display:block;} .philum {font-size:22px;} input {font-size:normal;} input#srch{margin:0px 3px 3px 2px;padding:3px 3px 1px;}}
+@media only screen and (min-width: 1200px) {body {font-size:large;} #page {max-width:1152px;} h2 {font-size:28px;} .justy {font-size:1.1em;} #content {width:912px;}}
+@media only screen and (min-width: 1400px) {#page {max-width:1600px;} #content {width:calc(100% - 240px);}}
+@media only screen and (max-width: 440px) {#page {padding:0 10px;} h2{font-size:18px;} .justy {font-size:16px; line-height:20px;}}

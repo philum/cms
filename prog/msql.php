@@ -16,7 +16,7 @@ function msqm_lnk($r,$nurl,$vf,$cs1,$cs2,$kv){
 foreach($r as $k=>$v){
 	if($kv=="k")$v=$k; elseif($kv=="v")$k=$v;
 	$lk=str_replace('#',$k,$nurl); $cs=$vf==$k?$cs1:$cs2; 
-	if($k==$_SESSION['qb'] && $vf!=$k)$cs='txtnoir';
+	if($k==$_SESSION['qb'] && $vf!=$k)$cs='txtblc';
 	if($v=='lang' && strpos($lk,'lang'))$lk=str_replace('lang','lang/'.prmb(25),$lk);
 	if($v)$ret.=lkc($cs,$lk,$v).' ';}
 return $ret;}
@@ -609,7 +609,7 @@ if(!$_GET['def']){//called
 	//add
 	if(auth(4))$ret['fls']=lkc('txtblc',$lkb.'new==',pictxt('add',$lh[9][0])).' ';
 	if($table && $authorized && $prefix && $is_file){//$defs && 
-		$ret['fls'].=lkc('txtx',$lkb.'sav==',$lh[2][0]);
+		$ret['fls'].=lkc('txtx',$lkb.'sav==',$lh[2][0]).' ';
 		if(is_file($basename.'_sav.php'))
 			$ret['fls'].=lkc('txtx',$lkb.'restore==',$lh[3][0]).' ';
 		$ret['fls'].=lj_goto('import_defs',5);
@@ -638,7 +638,7 @@ if(!$_GET['def']){//called
 		$ret['utl'].=lkc('txtx',$lkb.'del_keys==',$lh[25][0]).' ';
 		$ret['utl'].=lkc('txtx',$lkb.'def=_menus_&add_col==',$lh[14][0]).' ';
 		$ret['utl'].=lj_goto('del_col',15);
-		if($is_file)$ret['utl'].=lkc('txtx" title="'.$lh[13][1],$lkb.'repair_cols==',$lh[13][0]).' ';
+		if($is_file)$ret['utl'].=lkc('txtx" title="'.$lh[13][1],$lkb.'repair_cols==',$lh[13][0]).br();
 		if($base!='system' && is_file(sesm('root').'system/'.$node.'.php'))
 			$ret['utl'].=lkc('txtblc',$lkb.'update==',$lh[26][0]).' ';
 		$ret['utl'].=lj_goto('sort_table',19);
@@ -648,6 +648,7 @@ if(!$_GET['def']){//called
 		$ret['utl'].=lkc('txtx',$lkb.'edit_conn==',$lh[16][0]).' ';
 		$ret['utl'].=lkc('txtx" title="'.$lh[6][1],$lkb.'inject_defs==',$lh[18][0]).' ';
 		$ret['utl'].=lkc('txtx',$lkb.'edit_csv==','csv').' ';
+		if(auth(6))$ret['utl'].=lkc('txtx',$lkb.'export_mysql==','create mysql').' ';
 		$ret['utl'].=lj('txtx','popup_msql___lang_helps_msql','?');
 	}
 	#-fieldset
@@ -687,6 +688,11 @@ if($_GET['edit_conn']=='='){
 if($_GET['inject_defs']=='='){
 	$datas=str_replace(array('<'.'?php','?'.'>'),'',read_file($basename.'.php'));
 	$ret[]=divc('','paste $r[1]=array(1,2,3)').form($lkb,txarea('inject_defs',$datas,60,14).br().input2('submit','replace','replace','txtbox').input2('submit','inject','inject','txtbox').checkbox('mono','1','key=>value','').checkbox('sql','1','mysql','')).hr().br();}
+
+//export_mysql
+if($_GET['export_mysql']=='=' && auth(6)){
+	$ok=plugin_func('mysql','import_msql',$defs,$node);
+	$ret[]=divc('txtalert','create table '.$node.': '.$ok);}
 
 //csv
 if($_GET['edit_csv']=='='){

@@ -1,5 +1,5 @@
 <?php
-//philum_microsql_admin_authes
+//philum_microsql_admin_authes_sav
 $r["_menus_"]=array('category');
 $r["console"]=array('console');
 $r["restrictions"]=array('restrictions');
@@ -24,16 +24,17 @@ $r["trackbacks"]=array('commentaires');
 $r["chat"]=array('discussions');
 $r["shop"]=array('boutique');
 $r["authes"]=array('autorisations');
+$r["apps"]=array('apps');
 $r["banner"]=array('bannière');
 $r["descript"]=array('description');
 $r["google"]=array('google');
 $r["fonts"]=array('typos');
-$r["connectors"]=array('connecteurs');
+$r["plugin"]=array('plugins');
 $r["modules"]=array('modules');
 $r["templates"]=array('templates');
-$r["code"]=array('code source');
+$r["connectors"]=array('connecteurs');
+$r["dev"]=array('dev');
 $r["exec"]=array('exec');
-$r["plugin"]=array('plugins');
 $r["backup"]=array('sauvegardes');
 $r["htaccess"]=array('htaccess');
 $r["mails"]=array('mails');
@@ -44,7 +45,7 @@ $r["messages"]=array('messages');
 $r["mail"]=array('mail admin');
 $r["password"]=array('mot de passe');
 $r["members"]=array('membres');
-$r["tools"]=array('outils de tags');
+$r["tags"]=array('outils de tags');
 $r["icons"]=array('iconographie');
 $r["pictos"]=array('pictographie');
 
