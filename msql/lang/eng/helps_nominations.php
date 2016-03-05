@@ -73,7 +73,7 @@ $r[69]=array('Home');
 $r[70]=array('boolean');
 $r[71]=array('Title');
 $r[72]=array('titles');
-$r[73]=array('virtual dir');
+$r[73]=array('virtual folder');
 $r[74]=array('shared');
 $r[75]=array('not shared');
 $r[76]=array('erase');
@@ -140,5 +140,13 @@ $r[136]=array('mail');
 $r[137]=array('password');
 $r[138]=array('related');
 $r[139]=array('Thank You');
+$r[140]=array('reclassify');
+$r[141]=array('with');
+$r[142]=array('in');
+$r[143]=array('poll');
+$r[144]=array('polls');
+$r[145]=array('tag');
+$r[146]=array('tags');
+$r[147]=array('suggest');
 
 ?>

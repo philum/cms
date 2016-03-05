@@ -78,7 +78,7 @@ return $r;}
 
 //shared
 function distrib_virtual_dir(){$rc=array(); $dr='users'; $nd='shared';
-$ra=msq_select($dr,'',$nd); $n=count($ra);
+$ra=msq_choose($dr,'',$nd); $n=count($ra);
 for($i=0;$i<$n;$i++){$r=msql_read($dr,$ra[$i],'',1);
 	if($r)$rc=array_merge($rc,$r);}
 return $rc;}
@@ -102,7 +102,7 @@ distrib_share();}
 
 //distant
 function finder_distant($p){require_once('plug/microxml.php');//server
-$h=split_only('/',$p,0,0); if(strpos($h,'.')!==false)
+$h=str_extract('/',$p,0,0); if(strpos($h,'.')!==false)
 return clkt('http://'.$h.'/msql/server/shared_files'); unset($r['_menus_']);}
 
 function finder_shared($p,$rb){//select
@@ -132,7 +132,7 @@ return $ret?br().br().$ret:'';}
 
 //process
 function fi_parent($p,$id,$t,$sc=''){
-if($sc)$p=split_only('/',$p,1,0); $j=ajx($p); $o=$_SESSION['fio'];
+if($sc)$p=str_extract('/',$p,1,0); $j=ajx($p); $o=$_SESSION['fio'];
 if(strprm($o)=='shared')$p=$id; elseif(strpos($p,'/')===false){$p='finder'; $_SESSION['fio']=mkprm($o,'',5);} else $p=normalize($p); 
 if(strprm($o,1)=='distant')return btn('txtyl',$t);
 return lj('txtyl',$p.'_finder___'.$j.'_auto',$t);}
@@ -162,7 +162,7 @@ elseif(auth(3)){$res=ajxg($res); $v[1]=$res;
 return $ret;}
 
 function fi_share($d,$id,$res){$sh=in_array_r($_SESSION['curdir'],$d,0);
-$sbdr=split_only('/',$d,0,1); $sbdr=split_only('/',$sbdr,1,0); 
+$sbdr=str_extract('/',$d,0,1); $sbdr=str_extract('/',$sbdr,1,0); 
 if(auth(3)){if($sh)share_file($d,$sh,'del'); else share_file($d,$sbdr,'push');}
 return fi_info_shared($d,$id);}
 
@@ -219,7 +219,7 @@ if(substr(fi_droot(),0,4)=='http'){$size=fi_info_dist($f,'fsize');
 $ret.=btn('txtsmall2',$size.' '.$date.' '.strprm($d));
 return $ret;}
 
-function finder_reader($d,$dist){require('prog/pop.php'); $id=randid();
+function finder_reader($d,$dist){req('pop'); $id=randid();
 $dr=fi_droot(); $f=$dr.$d; $dj=ajx($d).'_'.$id; $xt=xtb($f);
 $ret.=blj('',randid().'fidel','fifunc___fi*del_'.ajx($d),fi_pic('delete')).br();
 if($xt)if(strpos('.jpg.png.gif',$xt)!==false && is_file($f))$ret.=fi_show_img_b($f,'').' ';
@@ -337,7 +337,7 @@ foreach($r as $k=>$v){if(is_array($v)){$np=$p.'/'.$k; $i++;
 	$j='active_list_finder(\'fdirs\','.$i.'); ';
 	$j.=sj('ffils_fifunc___fi*flapf_'.ajx($np).'_'.$o);
 	$lk=ljb('',$j,'',$k);
-	$ul=balb('ul','style="display:none;"',finder_flap_dirs($v,$np,$o));
+	$ul=balb('ul',' style="display:none;"',finder_flap_dirs($v,$np,$o));
 	$ret.=li($lk.$ul);}}
 return $ret;}
 
@@ -352,7 +352,7 @@ foreach($r as $k=>$v){if(!$v['r']){$furl=$jc.$v['url'];
 if(!auth(4))$sh=lkc('','plug/download.php?file='.$furl,fi_pic('download'));
 elseif($v['prop']==$_SESSION['qb'])$sh=fi_info_shared($v['url'],randid());
 	$ret.=divc('',$ico.$op.$sh.$lk);}}
-$dir='../'.split_only('/',$furl,1,0);
+$dir='../'.str_extract('/',$furl,1,0);
 if($mp3)$rt=lj('','popup_callp___pop_jukebox_'.$dir.'_autosize',picto('play'));
 if($jpg)$rt=lj('','popup_callp___pop_gallery*j_'.$dir.'_autosize',picto('play'));
 return $rt.$ret;}
@@ -360,8 +360,8 @@ return $rt.$ret;}
 function finder_flap($r,$p,$rb){$o=mkprm($rb,'alone',5);
 $reta=finder_flap_dirs($r,$p,$o);
 $rb=finder_data($r,$p,$rb); $retb=finder_flap_files($rb,$o,$p);
-$csa='class="flap" style="width:140px;"';
-$csb='class="flapf" style="width:390px;"';
+$csa=atc('flap').ats('width:140px;"');
+$csb=atc('flapf').ats('width:390px;"');
 return div($csa,divd('fdirs',$reta)).div($csb,divd('ffils',$retb));}
 
 //render
@@ -369,7 +369,7 @@ function fi_design($fi,$rb){$id=randid();
 if($rb[4]!='conn')$ret=divc('fimnu imgr',$fi['menu'].hlpbt('finder')); 
 $ret.=$fi['url'].$fi['flap'].$fi['reg'].$fi['act'];
 $ret.=($ret?br().br():'').$fi['win'];
-return div('id="finder" style="width:550px;"',$ret);}//float:left; 
+return div(atd('finder').ats('width:550px;"'),$ret);} 
 
 function fi_plnk($p,$o){$o=mkprm($o,'',5);
 if(strprm($o,0)=='')$o=mkprm($rb,'disk',0); $o=str_replace('/','|',$o);

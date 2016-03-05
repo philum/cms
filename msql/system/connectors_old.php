@@ -20,7 +20,6 @@ $r[":jukebox2"]=array('§2:jukebox');
 $r["msq_template"]=array(':microtemplate');
 $r["msq_ads"]=array(':msq_html');
 $r["microform"]=array(':msq_conn');
-$r["popvideo"]=array('§1:video');
 $r["microsql"]=array('msql');
 
 ?>

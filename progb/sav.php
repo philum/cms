@@ -3,12 +3,13 @@
 
 function save_art(){$dayx=$_SESSION['dayx']; $frm=$_SESSION['frm'];
 $qb=$_SESSION['qb']; $base=$_SESSION['qda']; $qdm=$_SESSION['qdm']; $USE=$_SESSION['USE'];
-if(!$frm or $frm=="Home" or $frm=="user")$frm="public"; $suj=clean_title($_POST['suj']); 
+if(!$frm or $frm=="Home" or $frm=="user")$frm="public"; 
+$suj=clean_title($_POST['suj']); $suj=etc($suj,240);
 $msg=nl2br($_POST['msg']); $name=$_POST['name']; $mail=$_POST['mail']; 
 $ib=trim($_POST['ib']); $pdat=$_POST['postdat']; $urlsrc=$_POST['urlsrc']; 
 if($_POST['pub'])$re=1;
 if($urlsrc)$mail=https($urlsrc); $mail=utmsrc($mail); if(!$ib)$ib='/';//!$_POST['sub'] or 
-if(!$name or $name==nms(38)){$exp_out.=btn("txtalert","empty_name $name");$stoop="ok";}
+if(!$name or $name==nms(38)){alert("empty_name $name"); $stoop="ok";}
 if($mail=="mail" or $mail=="url"){$mail='';$urlsrc='';}
 $msg=str_replace(array("<br />","<br/>","<br>","<BR>"),"\n",$msg);
 $msg=str_replace("\n","",$msg); $msg=str_replace("\r","\n",$msg);
@@ -24,8 +25,8 @@ if($stoop==""){
 	$msg=mysql_real_escape_string(stripslashes($msg)); $siz=strlen($msg);
 	$suj=mysql_real_escape_string(stripslashes($suj));
 	$frm=mysql_real_escape_string(stripslashes($frm));
-	$nid=msquery("INSERT INTO $base VALUES ('','$ib','$name','$mail','$pdt','$qb','$frm','$suj','$re','$lu','$img','$kywk','$siz')");
-	$nid=msquery("INSERT INTO $qdm VALUES ('$nid','$msg')");}
+	$nid=msquery("INSERT INTO $base VALUES ('','$ib','$name','$mail','$pdt','$qb','$frm','$suj','$re','$lu','$img','$kywk','$siz')",1);
+	$nid=msquery("INSERT INTO $qdm VALUES ('$nid','$msg')",1);}
 if($nid && $USE!=$qb && $_SESSION["auth"]<6){
 	mail($_SESSION['qbin']["adminmail"],'new article: '.stripslashes($suj),'
 	'.host().'/'.$nid.',
@@ -45,8 +46,8 @@ $lnk=mysql_real_escape_string(stripslashes($k));
 $frm=mysql_real_escape_string(stripslashes($frm));
 $suj=mysql_real_escape_string(stripslashes($suj));
 $msg=mysql_real_escape_string(stripslashes($msg));
-$nid=msquery("INSERT INTO $base VALUES ('','/','$name','$lnk','$pdt','$qb','$frm','$suj','$re','$lu','$img','$kywk','')"); 
-$nid=msquery("INSERT INTO $qdm VALUES ('$nid','$msg')");
+$nid=msquery("INSERT INTO $base VALUES ('','/','$name','$lnk','$pdt','$qb','$frm','$suj','$re','$lu','$img','$kywk','')",1); 
+$nid=msquery("INSERT INTO $qdm VALUES ('$nid','$msg')",1);
 $msg=correct_txt($msg,$nid,'savimg');
 $_SESSION['rqt'][$nid]=array($pdt,stripslashes($frm),stripslashes($suj),'',$qb,'','','',$s,$lnk,$ib,$re); $_SESSION['daya']=$_SESSION['dayx'];
 return divc('txtx',lka(htac('read').$nid,$suj));}
@@ -79,7 +80,7 @@ relod('/?read='.$erz);}}
 function delete_art(){$erz=$_GET["delete_art"]; $USE=$_SESSION['USE'];
 if($erz && $USE && ($USE==$_SESSION['author'] or $_SESSION["auth"]>=4)){
 delete("qda",$erz); delete("qdm",$erz); unset($_SESSION['rqt'][$erz]); 
-relod('/?section='.$_SESSION['frm']);}}
+relod('/?cat='.$_SESSION['frm']);}}
 
 function save_img(){
 $qb=$_SESSION['qb']; $read=$_SESSION['read'];
@@ -113,7 +114,8 @@ if(is_uploaded_file($fich_tmp) && !$exp_out){
 		if(!$_POST["imnot"])add_im_msg("",$rep.$mg.$w);}}//msg
 else{$exp_out.="upload refused: $rep$mg";}
 }//end_no_file
-return array($exp_out,$rep.$mg);}
+if($exp_out)alert($exp_out);
+return $rep.$mg;}
 
 function edit_tracks($hide,$erase){$id=$hide?$hide:$erase;
 if($_SESSION['USE']==$nam or $_SESSION['auth']>=4){
@@ -126,11 +128,10 @@ if($_GET['insert']=='ok')save_art();
 if($_GET['continue']=="ok" && $read)modif_art($read,$_POST['msg']);
 if($_GET['trash_art'])trash_art();
 if($_GET['delete_art'])delete_art();
-if($_GET['im']=='on')list($results,$im)=save_img();
+if($_GET['im']=='on')$im=save_img();
 if($_GET['publish'] && $_GET['idy'])publish_art($_GET['publish'],$_GET['idy'],'qdi');
 elseif($_GET['publish'] && $read)publish_art($_GET['publish'],$read,"qda");
-if($_GET['deploy']){require("ajxf.php"); $results.=deploy($_GET['deploy']);}
-if($_GET['idy_hide'] or $_GET['idy_erase'])edit_tracks($_GET["idy_hide"],$_GET["idy_erase"]);
-if($results)alert($results);}
+if($_GET['deploy']){req('ajxf'); alert($_GET['deploy']);}
+if($_GET['idy_hide'] or $_GET['idy_erase'])edit_tracks($_GET["idy_hide"],$_GET["idy_erase"]);}
 
 ?>

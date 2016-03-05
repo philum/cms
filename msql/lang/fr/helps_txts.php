@@ -2,8 +2,7 @@
 //philum_microsql_helps_txts
 $r["_menus_"]=array('description');
 $r["philum_pub_txt"]=array('[[http://philum.net/236§[phi1§32::picto]:popart] [v[:ver]§txtsmall2:css] [http://philum.net§[logo:picto]]:center]');
-$r["update_ok_alert"]=array('Derniers correctifs critiques :
-1506 : reset global de tous les fichiers');
+$r["update_ok_alert"]=array('');
 $r["conn_help_txt"]=array('Les connecteurs remplacent le code html par des fonctions interrogeables avec une séquence de variables, du type de celles-ci :
 
 Connecteurs de mise en forme :
@@ -220,7 +219,8 @@ Le fichier .htaccess est étudié pour faire de la barre d\'adresse une console de
 Vérifier les définitions htaccess propres à chaque serveur.
 - infomaniak : php_flag \"allow_url_fopen\" \"On\"
 php_flag \"allow_url_include\" \"On\"');
-$r["favs"]=array('L\'icône Star dans les menus d\'articles permet de les ajouter aux Favoris.<br>Les collections peuvent être distribuées dans une iframe.');
+$r["favs"]=array('L\'icône Like dans les menus d\'articles permet de les ajouter aux Favoris.
+Les collections peuvent être assemblées dans un Book.');
 $r["pictos"]=array('Liste des pictogrammes du système, dû à la typo \'philum\'.
 
 Les affectations reçoivent un connecteur, qui spécifie la nature de l\'icône, une typo, une image ou un objet vectoriel svg. 
@@ -243,7 +243,10 @@ Le répertoire virtuel permet de générer des classements publiques ; \'server/sha
 - picto/mini : usage de pictogramme ou des miniatures
 - update : informe la table \'server/shared_files\'');
 $r["comline"]=array('Ligne de commande : Certains modules utilisent une commande de modules comme paramètre (MenusJ, Apps, le connecteur \':module\').');
-$r["mod_cond"]=array('Les contextes possibles sont : home, cat, art, [a-z] (catégorie), [0-1] (article)');
+$r["mod_cond"]=array('contexte par défaut : (rien), home, cat, art
+[0-9] : contexte d\'un article précis (ID)
+[a-z] : contexte d\'une catégorie existante
+[a-z] : contexte déclenché par l\'url /context/nom');
 $r["updfonts"]=array('Après avoir téléchargé une typo il faut aller dans admin/fonts et faire un \'inject\' ; ça consiste à décompresser le fichier, l\'installer, et signaler son existence à la table des typos du serveur, qui n\'est pas concerné par les mises à jour, contrairement à celle du système.');
 $r["updpictos"]=array('Le système a besoin de pictogrammes, il faut télécharger la police \'philum\' dans l\'onglet \'pictos\'');
 $r["breadcrumb"]=array('Le Breadcrumb reçoit le nom de la catégorie, le nombre d\'articles et si besoin, la topologie à laquelle appartient l\'article. 
@@ -262,14 +265,12 @@ $r["newsletter_uns"]=array('se désinscrire');
 $r["conn_pub"]=array('Les connecteurs remplacent le html pour gagner de l\'espace et permettent de rédiger des commandes pour des applications');
 $r["search"]=array('Astuces : 
 - recherche booléenne : * à la fin
-- titres seulement : * au début
-- recherche vide : portant seulement sur les paramètres
-- recherche numérique : appel d\'un article depuis son ID
+- recherche vide : portant seulement sur des paramètres
 - filtres : ajouter les termes sous forme de connecteurs 
-ex: mot1;mot2:tag;mot3:auteurs (\'auteurs\' est une classe de tags utilisateur)
+ex: mot1;mot2:tag;mot3:auteurs (\'auteurs\' est une classe de tags)
 - ligne de commande d\'articles : priority=4&from=01-02-13&cat=public (cat, nocat, tag, notag, until, nbdays)
 - le bouton \'del\' permet d\'effacer le cache
-- le bouton \'creuser\' permet de continuer la recherche sur toute la base');
+- le bouton \'creuser\' permet de laisser la recherche continuer sur des périodes antérieures jusqu\'à ce qu\'une réponse soit trouvée');
 $r["defcons"]=array('Les définitions d\'importation de sites sont des points d\'ancrage où commence et se termine la copie des parties qui nous intéressent dans la page.
 
 Ce sont le titre et le corps du texte, et en option un chapeau.
@@ -288,8 +289,10 @@ $r["suggest"]=array('Coller l\'url de l\'article.
 Une prévisualisation tentera de s\'afficher. 
 Le champ mail est optionnel et renvoie une mention \"Proposé par [préfixe du mail]\". Vous serez averti lors de la publication.');
 $r["suggest_ok"]=array('Votre article a été publié');
-$r["console_cond"]=array('[Conditions:b] : Les états de lecture sont \'cat et \'art\' (catégorie et lecture d\'un article), en plus de \'home\' et \'all\'.
-Les modules s\'activent en fonction du contexte auquel ils appartiennent.');
+$r["console_cond"]=array('[Contexte:b] : Les modules s\'activent en fonction du contexte auquel ils appartiennent.
+home, cat et art sont les contextes par défaut. On peut cibler une catégorie précise, un article (ID), ou en créer.
+
+Ainsi quand on appelle la page /context/name tous les modules appartenant à ce contexte s\'affichent.');
 $r["console_mods"]=array('Le [menu de mods:b] n\'affecte que la session en cours. Pour que les effets prennent effet pour le visiteur, il faut l\'appliquer, pour que le numéro de version de la table de module figure dans [config/param/modules_table:l].');
 $r["scripts"]=array('param/titre/commande/option/en cache/masquer/template/br:module§button[,]');
 $r["video"]=array('Youtube, Dailymotion, Vimeo, Rutube, vk.com, Livestream');
@@ -332,7 +335,7 @@ $r["tracks_error2"]=array('Merci d\'indiquer un nom');
 $r["tracks_error3"]=array('Message vide');
 $r["retape"]=array('Des connecteurs obsolètes ont été remplacés');
 $r["prmb5"]=array('Le param \'auto_design\' (5) est actif : il supplante le design utilisateur');
-$r["flog"]=array('retenez votre ID pour être reconnu et retrouver vos données');
+$r["flog"]=array('fast-log: retenez votre ID pour être reconnu et retrouver vos données');
 $r["memstorage"]=array('les contenus sont stockés dans les variables locales de votre navigateur');
 $r["blocmenu"]=array('Le bloc \'menu\' a de particulier ses css qui lui permettent de gérer correctement les menus présentés dans des ul<li');
 $r["bloctest"]=array('ne s\'affiche pas, permet de tester des modules');
@@ -341,5 +344,12 @@ $r["first_user"]=array('Créer le compte Admin');
 $r["new_user"]=array('Création de compte');
 $r["meta_lang"]=array('ID des versions dans une autre langue. Le menu définit la langue de l\'article.');
 $r["tracks_moderation"]=array('les commentaires sont modérés');
+$r["twitter_oAuth"]=array('Paramètres d\'authentification de l\'API twitter 1.1 (https://apps.twitter.com/)');
+$r["tag_rename"]=array('Renommer un tag va, s\'il existe déjà, le détruire et associer les articles à au tag existant');
+$r["usertags"]=array('Ajouter des tags à cet article et retrouvez-les dans vos favoris');
+$r["api"]=array('L\'API permet de réaliser des tris complexes via une commande.
+- /module/api/{command} : affiche le résultat
+- /api/{command] : flux open data en json');
+$r["like"]=array('Les Likes sont publics');
 
 ?>

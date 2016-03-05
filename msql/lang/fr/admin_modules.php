@@ -31,17 +31,13 @@ $r["archives"]=array('navigation temporelle','Donner un titre','','');
 $r["art_mod"]=array('modules attachés aux articles : affiche un bouton dans les titres qui ouvrent ce menu de modules','commandes de modules : 
 param/title/command/option:module(§button)[,] 
 
-Ex: related_arts§lié à, related_by§lié par, tags/Tags/scroll/7:see_also-tags§tags, themes//scroll/7:see_also-usertags§themes, //scroll/7:see_also-source§source, art:rub_taxo§contexte','La rstr60 permet d\'afficher le résultat dans le corps de l\'article. Dans ce cas il faut spécifier l\'option de largeur de colonne. Elle diminue d\'autant la largeur des images.','');
-$r["articles"]=array('déroulé personnalisé d\'articles','liste d\'articles selon paramètres, séparés par un &amp;
-ex: tag=Une&amp;nbdays=1&amp;preview=true&amp;lasts=1-10
-
-- cat/tag : spécifie une catégorie / un tag ;
-- nocat/notag : exclut une catégorie / un tag ;
-- nbdays : champ temporel ;
-- preview : true, false, full ;
-- lasts : les plus récents (lasts=1 pour le premier, lasts=1-10 pour les 9 suivants) ;
-
-La commande \'multi\' autorise les templates ponctuels, et ne divise pas le résultat en pages comme \'articles\'.','','');
+Ex: related_arts§lié à, related_by§lié par, tags/Tags/scroll/7:see_also-tags§tags, thèmes/Thèmes/scroll/7:see_also-tags§themes, //scroll/7:see_also-source§source, art:rub_taxo§contexte','La rstr60 permet d\'afficher le résultat dans le corps de l\'article. Dans ce cas il faut spécifier l\'option de largeur de colonne. Elle diminue d\'autant la largeur des images.','');
+$r["articles"]=array('déroulé personnalisé d\'articles','paramètres de l\'Api :
+tag=Une&nbdays:1,preview:auto,limit:10
+- cat/tag : spécifie une catégorie / un tag
+- nocat/notag : exclut une catégorie / un tag
+- nbdays : champ temporel
+- preview : 1, 2, 3, auto','','');
 $r["ban_art"]=array('bannière','(ID) article utilisant la bannière, ou la première image cataloguée de l\'article, en tant que fond de page','','');
 $r["blocks"]=array('détermine les balises DIV de la page html, qui sont autant de blocs de modules (informé par le constructeur css, obligatoire)','liste des blocks de modules, séparés par un espace','','');
 $r["br"]=array('ajoute un saut de ligne','','','');
@@ -104,11 +100,9 @@ $r["hubs"]=array('liste des Hubs','Donner un titre','affiche nombre d\'articles'
 $r["jscode"]=array('ajoute des js dans le header','','','');
 $r["last"]=array('article le plus récent','','','');
 $r["leftbar"]=array('largeur de leftbar (pour les images et vidéos)','informé par css_builder après un \'save_width\'','','');
-$r["link"]=array('renvoie un lien (dans un li)','liens prédéfinis :
-- lien-clef : Home, ID, catégorie, module
-- plugin : /plug/index
-- mettre un titre : Home§Accueil
-- utiliser un picto : Home§home:picto','pas d\'espace après (or br si col)','pas dans une balise li');
+$r["link"]=array('renvoie un lien (dans un li)','Lien prédéfini : Home, ID d\'article, nom de catégorie
+Lien direct : /module/..., /plug/...
+Title : texte, picto : home:picto','pas d\'espace après (or br si col)','pas dans une balise li');
 $r["log-out"]=array('déconnexion','','','');
 $r["login"]=array('login','Donner un titre','à droite','');
 $r["login_popup"]=array('login dans une popup','Donner un titre','','');
@@ -140,8 +134,7 @@ $r["same_title"]=array('articles ayant le même titre','Donner un titre','','');
 $r["search"]=array('moteur de recherche','Donner un titre','aligne à droite','');
 $r["see_also-rub"]=array('Dans la même rubrique','spécifier la rubrique, 1=auto quand Home=All','','');
 $r["see_also-source"]=array('articles de la même source','Donner un titre','','');
-$r["see_also-tags"]=array('Articles ayant les mêmes Tags','Donner un titre','','');
-$r["see_also-usertags"]=array('liste des articles ayant les mêmes champs de tri utilisateur','spécifier le tag utilisateur','','');
+$r["see_also-tags"]=array('Articles ayant les mêmes Tags que l\'article en cours de lecture','spécifier la classe','','');
 $r["short_arts"]=array('articles courts (brèves)','spécifier le nombre de caractères de l\'article (4000)','','');
 $r["social"]=array('déroulé de publications','Donner un titre','','');
 $r["sources"]=array('source url des articles aspirés','nombre d\'occurences','','');
@@ -160,9 +153,10 @@ three
 $r["suggest"]=array('donne au visiteur le moyen de proposer un article depuis une Url','','','');
 $r["tab_mods"]=array('modules dans des onglets (tabs en anglais)','param/title/command/option:module§button[,]','','');
 $r["tag_arts"]=array('articles ayant pour Tag','spécifier le tag de référence pour le tri ;
-CAT indique que le tag recherché est le nom de la catégorie','','');
-$r["tags"]=array('liste des mots-clefs (tags)','Donner un titre','nb cols ou limite de scroll','');
-$r["tags_cloud"]=array('liste des mots-clefs (nuage de tags)','Donner un titre','','');
+si besoin, préciser la classe de tags
+ex: tag:classe','','');
+$r["tags"]=array('liste des mots-clefs (tags)','spécifier la classe de tags','nb/taille des cols ou limite de scroll','');
+$r["tags_cloud"]=array('liste des mots-clefs (nuage de tags)','spécifier la classe de tags','','');
 $r["taxo_arts"]=array('taxonomie d\'une rubrique / d\'un article (liste d\'articles, utilise le cache)','spécifier 1 (=rubrique en cours/All), une rubrique ou l\'ID d\'un article','','');
 $r["taxo_nav"]=array('liste des noeuds avec menus ouvrables (se réfère au cache, puis cherche les parents dans le temps)','plugin ; spécifier l\'ID d\'un article parent','','');
 $r["taxonomy"]=array('','','','');
@@ -175,10 +169,6 @@ $r["user_menu"]=array('navigation du site','liens prédéfinis :
 - mettre un titre : Home§Accueil
 - utiliser un picto : Home§home:picto
 - lien interne : /?plug=myplug§name_of_plug','css','');
-$r["usertag_arts"]=array('articles ayant un tag utilisateur (sans préciser la classe)','spécifier le tag utilisateur ;
-CAT indique que le tag recherché est le nom de la catégorie','','');
-$r["usertags"]=array('liste des Tags d\'un champ de tri utilisateur','spécifier le champ de tri utilisateur','nb cols ou limite de scroll ','');
-$r["usertags_cloud"]=array('liste des tag utilisateur (nuage de tags)','','','');
 $r["video_playlist"]=array('','nb de jours','','');
 $r["video_viewer"]=array('viewer vidéo en ajax','règles de tri séparées par \'|\' :
 - tag, cat, priority 
@@ -189,6 +179,11 @@ $r["video_viewer"]=array('viewer vidéo en ajax','règles de tri séparées par \'|\
 $r["desktop"]=array('paramètres du bureau','spécifier couleur html, #_var, dégradé ou image','','');
 $r["popart"]=array('ouvre article (local ou distant) dans une popup','','','');
 $r["video"]=array('affiche une vidéo','id de la vidéo','','');
-$r["userclasstag_arts"]=array('articles ayant un tag d\'une classe utilisateur précise','spécifier la classe de tag utilisateur','','');
+$r["classtag_arts"]=array('Affiche les articles ayant une classe de tags définie','spécifier la classe de tags','','');
+$r["api_arts"]=array('Appel de l\'Api en utilisant les constructeurs Load','commande de l\'Api','','');
+$r["api_mod"]=array('Appel de l\'API en utilisant les constructeurs de l\'API','commande d\'articles de type Json','','');
+$r["api"]=array('Renvoie le résultat d\'une requête à l\'Api','commande séquentielle (voir /module/api)','','');
+$r["rssin"]=array('chaîne de flux rss','','','');
+$r["module"]=array('ID du module à appeler (utilisé pour simplifier les requêtes)','','','');
 
 ?>

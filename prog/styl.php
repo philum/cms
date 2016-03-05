@@ -2,8 +2,7 @@
 //philum_css_builder
 
 function edit_css(){$base="msql/design/"; $basy="msql/system/";
-#boot
-$_SESSION['headr'].=clrpckr_js(); $qb=ses('qb'); $lh=sesmk('csslang');
+clrpckr_js(); $qb=ses('qb'); $lh=sesmk('csslang');
 $defsb["_menus_"]=array("div","class","element","color","bkg","border","free");
 $edit=$_GET["edit_css"]?$_GET["edit_css"]:$_POST["edit_css"];
 if(!$_SESSION['desgn'])$_SESSION['desgn']=$_SESSION['prmd'];
@@ -11,7 +10,7 @@ $numb=$_GET["desgn"];//desgn
 if($numb && $numb!="="){$_SESSION['desgn']=$numb;
 	$_SESSION['clrset']=$numb; $_SESSION['prmd']=$numb;
 	$_SESSION['clrs'][$numb]=msql_read('design',$qb.'_clrset_'.$_SESSION['clrset'],'');
-	$defs=plug_motor($base,$qb.'_design_'.$_SESSION['desgn'],$defsb);}
+	$defs=read_vars($base,$qb.'_design_'.$_SESSION['desgn'],$defsb);}
 $desgn=$_SESSION['desgn']; $prmd=$_SESSION['prmd'];
 $clrset=$_SESSION['clrset']=$_SESSION['clrset']?$_SESSION['clrset']:$prmd;
 $f_dsn=$qb.'_design_'.$desgn;
@@ -19,7 +18,7 @@ $f_clr=$qb.'_clrset_'.$clrset;
 $basecss='css/'.$f_dsn.'.css';
 $basecss_temp='css/'.$qb.'_design_dev_'.$prmd.'.css';
 #load
-if(!$defs)$defs=plug_motor($base,$f_dsn,$defsb); unset($defs['_menus_']);//good_nb
+if(!$defs)$defs=read_vars($base,$f_dsn,$defsb); unset($defs['_menus_']);//good_nb
 unset($defs[0]); $defs=reorder_keys($defs);
 if(!is_file($basecss_temp))build_css($basecss_temp,$defs);
 #sav
@@ -66,7 +65,7 @@ if($_GET["import_clrset"]){
 if($_GET["add_clrset"])save_clr($qb.'_'.$_GET["clrset"]);
 //reset
 if($_GET["reset_clr"] or $_GET["add_design"]){
-	$_SESSION['clrs'][$prmd]=msql_read('system',"default_clr_2",""); 
+	$_SESSION['clrs'][$prmd]=msql_read('system',"default_clr_2",''); 
 	save_clr($f_clr);}
 if($_GET["reset_default"] or $_GET["add_design"]){
 	$defs=css_default(); unset($defs['_menus_']);
@@ -76,10 +75,10 @@ if($_GET["reset_global"] or $_GET["add_design"]){
 	save_vars($base,$f_dsn,$defs); build_css($basecss_temp,$defs);}
 //public
 if($pub=$_GET["public_clr"]){
-	$_SESSION['clrs'][$prmd]=msql_read('design','public_clrset_'.$pub,"");
+	$_SESSION['clrs'][$prmd]=msql_read('design','public_clrset_'.$pub,'');
 	save_clr($f_clr);}
 if($pub=$_GET["public_design"]){
-	$defs=msql_read('design','public_design_'.$pub,""); unset($defs['_menus_']);
+	$defs=msql_read('design','public_design_'.$pub,''); unset($defs['_menus_']);
 	save_vars($base,$f_dsn,$defs); build_css($basecss_temp,$defs);}
 //null
 if($_GET["empty_design"]){$defs=empty_design($defs,'css');
@@ -104,22 +103,22 @@ if($_GET["reset_this"]){$ec=$_GET["edit_css"];
 	build_css($basecss_temp,$defs);}}
 //restore_design
 if($_GET["restore"]=="design"){
-	$defs=plug_motor($base,$f_dsn.'_sav',$defsb); unset($defs['_menus_']);
+	$defs=read_vars($base,$f_dsn.'_sav',$defsb); unset($defs['_menus_']);
 	save_vars($base,$f_dsn,$defs); build_css($basecss_temp,$defs);}
 //restore_clrset
 if($_GET["restore"]=="clrset"){
-	$r=plug_motor($base,$f_clr.'_sav',''); 
+	$r=read_vars($base,$f_clr.'_sav',''); 
 	foreach($r as $k=>$v)$clrst[]=$v[0];
 	$_SESSION['clrs'][$prmd]=$clrst; save_clr($f_clr); 
 	build_css($basecss_temp,$defs);}
 //herits
 if($_GET["herit_desgn"]){list($qbb,$nbd)=explode('_',$_GET["herit_desgn"]);
-	$defs=plug_motor($base,$qbb.'_design_'.$nbd,$defsb);
-	//$_SESSION['clrs'][$desgn]=msql_read("design",$qbb.'_clrset_'.$nbd,"");
+	$defs=read_vars($base,$qbb.'_design_'.$nbd,$defsb);
+	//$_SESSION['clrs'][$desgn]=msql_read("design",$qbb.'_clrset_'.$nbd,'');
 	//save_clr($f_clr);
 	save_vars($base,$f_dsn,$defs); build_css($basecss_temp,$defs);}
 if($_GET["herit_clrset"]){list($qbb,$nbd)=explode('_',$_GET["herit_clrset"]);
-	$_SESSION['clrs'][$desgn]=msql_read("design",$qbb.'_clrset_'.$nbd,"");
+	$_SESSION['clrs'][$desgn]=msql_read("design",$qbb.'_clrset_'.$nbd,'');
 	save_clr($f_clr); build_css($basecss_temp,$defs);}
 //ff
 if($_GET['addff']){$defs=defs_adder_ff($defs);
@@ -145,7 +144,7 @@ if($_GET["newfrom"]){$defs=save_css_newfrom($defs,$_GET["newfrom"]);
 if($_GET["atpos"]){$n=count($defs);
 	$defs=save_css_displace($defs,$_GET["atpos"],$_POST["pos"]);
 	if(count($defs)==$n)save_vars($base,$f_dsn,$defs);}
-if($_GET["sav"]){save_vars($base,$f_dsn,$defs); save_clr($f_clr);}//_sav
+if($_GET['sav']){save_vars($base,$f_dsn.'_sav',$defs,1); save_clr($f_clr);}//_sav
 if($_GET["apply"]){save_vars($base,$f_dsn,$defs); save_clr($f_clr);
 	build_css($basecss,$defs); informe_config_design();}//informe_config_width($defs);
 //build_css
@@ -286,7 +285,7 @@ if($r){foreach($r as $k=>$v){$v=substr($v,0,-4); list($nd,$bs,$nb,$sv)=split("_"
 		$rb[$nd][$nb][$bs]=$nb;}}
 $tab[]=array('hub','design','clrset');
 if($rb)foreach($rb as $k=>$v){
-	if(is_array($v)){$taba=""; $tabb="";
+	if(is_array($v)){$taba=''; $tabb='';
 	foreach($v as $nb=>$bs){
 	$ra=msql_read('users',$k.'_design',''); $na=$ra[$nb][0]?$ra[$nb][0]:$bs["design"];
 	if($d=="herit")$nd=$k.'_'; else $nd=''; $tabt[$nb]=$nb;
@@ -302,17 +301,17 @@ function clrset_view($d){
 $r=msql_read('design',$d,'');
 if(is_array($r))foreach($r as $k=>$v){
 if($k>0){$sty='"style="color:#'.invert_color($v,1).'; background-color:#'.$v.'; ';
-if($v=="")$v="none"; $ret.=btn($sty,"__").' ';}}
+if(!$v)$v="none"; $ret.=btn($sty,"__").' ';}}
 return $ret;}
 
 function f_inp_clr_manage_j(){
 $ndc=$_SESSION['clrset']?$_SESSION['clrset']:$_SESSION['prmd'];
 $clr=msql_read('design',$_SESSION['qb'].'_clrset_'.$ndc,''); $nb=count($clr);
-$clrn=array("","bkg","border","bloc","identity","active","art_bkg","art_txt","txt");
+$clrn=array('',"bkg","border","bloc","identity","active","art_bkg","art_txt","txt");
 for($i=1;$i<=$nb;$i++){$name=$i.($clrn[$i]?':'.$clrn[$i]:'');
 $inp=input2('text','" size="5" id="colorpickerField'.$i,$clr[$i],'');
 $ret.=div(atc('clrp').atd('colorpick'.$i).ats('color:#'.invert_color($clr[$i],1)),divs('background-color: #'.$clr[$i].';',$name.$inp));}
-return $ret.br().ljb("txtbox","SaveClr",$nb,nms(57)).divd("clrreponse","");}
+return $ret.br().ljb('txtbox','SaveClr',$nb,nms(57)).divd("clrreponse",'');}
 
 #editor
 
@@ -323,26 +322,13 @@ if($p[1])$t.=".".$p[1].' ';
 if($p[2])$t.=$p[2].' ';
 return $t;}
 
-function mnu_line_color($d,$p){$r[""]="";
-$klr=$_SESSION['clrs'][$_SESSION['prmd']];
-$k=explode("|",$d); $nb=count($klr);
-for($i=0;$i<=3;$i++){if($k[$i]=='undefined')$k[$i]='';}
-for($i=0;$i<=$nb;$i++){//$r[]=$i;
-	$sty='" style="background-color:#'.$klr[$i].';';
-	if($k[0]==$i && $i)$h1=$i.$sty; if($k[1]==$i && $i)$h2=$i.$sty;
-	if($k[2]==$i && $i)$h3=$i.$sty; $r[$i]=$i.$sty;}
-$ret=menuder_form_kv($r,$p.'1" id="'.$p.'1',$h1,"vk").' ';
-$ret.=menuder_form_kv($r,$p.'2" id="'.$p.'2',$h2,"vk").' ';
-$ret.=menuder_form_kv($r,$p.'3" id="'.$p.'3',$h3,"vk");
-return $ret;}
-
 function petit_clr($t,$clr){
 if(!$t)$t=0; $a=explode("|",$t);
 foreach($a as $v){if(!$v)$v="-";
 $ret.=btn('" style="background:#'.$clr[$v].'; color:#'.invert_color($clr[$v],1).'; padding:0; float:left; width:8px;',$v);}
 return $ret;}
 
-function divname_cls($t){return 'css'.str_replace(array(".","#"," "),"",$t);}
+function divname_cls($t){return 'css'.str_replace(array(".","#"," "),'',$t);}
 
 function name_line_j($k,$p,$op,$clrb=''){
 $csa='txtnoir'; $t=name_classe($p);
@@ -397,13 +383,12 @@ function SaveClr(nb){var clrs='/';
 return $ret;}
 
 function clrpckr_js(){$jsp='/js/colorpicker/';
-$ret.=css_link($jsp.'css/colorpicker.css');
-$ret.=css_link($jsp.'css/layout.css');
-$ret.=js_link($jsp.'js/jquery.js');
-$ret.=js_link($jsp.'js/colorpicker.js');
-$ret.=js_link($jsp.'js/eye.js');
-$ret.=js_code(clrpckr_layout());
-return $ret;}
+Head::add('csslink',$jsp.'css/colorpicker.css');
+Head::add('csslink',$jsp.'css/layout.css');
+Head::add('jslink',$jsp.'js/jquery.js');
+Head::add('jslink',$jsp.'js/colorpicker.js');
+Head::add('jslink',$jsp.'js/eye.js');
+Head::add('jscode',clrpckr_layout());}
 
 //see_css
 function styls($d,$edit){$qb=$_SESSION['qb']; $base='msql/design/';
@@ -411,7 +396,7 @@ $ndd=$_SESSION['desgn']?$_SESSION['desgn']:$_SESSION['prmd'];
 $ndc=$_SESSION['clrset']?$_SESSION['clrset']:$_SESSION['prmd'];
 $nod=$qb.'_design_'.$ndd; $ndc=$qb.'_clrset_'.$ndc;
 if($d=="select" or $d=="herit")$ret=popup('select design',charge_sets($d),340);
-if($d=="edit"){$rb=plug_motor('msql/design/',$nod,"");
+if($d=="edit"){$rb=read_vars('msql/design/',$nod,'');
 	$ret=f_inp_facilities($rb,$edit);}
 //if($d=="css1")$ret=nl2br(read_file('css/'.$qb.'_design_'.$_SESSION['cond'][0].'.css'));
 if($d=="css2")$ret=nl2br(read_file('css/'.$nod.'.css'));
@@ -454,7 +439,7 @@ function save_css_j($k,$v,$c){//facil_css//stylsav
 $ndd=$_SESSION['desgn']?$_SESSION['desgn']:$_SESSION['prmd'];
 $base='msql/design/'; $nod=$_SESSION['qb'].'_design_'.$ndd;
 if($_SESSION['desgn'])$nodb=$_SESSION['qb'].'_design_dev_'.$ndd; else $nodb=$nod;
-$defs=plug_motor($base,$nod,'');
+$defs=read_vars($base,$nod,'');
 if($c==1)$defs=save_css_clr($defs,$k,$v);//clr
 elseif($c==2)$defs=save_css_bkg($defs,$k,$v);//img
 elseif($c==3)$defs=save_css_clname($defs,$k,$v);//classname
@@ -501,8 +486,7 @@ if($v==3)return lkt('txtsmall2','http://new.myfonts.com/','myfonts').' ';}
 
 function font_set_cat($k,$v,$go){
 $ret=br(); $ml['-']=1; if($_SESSION['fntcat'])$ml+=$_SESSION['fntcat'];
-$ret.=balise("select",array(5=>"",16=>"width:80px;",15=>'jumpslct(\'fntcat'.$k.'\',this)'),batch_defil($ml));
-//$ret.=jump_btns('fntcat'.$k,addslashes(implode("|",array_keys_b($_SESSION['fntcat']))),'');
+$ret.=select('style="width:80px;" onchange="jumpslct(\'fntcat'.$k.'\',this)"',$ml,'kk');
 $ret.=input2('text','fntcat" size="8" id="fntcat'.$k,$v,'');
 $ret.=lj('txtred',$go.'_cat___fntcat'.$k,'ok').' ';
 return $ret;}
@@ -598,7 +582,7 @@ if($defs)foreach($defs as $k=>$v)//find
 
 function obtain_values($defs,$css,$vl,$vb){
 $k=find_value($defs,$css); $val=$defs[$k][6];
-return embed_detect($val,$vl,$vb,"");}
+return embed_detect($val,$vl,$vb,'');}
 
 function obtain_set($st){$set=explode(" ",$st); 
 foreach($set as $k=>$v)$set[$k]=str_replace('px','',$v);
@@ -635,28 +619,32 @@ foreach($defs as $ka=>$va){
 $ff=embed_detect($val,'font-family:',';','');
 $ff=str_replace(array(" ","'",'"'),'',$ff);
 $t.=hidden('facefont','',$ff);
-$t.=menuder_form_kv($mnu_divs,"applyfont",$t_size,"kv");
-$t.=input2('submit','save',"Apply_font","").br();
+//$t.=menuder_form_kv($mnu_divs,"applyfont",$t_size,"kv");
+$t.=select(atn('applyfont'),$mnu_divs,'kv',$t_size);
+$t.=input2('submit','save',"Apply_font",'').br();
 return form($url.'#'.$k,$t);}
 	
 function facil_images($k,$url,$val){
 $ret.=btn('txtx',toggle('','bkg'.$k.'_dsnav_bkg_'.$k,'backgrounds')).' ';
 if(strpos($val,':url(/')!==false)$ret.=lkc("txtred",$url.'&save_img='.$k.'&erase_img==','delete_background');
-$ret.=btd('bkg'.$k,"");
-	$mnu_bkg=array("","no-repeat","repeat-x","repeat-y","repeat");
-	$mnu_im_align=array("","left","right","center");
-	$mnu_im_valign=array("","top","bottom","center");
+$ret.=btd('bkg'.$k,'');
+	$mnu_bkg=array('',"no-repeat","repeat-x","repeat-y","repeat");
+	$mnu_im_align=array('',"left","right","center");
+	$mnu_im_valign=array('',"top","bottom","center");
 	if(strpos($val,"background:url")!==false){
-		$t_ims=embed_detect($val,"background:url",";","");}
+		$t_ims=embed_detect($val,"background:url",";",'');}
 	list($urb,$reap,$fixd,$alg,$vlg)=explode(" ",$t_ims);
 	if($fixd){$chk=' checked';}
 	if($urb){$urb=substr($urb,1,-1); $ret.=lkt('txtx',$urb,'open').br();}
-	$mnu=menuder_form_kv($mnu_bkg,"repeat",$reap,"vv").' ';
-	$mnu.=menuder_form_kv($mnu_im_align,"align",$alg,"vv").' ';
-	$mnu.=menuder_form_kv($mnu_im_valign,"valign",$vlg,"vv").' ';
+	//$mnu=menuder_form_kv($mnu_bkg,"repeat",$reap,"vv").' ';
+	//$mnu.=menuder_form_kv($mnu_im_align,"align",$alg,"vv").' ';
+	//$mnu.=menuder_form_kv($mnu_im_valign,"valign",$vlg,"vv").' ';
+	$mnu.=select(atn('repeat'),$mnu_bkg,'vv',$reap).' ';
+	$mnu.=select(atn('align'),$mnu_im_align,'vv',$alg).' ';
+	$mnu.=select(atn('valign'),$mnu_im_valign,'vv',$vlg).' ';
 	$mnu.=checkbox('fixed','fixed','fixed',$chk);
 //$upl=upload_btn('upl',$url.'&save_img='.$k,'upload').br();
-return $ret.imgform($url.'&save_img='.$k,$mnu,"");}
+return $ret.imgform($url.'&save_img='.$k,$mnu,'');}
 
 function facil_names($defs,$k){
 $sty='" size="20'; $ids='cl1'.$k.'|cl2'.$k.'|cl3'.$k;
@@ -666,20 +654,41 @@ $ret.=btn('txtsmall2','element:').input(1,'cl3'.$k.$sty,$defs[$k][2],'').' ';
 $ret.=lj('popbt','css'.$k.'_stylsav____'.$k.'_3__'.$ids,'save').br().br();
 return $ret;}
 
+function select_clr($p,$n){//stylclr
+$r=$_SESSION['clrs'][$_SESSION['prmd']]; $n=count($r);
+for($i=0;$i<=$n;$i++){$t=mnu_line_t($r[$i],$i);
+	$ret.=lj('','bt'.$p.'_stylsetclr___'.$r[$i].'_'.$i.'_'.$p,$t);}
+return $ret;}
+
+function mnu_line_t($clr,$t,$o=''){if($clr)$cb=invert_color($clr,1);
+if($o)$s='border:1px solid gray; ';
+return divs($s.'padding:2px 4px; color:#'.$cb.'; background-color:#'.$clr,$t);}
+
+function mnu_line_bt($clr,$n,$p){//stylsetclr
+$h=hidden('',$p,$n); $t=mnu_line_t($clr,$n);
+return togbub('stylclr',$p.'_'.$n,$t).$h;}
+
+function mnu_line_color($d,$p){$r=explode('|',$d);//txt|link|hover
+$kr=$_SESSION['clrs'][$_SESSION['prmd']]; $n=count($klr);
+for($i=0;$i<3;$i++){$clrn=$r[$i]=='undefined'||!$r[$i]?'0':$r[$i]; $nid=$i+1;
+	$ret.=span(atc('cell').atd('bt'.$p.$nid),mnu_line_bt($kr[$clrn],$clrn,$p.$nid));}
+return $ret;}
+
 function facil_colors($defs,$k,$url){
-$t=btn("txtsmall",'text').' | '.btn("txtsmall",'link').' | '.btn("txtsmall",'hover').br();
-$t.=btn("txtsmall",'color').' '.mnu_line_color($defs[$k][3],'clr'.$k).br();
-$t.=btn("txtsmall",'backg').' '.mnu_line_color($defs[$k][4],'bkg'.$k).br();
-$t.=btn("txtsmall",'border').' '.mnu_line_color($defs[$k][5],'bdr'.$k).' ';
+$t=divc('row',btn('cell','').btn('cell','text').btn('cell','link').btn('cell','hover'));
+$t.=divc('row',btn('cell','color').mnu_line_color($defs[$k][3],'clr'.$k));
+$t.=divc('row',btn('cell','backg').mnu_line_color($defs[$k][4],'bkg'.$k));
+$t.=divc('row',btn('cell','border').mnu_line_color($defs[$k][5],'bdr'.$k));
+$ret=divc('table',$t);
 foreach(array('clr','bkg','bdr') as $va){$rb.=$va.$k.'1|'.$va.$k.'2|'.$va.$k.'3|';}
-$t.=lj('popbt','css'.$k.'_stylsav____'.$k.'_1__'.$rb,'save').br();
-return form($url.'#'.$k,$t);}
+$ret.=lj('popbt','css'.$k.'_stylsav____'.$k.'_1__'.$rb,'save').br();
+return $ret;}
 
 function facil_css($k,$url,$v){//save_css_j//stylsav
 $v=str_replace("} ","}\n",$v);//smart_css
 $v=str_replace("; ",";\n",$v);
 $t=f_inp_edit_css($k);
-$t.=txarea('cssarea'.$k,$v,60,'10" class="console').' ';
+$t.=txarea('cssarea'.$k,$v,60,10,atc('console')).' ';
 return form($url.'#'.$k,$t);}
 
 function facil_globalc($k,$nc){$r=css_default(1);
@@ -701,7 +710,8 @@ function facil_pos($defs,$k){$u='/?admin=css&';
 $ret.=lkc('txtyl',$u.'erase='.$k.'#'.($k-1),'delete').' ';
 $ret.=lkc('txtbox',$u.'newfrom='.$k.'&edit_css='.($k+1).'#'.($k+1),nms(44)).' ';
 foreach($defs as $ka=>$v){$rb[$ka]=name_classe($v);}
-$t.=btn('txtx','position:').menuder_form_kv($rb,'pos',$k,"kv");
+//$t.=btn('txtx','position:').menuder_form_kv($rb,'pos',$k,"kv");
+$t.=btn('txtx','position:').select(atn('pos'),$rb,'kv',$k);
 $t.=input2('submit','save',"ok");
 $ret.=form($u.'&atpos='.$k,$t);
 return $ret;}
@@ -764,14 +774,14 @@ return $ret;}
 
 function modif_css($defs,$k,$deb,$end,$new){$val=$defs[$k][6];
 	if(strpos($val,$deb)===false){$defs[$k][6].=' '.$new;}
-	else{$old=embed_detect($val,$deb,$end,"");
+	else{$old=embed_detect($val,$deb,$end,'');
 	$defs[$k][6]=str_replace($deb.$old.$end,$new,$val);}
 return $defs;}
 
 function save_img_b($spe){
 	$fich=$_FILES['fichier']['name'];
 	$fich=normalize($fich);
-	if($fich==""){$exp_out.="empty";}
+	if(!$fich){$exp_out.="empty";}
 	if(stristr(".jpg.png.gif",substr($fich,-4))!==false)
 	return '../imgb/css_'.$_SESSION['qb'].'_'.$fich;}
 
@@ -850,10 +860,10 @@ if($v[2] && $v[3]){
 	$re[$v[0].$v[1]][]=$v[2].':'.$v[3].' ';}
 	else $re[$v[0].$v[1]][]=$v[2].':'.$v[3].' ';}
 elseif($v[3]) $re[$v[0].$v[1]][]=$v[3].' ';}
-foreach($re as $k=>$v){$ter="";//groupe par attributs cummuns
+foreach($re as $k=>$v){$ter='';//groupe par attributs cummuns
 	foreach($v as $ka=>$va){$ter.=$va;}
 	$rte[$ter][]=$k;}
-foreach($rte as $k=>$v){$ter="";//$rte
+foreach($rte as $k=>$v){$ter='';//$rte
 	foreach($v as $ka=>$va){$ter.=$va.', ';}
 	$ret.=substr($ter,0,-2).'{'.$k.'}'."\n";}
 $ret=str_replace(array(" ,","  ","a a"),array(","," ","a"),$ret);//clean
@@ -863,7 +873,7 @@ function write_css($basecss,$r){
 if($r)foreach($r as $k=>$v){
 	if($v[2] && $v[3]){$re[$v[0].$v[1]][]=$v[2].':'.$v[3].' ';}
 	elseif($v[3])$re[$v[0].$v[1]][]=$v[3].'';}
-if($r)foreach($re as $k=>$v){$ter="";//groupe par css
+if($r)foreach($re as $k=>$v){$ter='';//groupe par css
 	foreach($v as $ka=>$va){
 		if(strpos($k,"font-face"))$ret.=$k.' {'.$va.'}'."\n"; else $ter.=$va;}
 	if($ter)$ret.=$k.' {'.$ter.'}'."\n";}
@@ -881,8 +891,8 @@ return $ret;}
 
 function build_css($basecss,$defs,$clr=''){unset($defs['_menus_']); //p($defs);
 $clr=$clr?$clr:$_SESSION['clrs'][$_SESSION['prmd']];
-$sheets=array(3=>"color",4=>"background-color",5=>"border-color","");
-$attributes=array("","a","a:hover","");
+$sheets=array(3=>"color",4=>"background-color",5=>"border-color",'');
+$attributes=array('',"a","a:hover",'');
 	if($defs)foreach($defs as $k=>$v){$css_name=name_classe($v);
 	if($css_name!='#div .class element '){
 		for($i=3;$i<6;$i++){
@@ -891,14 +901,11 @@ $attributes=array("","a","a:hover","");
 				if(is_numeric($conn[$o])) $cur='#'.$clr[$conn[$o]].';';
 				//elseif(is_numeric(hexdec($conn[$o]))) $cur='#'.$conn[$o].';';
 				elseif($conn[$o]) $cur='#'.$conn[$o].';';
-				else $cur="";
+				else $cur='';
 				$ret[]=array($css_name,$attributes[$o],$sheets[$i],$cur);}}
-	$ret[]=array($css_name,"","",affect_rgba($v[6],$clr));}}
-if($_GET["cmpq"]){write_css_c($basecss,$ret);}else{write_css($basecss,$ret);}
-if($_GET["sav"]=="="){$and="=&exit_design==";}else{$and="css";}
-if($_GET["bkg"]){$and.='css&bkg='.$_GET["bkg"];}
-if($_GET["edit_css"]){$and='css&edit_css='.$_GET["edit_css"].'#'.$_GET["edit_css"];}
-//if(!$_GET["log"] && !$_POST["Submit"]) relod("/?admin=$and");
+	$ret[]=array($css_name,'','',affect_rgba($v[6],$clr));}}
+if($_GET["cmpq"])write_css_c($basecss,$ret); else write_css($basecss,$ret);
+
 return $ret;}
 
 ?>

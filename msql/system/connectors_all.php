@@ -122,7 +122,7 @@ $r["swf"]=array('embed','','media');
 $r["t"]=array('embed','','html');
 $r["tables"]=array('SaveJ','txarea_filters_txtarea__deltables','del');
 $r["thumb"]=array('embed','','media');
-$r["twit"]=array('embed','','media');
+$r["poptwit"]=array('embed','','media');
 $r["twitter"]=array('embed','','media');
 $r["version"]=array('embed','','media');
 $r["video"]=array('embed','','media');
@@ -132,7 +132,6 @@ $r["webpage"]=array('embed','','tools');
 $r["mktable"]=array('embed_slct','\',\'\',\'\',\'mktable','filters');
 $r["svgcode"]=array('embed','','tools');
 $r["popmsql"]=array('embed','','arts');
-$r[1]=array('','','');
 $r[":pre"]=array('conn','_delconn_pre','del');
 
 ?>

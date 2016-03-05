@@ -42,7 +42,7 @@ $r[38]=array('config arts','explicit url','1');
 $r[39]=array('config','pages ajax','0');
 $r[40]=array('template arts','rss','1');
 $r[41]=array('config arts','full text','1');
-$r[42]=array('template arts','usertags','0');
+$r[42]=array('social','usertags','0');
 $r[43]=array('template arts','category','0');
 $r[44]=array('social','facebook','1');
 $r[45]=array('social','twitter','1');
@@ -52,7 +52,7 @@ $r[48]=array('menu admin','login','0');
 $r[49]=array('social','words','1');
 $r[50]=array('template arts','views','1');
 $r[51]=array('menu admin','open admin','0');
-$r[52]=array('social','favs','0');
+$r[52]=array('social','fav','1');
 $r[53]=array('save','save in ajax','0');
 $r[54]=array('template arts','date travel','');
 $r[55]=array('local','template pubs','1');
@@ -90,5 +90,8 @@ $r[86]=array('social','tracks','1');
 $r[87]=array('config arts','empty mini','1');
 $r[88]=array('local','template read','');
 $r[89]=array('menu admin','env. meta','1');
+$r[90]=array('social','like','1');
+$r[91]=array('social','poll','1');
+$r[92]=array('config','accessibility','0');
 
 ?>

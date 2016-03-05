@@ -180,7 +180,7 @@ return assistant($rid,'SaveJ',ajx($k.'-'.$ka).'_msqlmodif__x_'.$j,$va,'');}
 //return input(1,$rid,$va).lj('popbt',ajx($k.'-'.$ka).'_msqlmodif__x_'.$j,'save');
 
 function medit_shot_bt($va,$k,$ka,$b,$nd){$id=ajx($k.'-'.$ka); if(!trim($va))$va='-';
-return  '<a id="'.$id.'" ondblclick="'.atj('SaveJ','popup_msqledit___'.$b.'_'.$nd.'_'.ajx($k).'_'.ajx($ka)).'">'.$va.'</a>';}
+return  '<a id="'.$id.'" ondblclick="'.sj('popup_msqledit___'.$b.'_'.$nd.'_'.ajx($k).'_'.ajx($ka)).'">'.$va.'</a>';}
 //return togbub('msqledit',$b.'_'.$nd.'_'.$k.'_'.$ka,$val);
 
 function draw_table($r,$murl,$adm=''){//adm=saving
@@ -192,7 +192,7 @@ foreach($r as $k=>$v){$ra='';$i++;
 	if($k=='_menus_' && $ra){
 		foreach($ra as $ka=>$va)$ra[$ka]=lka(sesm('url').$murl.'&sort='.$ka,$ka.':'.$va);
 		array_unshift($ra,lka(sesm('url').$murl.'&sort=k','keys')); 
-		if(auth(4))array_unshift($ra,ljb('','chkall()','','²'));}
+		if(auth(4))array_unshift($ra,ljb('','chkall','','²'));}
 	elseif(is_array($ra)){
 		foreach($ra as $ka=>$va)$ra[$ka]=medit_shot_bt($va,$k,$ka,$dr,ajx($nd));
 		if(auth(4))array_unshift($ra,$edit.lj($css,'popup_editmsql___'.$jurl,$k));
@@ -224,10 +224,10 @@ return call_user_func($d,$r,$g);}
 
 function msql_modifs($defs,$defsb,$folder,$pre,$node,$basename,$modif){
 switch($modif){
-case('restore'): $defs=plug_motor($folder,$node.'_sav',$defsb); break;
+case('restore'): $defs=read_vars($folder,$node.'_sav',$defsb); break;
 case('import_old'):$defs=$$table; break;
 case('del_menus'):unset($defs['_menus_']); break;
-case('del_file'): $_GET['sav']=1; save_vars($folder,$node,$defs);
+case('del_file'): save_vars($folder,$node.'_sav',$defs);
 	unlink($basename.'.php'); relod('/'.$folder.$pre); break;
 case('del_table'):$r["_menus_"]=$defs["_menus_"]; $defs=$r; break;
 //auto
@@ -269,7 +269,7 @@ return $ret;}
 function import_defs($defsb,$d){
 if(strpos($d,'msql/')!==false){require('plug/microxml.php'); return clkt($d);}
 else{list($a,$b)=split_one('/',$d,1); if(substr($a,5)!='msql/')$a=sesm('root').$a;
-return plug_motor($a.'/',$b,$defsb);}}
+return read_vars($a.'/',$b,$defsb);}}
 
 function import_keys($r,$d){
 list($a,$b)=split_one('/',$d,1); $rb=msql_read_b($a,$b);
@@ -438,7 +438,7 @@ if(auth(7))return plugin('backup_msql','');}
 
 #render 
 function msql_adm_head($u,$base,$prefix,$table,$version){
-$rh[]['jscode']='//slctmenuder
+Head::add('jscode','//slctmenuder
 	function MM_jumpMenu(targ,selObj,restore){
 	eval(targ+".location=\''.$u.'&def="+selObj.options[selObj.selectedIndex].value+"\'");
  	if(restore)selObj.selectedIndex=0;}
@@ -458,8 +458,7 @@ function display_all(k){val=document.getElementById(\'cln\'+k).value;
 	document.getElementById(\'cnt\'+k).innerHTML=val;}
 function chkall(){var inp=document.getElementsByTagName("input");
 	for(i=0;i<inp.length;i++){if(inp[i].type=="checkbox"){
-	if(inp[i].checked=="")inp[i].checked="checked"; else inp[i].checked="";}}}';
-return $rh;}
+	if(inp[i].checked=="")inp[i].checked="checked"; else inp[i].checked="";}}}');}
 
 #core
 function sesm($k,$v=''){return sesr('mu',$k,$v);}
@@ -551,7 +550,6 @@ function msql_adm($msql=''){//echo br();
 $root=sesm('root','msql/');
 $auth=$_SESSION['auth']; $ath=6;//auth_level_mini
 $wsz=define_s('wsz',700);
-$_SESSION['head_r']='';
 $msql=$msql?$msql:$_GET['msql'];
 $_SESSION['page']=$_GET['page']?$_GET['page']:1;
 #boot
@@ -564,17 +562,17 @@ if($msql && $msql!='='){$url=sesm('url','/msql/');
 	$is_file=is_file($basename.'.php');
 	$lk=sesm('lk',$url.$folder.$node.gpage());
 	$folder=$root.$folder;//conformity
-	$_SESSION['head_r']=msql_adm_head($lk,$base,$prefix,$table,$version);}
+	msql_adm_head($lk,$base,$prefix,$table,$version);}
 $def=ajx($_POST['def']?$_POST['def']:$_GET['def'],1);
 if($_GET['see'])$ret[]=verbose($ra,'dirs');
 //auth
-if(base=='users' && $prefix==$_SESSION['USE'])$_SESSION['ex_atz']=1;
+if($base=='users' && $prefix==$_SESSION['USE'])$_SESSION['ex_atz']=1;
 if($auth>=$ath && $_SESSION['ex_atz'] or $auth>=6)$authorized=true;
 $lkb=$lk.'&';
 #load
 //reqp('msql'); $msq=new msql($base,$node); if($is_file)$defs=$msq->load();
 if(get('repair'))msql_repair($folder,$node);//old
-if($is_file)$defs=plug_motor($folder,$node,$defsb);
+if($is_file)$defs=read_vars($folder,$node,$defsb);
 //if(!$defs)$ret[]=verbose($ra,'');
 if($defs['_menus_'])$defsb['_menus_']=$defs['_menus_'];
 //save
@@ -582,7 +580,7 @@ if($def && !$defs[$def])$_POST['add']=$def;
 if(($_POST['def'] or $_POST['add']) && $authorized)
 	list($defs,$def)=save_defs($folder,$node,$defs,$def,$base);
 //savb
-if($_GET['sav'])save_vars($folder,$node,$defs);
+if($_GET['sav'])save_vars($folder,$node.'_sav',$defs,1);
 //create
 if($_GET['create'] && $authorized){
 	$prefix=normaliz_c($_POST['prfx']);
@@ -595,7 +593,7 @@ if($_GET['create'] && $authorized){
 	elseif($defs['_menus_'])$defsb['_menus_']=$defs['_menus_'];
 	else $defsb['_menus_']=array('');
 	$node=mnod($prefix,$table,$version);
-	if($folder && $prefix)plug_motor($folder,$node,$defsb);
+	if($folder && $prefix)read_vars($folder,$node,$defsb);
 	relod(sesm('url').murl_build('','',$prefix,$table,$version));}
 #modifs
 //save_modif
@@ -611,7 +609,7 @@ if(!$_GET['def']){//called
 	//add
 	if(auth(4))$ret['fls']=lkc('txtblc',$lkb.'new==',pictxt('add',$lh[9][0])).' ';
 	if($table && $authorized && $prefix && $is_file){//$defs && 
-		$ret['fls'].=lkc('txtx',$lkb.'sav==',$lh[2][0]);
+		$ret['fls'].=lkc('txtx',$lkb.'sav==',$lh[2][0]).' ';
 		if(is_file($basename.'_sav.php'))
 			$ret['fls'].=lkc('txtx',$lkb.'restore==',$lh[3][0]).' ';
 		$ret['fls'].=lj_goto('import_defs',5);
@@ -640,7 +638,7 @@ if(!$_GET['def']){//called
 		$ret['utl'].=lkc('txtx',$lkb.'del_keys==',$lh[25][0]).' ';
 		$ret['utl'].=lkc('txtx',$lkb.'def=_menus_&add_col==',$lh[14][0]).' ';
 		$ret['utl'].=lj_goto('del_col',15);
-		if($is_file)$ret['utl'].=lkc('txtx" title="'.$lh[13][1],$lkb.'repair_cols==',$lh[13][0]).' ';
+		if($is_file)$ret['utl'].=lkc('txtx" title="'.$lh[13][1],$lkb.'repair_cols==',$lh[13][0]).br();
 		if($base!='system' && is_file(sesm('root').'system/'.$node.'.php'))
 			$ret['utl'].=lkc('txtblc',$lkb.'update==',$lh[26][0]).' ';
 		$ret['utl'].=lj_goto('sort_table',19);
@@ -650,6 +648,7 @@ if(!$_GET['def']){//called
 		$ret['utl'].=lkc('txtx',$lkb.'edit_conn==',$lh[16][0]).' ';
 		$ret['utl'].=lkc('txtx" title="'.$lh[6][1],$lkb.'inject_defs==',$lh[18][0]).' ';
 		$ret['utl'].=lkc('txtx',$lkb.'edit_csv==','csv').' ';
+		if(auth(6))$ret['utl'].=lkc('txtx',$lkb.'export_mysql==','create mysql').' ';
 		$ret['utl'].=lj('txtx','popup_msql___lang_helps_msql','?');
 	}
 	#-fieldset
@@ -689,6 +688,11 @@ if($_GET['edit_conn']=='='){
 if($_GET['inject_defs']=='='){
 	$datas=str_replace(array('<'.'?php','?'.'>'),'',read_file($basename.'.php'));
 	$ret[]=divc('','paste $r[1]=array(1,2,3)').form($lkb,txarea('inject_defs',$datas,60,14).br().input2('submit','replace','replace','txtbox').input2('submit','inject','inject','txtbox').checkbox('mono','1','key=>value','').checkbox('sql','1','mysql','')).hr().br();}
+
+//export_mysql
+if($_GET['export_mysql']=='=' && auth(6)){
+	$ok=plugin_func('mysql','import_msql',$defs,$node);
+	$ret[]=divc('txtalert','create table '.$node.': '.$ok);}
 
 //csv
 if($_GET['edit_csv']=='='){

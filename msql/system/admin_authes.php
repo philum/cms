@@ -45,7 +45,7 @@ $r["messages"]=array('User','0');
 $r["mail"]=array('User','1');
 $r["password"]=array('User','1');
 $r["members"]=array('User','4');
-$r["tools"]=array('Builders','7');
+$r["tags"]=array('Builders','7');
 $r["icons"]=array('Builders','5');
 $r["pictos"]=array('Builders','5');
 

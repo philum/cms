@@ -1,0 +1,70 @@
+<?php
+//philum_microsql_default_restrictions
+$r["_menus_"]=array('name','description');
+$r[1]=array('public trackbacks','comments opened to public');
+$r[2]=array('open trackbacks','comments need moderation (auth 4)');
+$r[3]=array('time system','time system : used for periodic revues');
+$r[4]=array('pub titles','give informations about article of a pub module');
+$r[5]=array('preview_arts','preview of article in category');
+$r[6]=array('authors','show author');
+$r[7]=array('pub date','show date in pub_art');
+$r[8]=array('ajax mode','open articles in a popup');
+$r[9]=array('float img','float images in articles');
+$r[10]=array('auto parent','the new article have the current as parent');
+$r[11]=array('auto publish','the new article is directly published');
+$r[12]=array('pager','pager (print or screen for mobiles)');
+$r[13]=array('p_balise','use balise \'p\' or \'br\' (\'br\' make easier to copy of the text)');
+$r[14]=array('nb_arts','number of articles');
+$r[15]=array('captcha','captcha');
+$r[16]=array('mini limits','place limits of image outside the limits of thumbnail');
+$r[17]=array('2 cols','articles on 2 columns');
+$r[18]=array('public defcons','Définitions for importations of articles. 
+The public base represent a risk to loose his datas.
+Using private Defcon let upgrade from public base and informe it of new entries. (in 01L editor)');
+$r[19]=array('user thumbs','prepare datas of \'_IMG1\' for template (personalized thumbnails) : [_IMG1§100/100:thumb]');
+$r[20]=array('herit_cat','articles herits of categories properties');
+$r[21]=array('restricted_area','acces to pages reserved to members');
+$r[22]=array('lets bots','authorize robots');
+$r[23]=array('priority','level of priority of article');
+$r[24]=array('date','show date');
+$r[25]=array('lenght','say lenght');
+$r[26]=array('ID','swho the article\'s ID');
+$r[27]=array('link','show link of original source');
+$r[28]=array('ouvrir','show Open button in Ajax');
+$r[29]=array('tags','show tags');
+$r[30]=array('thumbnails','show thumbnail of article');
+$r[31]=array('back','back to topologic context of the article');
+$r[32]=array('mini home','thumbnails in pub_art');
+$r[33]=array('display affiliates','show sub_articles in categories');
+$r[34]=array('destroy bich','destroy balises b, i, c et h in preview mode');
+$r[35]=array('Taxonomy','open an article on place put it in a scrollable window (with rstr 28 at ON)');
+$r[36]=array('pub category','category in pub_art');
+$r[37]=array('Agenda','display the article in a popup');
+$r[38]=array('explicit url','use explicits URL with title and not with ID_art (actually desactivated)');
+$r[39]=array('pages ajax','call pages in ajax');
+$r[40]=array('rss','article in rss format');
+$r[41]=array('full text','full article in category (pub3)');
+$r[42]=array('usertags','user_tags');
+$r[43]=array('category','category of artile');
+$r[44]=array('Facebook','export: Facebook');
+$r[45]=array('Twitter','export: Twitter');
+$r[46]=array('Stumble','export: Stumble');
+$r[47]=array('mail','let the visitor send the article by mail');
+$r[48]=array('auto update','auto-update software');
+$r[49]=array('words','detected knowns words');
+$r[50]=array('views','number of views');
+$r[51]=array('import url ','display the field of importation of an article from url');
+$r[52]=array('batch','display the \'batch\' element');
+$r[53]=array('save in ajax','save articles in ajax');
+$r[54]=array('finder','display the \'finder\' element');
+$r[55]=array('user template','activate the user templates, (breadcrumbs and trackbacks)');
+$r[56]=array('apps','display apps');
+$r[57]=array('save in popup','display new article in a popup');
+$r[58]=array('display code','display the code of the article (connectors)');
+$r[59]=array('permalog','use cookies for permanent connexion');
+$r[60]=array('art modules','don\'t display modules of articles but display a button to open it (as it is in popup)');
+$r[61]=array('system apps','display in \'Apps\' the sub menu by default in place of those are set in the condition \'menu\' of the module \'apps\'');
+$r[62]=array('auto dig','automatically reload the research with the next time set');
+$r[63]=array('edit divs','edit modules');
+
+?>
