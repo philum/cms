@@ -14,8 +14,9 @@ if($d)unlink('msql/users/'.$nd.'_txt_'.$d.'.php');
 return btn('txtyl','deleted');}
 
 function st_paste($d){$ret=hidden('','cka','m'.$d);
-$ret.=ljb('" title="copy" id="cka1','mem_storage','_m1___cka0',picto('copy')).' ';
-$ret.=ljb('" title="paste" id="ckb1','mem_storage','_m1_1__ckb0',picto('paste'));
+$ret.=ljb('" title="'.nms(57).'" id="cka1','mem_storage','_m1___cka0',picto('save')).' ';
+$ret.=ljb('" title="'.nms(95).'" id="ckb1','mem_storage','_m1_1__ckb0',picto('refresh')).' ';
+$ret.=hlpbt('memstorage');
 return btn('nbp',$ret).' ';}
 
 function stx_files($nd,$tx){$r=msq_choose('',$nd,'txt'); if($r)asort($r);
@@ -44,7 +45,7 @@ if($d && !$ra && $nd)msql_modif('users',$nd.'_txt_'.$d,array('title',''),'','one
 $ret.=st_paste($d).' ';
 if($d)$ret.=input('text','tit',stripslashes($ra[1][0])).' ';
 $ret.=stx_btn($d,$nd,$tx).br();
-if(!$tx)$ret.=txarea('txtarea',$msg,44,4,ats('width:100vw; height:90vh; font-size:large; padding:16px;'));
+if(!$tx)$ret.=txarea('txtarea',$msg,44,4,ats('min-width:640px; min-height:400px; font-size:large; padding:16px;'));
 return btd('plgtxt',$ret);}
 
 ?>

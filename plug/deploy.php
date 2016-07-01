@@ -2,14 +2,13 @@
 //philum_plugin_deploy
 
 function plug_deploy($deploy){
-$qb=$_SESSION['qb']; $USE=$_SESSION['USE']; $raed=$_SESSION["raed"];
+$qb=$_SESSION['qb']; $USE=$_SESSION['USE']; $raed=suj_of_id($deploy);
 $nl=$_GET['nl']?$_GET['nl']:"nl";
 if($deploy && $USE){//prep
 	list($qauth,$subj)=sql('name,suj','qda','r','id="'.$deploy.'"');
 	$msg=sql('msg','qdm','v','id="'.$deploy.'"');
 	if($USE==$qauth or auth(5)){$http=host();
-		if($_POST['dpl']==""){ 
-		$qmail=recup_mails_tosend();
+		if(!$_POST['dpl']){reqp('mail'); $qmail=mail_list_tosend();
 		$ret.=form("/?read=$deploy&deploy=$deploy&nl=nlb",txarea('dpl" maxlength="1000',$qmail,40,10).br().checkbox("dpf","ok","html",1).checkbox("multiple","ok","each_one",1).input2('submit',"send",nms(50),'popbt'));} 
 		else{$htacc=urlread($deploy); $_SESSION['nl']=$nl;//deploy
 			if($_POST['dpf']=="ok"){$mail_format="html";

@@ -60,7 +60,7 @@ if($d>1)$ret=lj('txtbox','spi_plug__2_spitable_spi*table_'.($d-1),picto('left'))
 $ret.=input(1,'spix',$d,'','','1').' ';
 $ret.=lj('txtbox','spi_plug__2_spitable_spi*table_'.($d+1),picto('right')).' ';
 $ret.=lj('txtbox','spi_plug__2_spitable_spi*table___spix','set');
-return divc('nbp',spi_levels($d).' '.$ret).br();}
+return divc('nbp',$ret.br().spi_levels($d)).br();}
 
 function spi_table($d){$d=$d?$d:118;
 $r=msql_read('','public_atomic','');
@@ -73,7 +73,8 @@ for($i=1;$i<=$n;$i++){
 	if(is_array($r[$i])){$nb=max(array_keys($r[$i])); $td=''; ksort($r[$i]); 
 	for($o=1;$o<=$nb;$o++)$td.=balc('td','',$r[$i][$o]);
 	$tr.=balc('tr','',$td);}}
-return balc("table",'',$tr);}
+$ret=balc('table','',$tr);
+return divs('width:100%; overflow:auto; height:auto;',$ret);}
 
 function plug_spitable($d){
 //echo js_code('document.onkeydown="if(event.keyCode == 39);');

@@ -115,11 +115,8 @@ $table["datas"]='
 CREATE TABLE IF NOT EXISTS `'.$qd.'_data` (
   `id` int(7) NOT NULL auto_increment,
   `ib` int(7) NOT NULL,
-  `qb` varchar(255) collate latin1_general_ci NOT NULL default "",
-  `day` int(10) NOT NULL,
-  `cat` varchar(255) collate latin1_general_ci NOT NULL default "",
   `val` varchar(255) collate latin1_general_ci NOT NULL default "",
-  `msg` mediumtext collate latin1_general_ci,
+  `msg` varchar(255) collate latin1_general_ci,
   PRIMARY KEY  (`id`),
   KEY `nod_qb` (`qb`,`day`),
   KEY `id_ib_val` (`ib`,`val`)
@@ -136,28 +133,36 @@ CREATE TABLE IF NOT EXISTS `_sys` (
   KEY `name` (`name`)
 ) ENGINE=MyISAM COLLATE=latin1_general_ci ;';
 
-
 $table["_meta"]='
 CREATE TABLE IF NOT EXISTS `'.$qd.'_meta` (
-  `id` int(7) NOT NULL,
+  `id` int(7) NOT NULL AUTO_INCREMENT,
   `cat` varchar(255) collate latin1_general_ci NOT NULL,
   `tag` varchar(255) collate latin1_general_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
 $table["_meta-ai"]=' 
 ALTER TABLE `'.ses('qd').'_meta`
 MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;';
 
 $table["_meta_art"]='
 CREATE TABLE IF NOT EXISTS `'.$qd.'_meta_art` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `idart` int(7) NOT NULL,
   `idtag` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
 $table["_meta_art-ai"]='
 ALTER TABLE `'.ses('qd').'_meta_art`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;';
+
+$table["_poll"]='
+CREATE TABLE IF NOT EXISTS `'.$qd.'_poll` (
+  `id` int(7) NOT NULL AUTO_INCREMENT,
+  `ib` int(7) NOT NULL,
+  `iq` int(12) NOT NULL,
+  `poll` int(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;';
 
 //todo
 /*$table["_cat"]='

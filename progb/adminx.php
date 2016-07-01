@@ -2,12 +2,10 @@
 //philum_ajx_functions 
 
 #master_config//(3)
-//$r=array('mb','mm','mp','mt','mc','md','mo','mh','mv','me','mr','mi','mj');
-function master_config($block,$mod,$act,$res){
-req('boot'); $r=ajxr($res);
-$cond=substr($r[4],0,1)!='-'?$r[4]:'';
-if($act=='add')$cond=$r[2];
-$r[5]=$r[5]!='-'?$r[5]:''; $r[4]=$r[4]!='-'?$r[4]:''; $r[9]=$r[9]!='-'?$r[9]:'';//4cond5com6opt9tmpl
+//$r=array('mb','mm','mp','mt','mc','md','mo','mh','mv','me','mr','mi','mj','pp');
+function master_config($block,$mod,$act,$res){req('boot'); $r=ajxr($res);
+$cond=substr($r[4],0,1)!='-'?$r[4]:''; if($act=='add')$cond=$r[2];
+$r[5]=$r[5]!='-'?$r[5]:''; $r[4]=$r[4]!='-'?$r[4]:''; $r[9]=$r[9]!='-'?$r[9]:'';//4cond,5com,6opt,9tmpl,10pop
 $nod=$_SESSION['modsnod'];
 if($cond)$_SESSION['cond']=determine_cond($cond);
 if($act=='sav' or $act=="savb"){
@@ -15,7 +13,7 @@ if($act=='sav' or $act=="savb"){
 	$ret=modif_vars('users',$nod,$ret,"mdf"); define_modc();}
 elseif($act=='add'){
 	$md=$mod?$mod:$r[1]; $pos=$r[0]; $cnd=$r[2]=='-'?'':$r[2];
-	$ret=array($block,$md,'','',$cnd,'','','','','');
+	$ret=array($block,$md,'','',$cnd,'','','','','','');
 	$cmd=define_modc_b($block);
 	if($cmd){$keys=array_keys($cmd); $i=0;
 	foreach($cmd as $k=>$v){//existants
@@ -118,7 +116,7 @@ return popup('edit_param',$ret);}
 
 function comline_edit($v,$na,$id,$res){$rid=randid();
 if($res)return comline_sav($na,$res);
-list($cod,$mod,$t)=$ra=decompact_mod($v); $r=explode("/",trim($cod));
+list($cod,$mod,$t)=$ra=decompact_mod($v); $r=explode('/',trim($cod));
 $ids=$id.'|medm'.$rid.'|medb'.$rid.'|';
 $arb=msql_read('system',"admin_modules",$mod);
 $rb['module']=input(0,'medm'.$rid,$mod).submod_comline('medm'.$rid,$mod); 
@@ -127,10 +125,15 @@ $rb['usage']=divc('small',$hlp['description']);
 $rb['button']=input(1,'medb'.$rid,$t,'txtblc');
 $rk=array('param','title','command','option','cache','hide','template','nobr','div','ajxbtn');
 foreach($rk as $k=>$v){$ids.='med'.$k.$rid.'|'; $jmp=''; $com=$arb[$v];
-	if($com && $v!='param')$jmp=select_j('med'.$k.$rid,$com);
-	//$jmp=jump_btns('med'.$k.$rid,str_replace(' ','|',$com),'');
-	$rb[$v]=input(1,'med'.$k.$rid,$r[$k]).$jmp;
-	if($v=='param')$rb[$v].=' '.admhlp('grey',ajx($mod),'help');}
+if($v=='param' or $v=='title' or $v=='command' or $v=='option' or $v=='template'){
+	if($com && $v!='param' && $v!='template')
+		$jmp=select_j('med'.$k.$rid,'- '.ajx($com),$com,1,picto('kdown'),0);
+	if($v=='param')$jmp=' '.admhlp('grey',ajx($mod),'help');
+	if($v=='template'){$ra=msql_read('',ses('qb').'_template','',1); 
+		if($ra)$tmp=implode(' ',array_keys($ra));
+		$jmp=select_j('med'.$k.$rid,'- '.ajx($tmp),$com,1,picto('kdown'),0);}
+	$rb[$v]=input(1,'med'.$k.$rid,$r[$k]).$jmp;}
+else $rb['toggles'].=checkbox_j('med'.$k.$rid,$r[$k],$v);}
 $sv=$id.'_submds__4x_'.$na.'__cmdel__'.$id.'\',\'sbm'.'_submds____'.$id.'_cmlin__'.$id;
 $bt=ljb('popdel','SaveJb',$sv,nms(43)).' ';
 $sv=$id.'_comline__4x__'.$na.'___'.$ids.'\',\'sbm_submds____'.$id.'_cmlin__'.$id;
@@ -185,21 +188,21 @@ if($o=='cmpsav')return ajxg($res);
 if($o=='mpos')return mod_pos($d,$id);
 if($o=='mps')return mod_mps($d,$id,$ob);
 //submods
-if($o=='sav')submod_sav($d,$id,$res);
-if($o=='del')submod_del($d,$id);
+if($o=='sav')$r=submod_sav($d,$id,$res);
+if($o=='del')$r=submod_del($d,$id);
 if($o=='adc')return submod_adc($d,$id,$res);
-if($o=='ads'){submod_ads($d,$ob); $ob='';}
-if($o=='revert')submod_revert($d);
+if($o=='ads'){$r=submod_ads($d,$ob); $ob='';}
+if($o=='revert')$r=submod_revert($d);
 if($o=='pos')return submod_pos($d,$id);
-if($o=='psb'){if($d!=$ob)submod_psb($d,$ob); $ob='';}
+if($o=='psb'){if($d!=$ob)$r=submod_psb($d,$ob); $ob='';}
 if($o=='add')return submod_add($id,$d);
 if($o=='edit')return submod_edit($d,$id,$ob);
-if($o=='move')submod_move($d);
-if($o=='from')submod_from($d);
+if($o=='move')$r=submod_move($d);
+if($o=='from')$r=submod_from($d);
 if($o=='pcto')return submod_picto($d);
 if($o=='deft'){msq_copy('users',ses('qb').'_apps','users',ses('qb').'_apps_sav');
 	msq_copy('system','default_apps_users','users',ses('qb').'_apps');}
-return adm_apps($id,$ob,'');}
+return adm_apps($id,$ob,'',$r);}
 
 //modpos
 function mod_pos($ka,$vl){$r=define_modc_b($vl);
@@ -222,24 +225,24 @@ function submod_pos($ka,$id){$r=locapps($p,1);
 	else $ret.=lj('','sbm'.'_submds__x_'.$ka.'_'.$id.'_psb_'.$k,$v[0]).' ';}
 	return popup('Apps position',divc('nbp',$ret),240);}
 function submod_psb($ka,$va){$ra=msq_move(locapps(),$ka,$va);
-	msql_modif('users',ses('qb').'_apps',$ra,'','add','mdf');}
+	return msql_modif('users',ses('qb').'_apps',$ra,'','add','mdf');}
 function submod_sav($p,$id,$res){$r=ajxr($res);
-	for($i=0;$i<=9;$i++){$ra[]=$r[$i];}
-	msql_modif('users',ses('qb').'_apps',$ra,'','one',$p);}
+	for($i=0;$i<=9;$i++)$ra[]=$r[$i];
+	return msql_modif('users',ses('qb').'_apps',$ra,'','one',$p);}
 function submod_del($d,$id){
-	$r=msql_modif('users',ses('qb').'_apps','','','del',$d);}
+	return msql_modif('users',ses('qb').'_apps','','','del',$d);}
 function submod_ads($d,$v){$r=msql_read('system','default_apps'.($v?'_'.$v:''),$d);
-	if($r)msql_modif('users',ses('qb').'_apps',$r,'','push','');}
+	if($r)return msql_modif('users',ses('qb').'_apps',$r,'','push','');}
 function submod_adc($d,$id,$res){$r=array('new',$d,'','','','desk','','','','');
 	$ra=msql_modif('users',ses('qb').'_apps',$r,'','push','');
 	foreach($ra as $k=>$v){$key=$k;} return submod_edit($k,$id,'');}
 function submod_from($d){$r=locapps($d);
-	if($r)msql_modif('users',ses('qb').'_apps',$r,'','push','');}
+	if($r)return msql_modif('users',ses('qb').'_apps',$r,'','push','');}
 function submod_revert($m){echo btn('txtalert','empty table: default copied');
 	return msq_copy('system','default_apps'.$m,'users',ses('qb').'_apps');}
 function submod_move($d){$r=locapps(); $ra=$r[$d-1]; $r[$d-1]=$r[$d]; $r[$d]=$ra;
-	msql_modif('users',ses('qb').'_apps',$r,'','add','mdf');}
-function submod_picto($d){$r=$_SESSION['picto'];
+	return msql_modif('users',ses('qb').'_apps',$r,'','add','mdf');}
+function submod_picto($d){$r=msql_read('system','edition_pictos','',1);
 	foreach($r as $k=>$v)$ret.=lj('','___jx_'.$d.'_'.$k,picto($k,24)).' '; 
 	return popup('pictos',$ret,320);}
 
@@ -251,8 +254,8 @@ function submod_add($id,$d){
 	$top.=lj(active($d,'desk'),'popup_submds__x_home_'.$id.'_add','home').' ';
 	$top.=lj(active($d,'desk'),'popup_submds__x_desk_'.$id.'_add','desk').' ';
 	$top.=lj(active($d,'dev'),'popup_submds__x_dev_'.$id.'_add','dev').' ';
-	$r=msql_read('system','default_apps'.$ver,'',1); $ra=array_flip(msq_cat($r,1));
-	foreach($ra as $va){$bt=picto('file',32).' '.$va;
+	$r=msql_read('system','default_apps'.$ver,'',1); if($r)$ra=array_flip(msq_cat($r,1));
+	if($ra)foreach($ra as $va){$bt=picto('file',32).' '.$va;
 		$rb[$va].=lj('sicon','popup_submds__x_'.$va.'_'.$id.'_adc',$bt).' ';
 		foreach($r as $k=>$v){$bt=picto($v[7],32).' '.$v[0];
 			if($v[1]==$va)$rb[$va].=lj('sicon',$j.$k.'_'.$id.'_ads_'.$d,$bt).' ';}}
@@ -281,15 +284,15 @@ $bt.=lj('popdel','sbm'.'_submds__x_'.$p.'_'.$id.'_del_'.$cnd,pictit('del',nms(43
 $bt.=lj('popbt','sbm'.'_submds__x_'.$p.'_'.$id.'_from_'.$cnd,nms(44)).' ';
 $bt.=lj('popbt','sbm'.'_submds___'.$p.'_'.$id.'_sav_'.$cnd.'_'.$ids,nms(66)).' ';
 $bt.=lj('popsav','sbm'.'_submds__x_'.$p.'_'.$id.'_sav_'.$cnd.'_'.$ids,nms(57));
+$bt.=lj('popbt','popup_appread___'.$p,nms(65));
 $ret.=on2cols($rb,300,4).divs('',$bt);
 return popup('Apps ('.$p.')',$ret,320);}
 
-function adm_apps($id,$cnd,$sys=''){//id=dir;cnd=;sys=;
-$rid='mp'.randid(); //echo $id.'-'.$sys; p($_GET);
-$m='apps'; $j='sbm_submds___'; 
-$top.=lj('',$j.'_'.$id.'_'.$sys.'__',picto('reload')).'';
+function adm_apps($id,$cnd,$sys='',$r=''){//id=dir;cnd=;sys=;
+$rid=randid('mp'); $m='apps'; $j='sbm_submds___'; 
+$top.=lj('',$j.'__'.$sys,picto('reload')).'';
 $top.=lj('txtx',$j.'_'.$id.'_'.$sys,'root').'';
-$r=explode('/',$id); foreach($r as $k=>$v){$idb[]=$v; //echo $v;
+$ra=explode('/',$id); foreach($ra as $k=>$v){$idb[]=$v;
 	if($v)$top.=lj('txtx',$j.'_'.implode('/',$idb),$v).'';}
 $top.=' '.admhlp('grey',$m,'help').' ';
 foreach(array('menu','desk','boot','home','user') as $v)//,'favs'
@@ -300,23 +303,22 @@ if(rstr(61) && $m=='apps')$top.=hlpbt('apps','alert');
 $top.=msqlink('system','default_apps').' ';
 $top.=lj('txtsmall2','popup_admin___apps_1','sys').' ';
 if($sys)$r=msql_read_b('system','default_apps','',1);
-else $r=msql_read('',ses('qb').'_'.$m,'',1);
-$ar[]=array('','icon',nms(71),'root','type','condition',nms(105));
+elseif(!$r)$r=msql_read('',ses('qb').'_'.$m,'',1);
+$ar[]=array('','button','root','type','condition',nms(105));
 if(!$r)$r=submod_revert('_users');
 foreach($r as $k=>$v)if(($cnd && strpos($v[5],$cnd)!==false) or !$cnd){
 	$prv=$v[9]?picto('lock'):''; $jp='popup_submds___'.$k.'_'.$id.'_';
-	$up=lj('',$jp.'pos',picto('ktop§10')).' ';
-	$bt=lj($v[8]?'grey':'',$jp.'edit_'.$cnd,$v[0]);
-	$pt=lj($v[8]?'grey':'',$jp.'edit_'.$cnd,picto($v[7]));
+	$up=lj('',$jp.'pos',picto('up',10)).' ';
+	$bt=lj($v[8]?'grey':'',$jp.'edit_'.$cnd,pictxt($v[7],$v[0]));
 	$cd=strpos($v[5],'menu')!==false?picto('admin'):'';
-	$cd.=strpos($v[5],'desk')!==false?picto('desktop'):'';
+	$cd.=strpos($v[5],'desk')!==false?picto('window'):'';
 	$cd.=strpos($v[5],'boot')!==false?picto('get'):'';
 	$cd.=strpos($v[5],'home')!==false?picto('home'):'';
 	$cd.=strpos($v[5],'user')!==false?picto('user'):'';
-	$dir=$v[6]?lj('txtx',$j.'_'.$v[6].'_'.$cnd.'_'.$sys,$v[6]):'';
+	$dir=$v[6]?lj('',$j.'_'.$v[6].'_'.$cnd.'_'.$sys,$v[6]):'';
 	if(substr($v[6],0,strlen($id))==$id or !$id)
-		$ar[$k]=array($up,$pt,$bt,$dir,$v[1],$cd,$prv);}//,$v[2],$v[5]
-$ret.=make_table($ar,'').hidden('',$id,'');
+		$ar[$k]=array($up,$bt,$dir,$v[1],$cd,$prv);}//,$v[2],$v[5]
+$ret.=make_table($ar,'popw','popbt').hidden('',$id,'');
 return divd('sbm',$top.$ret);}
 
 function submod_pop(){return popup('Apps',adm_apps('',''),460);}
@@ -365,15 +367,16 @@ elseif($prm==2){//wait_ID
 		if(is_numeric($id) && $param>3){list($dy,$frm,$suj,$amg)=pecho_arts($id);//art
 		$rc["article"]=lkt('','/?read='.$id,$suj);}}
 $l='modules_'.$bloc.'_'.$mnb; $rid=randid();
-$rds=array('mb','mm','mp','mt','mc','md','mo','mh','mv','me','mr','mi','mj');
+$rds=array('mb','mm','mp','mt','mc','md','mo','mh','mv','me','mr','mi','mj','pp');
 foreach($rds as $k=>$v){$rvs[$v]=$v.$rid; $dvs.=$v.$rid.'|';}
-//$dvs.=;
 $sty='" onkeypress="checkEnter(event,\'savmod\')';
 $form.=hidden('',$rvs['mm'],$mod);
 //edit
 if($mod=="submenus"){require_once('spe.php'); $rc["edit"]=menus_h($mnb); 
 	if($option)$param=menu_h_g($option);}
-if($mod=="Banner") $rc["edit"]=lkc("popbt",'/admin/banner','edit_banner');
+elseif($mod=='MenuBub'){$da='root,action,type,button,icon,auth'; $phlp=hlpbt('menubub');
+	$rc["edit"]=lj('','popup_plupin___msqedit_menubub*1_'.$da,picto('edit')).' '.$phlp;}
+if($mod=="Banner")$rc["edit"]=lkc("popbt",'/admin/banner','edit_banner');
 elseif($mod=="user_menu")$rc["edit"]=jump_btns($rvs['mp'],spelinks(),' ');
 elseif($mod=="app_menu"){$rc["edit"]=btn('console','button/type/process/param/option/condition/root/icon/hide/private§display[,]');}
 elseif($mod=='link' or $mod=="url"){$arr=explode('|',spelinks());
@@ -383,7 +386,7 @@ elseif($mod=='template'){$ra=msql_read('',ses('qb').'_template','',1);
 	if($ra){$rb=array_keys_r($ra,1,'k'); $rc["edit"]=jump_btns($rvs['mp'],$rb,'');}}
 elseif($mod=='msql_links')$rc["edit"]=jump_btns($rvs['mp'],'links|rssurl|deploy','');
 elseif($mod=='connector'){req('art'); $rc["edit"]=conn_edit();
-	$rc["edit"].=txarea('txtarea',$param,50,5,'txtnoir" onkeyup="transvalue(\''.$rvs['mp'].'\')" onclick="transvalue(\''.$rvs['mp'].'\')"; onblur="transvalue(\''.$rvs['mp'].'\');');}
+	$rc["edit"].=txarea('txtarea',$param,40,5,'class="txtnoir" onkeyup="transvalue(\''.$rvs['mp'].'\')" onclick="transvalue(\''.$rvs['mp'].'\')"; onblur="transvalue(\''.$rvs['mp'].'\');"');}
 elseif($mod=='desktop')$rc["edit"]=hlpbt('desklr');
 elseif($mod=='cssfonts')$rc["edit"]=jump_btns($rvs['mp'],'fontphilum|fontmicrosys|',' ');
 elseif($mod=='columns')$rc["edit"]=mod_edit('',1,$rvs['mp']);
@@ -405,14 +408,14 @@ if($bloc!='system' && $bloc!='newsletter' && $bloc!='gsm'){
 $rc["bloc"]=select_j($rvs['mb'],'system '.prma('blocks'),$bloc,1,$bloc,0);}
 else $form.=hidden('',$rvs['mb'],$bloc);
 //condition
-if($bloc!='newsletter')$rc["context"]=select_j($rvs['mc'],'- home cat art',$rm['condition'],3,$rm['condition'],0).' '.hlpbt('mod_cond');
+if($bloc!='newsletter')$rc["context"]=select_j($rvs['mc'],'- home cat art '.ajx($rm['condition']),$rm['condition'],3,$rm['condition'],0).' '.hlpbt('mod_cond');
 else $form.=hidden('',$rvs['mc'],'');
 //command
 if($com)$rc["command"]=select_j($rvs['md'],'- '.ajx($com),$rm['command'],1,$rm['command'],0).' '.$dhlp;
 else $form.=hidden('',$rvs['md'],'');
 //option
 if($opt!='0'){
-	$rc["option"]=select_j($rvs['mo'],'-|'.$opt,$rm['option'],3,$rm['option'],0).' ';
+	$rc["option"]=select_j($rvs['mo'],'- '.$opt,$rm['option'],3,$rm['option'],0).' ';
 	if($mod=='LOAD')$rc["option"].=hlpbt('art_render'); else $rc['option'].=$ohlp;}
 else $form.=hidden('',$rvs['mo'],'');
 //template
@@ -428,8 +431,10 @@ if($arb["nobr"]!='0')$rc['toggles'].=checkbox_j($rvs['mr'],$rm['nobr'],'nobr');/
 else $form.=hidden('',$rvs['mr'],'');
 if($arb["div"]!='0')$rc['toggles'].=checkbox_j($rvs['mi'],$rm['div'],'div');//divmod
 else $form.=hidden('',$rvs['mi'],'');
-if($arb["ajax button"]!='0')$rc['toggles'].=checkbox_j($rvs['mj'],$rm['js'],'ajax btn');//jstimer
+if($arb["ajax button"]!='0')$rc['toggles'].=checkbox_j($rvs['mj'],$rm['js'],'ajax btn');//js
 else $form.=hidden('',$rvs['mj'],'');
+if($arb["popup"]!='0')$rc['toggles'].=checkbox_j($rvs['pp'],$rm['pp'],'popup');//pop
+else $form.=hidden('',$rvs['pp'],'');
 //save
 $bt.=ljb("popdel","SaveR",$l.'_del\',\''.$dvs,nms(43)).' ';
 $bt.=ljb('popbt',"SaveR",$l.'_new\',\''.$dvs,nms(44)).' ';
@@ -486,7 +491,7 @@ if($r){foreach($r as $k=>$v)$ra[$v[3]]+=1;//cat list
 	if($kb && ($_SESSION['line'][$kb] or is_numeric($kb)))$kc=$kb; else $kc=$k;
 	if($k==$cnd[0].$cnd[1] or ($ka==$cnd[0] && !$kb) or ($kb && $kb==$cnd[1]))
 		$css='active'; else $css='';//as in define_modc_b()
-	if($k)$ret.=ljb($css,'SaveBb','modules_'.$vl.'__'.$k,$kc);}
+	if($k)$ret.=ljb($css,'SaveBb','modules_'.$vl.'__'.ajx($k),$kc);}
 if($ret)$all=ljb($cnd[0]?'':'active','SaveBb','modules_'.$vl.'__all','-');
 return divc('nbp',$all.$ret);}}
 
@@ -525,7 +530,7 @@ foreach($r as $k=>$v)if($v && $v!='clear'){if($v=='system')$hlp=hlpbt('blocsyste
 	elseif($v=='menu')$hlp=hlpbt('blocmenu'); else $hlp='';
 	$ret.=ljb('txtx','SaveBb','modules_'.$v.'__'.$_SESSION['cond'][0],$v).$hlp;
 	$ret.=divc('menu',divd('modules'.$v,console_block($v)));}//
-$ret.=ljb('txtx','SaveBb','modules_dev__','unused').hlpbt('bloctest').divc('menu',divd('modulesdev',console_block('dev')));
+$ret.=ljb('txtx','SaveBb','modules_dev__',nms(148)).hlpbt('bloctest').divc('menu',divd('modulesdev',console_block('dev')));
 return $ret;}//.divb('cell|modedit','')
 
 #rstr
@@ -614,20 +619,20 @@ return $ret.br();}
 
 function backup_config(){
 $f='params/'.ses('qb').'_saveconfig.txt';
-$goto='/?admin='.$_GET["admin"];
-$ret.=lkc("popbt",$goto.'&backup_config==',"backup_config").' ';
-if(is_file($f)) $ret.=lkc("popbt",$goto.'&restore_config==',"restore_config").' ';
+$goto='/?admin='.$_GET['admin'];
+$ret.=lkc("popbt",$goto.'&backup_config==',"backup").' ';
+if(is_file($f)) $ret.=lkc("popbt",$goto.'&restore_config==',"restore").' ';
 $ret.=lkt("popbt",$f,"config").' ';
 if($_SESSION["auth"]>=5){
 	if($_GET["backup_config"]){
-$ret.=lkc("txtred",$goto.'&reset_config==',"!! default_config").' ';
+$ret.=lkc("txtred",$goto.'&reset_config==',"reset defaults").' ';
 		$tosave=implode("#",$_SESSION['prmb']);
 		write_file($f,$tosave);}
 	if($_GET["restore_config"]){
 		$config=read_file($f);
 		$_SESSION['prmb']=explode('#',$config);
 		update("qdu","config",$config,"name",ses('qb'));
-		$ret.=lkc("popdel",$goto,"old_config_restored");
+		$ret.=lkc("popdel",$goto,"old config restored");
 		relod($goto);}
 	if($_GET["reset_config"]){
 		$prmdef=ndprms_defaults();

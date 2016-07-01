@@ -91,7 +91,7 @@ function ljd($d,$i){
 return ljb('bk'.$d,'icons_toggle(this,'.$i.')','','');}
 function icons_icon($d,$id){if($d)$r=str_split($d); $n=16; $nb=$n*$n; $sz=16;
 for($i=0;$i<$nb;$i++){$ret.=ljd($r[$i],$i);}
-return div('id="pct'.$id.'" class="pixels" style="width:'.($n*$sz+32).'px;"',$ret);}
+return div(' id="pct'.$id.'" class="pixels" style="width:'.($n*$sz+32).'px;"',$ret);}
 
 function icons_edit($k){$id=randid();
 Head::add('csscode',icons_css()); 

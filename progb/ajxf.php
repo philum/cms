@@ -21,16 +21,16 @@ if(!$w && !$h)list($w,$h)=fwidth($im);
 if($w && $h)$r1=($w/$h); $r2=($sw/$sh); $ml=($sw-$w)/2; $mt=($sh-$h)/2; $nw=$w; $nh=$h;
 if($r1>$r2){if($w>$sw){$ml=0; $nw=$sw; $nh=$h*($sw/$w); $mt=($sh-$nh)/2;}}
 else{if($h>$sh){$mt=0; $nh=$sh; $nw=$w*($sh/$h); $ml=($sw-$nw)/2;}}
-if($id)$o=photos_art_bt(substr($im,4),$sz,$id); $rid='imz'.randid();
+if($id)$o=photos_art_bt(substr($im,4),$sz,$id); $rid=randid('imz');
 $o.=lkt('',$im,picto('url')).' ';
 if($w>$nw or $h>$nh)$o.=lj('','pagup_overim__x_'.ajx($im).'_'.$sz,picto('fullscreen')).' ';
-$cs1=atd('popu').ats('position:absolute; width:'.($nw).'px; height:'.($nh).'px; box-shadow:0 0 100px 10px #000; z-index:-1;"');
+$cs1=atd('popu').ats('position:absolute; width:'.($nw).'px; height:'.($nh).'px; box-shadow:0 0 100px 10px #000; z-index:-1; background:#ddd;"');
 $popa=popa(' ',$o);//strrchr_b($im,'/')
 if(substr($im,0,4)!='http')$im='/'.$im;
 return $popa.div($cs1,divd($rid,image($im,round($nw),round($nh))));}
 
 function overim($im,$sz){//list($sw,$sh)=explode('-',$sz);
-$s='overflow:auto; text-align:center; width:100%; height:calc(100% - 28px);';
+$s='overflow:auto; text-align:center; width:100%; height:calc(100% - 28px); background:#ddd;';
 return div(ats($s),img($im,''));}
 
 function video_viewer($iv,$cr_div,$n){
@@ -100,7 +100,7 @@ return menuder_jb($r,$id,$rid,$opt);}
 function menuder_inp($id,$rid,$v,$pre,$o){//assistant($id,$j,$jv,$va,$chk);
 if($o==1 or $o==3)$bt='getbyid(\''.$pre.$rid.'\').innerHTML=val;';
 return input(1,'adc'.$rid,'').lja('popbt','var val=getbyid(\'adc'.$rid.'\').value; 
-if(val){'.$bt.' getbyid(\''.$id.'\').value=ajx(val);} Close(\'popup\');','ok');}
+if(val){'.$bt.' getbyid(\''.$id.'\').value=val;} Close(\'popup\');','ok');}
 
 function slct_r($d,$o,$vrf=''){
 switch($d){case('parent'):$r=newartparent(); break;
@@ -123,7 +123,7 @@ switch($d){case('parent'):$r=newartparent(); break;
 if($r && $cl)$r=array_unshift_b($r,'','x'); //if($r[0])unset($r[0]);
 return $r;}
 
-function hidslct_j($id,$d,$vrf='',$o=''){//select_j
+function hidslct_j($id,$d,$vrf='',$o=''){//select_j//hidden
 if($d=='date')return menuder_inp($id,$id,$vrf,'bt',$o); $r=slct_r($d,$o,$vrf);
 if($d=='msql')$o='1'; elseif($d=='msqlc')$o=''; 
 elseif($d=='pfuncb')$o=3; elseif($d=='pfunc')$o=1; elseif($d=='tag')$o=1; 
@@ -142,7 +142,7 @@ if(substr($f,0,4)!='http' && $f)$f='http://'.$f; //$read=$_SESSION['read'];
 list($defid,$r)=verif_defcon($f); if($f)$auv=auto_video($f);
 if($defid or $auv){req('sav,boot'); //if(rstr(10))
 	$_POST['ib']=$ib; $_POST['pub']=$pub; save_art(); $ret=$_GET['read'];}//
-else $ret=popup('Article',f_inp('',$f));
+else $ret=popup('Article',f_inp($f,''));
 return $ret;}
 
 function addart_new($msg,$id,$res){req('boot');
@@ -188,9 +188,18 @@ foreach($r as $k=>$v){if($k==$vrf)$c='active'; else $c='';
 $ret=scroll_b($r,$head.divc('nbp',$ret),24,'',400);//savart
 return $ret;}
 
+function findefs($f){req('tri');
+$reb=vaccum_ses($f);
+//list($defid,$r)=verif_defcon($f);
+if(!$r)$r=recognize_defcon($reb);
+if(!$r)$r=known_defcon($reb);
+foreach($r as $v)$ret.=inp('',htmlentities($v)).br();
+return $ret;}
+
 function urledt($u){$b=rstr(18)?'public':ses('qb'); if(!auth(4))return;
-list($id,$v)=verif_defcon($u); if(!$v)$v=known_defcon($f,'');
-$see=lj('','popup_callp___ajxf_seesrc_'.ajx($u),pictit('view','code'));
+list($id,$v)=verif_defcon($u); //if(!$v)$v=known_defcon('');
+$see=lj('','popup_callp___ajxf_findefs_'.ajx($u),pictit('filelist','detect defs')).' ';
+$see.=lj('','popup_callp___ajxf_seesrc_'.ajx($u),pictit('view','code'));
 if($id)return lj('','popup_editmsql___users/'.$b.'*defcons_'.$id,pictit('txt','defs')).' '.$see;
 else return msqlink('',$b.'_defcons',http_domain(strtolower($u))).hlpbt('defcons').' '.$see;}
 
@@ -205,31 +214,6 @@ $d=highlight_string($d,true);
 return $d;}
 
 #transports
-//deploy
-function vmail($id){
-$ids='vmfrom'.$id.'|vmto'.$id.'|vmsg'.$id;
-$ret.=btn('right',lj('popsav','vsd'.$id.'_vmailsend___'.$id.'____'.$ids,nms(28)));
-if($_SESSION['USE'])$ret.=hidden('','vmfrom'.$id,$_SESSION['qbin']['adminmail']);
-else{$ret.=label('vmfrom'.$id,'popw','',nms(68).':').' ';
-$ret.=input(1,'vmfrom'.$id,'','" size="24').br();}
-if(auth(0))$ret.=lj('txtbox','popup_plup___mail_mail*prep_vmto'.$id,nms(36));
-else $ret.=btn('txtx',nms(36));
-$ret.=input(1,'vmto'.$id,'','" size="24').br();
-$ret.=txarea('vmsg'.$id,'',44,2);
-return divd('vsd'.$id,$ret);}
-
-function vmailsend($id,$res){
-$http=host(); $htacc=urlread($id);
-list($from,$to,$txt,$suj)=ajxr($res);
-if(strpos($to,"@")!==false){
-$suj=sql('suj','qda','v','id="'.$id.'"');
-$msg=divc("panel justy",$txt);
-$msg.=lkc("",$http.$htacc,bal("h2",$suj));
-$msg.=divc("panel justy",read_msg($id,"nlb"));
-send_mail("html",$to,$suj,$msg,$from?$from:hostname(),$htacc);
-return btn("popbt",nms(34).' '.nms(79).' '.nms(36).': '.$to);}
-else return btn("popdel",'error'.$to);}
-
 //export
 function exportation($pub,$node,$topic,$sub){
 $USE=$_SESSION['USE']; $go='popup_export__pop_';
@@ -245,18 +229,24 @@ if($USE!=""){
 	if(count($_SESSION['mn'])>1 && $lineb) 
 		$ret.=slctmenusj($lineb,$go.$pub.'_'.$node.'_','',' ');}
 if($topic!="" && !$sub){//topic
-	$sqlt=$_SESSION['sqlimit'];
 	$lk=$go.$pub.'_'.$node.'_'.$topic.'_';
 	$ret.=lj("popdel",$lk.'ok','save in: '.$topic);
-	$req=sq('id,suj','qda',"where nod='$node' AND frm='$topic' $sqlt ORDER BY id DESC LIMIT 100");
-	while($data=mysql_fetch_array($req)){
+	if($_SESSION['dayb'])$sqlt='AND day>'.$_SESSION['dayb'].'';
+	$req=sq('id,suj','qda','where nod="'.$node.'" AND frm="'.$topic.' '.$sqlt.' ORDER BY id DESC LIMIT 100');
+	if($req)while($data=mysql_fetch_array($req)){
 		$rte.=lj('',$lk.$data["id"],$data["suj"]).br();}
 	if($rte) $ret.=' '.btn('txtx','or affiliate to:').br().divc('nbp',$rte);}
 if($sub!=""){$tosave=import($node,$pub,$USE,$topic,$_SESSION['qb'],$sub);//sub
 $ret=lkc("popw",'/?read='.$tosave,'saved in '.$node.'/'.$topic.'/'.$tosave);}
 return $ret;}
 
-//transport
+function apicom($id){$ra=explode_k($id,',',':'); unset($ra['rid']); unset($ra['notpublished']); 
+unset($ra['nbarts']); unset($ra['link']); unset($ra['t']); $com=implode_k($ra,',',':');
+$bt=hlpbt('api').' '.lj('grey','popup_plupin___favs_com_'.ajx($com),picto('save')).' '.lj('grey','popup_plupin___apicom_'.ajx($com).'____injectjs',picto('view')).' '.
+$ret.=lkc('grey','/module/api/'.str_replace(',',';',$id),picto('url')).' ';;
+return $bt.divc('editor',$com);}
+
+//import
 function import($node,$part,$use,$frm,$qb,$suj){$tim=$_SESSION['dayx'];
 $mmb=sql('members','qdu','v','name="'.$node.'"'); $r=explode(",",$mmb); 
 foreach($r as $k=>$v){list($ath,$muser)=explode("::",$v); if($muser==$use)$auth=$ath;}
@@ -276,7 +266,7 @@ $idb=strdeb($jv,"'");//is_numeric($jv)?'import':
 if($jv)$help=msql_read('lang','connectors_all',$idb);
 if($help && !is_array($help)){$bi=strpos($help,'§');//prop_detect
 	$ret.=divc('small',nl2br($help));}
-$ret1=goodarea(!is_numeric($va)?$va:'',$p1,'','',40);//$nk
+$ret1=goodarea($va,$p1,'','',40);//$nk//is_numeric($va)?$va:''
 //$ret1=balise($type,array('','text','',$p1,$va==1?url:$va,'',32,255,$nk),"").' ';
 if($chk or $bi){$ret2=input(1,$p2,$chk,'').' '; $sep='§';} 
 else $ret.=hidden('','cnp','');
@@ -382,7 +372,7 @@ return $d?$ret:'select text to replace';}
 
 function mbd_paste(){$ret=txareac_btns();
 $ret.=btn('right',lj('popbt" id="bts','txtarea_convhtml_txtareb_5',nms(86)));
-$ret.=div('contenteditable id="txtareb" class="panel justy" style="padding:10px; border:1px dotted grey; min-width:550px; min-height:240px;"','<br>');
+$ret.=div(' contenteditable id="txtareb" class="panel justy" style="padding:10px; border:1px dotted grey; min-width:550px; min-height:240px;"','<br>');
 return $ret;}
 
 function mbd_book($cnn){req('adminx');
@@ -408,11 +398,15 @@ return $ret;}
 
 function recenseim($id){req('tri');
 $msg=sql('msg','qdm','v','id='.$id); 
-$ims=correct_txt($msg,'','extractimg'); $ra=explode('/',$ims); //pr($ra);
+$ims=correct_txt($msg,'','extractimg'); $ra=explode('/',$ims);
 $ims=sql('img','qda','v','id='.$id); $r=explode('/',$ims); 
-foreach($ra as $k=>$v)if(!in_array($v,$r))$r[]=$v;
-//if(count($ra)>count($r))update('qda','img',implode('/',$r),'id',$id);
+foreach($ra as $k=>$v)if(!in_array($v,$r))$r[$w]=$v;
 return implode('/',$r);}
+
+function orderim($id){
+$ims=sql('img','qda','v','id='.$id); $r=explode('/',$ims); 
+if($r)foreach($r as $v)if(is_file('img/'.$v)){list($w,$h)=getimagesize('img/'.$v); $rb[$w]=$v;}
+if($rb){krsort($rb); return '/'.implode('/',$rb);}}
 
 function placeim($id){
 $ims=sql('img','qda','v','id='.$id); $r=explode('/',$ims); foreach($r as $k=>$v)if($v){
@@ -438,17 +432,17 @@ for($b=0;$b<$nb;$b++){$td='';
 		$td.=bal('td',input(1,$id,'','" size="'.($cell>0?$cell:1)));}//
 	$ret.=bal('tr',$td);}
 $ret=bal('table',$ret);
-$ret.=lj('','mkb_mktable__5_'.$na.'_'.$nb.'___'.$md,'normal').' ';
-$ret.=lj('','mkb_mktable__5_'.$na.'_'.$nb.'_1__'.$md,'titles').' ';
-$ret.=lj('','mkb_mktable__5_'.$na.'_'.$nb.'_2__'.$md,'alternate');
-$ret.=lj('','mkb_mktable__5_'.$na.'_'.$nb.'_div__'.$md,'divtable');
+$ret.=lj('txtx','mkb_mktable__5_'.$na.'_'.$nb.'___'.$md,'normal').' ';
+$ret.=lj('txtx','mkb_mktable__5_'.$na.'_'.$nb.'_1__'.$md,'titles').' ';
+$ret.=lj('txtx','mkb_mktable__5_'.$na.'_'.$nb.'_2__'.$md,'alternate');
+$ret.=lj('txtx','mkb_mktable__5_'.$na.'_'.$nb.'_div__'.$md,'divtable');
 $ret.=divd('mkb','');
 return $ret;}
 
 function mkt_build($d){
 $d=str_replace(',','|',$d); $d=str_replace("\n",'¬',$d); $h=hidden('','mktb',$d);
-return lj('','socket_jump__5_____mktb','ok').$h;
-return ljb('','insert',ajx($d),'ok');}
+return lj('popbt','socket_jump__5_____mktb','ok').$h;
+return ljb('popbt','insert',ajx($d),'ok');}
 
 function mbd_mktable($d){
 if($d)return mkt_build($d);
@@ -461,12 +455,6 @@ return $ret;}
 
 #admin
 //edit_art
-function artedit($id,$sz=''){
-$_SESSION['read']=$id; $_GET['continue']="edit";
-//list($w,$h)=explode('-',$sz); $mxw=currentwidth(); if($w>$mxw)$w=$mxw;
-//if($w)$sty='width:'.($w-26).'px;';
-return divs($sty,f_inp('',''));}
-
 function artwedit($id){req('tri,pop');
 $clr=$_SESSION['clrs'][$_SESSION['prmd']];
 $d=correct_txt($id,'','sconn'); $d=nl2br($d);
@@ -492,7 +480,7 @@ build_css($f_css_temp,$defs);
 return btn("popdel","saved");}
 
 //mod
-function modsee($r){for($i=1;$i<10;$i++){$u.=$r[$i].'/';}
+function modsee($r){for($i=1;$i<12;$i++){$u.=$r[$i].'/';}
 $ret=btn('txtcadr','connector').' '.str_replace(array('/////:','////:','///:','//:','/:'),':',$u.':'.$r[0]).':module'.br().br();
 $lk='/module/'.$r[0].'/'.$r[1].'/'.$r[2].'/'.$r[4].'/'.$r[5]; $lk=strdeb($lk,'§');
 $ret.=btn('txtcadr','url').' '.$lk;
@@ -501,17 +489,11 @@ return $ret;}
 function modj($id,$va){return build_mods($_SESSION['modc'][$va][$id]);}
 
 //admin
-function admin_call($id,$va,$opt){$_GET['admin']=$id; $sz=550;
-if($id=='css' or $id=='colors' or $id=='console' or $id=='htaccess' or $id=='code' 
-	or $id=='pictos' or $id=='stats')$sz=680; if($id=='editor')$sz=640;
-elseif($id=='design' or $id=='colors' or $id=='restrictions' or $id=='params' 
-	or $id=='hubs' or $id=='editor' or $id=='update' or $id=='msql' or $id=='updb' 
-	or $id=='console' or $id=='finder' or $id=='messages' or $id=='plugin')
-		$reb=call_user_func('adm_'.($id=='design'?'css':$id),$va,$opt);
-elseif($id=='apps'){req('adminx'); $reb=adm_apps('','',$va);}
-elseif($id=='css')$reb=adm_admin($id,$va);
-else $reb=admin();
-return popup($id,$reb,$sz);}
+function admin_call($id,$va,$opt){$_GET['admin']=$id;
+if($id=='design' or $id=='colors' or $id=='restrictions' or $id=='params' or $id=='hubs' or $id=='editor' or $id=='update' or $id=='msql' or $id=='updb' or $id=='console' or $id=='finder' or $id=='messages' or $id=='plugin')$ret=call_user_func('adm_'.($id=='design'?'css':$id),$va,$opt);
+elseif($id=='apps'){req('adminx'); $ret=adm_apps('','',$va);}
+elseif($id=='css')$ret=adm_admin($id,$va); else $ret=admin();
+return $ret;}
 
 //rstr
 function rstr_sav($d){
@@ -525,11 +507,16 @@ function medium_clr($g){$r=explode(',',$g);
 foreach($r as $k=>$v){if(substr($v,0,1)=='#'){$oa+=hexdec(substr($v,1)); $ob++;}}
 if($ob)return dechex($oa/$ob);}
 
+function randimg($dr){
+$r=explore($dr); $n=count($r); return $dr.'/'.$r[rand(0,$n-1)];}
+
 function desk_css(){
 $prmd=$_SESSION['prmd']; if($_SESSION['negcss'])$prmd.='_neg';
 $clr=$_SESSION['clrs'][$prmd]; req('styl');
 $g=prma('desktop'); //sesmk('desklr');
-if(is_image($g))$ret='background:url('.goodroot($g).');';
+if($g){req('spe'); $g=goodroot($g);}
+if(is_dir($g))$ret='background:url('.randimg($g).') no-repeat center fixed; background-size:cover;';
+elseif(is_image($g))$ret='background:url('.goodroot($g).') no-repeat center fixed; background-size:cover;';
 elseif(strpos($g,',')===false && $g){
 	$ret='background-color:'.affect_rgba($g,$clr).';'; $klr=$g;}
 else{$g=affect_rgba($g,$clr); $gh=$g?$g:'#'.$clr[4].',#'.$clr[2]; $klr=medium_clr($gh);
@@ -537,21 +524,28 @@ else{$g=affect_rgba($g,$clr); $gh=$g?$g:'#'.$clr[4].',#'.$clr[2]; $klr=medium_cl
 $ret='height:100%; 
 	background:linear-gradient('.$g.') no-repeat fixed;';}
 return css_code('body {'.$ret.'}
-	#desktop a, .philum {color:#'.invert_color($klr,1).';}
+	#desktop a, #desktop .philum {color:#'.invert_color($klr,1).';}
 	#page {padding:0; margin:0 40px 0 0; border:0; box-shadow:none;}');}
 
 function desktop_root($id,$va,$opt,$optb){poplist();
-if($id=='varts' or $id=='files')req('mod');
+if($id=='varts' or $id=='files' or $id=='explore' or $id=='menubub' or $id=='overcats')
+req('mod');
 if($id=='arts')req('api,pop,spe,art,tri,mod');
 $r=desktop_apps($id,$va,$opt,$optb); $ret=desktop_build_ico($r,'icones');
 return $ret.divs('clear:left;','');}
 
-function desktop_ico($id){$r=desktop_apps($id,$va,$opt,$optb);
+function desktop_ico($id){$r=desktop_apps($id,'','','');
 return desktop_build_ico($r,'');}
 
 function desktop_load($id){if($id)$r=desktop_cond($id);//deskload
 else $r=array('desktop_desk___desk','page_deskbkg','popup_site___desktop_ok__autosize');
+//$r[]='bub_';//del admin
 return implode(';',$r);}
+
+function apps_read($id){
+$r=msql_read('',ses('qb').'_apps',$id,1); $ra[$id]=$r;
+$ret=m_apps($ra,$r[5],$r[6],$r[3],$r[4]);
+return desktop_build_ico($ret,'icones').divc('clear','');}
 
 #connectors
 
@@ -575,7 +569,7 @@ function navs($op){
 if($op=="ascii"){$r=msql_read('system',"edition_chars","",1);
 	foreach($r as $k=>$v)$ret.=ljb('',"insert",$v,$v).' ';
 	$ret.=lj('txtx','popup_plup___ascii','table');}
-elseif($op=="pictos"){$r=$_SESSION['picto'];
+elseif($op=="pictos"){$r=msql_read('system','edition_pictos','',1);
 	foreach($r as $k=>$v)$ret.=ljb('','insert','['.$k.'§16:picto]',picto($k)).' ';}
 elseif($op=="uc"){$r=msql_read('',$_SESSION['qb'].'_connectors',"",1);
 	if($r){$ret.=btn('txtx',$_SESSION['qb'].':').' ';
@@ -603,9 +597,9 @@ else $ret=conn_props_b($op);
 return divs('min-width:300px;',$ret);}
 
 //pdf
-function pdfreader_j($d,$t){
-$url='http://docs.google.com/viewer?url='.urlencode($d).'&embedded=true'.$sz;
-return popup($t,iframe($url,prma('content')));}
+function pdfreader_j($d){
+$url='http://docs.google.com/viewer?url='.urlencode($d).'&embedded=true';
+return iframe($url,prma('content'));}
 
 #batch
 function batch($f,$d){$f=utmsrc($f); $fb=nohttp($f);
@@ -625,13 +619,13 @@ $ret.=lj('',$idt.'_batchfbi__3',picto('update'));
 $ret.=lj('','page_deskbkg',picto('desktop'));
 $ret.=msqlink('',ses('qb').'_rssurl');
 $r=$_SESSION['vacuum']; if($r)$r=array_reverse($r);
-if($r)$ret.=lj('bkg',$idt.'_batch___z_1',nms(57));
+if($r)$ret.=lj('popsav',$idt.'_batch___z_1',nms(57));
 if($r)foreach($r as $k=>$v){$i++;
 	if((!$_SESSION['vacsuj'][$k] or $k==$f) && $k!=1 && $k && $k!='http://loading...'){
 		list($_SESSION['vacsuj'][$k],$msg)=vacuum($k,'');}
 	if(!$_SESSION['vacsuj'][$k] && $v)$suj='no_title'; else $suj=$_SESSION['vacsuj'][$k];
 	$kb=ajx($k,''); $cat=$_SESSION['vaccat'][$k];
-	$rid='bth'.randid(); 
+	$rid=randid('bth'); 
 	$btb=ljc('','popup','ajxf_batch*preview_'.$kb,picto('view'));
 	$btb.=slct_cat($rid,$cat,$i);
 	//$btb.=select_j($rid,'category',$cat,3,$cat?$cat:picto('list'));
@@ -644,13 +638,13 @@ if($r)foreach($r as $k=>$v){$i++;
 if($d!='in')$ret=div(atd($idt).ats('padding:2px; min-width:240px;'),$ret);
 return scroll_b($i,$ret,10);}
 
-function slct_cat($id,$t,$n){return hidden($id,$id,$t).lj('" id="adcat'.$id,'popup_addCat___'.$id.'_'.$id.'_'.$n,$t?$t:picto('list'));}//menuder_jb
+function slct_cat($id,$t,$n){return hidden($id,$id,$t).lj('" id="adcat'.$id,'popup_addCat___'.$id.'_'.$id.'_'.$n,$t?$t:picto('filelist'));}//menuder_jb
 
 function batch_prep($v){$http=strdeb($v,'/'); req('pop'); 
 $rss=rssin_load(http($v)); $vac=$_SESSION['vacuum'];//pr($rss);
 foreach($rss as $k=>$v){list($suj,$f,$dat,$id)=$v; $f=(string)$f;
-	if($id)break; elseif($f && !isset($vac[$f])){$f=nohttp($f);
-	@$_SESSION['vacsuj'][$f]=$suj; @$_SESSION['vacdat'][$f]=$dat; @$_SESSION['vacuum'][$f]='';}}}
+if($id)break; elseif($f && !isset($vac[$f])){$f=nohttp($f);
+@$_SESSION['vacsuj'][$f]=$suj; @$_SESSION['vacdat'][$f]=$dat; @$_SESSION['vacuum'][$f]='';}}}
 
 function batchfbi(){req('pop'); $ret=hlpbt('rssurl_1').br();
 $r=msql_read('',$_SESSION['qb'].'_rssurl',"",1); $r=msq_tri($r,3,1);
@@ -664,8 +658,9 @@ $msg=embed_links($msg); $msg=clean_br_lite($msg); $msg=clean_punct($msg);
 $msg=format_txt($msg,'','test');
 $sty=atc('justy').ats('width:'.$w.'px;');
 if(strlen($msg)>400)$sty.=atd('scroll'); $titl=bal('h2',$suj);
-$_SESSION['sugm']=$sug; $rid='btch'.randid();
+$_SESSION['sugm']=$sug; $rid=randid('btch');
 $rel=lj('','popup_call__x_ajxf_batch*preview_'.ajx($f).'_',pictit('reload',nms(101))).' ';
+$rel.=lj('','popup_addArt__x_'.ajx($f).'_1',picto('edit')).' ';
 if(auth(6))$titl.=$rel.urledt($f).' '; $titl.=lkt('',$f,picto('url'));
 if(auth(6))$titl.=newartcat($f);
 $ret.=bal('section',bal('header',$titl).balb('article',$sty,$msg)); //$_SESSION['vacuum'][$f]='';

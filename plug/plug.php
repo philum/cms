@@ -9,12 +9,13 @@ foreach($r as $k=>$v){
 	if($rb)foreach($rb as $kb=>$vb)$ret[$vb][]=lkc('','/plug/'.$k,$k);}
 return divc('',make_tabs($ret));}//onxcols($ret,6,'')
 
-function plug_in($p='',$o='',$res=''){list($plg,$p,$o)=ajxr($res); echo $res;
+function plug_call($p='',$o='',$res=''){
+list($plg,$p,$o)=ajxr($res);
 return plugin($plg,$p,$o);}
 
 function plug_plug($plg,$p='',$o='',$res=''){$rid='plg'.$plg.$p;
 if($res)list($plg,$p,$o)=ajxr($res);
-$ret.=lj('','pop_plupin___plug____plugin|plugp|plugo',picto('reload')).' ';
+$ret.=lj('',$rid.'_plug__3_plug_plug*call___plugin|plugp|plugo',picto('reload')).' ';
 $ret.=select_j('plugin','plug','','','','2');
 $ret.=input(1,'plugin',$plg?$plg:'plugin','',1).' ';
 $ret.=input(1,'plugp',$p?$p:'param','',1).' ';

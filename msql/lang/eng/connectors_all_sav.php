@@ -80,7 +80,6 @@ $r["import"]=array('import an article (ID)');
 $r["jconn"]=array('call a connector on place in ajax; ex: [248:read§open:jconn]');
 $r["jopen"]=array('open a content on place in ajax');
 $r["jukebox"]=array('mp3 player for a directory (recursive) [hub/directory:jukebox]');
-$r["label"]=array('label of image');
 $r["last-update"]=array('date of last modification of an article');
 $r["last_saved"]=array('restore last saved action');
 $r["lines"]=array('delete line from selected text');
@@ -124,7 +123,7 @@ $r["plug"]=array('[param§option:plugin:plug]');
 $r["plup"]=array('plugin in a popup
 [param§option:plugin§button:plup] but not :
 [plugin§param:plup]');
-$r["polaroid"]=array('[image.jpg§texte:polaroid]');
+$r["figure"]=array('[image.jpg§texte:figure]');
 $r["pop"]=array('open content in a popup [text§title:pop]');
 $r["popart"]=array('open an article Philum (local or distant) in a popup');
 $r["popmsqt"]=array('return content from a msql entry in a popup ; [system_program*gnu_1§GNU:popmsqt] ');
@@ -166,7 +165,9 @@ $r["webpage"]=array('display a web page in a popup (using suggest plugin)');
 $r["mktable"]=array('format csv as table datas');
 $r["svgcode"]=array('create svg from connectors. §width/height');
 $r["popmsql"]=array('return content from a msql entry in a popup ; [public_atomic§GNU:popmsql]');
-$r[1]=array('');
-$r[":pre"]=array('');
+$r[":pre"]=array('delete the connectors :pre');
+$r["image"]=array('open an external image, from any format');
+$r["plugin"]=array('plug_name§param:plugin');
+$r["slides"]=array('create a slide from the datas. use new line or -- as separator');
 
 ?>

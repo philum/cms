@@ -67,7 +67,7 @@ if($_POST["convent"])$ret=html_entity_decode($ret);
 if($_POST["convutf"])$ret=utf8_decode($ret);
 if($_POST["convurl"])$ret=urldecode($ret);
 if($_POST["urlencode"])$ret=urlencode($ret);
-if($_POST["ucfirst"])$reb=ucfirst(strtolower($reb));//strtoupper
+if($_POST["table2array"])$reb=plugin_func('table2array','table2array_build',$reb);
 
 if($ret && !$reb){
 	//if(!strpos($ret,'<br />') && strpos($ret,"\r"))$ret=nl2br($ret);
@@ -127,14 +127,14 @@ $otab['html'].=checkbox("convutf","ok","utf8",0).' ';
 $otab['html'].=checkbox("convurl","ok","url",0).' ';
 $otab['html'].=checkbox("see","ok","show_work",0).br();
 $otab['html'].=lkt("txtblc","/plug/converts","conversions").' ';
-$otab['html'].=lkt("txtblc","/plug/notepad","notepad").' ';
+$otab['html'].=lkt("txtblc","/plug/pad","notepad").' ';
 $otab['html'].=lkt("txtblc","/plug/ifram","iframe").' ';
 $otab['html'].=lkc('txtblc','/plug/editor/reset_cache','reset_cache').' ';
 $otab['html'].='</form>';
 
 //notepad
-if($_SESSION['USE']){require_once("stext.php"); 
-	$otab['connectors'].=divs('position:absolute; right:0; top:0;',plug_stext($npb,1));}
+if($_SESSION['USE']){
+	$otab['connectors'].=divs('position:absolute; right:0; top:0;',plugin('txt',$npb,1));}
 $otab['connectors'].=btn('txtit',$title);
 $otab['connectors'].='<form name="converted" method="post" action="">';
 $otab['connectors'].=ljb('txtbox','document.converted.txb.select()','','::');
@@ -151,13 +151,14 @@ $otab['connectors'].=checkbox("del_n","ok","del_nl",0).' ';
 $otab['connectors'].=checkbox("add_punct","ok","add_nl",0).' ';
 $otab['connectors'].=checkbox("clean_punct","ok","typo_rules",0).' ';
 $otab['connectors'].=checkbox("del_tab","ok","del_tables",0).' ';
-$otab['connectors'].=checkbox("ucfirst","ok","ucfirst",0).' ';
+$otab['connectors'].=checkbox("table2array","ok","table2array",0).' ';
 //$otab['connectors'].='<label>delete:</label>'.balise("select",array(2=>"conn_to_del",5=>"txtblc"),batch_defil_kv(connectors_reference_lite(),"","vv")).' ';
 $otab['connectors'].='</div>';
 $otab['connectors'].=divc('txtsmall2','replace by:').''.txarea("repla",$_POST['repla'],15,1).' '.txarea("replb",$_POST['replb'],15,1).' '.checkbox("rec_prg","ok","preg",0);
 $otab['connectors'].='</form>';
-$otab['connectors'].=lkt("txtblc","../plugin/converts","converts").' ';
-$otab['connectors'].=lkt("txtblc","../plugin/notepad","notepad").' ';
+$otab['connectors'].=lkt("txtblc","/plug/converts","converts").' ';
+$otab['connectors'].=lkt("txtblc","/plug/pad","notepad").' ';
+$otab['connectors'].=lkt("txtblc","/plug/buildtable","buildtable").' ';
 
 //wysiwyg
 //if($title)$otab["render"].=btn("txtit",$title).br();

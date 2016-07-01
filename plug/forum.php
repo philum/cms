@@ -6,7 +6,7 @@ if($_POST["submit"]){forumsave($_POST["name"],$cht,$_POST["msg"],$_POST["suj"]);
 $qdi=$_SESSION['qdi'];$qb=$_SESSION['qb'];
 if($_GET['open']) $ar[]=array("name","date","msg"); 
 else $ar[]=array("title","msg","nb","name","date");
-$otp=sql('suj,id','qdi','kr',"nod='$qb' AND frm='forum$cht' ORDER BY id desc");
+$otp=sql('suj,id','qdi','kr','nod="'.$qb.'" AND frm="forum'.$cht'" ORDER BY id desc');
 if($otp){foreach($otp as $suj=>$r){$mx=count($r); $bid=$r[0];
 	list($id,$name,$day,$msg)=sql('id,name,day,msg','qdi','r','id='.$bid);
 	$suj=lkc('','/?read='.$_SESSION['read'].'&suj='.$suj.'&open='.$bid,$suj);
@@ -20,7 +20,7 @@ return make_table($ar,"txtblc","");}
 
 function forumsave($name,$frm,$msg,$suj){
 $qb=$_SESSION['qb']; $qdi=$_SESSION['qdi']; $pdt=$_SESSION['dayx']; 
-return msquery("INSERT INTO $qdi VALUES ('','/$ib','$name','$mail','$pdt','$qb','forum$frm','$suj','$msg','1','','','','')");}
+return msquery("INSERT INTO $qdi VALUES ('','/$ib','$name','$mail','$pdt','$qb','forum$frm','$suj','$msg','1','')");}//,'','',''
 
 function forumform($cht){
 $tfield=btn("txtx","subject:").' ';

@@ -9,6 +9,11 @@ $t.=balise('input',array(1=>'text',3=>"tckansw",23=>nms(91),6=>4,7=>4),'').br();
 $t.=balise('textarea',array(3=>"tckmsg",7=>1000,9=>61,10=>7),'');
 return form('',$t);}
 
+function by_pages($r,$p){$n=count($r); $page=$p?$p:1; $npg=10;
+$ret=nb_page($n,$npg,$page); $min=($page-1)*$npg; $max=$page*$npg;
+for($i=0;$i<$n;$i++){if($i>=$min && $i<$max)$ret.=$r[$i];}
+return $ret;}
+
 function msqlxread(){$page=$_GET['page']?$_GET['page']:1; $npg=10;
 require('plug/microxml.php'); $min=($page-1)*$npg; $max=$page*$npg; $i=0;
 $site='http://philum.net';//$site=philum();//father_server
@@ -24,7 +29,7 @@ if($r)foreach($r as $k=>$v){//array('host','hub','msg','day','ip')
 	//$msg=correct_txt($msg,'','sconn'); 
 	if($i>=$min && $i<$max)$msg=miniconn($msg); $i++;
 	$rb[$k].=divc('" style="width:400px;',nl2br(stripslashes($msg))).br();
-	if($v[5]){$rb[$v[5]].=div('style="margin-left:40px;"',$rb[$k]); unset($rb[$k]);}}
+	if($v[5]){$rb[$v[5]].=div(ats('margin-left:40px;'),$rb[$k]); unset($rb[$k]);}}
 if($rb)rsort($rb);
 return by_pages($rb,$page);}
 

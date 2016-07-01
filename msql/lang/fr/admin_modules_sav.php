@@ -3,14 +3,14 @@
 $r["_menus_"]=array('description','help','option','command');
 $r["All"]=array('Tous les articles','Donner un titre','prévisualisation ; auto dépend des étoiles','');
 $r["BLOCK"]=array('Appelle un Bloc de modules','spécifier le nom d\'un bloc de modules','','');
-$r["Banner"]=array('image s\'il y en a une, titre du hub par défaut','','','');
+$r["Banner"]=array('texte et image de fond','p=image s\'il y en a une, t=titre','hauteur','');
 $r["Board"]=array('articles ayant une priorité supérieure à 1 ; sensible à la rubrique en cours','spécifier nombre de colonnes','','');
 $r["Hubs"]=array('Liste des Hubs','Donner un titre','','');
 $r["LOAD"]=array('Composant principal qui reçoit le déroulé des articles ou un article entier','','prévisualisation ; auto dépend des étoiles','');
 $r["MenusJ"]=array('Menu qui renvoie des modules en Ajax','param/title/command/option:module->target§button[,]','non refermable','');
 $r["Page_titles"]=array('Titres de la page (inclue la navigation)','','articles parents','');
 $r["Wall"]=array('Déroulé d\'articles avec seulement le corps du message','spécifier une catégorie (option)','','');
-$r["agenda"]=array('articles futurs','Donner un titre','','');
+$r["agenda"]=array('articles dont le tag \'agenda\' est dans le futur','Donner un titre','','');
 $r["app_link"]=array('bouton d\'une App','syntaxe ou id de la ligne de ta table utilisateur, ou celle de la commande','','');
 $r["app_menu"]=array('liste d\'apps prédéfinies','- prédéfinis : home all hubs plan taxonomy agenda categories lang hub
 - existant : key ou val0 de la ligne
@@ -42,7 +42,7 @@ $r["ban_art"]=array('bannière','(ID) article utilisant la bannière, ou la premiè
 $r["blocks"]=array('détermine les balises DIV de la page html, qui sont autant de blocs de modules (informé par le constructeur css, obligatoire)','liste des blocks de modules, séparés par un espace','','');
 $r["br"]=array('ajoute un saut de ligne','','','');
 $r["bridge"]=array('pont entre deux sites philum','param : serveur sans le \'http\'','ID de l\'article ou console url (/module/bridge/philum.net/236)','');
-$r["calendrier"]=array('calendrier','Donner un titre','','');
+$r["calendar"]=array('calendrier','Donner un titre','','');
 $r["cart"]=array('Articles ajoutés au panier','Donner un titre','','');
 $r["cat_arts"]=array('articles d\'une catégorie','spécifier la catégorie','','');
 $r["categories"]=array('liste des rubriques','Donner un titre','option de param ou nb = nombre d\'articles, home','');
@@ -64,21 +64,17 @@ $r["clear"]=array('clear:left annule le flottement à gauche','','','');
 $r["codeline"]=array('Renvoie des balises html imbriquées écrites en Codeline','ex: [[_URL§_SUJ:link]§h2:html] [[_OPT§txtsmall2:css]','','');
 $r["columns"]=array('met chaque module dans une colonne','ligne de commande de modules','','');
 $r["conn"]=array('résultat d\'un connecteur unique','','','');
-$r["connector"]=array('renvoie le résultat d\'un connecteur','Exemples:
-- \'24:read\' :lit le contenu
-- \'24:pub\' : pub d\'un article 
-- [[104:pub]:/2][[106:pub]:/2] : connecteurs complexes (celui-ci met 2 titres sur 2 colonnes)','balise article','');
+$r["connector"]=array('permet de composer du code sous forme de connecteurs','L\'éditeur renvoie son contenu dans le champ param','balise article','');
 $r["contact"]=array('mail à l\'admin','titre','css','');
 $r["content"]=array('détermine la largeur artificielle de la page (informé par le constructeur css, obligatoire)','largeur de content (pour les images et vidéos)','','');
 $r["create_art"]=array('formulaire d\'ajout d\'articles','','','');
 $r["credits"]=array('philum','','','');
 $r["csscode"]=array('ajoute des css dans le header','','','');
-$r["cssfonts"]=array('ajoute des font-face prédéfinies dans le header ','','','');
 $r["deja_vu"]=array('articles récemment visités','','','');
 $r["design"]=array('détermine la feuille Css à utiliser (informé par le constructeur css, obligatoire)','spécifier un numéro de feuille css','abonnement css : place les css récents en sous-couche, sur laquelle il est possible d\'utiliser le minimum de personnalisation : classic, default, n>3 pour une table public) ; sinon voir params/auto_design','');
 $r["desktop_arts"]=array('présente des articles dans le Desktop','script de commande d\'articles (rien = ceux du cache)','','');
 $r["desktop_files"]=array('présente des fichiers partagés dans le Desktop','global|virtual (defaut : local|real)','position du root','');
-$r["desktop_varts"]=array('articles virtuels : construit les répertoires d\'après le meta \'folder\' des articles ','filtre sur les résultats : script de commande d\'articles (rien = tout, \'cache\' = ceux du cache)','','');
+$r["desktop_varts"]=array('articles virtuels : construit les répertoires d\'après le meta \'folder\' des articles ','depuis [nombre de jours]','','');
 $r["disk"]=array('Contenu d\'un répertoire de l\'espace disque utilisateur','spécifier un répertoire','','');
 $r["favs"]=array('Articles sélectionnés par le visiteur','','','');
 $r["finder"]=array('Ouvre un Finder','param (chemin) : hub/root/dir...','options pour chaque paramètre : 
@@ -162,7 +158,7 @@ $r["taxo_nav"]=array('liste des noeuds avec menus ouvrables (se réfère au cache,
 $r["taxonomy"]=array('','','','');
 $r["template"]=array('template d\'articles','nom du template','','');
 $r["text"]=array('texte libre','spécifier un texte brut','','');
-$r["tracks"]=array('','','','');
+$r["tracks"]=array('commentaires des articles','nb de jours','titre','');
 $r["twitter"]=array('reçoit un flux Twitter','indiquer le hashtag (sans le #) ; option = nb de secondes du rafraîchissement','','');
 $r["user_menu"]=array('navigation du site','liens prédéfinis :
 - lien-clef : Home, ID, catégorie, module
@@ -180,9 +176,18 @@ $r["desktop"]=array('paramètres du bureau','spécifier couleur html, #_var, dégra
 $r["popart"]=array('ouvre article (local ou distant) dans une popup','','','');
 $r["video"]=array('affiche une vidéo','id de la vidéo','','');
 $r["classtag_arts"]=array('Affiche les articles ayant une classe de tags définie','spécifier la classe de tags','','');
-$r["api_arts"]=array('Appel de l\'Api en utilisant les constructeurs Load','commande d\'articles de type get','','');
+$r["api_arts"]=array('Appel de l\'Api en utilisant les constructeurs Load','commande de l\'Api','','');
 $r["api_mod"]=array('Appel de l\'API en utilisant les constructeurs de l\'API','commande d\'articles de type Json','','');
 $r["api"]=array('Renvoie le résultat d\'une requête à l\'Api','commande séquentielle (voir /module/api)','','');
 $r["rssin"]=array('chaîne de flux rss','','','');
+$r["module"]=array('ID du module à appeler (utilisé pour simplifier les requêtes)','','','');
+$r["folders_varts"]=array('Articles classés dans un dossier virtual','nb de jours','','');
+$r["panel_arts"]=array('panneau d\'articles','commande de l\'Api, ou id','','');
+$r["overcats"]=array('Menus supérieurs (voir /admin/overcat), auxquels se rattachent les catégories','Affiche un menu ouvrable, de type javascript ou ajax avec la commande bub','','');
+$r["MenuBub"]=array('Menus ouvrables en ajax, fondés sur une table msql (ne dépend pas des sessions)','indiquer un numéro de version alternatif à la table menubub_1','','');
+$r["last_tags"]=array('derniers tags ajoutés','nombre de tags','préciser une classe / command bub : à destination d menubub','');
+$r["app_popup"]=array('lance une app dans une popup','params : button,type,process,param
+ex: hello,art,auto,(id article)','','');
+$r["jslink"]=array('ajoute un lien js dans le header ','','','');
 
 ?>

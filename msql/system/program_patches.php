@@ -12,5 +12,6 @@ $r[130602]=array('patch_userart','suppression d\'un artefact (articles de la cat
 $r[140615]=array('patch_sql_stats','mutation des tables de stats : _eye devient _ip, _stat est abandonnée (contient les anciennes stats), _live est créée');
 $r[150521]=array('patch_passwd','cryptage des mots de passes');
 $r[160101]=array('patch_tags','New system of tags : create 2 Mysql tables + apply patch');
+$r[160606]=array('patch_tracks','rename and strip 3 cols in tables of trackbacks');
 
 ?>

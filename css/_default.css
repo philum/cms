@@ -1,27 +1,34 @@
+@font-face {font-family: 'Oswald-Regular'; src: url('/fonts/Oswald-Regular.eot?iefix') format('eot'), url('/fonts/Oswald-Regular.woff') format('woff'), url('/fonts/Oswald-Regular.svg#Oswald-Regular') format('svg');}
+@font-face {font-family: 'OpenSans-Regular'; src: url('/fonts/OpenSans-Regular.eot?iefix') format('eot'), url('/fonts/OpenSans-Regular.woff') format('woff'), url('/fonts/OpenSans-Regular.svg#OpenSans-Regular') format('svg');}
 a:active {outline:none;}
 h1 {text-shadow: 0px 0px 10px #777777; font-size:xx-large; margin:0;}
 h1 a:hover {text-shadow: 0px 0px 4px #777777;}
-h2 {text-rendering:optimizeLegibility; font-weight:700; text-style:normal; font-size:24px; text-shadow:0; margin:0;}
-h3 {font-size:21px;}
+h2 {font-family:Oswald-Regular; text-rendering:optimizeLegibility; text-style:normal; line-height:1.2em;}
+h3 {font-size:18px;}
 #titles h3 {margin:0 0 12px 0; display:inline;}
-h4 {font-size:16px; font-weight:normal; margin:0 0 4px 0;}
+h4 {margin:0 12px;}
+.justy h4 {font-weight:bold; margin:16px 0;}
 td {padding:4px; margin:2px;}
 table {font-size:14px;}
 blockquote {margin:0; padding:8px 16px; border-style:solid; border-width:0 0 0 4px;}
-article {margin:12px 0 0;}
-section {margin:10px 0; padding:10px; border-bottom:0px solid rgba(119,119,119,0.4);}
+section {margin:20px 0 0 0; /*padding:10px 16px; box-shadow:0px 0px 10px -6px #777777;*/}
+section header {margin-bottom:10px;}
 section .imgl {margin-right:10px;}
+article {margin:0px 0 0; clear:left; padding:1px 0 0;}
+figure {margin:0;}
+figcaption {padding:10px 0;}
 ul {padding:0;}
 li {padding:0px 0;}
-input {border-width:1px; border-style:solid; border-radius:1px; font-size:small; transition: background 0.2s linear; box-sizing:border-box; margin:1px 3px; padding:1px 2px;}
-textarea {box-shadow: 0 0 4px #ffffff; padding:0 2px; margin:0px 0; border-radius:2px; box-sizing:border-box; -moz-box-sizing:border-box;}
-select {box-shadow:0 0 2px #ffffff;}
+input {border-width:1px; border-style:solid; border-radius:1px; font-size:small; transition: background 0.2s linear; box-sizing:border-box; margin:1px 3px; padding:1px 2px; transition: all 0.2s linear;}
+textarea {box-shadow: 0 0 4px #f4f4f4; padding:0 2px; margin:0px 0; border-radius:2px; box-sizing:border-box; -moz-box-sizing:border-box;}
+select {box-shadow:0 0 2px #f4f4f4;}
 button {font-size:smaller;}
-fieldset {background:rgba(255,255,255,0.2); margin:4px 0; padding:10px; border:1px solid #777777; box-shadow:0;}
-legend {background:rgba(255,255,255,0.2); border:1px solid #777777;}
-#page {width:inherit; margin:0 auto; padding:0 20px; max-width:722px;}
+button:hover {text-shadow:1px 1px 2px #777777;}
+fieldset {background:rgba(244,244,244,0.2); margin:4px 0; padding:10px; border:1px solid #777777; box-shadow:0;}
+legend {background:rgba(244,244,244,0.2); border:1px solid #777777;}
+#page {width:inherit; margin:0 auto; padding:0 10px; max-width:722px;}
 #banner {padding:0;}
-#menu {border-width:0; line-height:auto;}
+#menu {border-width:0; line-height:20px;padding:0 0 10px;}
 #navigation {border-width:0; line-height:auto; margin:0 0 10px 0;}
 .menus {font-size:90%; line-height:130%; margin:4px 0 0 0;}
 .menus a {padding:0px 2px;}
@@ -32,34 +39,42 @@ legend {background:rgba(255,255,255,0.2); border:1px solid #777777;}
 #rightbar .mod {padding:0px; margin:0 0 16px 0;}
 #content {margin:0 0 10px 0;}
 #footer {clear:both; text-align:left; border-radius:inherit;}
-#menu a {padding:0 2px;}
 #menu li {float:none;}
-#menu li a {font-family:Arial; font-size:small; border-width:0; border-style:solid; padding:0px;}
+#menu li a {font-family:Arial; font-size:small; border-width:0; border-style:solid; padding:2px 4px; margin:0px 0; line-height:20px;}
 #menu li a:hover {text-shadow:0px 0px 1px #777777;}
 #menu li a.active {text-shadow:0px 0px 1px #777777;}
 #menu .panel {display:block; font-weight:normal; font-family:Verdana;}
+#menu .philum {font-size:23px;}
 #menu .panel :hover {border:0;}
 #artmod {display:none;}
 #board {padding:0;}
-input#srch {padding:1px 4px 1px;}
+input#srch {width:100px; padding:1px 3px 1px;}
+input#srch:hover {width:100px;}
+input#srch:focus {width:100px;}
 #board li {box-shadow:0px 0px 4px #e3e3e3; margin:4px 2px; padding:4px; font-size:small;}
 #board li a:hover {text-shadow:0px 0px 1px #e3e3e3;}
+#bub li {line-height:20px;}
+#bub li a {padding:3px 4px 2px;}
+#bub li li {min-width:160px;}
+#bub ul {box-shadow:0 0 5px -3px #777777;}
+#bub .philum {line-height:20px;}
 .desk a {width:56px; padding:0 4px; margin:0 4px;}
 .tab {margin:0 0 10px 0;}
 ul.panel li {font-family:Arial; margin:4px 0; font-size:small;}
 ul.panel li a {word-wrap: break-word;}
-.justy {padding:0; font-size:1em; font-family:Arial;}
-.justy p {margin:16px 0;}
+.justy {font-size:1em; font-family:Arial;}
+.justy p {margin:8px 0;}
 .justy a {text-decoration:none;}
 .justy a:hover {text-decoration:underline;}
 .justy img {border-width:0px; border-style:solid; max-width:auto;}
 .cols img#rez {width:100%;}
+.thumb {background-size:cover; height:120px; width:180px; float:left; margin:0 10px 0 0; transition: all 0.2s ease;}
 .txtit {font-size:21px; text-shadow:inherit; font-weight:bold;}
 .txtcadr {font-size:12px; margin:10px 0; padding:6px 10px 5px 10px; line-height:23px;}
 .txtx, .txtred, .txtblc, .txtnoir, .txtyl {border-radius:4px; border-style:solid; border-width:0px; box-shadow:0px 0px 2px #e3e3e3;}
 .txtx {border-width:0;}
-.txtblc a:hover {box-shadow: 0px 3px 4px #ffffff inset, 0px 0px 4px #777777;}
-.txtred {border-color:red; border-width:0 0 1px 0; box-shadow: 0px 3px 4px #ffffff inset, 0px 0px 2px #777777;}
+.txtblc a:hover {box-shadow: 0px 3px 4px #f4f4f4 inset, 0px 0px 4px #777777;}
+.txtred {border-color:red; border-width:0 0 1px 0; box-shadow: 0px 3px 4px #f4f4f4 inset, 0px 0px 2px #777777;}
 .txtred a:hover {box-shadow: 0px 3px 4px #fff inset, 0px 0px 4px #777777;}
 .txtnoir {box-shadow: 0px 0px 4px #e3e3e3;}
 .txtnoir a:hover {box-shadow: 0px 0px 4px #777777;}
@@ -68,16 +83,20 @@ ul.panel li a {word-wrap: break-word;}
 .txtsmall2 a {padding:0 2px; border-radius:2px;}
 .txtbox {box-shadow:0px 0px 0px #e3e3e3;}
 .txtbox:hover {box-shadow:0px 0px 0px #e3e3e3;}
-.txtaa, .txtab, .txtac {border-width:0 0 1px 0; border-style:solid;}
+.txtaa, .txtab, .txtac {border-width:0 0 0px 0; border-style:solid; line-height:20px; border-radius:6px 6px 0px 0px;}
+.txtaa {box-shadow:0px 0px 4px -3px #777777;}
+.txtab {box-shadow:0px 0px 4px -3px #777777;}
 .txtac {border-width:0 0 1px 0; background:linear-gradient(to bottom,rgba(119,119,119,0),rgba(119,119,119,0.5));}
-.popbt, .popw, .popsav, .popdel {text-decoration:none; font-size:smaller; padding:2px 6px; line-height:180%; background:linear-gradient(to bottom,#f0edf0,#ffffff) no-repeat;}
+.popbt, .popw, .popsav, .popdel {text-decoration:none; font-size:smaller; padding:2px 6px; line-height:180%;}
 .popbt {padding:2px 6px; margin:0 2px; background:#e3e3e3;}
-.popw {padding:2px 6px; margin:0 2px; box-shadow:0px 0px 1px #333333 inset; background:linear-gradient(to bottom,#ffffff,#ffffff);}
+.popw {padding:2px 6px; margin:0 2px; box-shadow:0px 0px 1px #333333 inset; background:linear-gradient(to bottom,#ffffff,#f4f4f4);}
 .popw a:hover {box-shadow:0px 0px 1px #333333 inset;}
-.popsav {padding:4px 8px 5px 8px; padding:2px 6px; box-shadow:0px 0px 1px #333333 inset;}
-.popsav:hover {background:linear-gradient(to bottom,#ffffff,#ffffff); box-shadow:0px 0px 4px #777777;}
+.popsav {background:linear-gradient(to bottom,#ffffff,#f4f4f4); padding:2px 6px; box-shadow:0px 0px 1px #333333 inset;}
+.popsav:hover {background:linear-gradient(to bottom,#ffffff,#f4f4f4); box-shadow:0px 0px 2px #00659c;}
 .txtclr {font-weight:normal;}
-.cols div {display:inline-block;}
+.cols {columns:auto 250px; -moz-columns:auto 250px; margin-top:10px;}
+.cols .pubart {display:inline-block;}
+.cols .panart {display:inline-block;}
 .cols p {margin:0 0 20px;}
 .colsmall {columns:auto 140px; -moz-columns:auto 140px; font-size:90%; line-height:130%;}
 .colsmall a {display:block;}
@@ -86,27 +105,30 @@ ul.panel li a {word-wrap: break-word;}
 .trkmsg {border-width:0px;}
 .twitter {padding:10px 0;}
 .pubart {margin-bottom:10px;}
+.pubart h4 {margin:2px 0 12px;}
 .pubart h4 a {font-size:smaller; line-height:15px;}
-.pubart img {margin-right:5px;}
+.pubart img {margin-bottom:6px;}
+.panart {background-color:rgba(0,0,0,0.15); font-family:Arial; text-shadow:0px 0px 4px black; font-size:16px; font-weight:700; color:white; padding:10px; margin:0px 0;}
+.panart a {color:white;}
 .nbp {line-height:140%; font-size:small;}
 .nbp a {background:0; border:0; padding:1px 3px;}
 .nb_pages a {text-shadow:1px 1px 1px #e3e3e3; font-size:smaller; border-width:0px; margin:0; padding:2px 6px; line-height:140%; border-radius:0px;}
 .nb_pages a:hover {box-shadow:0px 0px 0px #777777;}
 .list a {padding:1px 2px;}
+#bub .inline .bub ul {box-shadow:0;}
 .taxonomy li {padding:0;}
 .flapf {padding:0;}
 .fimnu a {border:0; background:inherit;}
-.imgl {margin:2px 2px 0 0; width:auto;}
+.imgl {margin:2px 4px 0 0; width:auto;}
 .left {float:left;}
 .right {float:right;}
 .center {text-align:center;}
 .inblock {display:inner-block;}
 .btp a {padding:2px 4px:}
 .bkg {background-color:rgba(119,119,119,0.5);}
-.icones {text-shadow:0 0 4px #777777;}
-.icones:hover {text-shadow:2px 2px 4px #777777; background:linear-gradient(to bottom,#ffffff,#f0edf0);}
+.icones {text-shadow:0 0 0px #777777; width:130px; height:88px;}
+.icones:hover {text-shadow:0px 0px 1px #777777; background:linear-gradient(to bottom,#f4f4f4,#eeeeee);}
 .sicon {width:120px;}
-.admnu {height:28px;}
 .philum {font-size:16px; display:inline-block;}
 .20px {min-width:20px;}
 .popup {border-width:0px; border-radius:0px; box-shadow:2px 2px 16px #777777; margin:0px;}
@@ -114,7 +136,6 @@ ul.panel li a {word-wrap: break-word;}
 .popa .philum {font-size:27px; padding:0 4px;}
 .popu {padding:0 4px 4px 4px;}
 #popup section {padding:0 10px; margin:0 0 10px 0;}
-@media only screen and (min-width: 1000px) {h2 {font-size:x-large;} #bub {font-size:normal;} #page {max-width:952px;} #content {width:712px;} #menu li a {font-size:medium;} #artmod {display:block;} #rightbar {display:block;} .philum {font-size:22px;} input {font-size:normal;} input#srch{margin:0px 3px 3px 2px;padding:3px 3px 1px;}}
-@media only screen and (min-width: 1200px) {body {font-size:large;} #page {max-width:1152px;} h2 {font-size:28px;} .justy {font-size:1.1em;} #content {width:912px;}}
-@media only screen and (min-width: 1400px) {#page {max-width:1600px;} #content {width:calc(100% - 240px);}}
-@media only screen and (max-width: 440px) {#page {padding:0 10px;} h2{font-size:18px;} .justy {font-size:16px; line-height:20px;}}
+@media only screen and (min-width: 1000px) {h2 {font-size:x-large;} #bub {font-size:normal;} #page {max-width:952px;} #menu li a {font-size:normal;} #artmod {display:block;} #rightbar {display:block;} .philum {font-size:22px;} .admnu{height:32px;} input {font-size:normal;} input#srch{margin:0px 1px 2px 2px;padding:2px 3px 1px;} .justy {font-size:1.1em;line-height:1.3em;}}
+@media only screen and (min-width: 1200px) {body {font-size:large;} #page {max-width:1152px;} h2 {font-size:28px;} .justy {font-size:1.2em;line-height:1.4em;} .thumb{width:260px;height:140px;}}
+@media only screen and (max-width: 440px) {h2{font-size:22px;} section{padding:0px;} .thumb{width:100%;margin:0 0 10px;float:none;}}

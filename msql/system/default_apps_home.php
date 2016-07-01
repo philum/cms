@@ -4,7 +4,7 @@ $r["_menus_"]=array('button','type','process','param','option','condition','root
 $r[1]=array('home','link','','/home','','','','home','','');
 $r[2]=array('cache','ajax','popup','rebuild__3xx','','','boot/reset','loading','','4');
 $r[3]=array('mini','link','','/?rebuild_img==','','','boot/reset','loading','','4');
-$r[4]=array('login','bub','login','exec','','','boot','logout','','0');
+$r[4]=array('login','ajax','popup','loged','','','boot','logout','','0');
 $r[5]=array('reload','link','','/reload','','','boot','reload','','');
 $r[6]=array('reboot','link','','/reboot','','','boot','reload','','1');
 $r[7]=array('logout','link','','/logout','','','boot','logout','','1');
@@ -23,5 +23,6 @@ $r[19]=array('favs','plug','favs','','','','','like','1','');
 $r[20]=array('dev','link','','/dev','','','utils','phi','','6');
 $r[21]=array('publish','linkt','blank','/plug/publish_site','','','utils','export','','7');
 $r[22]=array('philum','ajax','popup','about','','','','phi2','','');
+$r[23]=array('Rss','linkt','blank','/rss/newsnet ','','','utils','rss','','7');
 
 ?>

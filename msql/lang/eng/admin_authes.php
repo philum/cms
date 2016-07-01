@@ -4,6 +4,7 @@ $r["_menus_"]=array('category');
 $r["console"]=array('console');
 $r["restrictions"]=array('restrictions');
 $r["params"]=array('params');
+$r["apps"]=array('apps');
 $r["finder"]=array('Finder');
 $r["css"]=array('css');
 $r["hubs"]=array('hubs');
@@ -22,9 +23,7 @@ $r["not_published"]=array('not published');
 $r["trash"]=array('trash');
 $r["trackbacks"]=array('trackbacks');
 $r["chat"]=array('chat');
-$r["shop"]=array('shop');
 $r["authes"]=array('authes');
-$r["apps"]=array('apps');
 $r["banner"]=array('banner');
 $r["descript"]=array('descript');
 $r["google"]=array('google');
@@ -48,5 +47,6 @@ $r["members"]=array('members');
 $r["tags"]=array('tools for tags');
 $r["icons"]=array('iconography');
 $r["pictos"]=array('pictography');
+$r["overcat"]=array('over categories');
 
 ?>

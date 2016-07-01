@@ -10,7 +10,7 @@ if($_GET['qd']){$qdb=$_GET['qd']; $bqd=rse('id',$qdb.'_user',' LIMIT 1');//maste
 	if(!$bqd && !$_POST['create_hub'] && !$_POST['create_node'])
 	$qd=$prms[0]; else $qd=$qdb;}
 $_SESSION['qd']=$qd; $_SESSION['qds']='_sys'; 
-$r=array('qda'=>'art','qdm'=>'txt','qdd'=>'data','qdu'=>'user','qdi'=>'idy','qdp'=>'ips','qdv'=>'live','qdv2'=>'live2','qds'=>'stat','qdt'=>'meta','qdta'=>'meta_art','qdpl'=>'poll');
+$r=array('qda'=>'art','qdm'=>'txt','qdd'=>'data','qdu'=>'user','qdi'=>'tracks','qdp'=>'ips','qdv'=>'live','qdv2'=>'live2','qds'=>'stat','qdt'=>'meta','qdta'=>'meta_art','qdpl'=>'poll');
 foreach($r as $k=>$v)$_SESSION[$k]=$qd.'_'.$v;
 $_SESSION['htacc']=$prms[1]=='yes'?1:'';
 sesr('prms','create_hub',$prms[2]=='yes'?'on':'off');
@@ -34,7 +34,8 @@ function define_hubs(){
 $_SESSION['mn']=''; $USE=$_SESSION['USE'];
 $exists=sql('id','qdu','v','id=1');
 if(!$exists){$_SESSION['stsys']='no'; $_SESSION['first']=1; alert(loged('','','superadmin'));}
-$req=sq('name,hub,id,active','qdu','where active="1" order by nbarts DESC');
+if(!auth(7))$wh='where active="1" ';
+$req=sq('name,hub,id,active','qdu',$wh.'order by nbarts DESC');
 if($req)while($r=mysql_fetch_row($req)){// && ($r[3] or auth(6))
 	$hub=$r[1]?$r[1]:$r[0]; $ret[$r[0]]=$hub; $rtb[$r[0]]=$r[2];}
 $_SESSION['mn']=$ret; $_SESSION['mnd']=$rtb;
@@ -56,8 +57,8 @@ if($id && $id!='=' && $_SESSION['mn'][$id]){$aqb=$id; $qbd=$_SESSION['mnd'][$id]
 elseif($defo && !$_SESSION['qb'])
 	list($qbd,$aqb)=sql('id,name,hub','qdu','r','name="'.$defo.'"');
 if(isset($aqb)){$_SESSION['qb']=$aqb; $_SESSION['qbd']=$qbd;}
-elseif($id!='=' && $id!='dev' && $id!='lab')$_GET['read']=$id;
-if(!$_SESSION['qbd'])$_SESSION['qbd']=sql('id','qdu','v','name="'.ses('qb').'"');}
+elseif($id!='=' && $id!='dev' && $id!='lab' && $id)$_GET['read']=$id;
+if(!$_SESSION['qbd'])$_SESSION['qbd']=sql('id','qdu','v','name="'.$_SESSION['qb'].'"');}
 
 function define_cats_rqt(){$r=$_SESSION['rqt'];
 if($r)foreach($r as $k=>$v)if($v[1] && substr($v[1],0,1)!='_')@$ret[$v[1]]+=1;
@@ -66,7 +67,6 @@ $_SESSION['line']=$ret;}
 function prmb_defaults($pm){
 //if(!$pm[0])$pm[0]=$_SESSION['qb'];//hub
 if(!$pm[1] or !is_numeric($pm[1]))$pm[1]='1';//mods
-if($pm[2])if(auth_ip())$pm[1]=$pm[2];//devmods
 if(!$pm[3])$pm[3]=400;//kmax
 if(!$pm[6])$pm[6]=20;//nb_arts_by_page
 if(!$pm[9])$pm[9]='id DESC';//order 
@@ -88,42 +88,27 @@ $_SESSION['modsnod']=$_SESSION['qb'].'_mods_'.prmb(1);
 if($_SESSION['prmb'][5])auto_design();
 define_mods('');
 $_SESSION['nms']=msql_read('lang','helps_nominations','',1);
-$_SESSION['picto']=msql_read('system','edition_pictos','',1);
-$_SESSION['icons']=msql_read('system','program_pictos','',1);
-$_SESSION['art_options']=array('related','folder','lang','template','authlevel','tracks','2cols','fav','like','poll');
+$_SESSION['art_options']=array('related','folder','agenda','lang','template','authlevel','tracks','2cols','fav','like','poll');
 $_SESSION['node_clr']=$_SESSION['qb'];
 $_SESSION['mobile']=mobile();
 $_SESSION['switch']=''; $_SESSION['prma']='';
 $_SESSION['ip']=sesmk('hostname');}
 
-function alternate_design($node_clr){$_SESSION['switch']=1; 
-$_SESSION['tab']=''; define_mods($node_clr);
-$qbinb=sql('rstr,config','qdu','r','name="'.$node_clr.'"');
-$prmb=explode('#',$qbinb['config']); $_SESSION['prmb']=prmb_defaults($prmb); 
-$_SESSION['node_clr']=$node_clr;
-$_SESSION['rstr']=strsplit($qbinb['rstr']);}
-
 function reset_mjx(){for($i=1;$i<12;$i++)$_SESSION['heremjx'.$i]='';}
-function reset_ses(){reset_mjx(); $r=array('tab','mem','plgs','digr','admb','icotag','pagewidth','jscode','recache','adminauthes','csslayer','prog','msqmimes','negcss','temp','scanplug');
+function reset_ses(){reset_mjx(); $r=array('tab','mem','plgs','digr','admb','icotag','pagewidth','jscode','recache','adminauthes','prog','msqmimes','negcss','temp','scanplug','mnbb');
 $n=count($r); for($i=1;$i<$n;$i++)$_SESSION[$r[$i]]='';}
-//notempty
-/*function setget(){
-$r=array('module','log','nbj','timetravel','read','dev','continue'); $n=count($r);
-for($i=1;$i<$n;$i++)if(!isset($_GET[$r[$i]]))$_GET[$r[$i]]=NULL;}*/
 
 #time_system
 function time_system($cache){$prmb16=$_SESSION['prmb'][16];
 if(isset($_GET['nbj'])){$_SESSION['nbj']=$_GET['nbj']; $cache='ok';}
-if((!$_SESSION['nbj'] or $cache=='ok') && !$_GET['nbj'] && !$_GET['continue']){
+if((!$_SESSION['nbj'] or $cache=='ok') && !$_GET['nbj']){
 	if($_SESSION['rstr'][3]=='0' or $prmb16=='auto')
 		$_SESSION['nbj']=dayslength($_SESSION['qb'],50);
 	else $_SESSION['dayb']=$_SESSION['nbj']=0;
 	if(is_numeric($prmb16))$_SESSION['nbj']=$prmb16;}
-if(!$_SESSION['daya'] or date('dmy',$_SESSION['daya'])==date('dmy',$_SESSION['dayx']) or $cache=='ok')$_SESSION['daya']=$_SESSION['dayx'];
+if(!$_SESSION['daya'] or date('d',$_SESSION['daya'])==date('d',$_SESSION['dayx']) or $cache=='ok')$_SESSION['daya']=$_SESSION['dayx'];
 if(isset($_GET['timetravel'])){$_SESSION['daya']=dayref($_GET['timetravel']); $cache='ok';}
 if($_SESSION['nbj'])$_SESSION['dayb']=calc_date($_SESSION['nbj']);
-$_SESSION['sqlimit']='AND day < '.$_SESSION['daya'];
-if($_SESSION['dayb'])$_SESSION['sqlimit'].=' AND day > '.$_SESSION['dayb'];
 return $cache;}
 
 function dayslength($qb,$limit){
@@ -141,20 +126,18 @@ if(is_numeric($read)){$_SESSION['module']='';
 	if($pb!=$_SESSION['qb'] && $_SESSION['mn'][$pb]){reset_ses();
 		$cache=$_GET['id']='ok'; $_SESSION['qb']=$pb; $_SESSION['author']=$author;}
 	if($raed){$_SESSION['frm']=$frm; $_SESSION['read']=$read; $_SESSION['raed']=$raed;
-	if($_SESSION['art_options'])$_SESSION['opts']=art_opts($read);
-	$_SESSION['artags']=art_tags($id);
-	$_SESSION['mem'][$read]+=1;}
-	else{$_GET['read']=''; $_GET['continue']=''; $_SESSION['artags']='';
+		if($_SESSION['art_options'])$_SESSION['opts']=art_opts($read);
+		$_SESSION['artags']=art_tags($id);
+		$_SESSION['mem'][$read]+=1;}
+	else{$_GET['read']=''; $_SESSION['artags']='';
 		$_SESSION['read']=''; $_SESSION['raed']=''; $_SESSION['frm']='Home';}}
 else{$_SESSION['read']=''; $_SESSION['raed']=''; $_SESSION['frm']='Home';
 	$_SESSION['opts']=''; $_SESSION['module']='';}
 if(isset($_GET['module'])){$_SESSION['module']=$_GET['module']; $_SESSION['frm']='Home';}
 return $cache;}
 
-function define_frm(){$ret=$_SESSION['frm'];
-$m=stripslashes(urldecode($_GET['cat']));
-if(!$m)$m=stripslashes(urldecode($_GET['section']));
-if($m)$ret=$m; return $ret;}
+function define_frm(){
+if($_GET['cat'])$_SESSION['frm']=stripslashes(urldecode($_GET['cat']));}
 
 function repair_mods($nod){
 $r=read_vars('msql/users/',$nod.'_sav','');
@@ -183,16 +166,13 @@ $r=$_SESSION['mods']; $cnd=$_SESSION['cond']; //p($cnd);
 if($r)foreach($r as $k=>$v)foreach($v as $ka=>$va)if($va[7]!=1){
 if($va[3]==$cnd[0] or $va[3]==$cnd[1] or !$va[3]){
 if($va[0]=='LOAD' && $rb[$va[0]])$ka=$rb[$va[0]];//substitute
-$ret[$k][$ka]=$va; $rb[$va[0]]=$ka;}} //p($ret);
+$ret[$k][$ka]=$va; $rb[$va[0]]=$ka;}}
 if($ret)ksort($ret); $_SESSION['modc']=$ret;}
 
 #css
 function define_clr(){
 $r=msql_read('design',$_SESSION['qb'].'_clrset_'.$_SESSION['prmd'],'');
 $_SESSION['clrs'][$_SESSION['prmd']]=$r;}
-
-function csslayer($n){if($n=='classic')return '_classic';
-elseif(is_numeric($n))return 'public_design_'.$n; elseif(is_numeric($n))return '_'.$n;}
 
 function auto_design(){$n=$_SESSION['prmb'][5]; $phi=ses('philum');
 $d=msql_read_b('',ses('qb').'_autodesign',$phi,'',array($phi=>array(1)));
@@ -207,11 +187,11 @@ alert('css_auto re-generated');}}
 function negcss(){
 if($n=$_SESSION['prmb'][5])$nod=ses('qb').'_auto';
 else $nod=ses('qb').'_design_'.$_SESSION['prmd'];
+$f='css/'.$nod.'_neg.css'; $tima=ftime('css/'.$nod.'.css','ymdhi'); $timb=ftime($f,'ymdhi');
+if($tima>$timb){req('styl');
 $clr=$_SESSION['clrs'][$_SESSION['prmd']];
 foreach($clr as $k=>$v)if($v)$klr[$k]=invert_color($v,0);
 $_SESSION['clrs'][$_SESSION['prmd'].'_neg']=$klr;
-$f='css/'.$nod.'_neg.css'; $tima=ftime('css/'.$nod.'.css','ymdhi'); $timb=ftime($f,'ymdhi');
-if($tima>$timb){req('styl');
 if($n){if($n<4)$r=msql_read('system','default_css_'.$n);
 	elseif(is_numeric($n))$r=msql_read('design','public_design_'.$n);}
 else $r=msql_read('design',$nod);
@@ -226,10 +206,18 @@ if(!$_SESSION['node_clr'])$nod='_classic';
 if($_SESSION['negcss']){$nod.='_neg'; negcss();}
 return $nod;}
 
+function csslayer($n){if($n=='classic')return '_classic';
+elseif(is_numeric($n))return 'public_design_'.$n;}
+
 #config
 function define_prma(){$r=$_SESSION['modc']['system'];
-if($r)foreach($r as $k=>$v){$_SESSION['prma'][$v[0]]=$v[1]; 
-if($v[0]=='design'){$_SESSION['prmd']=$v[1]; sesf('csslayer',$v[5],1);}}}
+if($r)foreach($r as $k=>$v){
+if($v[0]=='design'){$_SESSION['prmd']=$v[1];
+	if($v[5])Head::add('jslink','/css/'.csslayer($v[5]).'.css');}
+if($v[0]=='csscode' && $v[1])Head::add('csscode',$v[1]);
+elseif($v[0]=='jscode' && $v[1])Head::add('jscode',$v[1]);
+elseif($v[0]=='jslink' && $v[1])Head::add('jslink',$v[1]);
+else $_SESSION['prma'][$v[0]]=$v[1];}}
 
 function define_condition(){
 if($_SESSION['read'])$cnd=array('art',$_SESSION['read']);
@@ -247,15 +235,15 @@ define_mods(''); define_condition();}
 #users
 //log
 function log_mods(){$use=ses('USE');
-if(!isset($_GET['log']))return;
-switch($_GET['log']){
+if(isset($_GET['log']))switch($_GET['log']){
 case('on'): $usr=$_POST['user']?$_POST['user']:'login';
 	$ret=login($usr,$_POST['pass'],$_POST['mail']); break;
 case('in'): $ret=loged('','',''); break;
 case('out'): $_SESSION['USE']=''; $_SESSION['auth']=''; $dayz=$_SESSION['dayx']-86400;
 	setcookie('use',$use,$dayz); $_COOKIE['use']=''; $_COOKIE['iq']='';
 	setcookie('iq',$_SESSION['iq'],$dayz); $_SESSION['nuse']=1; break;
-case('reboot'): reboot(); relod('/'); break;
+case('reboot'): $r=array('qd','qb','USE','iq','dev');
+	foreach($r as $v)$ret[$v]=$_SESSION[$v]; $_SESSION=$ret; relod('/'); break;
 case('create_hub'): $_POST['create_hub']=ses('qb'); 
 	$ret=login(ses('qb'),'pass',''); break;
 case('off'): $qd=$_SESSION['qd']; $dev=$_SESSION['dev']; session_destroy();
@@ -276,12 +264,13 @@ return $ret;}
 function define_auth(){
 $USE=$_SESSION['USE'];
 $mmbr=$_SESSION['qbin']['membrs'];
+if(!$_SESSION['master'])$_SESSION['master']=sql('name','qdu','v','id="1"');
 if($USE){if($USE==$_SESSION['master'])$auth=7;
 	elseif(is_numeric($mmbr[$USE]))$auth=$mmbr[$USE];
 	elseif($USE==$_SESSION['qb'])$auth=6;
 	else $auth=1;}
 else $auth=0;
-return $auth;}
+$_SESSION['auth']=$auth;}
 
 //stats
 function eye_iq(){$ip=ses('ip');
@@ -290,7 +279,7 @@ if(!$iq){$iq=$_COOKIE['iq']; if($iq)update('qdp','ip',$ip,'id',$iq);}
 if(!$iq){$nav=addslashes($_SERVER['HTTP_USER_AGENT']); $ref=$_SERVER['HTTP_REFERER'];
 $iq=insert('qdp','("","'.$ip.'","'.$nav.'","'.$ref.'","1",NOW())');
 setcookie('iq',$iq,$_SESSION['dayx']+(86400*30));}
-return $iq;}
+$_SESSION['iq']=$iq;}
 
 #update
 function verif_update(){
@@ -299,22 +288,12 @@ if($_SESSION['auth']>5 && !$_SESSION['dlnb'] && !prms('aupdate')){
 	if($maj>ses('philum')){$_GET['update']='program';
 		require_once('plug/distribution.php');}}}
 
-function define_fonts($t){//echo prma('csscode');
-$r=explode(' ',prma('cssfonts')); $n=count($r); //$srvr=prms('upservr');
-for($i=0;$i<$n;$i++){switch($r[$i]){
-case('fontphilum'): $ret.="@font-face {font-family: 'philum';
-src: url('/fonts/philum.eot?iefix') format('eot'), url('/fonts/philum.woff?".$t."') format('woff'), url('/fonts/philum.svg#philum') format('svg'), url('/fonts/philum.ttf') format('truetype');}\n"; break;
-case('fontmicrosys'): $ret.="@font-face {font-family: 'microsys';
-src: url('/fonts/microsys4.eot?iefix') format('eot'), url('/fonts/microsys4.woff?".$t."') format('woff'), url('/fonts/microsys4.svg#microsys4') format('svg'), url('/fonts/microsys4.ttf') format('truetype');}\n"; break;
-case('desktop_img'): $ret.=''; break;}}
-if($ret)return css_code($ret);}
-
 #blocks
-function build_content(){$p=$_GET['plug']; $gmd=$_GET['module']; $ra=api_load_rq();
-	if($p)$content=plugin($p,get('p'),get('o'));
-	elseif($ra)$content=api_load($ra);
-	elseif($gmd && $gmd!='Home')$content=build_mod_r($gmd);
-	else $content=build_modules('content','');
+function build_content(){$gmd=$_GET['module']; $p=$_GET['plug']; $ra=api_load_rq();
+if($p)$content=plugin($p,get('p'),get('o'));
+elseif($ra)$content=api_load($ra);
+elseif($gmd && $gmd!='Home')$content=build_mod_r($gmd);
+else $content=build_modules('content','');
 return $content;}
 
 function build_blocks(){
@@ -325,6 +304,16 @@ foreach($r as $k=>$v){
 $ret=str_replace('</p>',"</p>\n",$ret);
 return $ret;}
 
+function build_deskpage($read){$gmd=$_GET['module'];
+Head::add('jscode',desktop_js('boot'));
+if($read)$ret='popup_ajxlnk2___'.$read;//'popup_popart___'.$read.'_3'
+elseif($cat=$_GET['cat'])$ret='popup_ajxlnk2___cat_'.ajx($cat);//'popup_modpop___:LOAD'
+elseif($gmd && $gmd!='Home')$ret='popup_modpop__3_'.$_GET['p'].':'.$gmd;
+elseif($plg=$_GET['plug'])$ret='popup_plupin___'.$plg.'_'.$_GET['p'];
+elseif($ra=api_load_rq())$ret='popup_apij___'.implode_k($ra,',',':');
+elseif($cnt=$_GET['context'])$ret='popup_ajxlnk2__3_context_'.$cnt;
+if($ret)Head::add('jscode',sj($ret));}//js_code(sj($ret));
+
 #cache
 function cache_arts(){
 $nod=$_SESSION['qb'].'_cache'; $main=msql_read_b('',$nod,'',1);
@@ -333,32 +322,25 @@ if((!is_array($main[$lastart]) && $lastart) or get('refresh')){
 	$ret['_menus_']=array('date','cat','title','img','hub','tag','lu','author','length','url','ib','re');
 	//if(!ses('dayb'))ses('dayb',calc_date(ses('nbj')));
 	$slct='id,day,frm,suj,img,nod,thm,lu,name,host,mail,ib,re';
-	$r=sq($slct,'qda','where nod="'.ses('qb').'" and day>"'.ses('dayb').'" order by '.prmb(9));
+	if(ses('dayb'))$wh=' and day>"'.ses('dayb').'"';
+	$r=sq($slct,'qda','where nod="'.ses('qb').'"'.$wh.' and substring(frm,1,1)!="_" and re>"0" order by '.prmb(9));
 	if($r)while($rb=mysql_fetch_row($r)){$k=array_shift($rb); $rb[3]=first_img($rb[3]);
 	$rtb[$k]=$rb; if($rtb)$ret+=$rtb;}
 	$ok='cache reloaded'; msql_save('',$nod,$ret); $_SESSION['rqt']=$rtb;}
 else $_SESSION['rqt']=$main;
 return lka('/reload/'.ses('qb'),'reload');}
 
+#reboot
+function reboot(){require('params/_connectx.php'); req('art,spe,pop');
+master_params('params/_'.$db,$qd,$aqb,$subd); $_SESSION['dayx']=time();
+define_hubs(); define_qb(); define_config(); eye_iq(); log_mods(); define_auth();
+//if($_SESSION['rstr'][22])block_crawls();
+time_system('ok'); cache_arts(); define_cats_rqt(); define_condition(); define_clr();}
+
 #utils
-function block_crawls(){$ip=ses('ip');//proxad
-$r=array('msnbot','googlebot','spider','wowrack','netestate','tralex'); $n=count($r);
+function block_crawls(){$ip=ses('ip');//hostname()//proxad
+$r=array('msnbot','googlebot','spider','wowrack','netestate','tralex','ipvnow'); $n=count($r);
 for($i=0;$i<$n;$i++)if(strpos($ip,$r[$i]!==false))exit;}
-
-function auth_ip(){$ip=ses('ip');//proxad
-$r=msql_read('',ses('qb').'_authip','',1); $r[]='85-170-69-142';
-if($r)foreach($r as $k=>$v)if(strpos($ip,$v)!==false)$ok=1;
-if(!$ok)return true;}
-
-function dev2prod(){$r=explore('progb','files',1); 
-$old='_old/'.date('ymd').'/'; mkdir_r($old);
-$olb='_old/'.date('ym').'/'; mkdir_r($olb);
-foreach($r as $k=>$v){if($v!='_trash.php'){
-	$fa='progb/'.$v; $da=filemtime($fa); $sa=filesize($fa);
-	$fb='prog/'.$v; $db=filemtime($fb); $sb=filesize($fb);
-	if(date('d')=='01')copy($fb,$olb.$v);
-	if($sa!=$sb or $da>$db){copy($fb,$old.$v); copy($fa,$fb); $ret.=strdeb($v,'.').' ';}}}
-return $ret;}
 
 function tests(){//chrono('test');
 p(get_defined_functions());}

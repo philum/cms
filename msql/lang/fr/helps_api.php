@@ -30,5 +30,7 @@ $r["from"]=array('min date');
 $r["until"]=array('max date');
 $r["nodig"]=array('1');
 $r["nopages"]=array('1');
+$r["template"]=array('titre');
+$r["file"]=array('1');
 
 ?>

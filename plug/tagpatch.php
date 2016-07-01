@@ -11,13 +11,11 @@ $r=sql('id,thm','qda','kv','id>'.$p.' limit 10000');
 if($r)foreach($r as $k=>$v){$r[$k]=tri_tag($v);
 	foreach($r[$k] as $ka=>$va){if($va){$ra[$va]+=1; $rb[$k][]=$va;}}}
 //pr($ra);
-
 if($ra)foreach($ra as $k=>$v){
 	$idtag=sql('id','qdt','v','cat="tag" and tag="'.$k.'"');
 	if(!$idtag)$idtag=insert('qdt','("","tag","'.$k.'")');
 	//echo $idtag.':'.$k.br();
 	$rtag[$k]=$idtag;}
-
 //pr($rb);
 if($rb)foreach($rb as $k=>$v){
 	foreach($v as $ka=>$va){

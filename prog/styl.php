@@ -128,10 +128,6 @@ if($_POST["save"] or $_GET["save_img"] or $_GET["save"]){
 	$defs=save_defs($base,$f_dsn,$defs,$defsb["_menus_"]);
 	build_css($basecss_temp,$defs);
 	if($_POST["saveblocks"] or $_GET["save"])build_css($basecss,$defs);}
-/*if($_GET["save_inverted"]){$_SESSION['clrs'][$prmd]=invert_defsclr();
-	build_css('css/'.$qb.'_design_neg_'.$prmd.'.css',$defs);
-	$_SESSION['clrs'][$prmd]=msql_read('design',$f_clr,'');
-	alert('inverted colors css saved');}*/
 if($_GET["invert_clr"]){
 	$_SESSION['clrs'][$prmd]=invert_defsclr();
 	save_clr($f_clr); build_css($basecss_temp,$defs);}
@@ -457,10 +453,6 @@ else{$defs=modif_css($defs,$k,"background-image:",";",$css);}
 return $defs;}
 
 #font-face
-
-/*function fonts_link($v){
-return $_SESSION['prmb'][24].'/fonts/'.$v;}*/
-
 function css_ff($v){$f='/fonts/'.$v;//$f=fonts_link($v);
 $ret="font-family: '".str_replace('-webfont','',$v)."'; src: url('".$f.".eot?iefix') format('eot'), url('".$f.".woff') format('woff'), url('".$f.".svg#".$v."') format('svg');";//src: url("'.$f.'.eot");, url("'.$src.'.ttf") format("truetype")
 return $ret;}
@@ -469,7 +461,7 @@ function valid_formats($va){$f='fonts/'.$va; $r=array('.woff'=>'Firefox/Chrome',
 foreach($r as $k=>$v){if(is_file($f.$k))$ret.=btn('txtsmall" title="'.$v,$k).' ';}
 return $ret;}
 
-function preview_ff_edit($k,$c,$p,$fb){$fb=substr($fb,0,-1);
+function preview_ff_edit($k,$c,$p,$fb){$fb=ajxg($fb);
 if($k)$r=msql_read('server','edition_typos',$k);
 if($c=='acc' && $p)$r['accents']=($p=='no'?1:'');
 if($c=='fav' && $p)$r['fav']=($p=='no'?1:'');
@@ -486,9 +478,9 @@ if($v==3)return lkt('txtsmall2','http://new.myfonts.com/','myfonts').' ';}
 
 function font_set_cat($k,$v,$go){
 $ret=br(); $ml['-']=1; if($_SESSION['fntcat'])$ml+=$_SESSION['fntcat'];
-$ret.=select('style="width:80px;" onchange="jumpslct(\'fntcat'.$k.'\',this)"',$ml,'kk');
+$ret.=select(' style="width:80px;" onchange="jumpslct(\'fntcat'.$k.'\',this)"',$ml,'kk');
 $ret.=input2('text','fntcat" size="8" id="fntcat'.$k,$v,'');
-$ret.=lj('txtred',$go.'_cat___fntcat'.$k,'ok').' ';
+$ret.=lj('popsav',$go.'_cat___fntcat'.$k,'ok').' ';
 return $ret;}
 
 function preview_ff_p($k,$v){$go='fnt'.$k.'_ffedit___'.$k;
@@ -507,7 +499,7 @@ function preview_ff($k,$v,$c){
 $nm=str_replace('-webfont','',$v[0]); 
 $str=$_SESSION['ffstr']?$_SESSION['ffstr']:'AaBbCcDdEe0123יא;!';
 //$seeall=lj('txtx','pop_stylsall___','set');
-$opt=div('id="fnt'.$k.'"',preview_ff_p($k,$v)).br().br();
+$opt=div(atd('fnt'.$k),preview_ff_p($k,$v)).br().br();
 return divs('font-family:'.$nm.'; font-size:'.$c.'px; line-height:'.round($c*1.2).'px;',$str).br().$opt;}
 
 function css_fontface($p,$b,$c,$o,$s,$u){//page,cat,size,opt 
@@ -534,8 +526,8 @@ $srch.=lj('popbt',$jx.$gf.'1_all','x');
 //tri
 foreach($r as $k=>$v){
 if(!$pv or (($pp['acc'] && $pp['acc']==$v[2]) or ($pp['fav'] && $pp['fav']==$v[3]) or ($pp['fam'] && $pp['fam']==$v[4]) or ($pp['rch'] && stristr($v[0],$pp['rch'])!==false))){
-	//if(!$s or ($s && stristr($v[0],$s)!==false)){}
-	if($v[1]==$b or $b=='all')$rc[$k]=$v;}} $n=count($rc);
+	if($v[1]==$b or $b=='all')$rc[$k]=$v;}}
+$n=count($rc);
 //pages
 $no=20; $np=10; $min=$p-$np; $max=$p+$np; $nb=ceil($n/$no); 
 $bb=ajx($b);
@@ -597,7 +589,7 @@ return $t;}
 function informe_config_width($defs){
 $w=obtain_values($defs,array("#page"),"width:",";");
 $w-=obtain_css_widths($defs,array("#page"),"padding:");
-$r=define_modc_b('system'); //echo $w;
+$r=define_modc_b('system');
 foreach($r as $k=>$v)if($v[0]=='content'){modif_vars('users',ses('modsnod'),$w,$k);
 $_SESSION['mods']['content'][$k]=$w;}}
 
@@ -619,7 +611,6 @@ foreach($defs as $ka=>$va){
 $ff=embed_detect($val,'font-family:',';','');
 $ff=str_replace(array(" ","'",'"'),'',$ff);
 $t.=hidden('facefont','',$ff);
-//$t.=menuder_form_kv($mnu_divs,"applyfont",$t_size,"kv");
 $t.=select(atn('applyfont'),$mnu_divs,'kv',$t_size);
 $t.=input2('submit','save',"Apply_font",'').br();
 return form($url.'#'.$k,$t);}
@@ -636,9 +627,6 @@ $ret.=btd('bkg'.$k,'');
 	list($urb,$reap,$fixd,$alg,$vlg)=explode(" ",$t_ims);
 	if($fixd){$chk=' checked';}
 	if($urb){$urb=substr($urb,1,-1); $ret.=lkt('txtx',$urb,'open').br();}
-	//$mnu=menuder_form_kv($mnu_bkg,"repeat",$reap,"vv").' ';
-	//$mnu.=menuder_form_kv($mnu_im_align,"align",$alg,"vv").' ';
-	//$mnu.=menuder_form_kv($mnu_im_valign,"valign",$vlg,"vv").' ';
 	$mnu.=select(atn('repeat'),$mnu_bkg,'vv',$reap).' ';
 	$mnu.=select(atn('align'),$mnu_im_align,'vv',$alg).' ';
 	$mnu.=select(atn('valign'),$mnu_im_valign,'vv',$vlg).' ';
@@ -685,7 +673,7 @@ $ret.=lj('popbt','css'.$k.'_stylsav____'.$k.'_1__'.$rb,'save').br();
 return $ret;}
 
 function facil_css($k,$url,$v){//save_css_j//stylsav
-$v=str_replace("} ","}\n",$v);//smart_css
+$v=str_replace("} ","}\n",$v);//smart_css//{{
 $v=str_replace("; ",";\n",$v);
 $t=f_inp_edit_css($k);
 $t.=txarea('cssarea'.$k,$v,60,10,atc('console')).' ';
@@ -742,10 +730,6 @@ $ret.=lj('popsav','css'.$d.'_stylsav_cssarea'.$d.'__'.$d,'save').' ';
 return divc('',$ret);}
 
 #save
-
-/*function report_styles($r,$a,$cur){
-foreach($r as $k=>$v){if($v[$a]==$cur) return $k;}}*/
-
 function defs_compiler($defs,$defsb){
 foreach($defs as $k=>$v){
 foreach($defsb as $ka=>$va){
@@ -826,7 +810,7 @@ return $defs;}
 function save_css($defs,$k,$v){
 if($_POST['erase_'.$k]=="ok")unset($defs[$k]);
 else{
-$v=str_replace("}\n","} ",$v);//smart_css
+$v=str_replace("}\n","} ",$v);//smart_css//{{
 $v=str_replace(";\n","; ",$v);
 $v=str_replace(array("\n","\r")," ",$v);
 $defs[$k][6]=ereg_replace("[ ]{2,}"," ",$v);}
@@ -861,11 +845,11 @@ if($v[2] && $v[3]){
 	else $re[$v[0].$v[1]][]=$v[2].':'.$v[3].' ';}
 elseif($v[3]) $re[$v[0].$v[1]][]=$v[3].' ';}
 foreach($re as $k=>$v){$ter='';//groupe par attributs cummuns
-	foreach($v as $ka=>$va){$ter.=$va;}
-	$rte[$ter][]=$k;}
+	foreach($v as $ka=>$va)$ter.=$va;
+$rte[$ter][]=$k;}
 foreach($rte as $k=>$v){$ter='';//$rte
-	foreach($v as $ka=>$va){$ter.=$va.', ';}
-	$ret.=substr($ter,0,-2).'{'.$k.'}'."\n";}
+	foreach($v as $ka=>$va)$ter.=$va.', ';
+$ret.=substr($ter,0,-2).'{'.$k.'}'."\n";}
 $ret=str_replace(array(" ,","  ","a a"),array(","," ","a"),$ret);//clean
 write_file($basecss,$ret);}
 
@@ -877,7 +861,7 @@ if($r)foreach($re as $k=>$v){$ter='';//groupe par css
 	foreach($v as $ka=>$va){
 		if(strpos($k,"font-face"))$ret.=$k.' {'.$va.'}'."\n"; else $ter.=$va;}
 	if($ter)$ret.=$k.' {'.$ter.'}'."\n";}
-$ret=str_replace(array(" ,","  ","a a"," }"),array(","," ","a","}"),$ret);//clean
+$ret=str_replace(array(" ,","  ","a a"," }"),array(","," ","a","}"),$ret);//clean//{{
 write_file($basecss,$ret);}
 
 function affect_rgba($d,$clr){
@@ -889,7 +873,7 @@ if(substr($r[$i],0,1)=='_'){$klr=str_until($r[$i],';,) '); $vlr=substr(trim($klr
 elseif($i)$ret.='#'.$r[$i]; else $ret.=$r[$i];}
 return $ret;}
 
-function build_css($basecss,$defs,$clr=''){unset($defs['_menus_']); //p($defs);
+function build_css($basecss,$defs,$clr=''){unset($defs['_menus_']);
 $clr=$clr?$clr:$_SESSION['clrs'][$_SESSION['prmd']];
 $sheets=array(3=>"color",4=>"background-color",5=>"border-color",'');
 $attributes=array('',"a","a:hover",'');
@@ -898,14 +882,13 @@ $attributes=array('',"a","a:hover",'');
 		for($i=3;$i<6;$i++){
 		$conn=explode("|",$v[$i]);
 			for($o=0;$o<3;$o++){
-				if(is_numeric($conn[$o])) $cur='#'.$clr[$conn[$o]].';';
-				//elseif(is_numeric(hexdec($conn[$o]))) $cur='#'.$conn[$o].';';
-				elseif($conn[$o]) $cur='#'.$conn[$o].';';
+				if(is_numeric($conn[$o]))$cur='#'.$clr[$conn[$o]].';';
+				//elseif(is_numeric(hexdec($conn[$o])))$cur='#'.$conn[$o].';';
+				elseif($conn[$o])$cur='#'.$conn[$o].';';
 				else $cur='';
 				$ret[]=array($css_name,$attributes[$o],$sheets[$i],$cur);}}
 	$ret[]=array($css_name,'','',affect_rgba($v[6],$clr));}}
 if($_GET["cmpq"])write_css_c($basecss,$ret); else write_css($basecss,$ret);
-
 return $ret;}
 
 ?>

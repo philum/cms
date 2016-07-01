@@ -23,7 +23,6 @@ $r["not_published"]=array('Articles','4');
 $r["trash"]=array('Articles','6');
 $r["trackbacks"]=array('Articles','4');
 $r["chat"]=array('Articles','4');
-$r["shop"]=array('Articles','5');
 $r["authes"]=array('User','6');
 $r["banner"]=array('Builders','5');
 $r["descript"]=array('Builders','5');
@@ -41,12 +40,13 @@ $r["mails"]=array('Microsql','5');
 $r["links"]=array('Microsql','5');
 $r["rssurl"]=array('Microsql','5');
 $r["avatar"]=array('User','1');
-$r["messages"]=array('User','0');
+$r["messages"]=array('User','1');
 $r["mail"]=array('User','1');
 $r["password"]=array('User','1');
 $r["members"]=array('User','4');
 $r["tags"]=array('Builders','7');
 $r["icons"]=array('Builders','5');
 $r["pictos"]=array('Builders','5');
+$r["overcat"]=array('Articles','4');
 
 ?>

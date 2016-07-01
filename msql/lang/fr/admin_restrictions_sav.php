@@ -20,7 +20,7 @@ $r[16]=array('miniature pleine','place les limites de l\'image à l\'extérieur de
 $r[17]=array('2 colonnes','article sur plusieurs colonnes, d\'après le css \'cols\' ; 
 seuls les longs contenus sont affectés');
 $r[18]=array('définitions publiques','Définitions d\'importation. Choisir la base \'public\' permet d\'obtenir une liste complétée par les utilisateurs, avec le risque de perdre les enregistrements qu\'on y a faits. Choisir la base privée permet d\'y importer la base publique régulièrement et d\'informer la base publique des ajouts. (dans l\'éditeur 01L)');
-$r[19]=array('_img1','injecte la variable _IMG (première image, qui sert de miniature) dans le template avant son traitement, afin que Codeline puisse produire une miniature personnalisée : [_IMG1§100/100:thumb]');
+$r[19]=array('_img1','injecte la variable _IMG1 (première image, qui sert de miniature) dans le template avant son traitement, pour produire par exemple une miniature personalisée : [_IMG1§100/100:thumb]');
 $r[20]=array('home','affiche le menu admin home');
 $r[21]=array('zones restreintes','accès des pages réservé aux utilisateurs inscrits');
 $r[22]=array('bots','ouvert aux robots');
@@ -97,5 +97,9 @@ $r[88]=array('template read','active un template dédié au mode lecture');
 $r[89]=array('meta','environnement meta de l\'article en cours');
 $r[90]=array('like','appréciation publique');
 $r[91]=array('poll','système de votes');
+$r[92]=array('accessibilité','normes du w3c');
+$r[93]=array('miniature css','crée une miniature en background d\'un div, utilisant la classe .thumb, redimensionnable en css');
+$r[94]=array('menubub','utilise les données du module MenuBub pour en faire un menu (marche si le module est inactif)');
+$r[95]=array('overcats','utilise les données du menu admin/categories pour créer des dossiers virtuels dans lesquels classer les catégories d\'articles');
 
 ?>

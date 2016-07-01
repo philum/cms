@@ -2,15 +2,15 @@
 //philum_microsql_helps_api_sav
 $r["_menus_"]=array('txt');
 $r["hub"]=array('hub');
-$r["section"]=array('multi');
-$r["nosection"]=array('multi');
+$r["cat"]=array('multi');
+$r["nocat"]=array('multi');
 $r["priority"]=array('1-2-3-4');
 $r["minday"]=array('depuis nb de jours');
 $r["maxday"]=array('jusquà nb de jours');
 $r["mintime"]=array('timestamp min');
 $r["maxtime"]=array('timestamp max');
-$r["from"]=array('min id');
-$r["to"]=array('max id');
+$r["minid"]=array('min id');
+$r["maxid"]=array('max id');
 $r["nbchars"]=array('>400');
 $r["source"]=array('domaine');
 $r["parent"]=array('id');
@@ -26,5 +26,11 @@ $r["page"]=array('1');
 $r["nbyp"]=array('articles par page');
 $r["t"]=array('titre');
 $r["verbose"]=array('1');
+$r["from"]=array('min date');
+$r["until"]=array('max date');
+$r["nodig"]=array('1');
+$r["nopages"]=array('1');
+$r["template"]=array('titre');
+$r["file"]=array('1');
 
 ?>

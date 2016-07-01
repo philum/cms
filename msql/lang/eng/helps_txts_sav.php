@@ -176,7 +176,7 @@ $r["finder"]=array('Finder is for navigate in directories, virtual directories, 
 $r["comline"]=array('Commande-line:  Some modules need as parameter a command of module (MenusJ, Apps,...), also like the connector \':module\'.');
 $r["mod_cond"]=array('Default contexts are (nothing), home, cat, art.
 [0-9] : context of a article (id)
-cat[a-z] : context of a targeted category
+[a-z] : context of a targeted category
 [a-z] : context given by url /context/name');
 $r["updfonts"]=array('after download a typo, go to admin/fonts and do \'inject\' ; that will unzip file, copy it, and add an entry in the server table, who is not aware of the update, unlike the table \'system\'.');
 $r["updpictos"]=array('The system need pictograms, download the font \'philum\' in the tab \'pictos\'');
@@ -201,7 +201,8 @@ $r["search"]=array('Tips:
 - filters : ex: \"word1;word2:tag;word3:author\" (\'author is an usertag, separator: \';\')
 - line of command: priority=4~from=01-02-13 (cat, nocat, tag, notag, until, nbdays)
 - cache can be deleted
-- dig check other time fields');
+- dig check other time fields
+- \'last\' give the last published article');
 $r["defcons"]=array('The Definitions are using some input and outputs for title, text, and another option if needed. Il the output is not set, it will be the natural end of the balise. Lot of rules let adjust the content, as del the title, the line 1, a link or a line with a keyworks, or strip some balises.');
 $r["apps"]=array('the restriction 61 is activated : the default Apps are loaded, and the yours are added after (system/default_apps)');
 $r["apps_add"]=array('Apps presets. when rstr 61 is active, the user apps replace the system apps.
@@ -211,23 +212,24 @@ $r["trackhelp"]=array('- links, images and vidéos (youtube etc...) are automatic
 - #public : call the room \'public\' of the Chat');
 $r["suggest"]=array('The article will have the mention \'proposed by\' [prefix of the mail]');
 $r["suggest_ok"]=array('Your article have been published');
-$r["console_cond"]=array('Conditions : The states are \'cat\' and \'art\' (category and article),
+$r["console_cond"]=array('[Context:b]: The states are \'cat\' and \'art\' (category and article),
 in addition of \'home\' and \'all\'.
-The modules can be activated only while the state is corresponding.
+The modules are activated while the state is corresponding.
 The console present a simulation of the site at this moment.');
 $r["console_mods"]=array('Here are the number of versions of the table of mods.
 This menu does not affect the configuration. 
 To set the current mods as visible for the visitors, do \'apply\' or set it in [config/params/table_mods:l] (change the number, that will create a new table from current if it not exists)');
 $r["scripts"]=array('param/title/command/option/cache/hide/template/br:module§button[,]');
 $r["video"]=array('Youtube, Dailymotion, Vimeo, Rutube, vk.com, Livestream');
-$r["popvideo"]=array('option §1:video = popup');
+$r["popvideo"]=array('- option §1 : load video player
+- option §440/320 : width/height');
 $r["pdf"]=array('The PDF player need to be loged on Google ');
 $r["art_render"]=array('The default mode of render of articles are given by the restrictions 5 and 41 (config arts) but can be overloaded here with : false, preview, full, read, auto');
 $r["desklr"]=array('attributs of Desktop :
-- top,#_4,#_2
-- center top ,#098FE3,#787878
-- top,#322f5c,#2b2b2b,#8a7971
-- newsnet/photo/space/crabhubble.jpg');
+top,#_4,#_2
+to bottom,#002594,#06999e,#878787,#bf1755,#4f004f
+philum/photo/space/crabhubble.jpg
+philum/photo/space (random img of folder)');
 $r["submod_types"]=array('sub-modules types: mod plug art msql link finder ajax admin');
 $r["chatxml"]=array('ChatXml works between Philum servers  (see \'admin/params\')');
 $r["chatcall"]=array('_NAME is inviting you to chat NOW!');
@@ -258,9 +260,15 @@ $r["twitter_oAuth"]=array('parameters of twitter API (https://apps.twitter.com/)
 $r["tag_rename"]=array('Rename a tag could delete and associate articles to an existing tag');
 $r["usertags"]=array('Add tags to this article and retrieve themes in your favorites');
 $r["api"]=array('The API give datas from a query.
-- multi : multiples words separated by a hyphen
 - /module/api/{command} : display result
 - /api/{command] : json stream');
 $r["like"]=array('The Likes are public');
+$r["overcats"]=array('a category can existing with an empty value, in this cas the categorie is listed at root');
+$r["overcats_menu"]=array('Overcats can be used as a module, as an admin menu or as a desktop menu, using an app with type=desktop and process=overcats');
+$r["menubub"]=array('types of menububs : 
+- (no type) : (a-z) = category, (0-9) = article, /module/... = link 
+- module : open content of a module (ex: ///lines/4///1:categories ) 
+- plug : (open a plug) 
+- ajax : (ex: popup_track___admin)');
 
 ?>

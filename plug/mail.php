@@ -1,6 +1,40 @@
 <?php
 //philum_plugin_mail
 
+//deploy
+function vmail($id){
+$ids='vmfrom'.$id.'|vmto'.$id.'|vmsg'.$id;
+$ret.=btn('right',lj('popsav','vsd'.$id.'_plug___mail_vmailsend_'.$id.'__'.$ids,nms(28)));
+if($_SESSION['USE'])$ret.=hidden('','vmfrom'.$id,$_SESSION['qbin']['adminmail']);
+else{$ret.=label('vmfrom'.$id,'popw','',nms(68).':').' ';
+$ret.=input(1,'vmfrom'.$id,'','" size="24').br();}
+if(auth(4))$ret.=lj('txtbox','popup_plup___mail_mail*prep_vmto'.$id,nms(36));
+else $ret.=btn('txtx',nms(36));
+$ret.=input(1,'vmto'.$id,'','" size="24').br();
+$ret.=txarea('vmsg'.$id,'',44,2);
+return divd('vsd'.$id,$ret);}
+
+function vmailsend($id,$o,$res){
+req('pop,spe,tri,mod');
+$http=host(); $htacc=urlread($id);
+list($from,$to,$txt,$suj)=ajxr($res);
+if(strpos($to,"@")!==false){
+$suj=sql('suj','qda','v','id="'.$id.'"');
+$msg=divc("panel justy",$txt);
+$msg.=lkc("",$http.$htacc,bal("h2",$suj));
+$msg.=divc("panel justy",read_msg($id,"nlb"));
+send_mail("html",$to,$suj,$msg,$from?$from:hostname(),$htacc);
+return btn("popbt",nms(34).' '.nms(79).' '.nms(36).': '.$to);}
+else return btn("popdel",'error'.$to);}
+
+function mails_list(){
+$r=msql_read('',$_SESSION['qb'].'_mails','',1);
+if($r)foreach($r as $k=>$v){if($v[2])$ret[$v[0]]=$v[1].'<'.$v[0].'>';}
+return $ret;}
+
+function mail_list_tosend(){$r=mails_list();
+if($r)return implode(",\n",$r);}
+
 function mail_mails(){$r=mails_list(); 
 if($r)foreach($r as $k=>$v){$vb=embed_detect($v,'<','>',''); $ret[$vb?$vb:$v]=1;}
 if($ret)ksort($ret);

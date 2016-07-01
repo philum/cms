@@ -6,11 +6,34 @@ function qlerror($ret){
 $ret.=mysql_error();
 return $ret.br();}
 
+//160606
+function patch_tracks(){
+$qdi=qd('idy'); $qdk=qd('tracks');
+//$sql='RENAME TABLE '.$qdi.' TO '.$qdk.';'; msquery($sql);
+//$sql='ALTER TABLE '.$qdk.' DROP lu, DROP img, DROP thm;'; msquery($sql);
+$sql='ALTER TABLE '.$qdk.' CHANGE `ib` `i.ib` INT(7) NOT NULL, CHANGE `name` `i.name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL DEFAULT "", CHANGE `mail` `i.mail` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL DEFAULT "", CHANGE `day` `i.day` INT(10) NOT NULL, CHANGE `nod` `i.nod` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL DEFAULT "", CHANGE `frm` `i.frm` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL DEFAULT "", CHANGE `suj` `i.suj` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL DEFAULT "0", CHANGE `msg` `i.msg` MEDIUMTEXT CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL, CHANGE `re` `i.re` ENUM("0","1","2","3","4") CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL, CHANGE `lu` `i.lu` INT(7) NOT NULL, CHANGE `img` `i.img` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL DEFAULT "", CHANGE `thm` `i.thm` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL DEFAULT "", CHANGE `host` `i.host` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL DEFAULT "";';
+//msquery($sql);
+}
+
+//160215
+function patch_qdd(){
+//msquery('ALTER TABLE `'.ses('qdd').'` DROP `qb`;');
+$r=sql('*','qdlk','','poll=1'); p($r);
+//foreach($r as $k=>$v)insert('qdd','("","'.$v[1].'","fav","'.$v[2].'")');
+}
+
+function patch_fav(){
+$r=msql_read('',ses('qb').'_fav','','1'); p($r);
+foreach($r as $k=>$v){$rb=explode(' ',$v);
+	//foreach($rb as $vb)insert('qdd','("","'.$vb.'","fav","'.$k.'")');
+	}
+}
+
 //160101
 function patch_tags(){
 $table["_meta"]='
 CREATE TABLE IF NOT EXISTS `'.ses('qd').'_meta` (
-  `id` int(7) NOT NULL,
+  `id` int(7) NOT NULL AUTO_INCREMENT,
   `cat` varchar(255) collate latin1_general_ci NOT NULL,
   `tag` varchar(255) collate latin1_general_ci NOT NULL,
   PRIMARY KEY (`id`)
@@ -20,13 +43,9 @@ $table["_meta-id"]='
 ALTER TABLE `'.ses('qd').'_meta`
 ADD PRIMARY KEY (`id`);';*/
 
-$table["_meta-ai"]=' 
-ALTER TABLE `'.ses('qd').'_meta`
-MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;';
-
 $table["_meta_art"]='
 CREATE TABLE IF NOT EXISTS `'.ses('qd').'_meta_art` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `idart` int(7) NOT NULL,
   `idtag` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
@@ -35,10 +54,6 @@ CREATE TABLE IF NOT EXISTS `'.ses('qd').'_meta_art` (
 $table["_meta_art-id"]='
 ALTER TABLE `'.ses('qd').'_meta_art`
 ADD PRIMARY KEY (`id`);';*/
-
-$table["_meta_art-ai"]='
-ALTER TABLE `'.ses('qd').'_meta_art`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;';
 
 foreach($table as $k=>$sql){
 	$req=mysql_query($sql) or die(mysql_error()); 

@@ -21,7 +21,7 @@ function plug_msqadd($p,$o){$p=$p?$p:'1';
 $bt.=balise('input',atd('type','text').atd('nod').atv($p).ats('padding:4px;'),'',1).' ';
 $bt.=lj('txtbox','cbk_plug___msqadd_msqadd*j_'.ajx($p).'__nod|txt','save').' ';
 $bt.=btd('cbk','').br();//callback
-$bt.=txarea('txt','',60,10,'" style="font-size:medium; padding:4px; width:340px; height:300px;').br();
+$bt.=txarea('txt','',60,10,ats('font-size:medium; padding:4px; width:340px; height:300px;')).br();
 $ret=msqadd_read('msqadd_'.$p);
 return $bt.divd('plugmsqadd',$ret);}
 

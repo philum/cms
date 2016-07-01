@@ -30,7 +30,7 @@ if($re){ksort($re);
 foreach($re as $k=>$v){
 $f=str_replace($dr.'/',"",$k); $ra=explode('/',$k); $xt=substr($f,-3);
 	if($f && substr($f,-8,4)!="_sav" && !is_dir($k) && strpos($k,".")!==false
-	&& ((substr($f,0,1)!="_" && $dr!="css") or $f=="_admin.css" or $f=="_global.css" or $f=="_classic.css" or $f=="_default.css") 
+	&& ((substr($f,0,1)!="_" && $dr!="css") or $f=="_admin.css" or $f=="_global.css" or $f=="_pictos.css" or $f=="_classic.css" or $f=="_default.css") 
 	&& (strpos($k,"msql/users")===false or strpos($k,"msql/users/public")!==false) 
 	&& (strpos($k,"msql/design")===false or strpos($k,"msql/design/public")!==false) 
 	&& strpos($k,"msql/cache")===false && strpos($k,"msql/clients")===false 

@@ -29,14 +29,14 @@ function span($p,$v){return '<span'.$p.'>'.$v.'</span>';}
 function btn($c,$v){return $c?'<span class="'.$c.'">'.$v.'</span>':$v;}
 function btd($d,$v){return $d?'<span id="'.$d.'">'.$v.'</span>':$v;}
 function bts($d,$v){return $d?'<span style="'.$d.'">'.$v.'</span>':$v;}
-function div($p,$v){return '<div '.$p.'>'.$v.'</div>';}
+function div($p,$v){return '<div'.$p.'>'.$v.'</div>';}
 function divr($p,$v){return '<div'.attr($p).'>'.$v.'</div>';}
 function divb($p,$v){return '<div'.atbb($p).'>'.$v.'</div>';}
 function divc($c,$v){return '<div'.atc($c).'>'.$v.'</div>';}
 function divd($d,$v){return '<div'.atd($d).'>'.$v.'</div>';}
 function divs($s,$v){return '<div'.ats($s).'>'.$v.'</div>';}
 function button($c,$j,$v){return balb('button',atc($c).atb('onclick',$j),$v);}
-function lk($u,$p,$v){return '<a href="'.$u.'"'.$p.'>'.$v.'</a>';}
+function lk($u,$p='',$v=''){return '<a href="'.$u.'"'.$p.'>'.($v?$v:$u).'</a>';}
 function lka($u,$v=''){return '<a href="'.$u.'">'.($v?$v:http_domain($u)).'</a>';}
 function lkc($c,$u,$v){return '<a href="'.$u.'"'.atc($c).'>'.$v.'</a>';}
 function lkt($c,$u,$v){return '<a href="'.$u.'"'.atc($c).' target="_blank">'.$v.'</a>';}
@@ -45,7 +45,7 @@ return '<a'.atc($c).atb('onclick',$oc).atb('onmouseover',$ov).'>'.$v.'</a>';}
 function llk($c,$l,$v){return balc("li",$c,lka($l,$v));}
 function submitj($c,$id,$v){return button($c,'document.forms[\''.$id.'\'].submit();',$v);}
 function lj($c,$j,$v,$o=''){if($o)return ljh($c,$j,$v);
-return '<a onclick="'.atj('SaveJ',$j).'"'.atc($c).$o.'>'.$v.'</a>';}
+return '<a onclick="'.sj($j).'"'.atc($c).$o.'>'.$v.'</a>';}
 function lja($c,$j,$v){return '<a onclick="'.$j.'"'.atc($c).'>'.$v.'</a>';}
 function ljb($c,$p,$j,$v,$a=''){$on=$a?'onmouseover':'onclick';
 return '<a '.$on.'="'.atj($p,$j).'"'.atc($c).'>'.$v.'</a>';}
@@ -76,9 +76,9 @@ if($d=='call' or $c)$id=($c?$c:'c').$id; $j='bubble_popbub__'.$id.'_'.$d.'_'.$j;
 return llj('',$j,$v,'bb'.$id,$o);}
 function togbub($ja,$j,$v,$c='',$o=''){$id=randid();
 return btd('bt'.$id,ljb($c,'toggle_bub',$ja.'__'.$id.'_'.$j,$v,$o));}//.'_1'
-function togses($v,$t){$rid='bt'.randid(); $c=ses($v)?'active':'';
+function togses($v,$t){$rid=randid('bt'); $c=ses($v)?'active':'';
 return btn('nbp',lj($c.'" id="'.$rid,$rid.'_tog__20_'.$v,$t));}
-function togses_j($d,$t){$id='oo'.randid(); $v=ses($d);//unused
+function togses_j($d,$t){$id=randid('oo'); $v=ses($d);//unused
 return lj('',$id.'_togses___'.$d,btd($id,offon($v,$t)));}
 
 #forms
@@ -106,10 +106,11 @@ function checkact($id,$v,$t){$c=$v?'popw':'popbt';
 	return ljb($c.'" id="bt'.$id,'checkact',$id,$t).hidden('',$id,$v?$v:0);}
 function label($id,$c,$s,$t){
 	return '<label'.atb('for',$id).atc($c).ats($s).'>'.$t.'</label>';}
-function radiobtn($r,$h,$n){if($r)foreach($r as $k=>$v){$ck=$v==$h?' checked="checked"':'';
-	$ret.='<input type="radio"'.atd($n).atv($v).$ck.'/>'.btn('txtsmall2',$v).' ';} 
+function radiobtn($r,$h,$n){
+	if($r)foreach($r as $k=>$v){$ck=$v==$h?' checked="checked"':''; $id=randid();
+	$ret.='<input type="radio"'.atn($n).atd($id).atv($v).$ck.'/> '.label($id,'small','',$v).' ';} 
 	return $ret;}
-function radiobtj($r,$vrf,$id,$o=''){$rid='rdio'.randid(); if($o)$r=array_keys($r);
+function radiobtj($r,$vrf,$id,$o=''){$rid=randid('rdio'); if($o)$r=array_keys($r);
 if(is_array($r))foreach($r as $k=>$v){$c=$v==$vrf?'active':'';
 	$ret.=ljb($c,'radioj',$rid.'\',\''.$id.'\',\''.ajx($v).'\',\''.$k,$v);}
 return span(atd($rid).atc('nbp'),$ret).hidden($id,$id,$vrf);}
@@ -129,7 +130,7 @@ if($j)$c.='" onclick="'.$j; return txarea($id,$v,$n,'1',atc($c));}
 function imgform($here,$d,$t=''){$t=$t?'" title="'.$t:'';
 return '<form name="form1" method="post" action="'.$here.'&im=on" enctype="multipart/form-data"><input name="fichier" type="file" class="txtsmall" size="1" border="0" />'.input('submit','Submit'.$t,'',nms(28)).'</form>';}// '.$d.'
 function upload($d,$p){return plugin('upload',$d,$p);}//dir,mode
-function upload_btn($id,$j,$t){return blj('txtx',$id,'upload___'.$j,$t);}
+function upload_btn($id,$j,$t){return blj('',$id,'upload___'.$j,$t);}
 
 function select($atr,$r,$kv,$h=''){
 if($r)foreach($r as $k=>$v){
@@ -174,7 +175,7 @@ public static function get(){$r=self::$add; return header_tags($r);}
 public static function generate(){return header_html().bal('head',self::get());}}
 
 #mysql
-function connect(){require('params/_connectx.php');}
+function connect(){require('params/_connectx.php'); return $db;}
 function qd($d){return $_SESSION[$d]?$_SESSION[$d]:ses('qd').'_'.$d;}
 function rcptb($db){if($db)return mysql_query('SHOW TABLES FROM `'.$db.'`');}
 function lstrc($rq){if($rq)while($d=mysql_fetch_row($rq))$qp[]=$d[0];return $qp;}
@@ -190,7 +191,7 @@ if($o)return mysql_insert_id();}
 function mysql_values($r,$d){$ra=sesmk($d); $i=0;
 foreach($ra as $k=>$v){$rb[$k]=$r[$i]; $i++;} return $rb;}
 function insert($b,$d){return msquery('insert into '.$_SESSION[$b].' values '.$d,1);}
-function update($bs,$in,$v,$col,$id){msquery('update '.$_SESSION[$bs].' set '.$in.'="'.$v.'" where '.$col.'="'.$id.'"');}
+function update($bs,$set,$v,$col,$id){msquery('update '.$_SESSION[$bs].' set '.$set.'="'.$v.'" where '.$col.'="'.$id.'"');}
 function delete($bs,$id,$o=''){msquery('delete from '.$_SESSION[$bs].' where id="'.$id.'" limit 1'); if($o)reflush($bs,1);}
 function reflush($bs,$o=''){msquery('alter table '.$_SESSION[$bs].' order by id');
 if($o)msquery('alter table '.$_SESSION[$bs].' AUTO_INCREMENT='.(lastid($bs)+1));}
@@ -235,6 +236,12 @@ $rq=mysql_query($sql); if($z)echo $sql;
 if($rq){$ret=sqlformat($rq,$p); mysql_free_result($rq);}
 return $ret;}
 
+function sqb($d,$b,$p,$q,$z=''){
+$sql='select '.$d.' from '.$_SESSION[$b].' '.$q;
+$rq=mysql_query($sql); if($z)echo $sql;
+if($rq){$ret=sqlformat($rq,$p); mysql_free_result($rq);}
+return $ret;}
+
 function sql_b($sql,$p,$z=''){//$sql=qw($s,$b).$q
 if(!$z)$rq=mysql_query($sql); else $rq=mysql_query($sql) or die(mysql_error());
 if($rq){$ret=sqlformat($rq,$p); if($rq)mysql_free_result($rq);}
@@ -243,10 +250,9 @@ return $ret;}
 
 function sql_inner($d,$b1,$b2,$key,$p,$q,$z=''){
 $sql='select '.$d.' from '.$_SESSION[$b1].' inner join '.$_SESSION[$b2].' 
-on '.$_SESSION[$b1].'.id='.$_SESSION[$b2].'.'.$key.' '.($q?'where '.$q:'');
+on '.$_SESSION[$b1].'.id='.$_SESSION[$b2].'.'.$key.' '.$q; if($z)echo $sql;
 if(!$z)$rq=mysql_query($sql); else $rq=mysql_query($sql) or die(mysql_error());
 if($rq){$ret=sqlformat($rq,$p); if($rq)mysql_free_result($rq);}
-if($z)echo $sql;
 return $ret;}
 
 #dirs
@@ -305,6 +311,8 @@ function curl_get_contents($f){$ch=curl_init($f); //curl_setopt($ch,CURLOPT_URL,
 curl_setopt($ch,CURLOPT_HTTPHEADER,array('HTTP_ACCEPT: Something','HTTP_ACCEPT_LANGUAGE: fr, en, es','HTTP_CONNECTION: Something','Content-type: application/x-www-form-urlencoded','User Agent: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'));//
 curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
 curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,0); curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,0);
+curl_setopt($ch,CURLOPT_REFERER,'http://www.google.fr/'); 
+//curl_setopt($ch,CURLOPT_REMOTE,'127.127.127.0'); 
 $ret=curl_exec($ch); curl_close($ch); return $ret;}
 
 function joinable($d){$ok=@fopen($d,'r'); if($ok){fclose($ok); return true;}}
@@ -326,15 +334,12 @@ include_once($p.'error.lib.php'); include_once($p.'trace.lib.php');
 PclTarExtract($f,$d,'','');}
 
 #db
-function db_f($dr,$nod){if($dr=='users' or !$dr)$dr='usr';
-return 'db/'.$dr.'/'.str_replace('_','/',$nod).'.txt';}
+function db_f($nod,$dr='usr/'){return root('db/').$dr.str_replace('_','/',$nod).'.txt';}
 function db_init($f){$dr=str_extract('/',$f,1,0);
 if(!is_dir($dr))mkdir_r($dr); if(!is_file($f))write_file($f,'');}
 function db_add($f,$row){db_init($f); $r=db_read($f); $r[]=$row; db_write($f,$r);}
-function db_write($f,$r){db_init($f); //pr($r);
-//echo txarea('',json_encode($r,JSON_HEX_QUOT||JSON_HEX_APOS),40,10); 
-write_file($f,json_encode($r));}
-function db_read($f){return json_decode(file_get_contents($f),true);}//db_init($f); 
+function db_write($f,$r){db_init($f); write_file($f,json_encode($r));}
+function db_read($f){db_init($f); return json_decode(file_get_contents($f),true);}
 
 #microsql
 function nod($d){return ses('qb').'_'.$d;}
@@ -380,8 +385,8 @@ msql_save($dr,$nod,$r);
 return $r;}
 
 //plug:22/prog:20
-function msql_modif($dr,$nod,$defs,$dfb,$act,$n){if(!$dr)$dr='users';
-$bs='msql/'; $m='_menus_'; $r=msql_read_b($dr,$nod,'','',$dfb);
+function msql_modif($dr,$nod,$defs,$dfb,$act,$n){
+if(!$dr)$dr='users'; $r=msql_read_b($dr,$nod,'','',$dfb);
 if($act=='one')$r[$n]=$defs; elseif($act=='shot')$r[$n][$dfb?$dfb:0]=$defs; 
 elseif($act=='del')unset($r[$n]); elseif($act=='val')$r[$n][$dfb]=$defs; 
 elseif($act=='push')$r[]=$defs; elseif($act=='arr')$r=$defs;
@@ -391,7 +396,7 @@ elseif(is_numeric($n))foreach($r as $k=>$v){if($v[$n]==$defs[$n] && $v[$n]){//re
 elseif($act=='add'){foreach($defs as $k=>$v){//batch 
 	if($n=='mdf')$rb[$k]=$v; else $r[]=$v;} if($rb)$r=$rb;}
 if($r[0])$r=msq_reorder($r); if($ra)$ra+=$r; else $ra=$r;
-save_vars($bs.$dr.'/',$nod,$ra);//need auth
+save_vars('msql/'.$dr.'/',$nod,$ra);//need auth
 //db_write(db_f($dr,$nod),$r);
 return $ra;}
 
@@ -404,13 +409,14 @@ if($in){if(!$r[$in])return; if($u=='k')return $r[$in];
 	elseif($n==1)return stripslashes_b($r[$in][0]); 
 	elseif($r[$m])return array_combine_a($r[$m],$r[$in]); else return $r[$in];}
 elseif($n==1 && $u!='k')foreach($r as $k=>$v)$ret[$k]=stripslashes_b($v[0]);
-elseif(!$r[$in])$ret=$r; 
+//elseif(!$r[$in])foreach($r as $k=>$v)foreach($v as $ka=>$va)$ret[$k][$ka]=stripslashes_b($va);
+elseif(!$r[$in])$ret=$r;
 return $ret;}
 
 //plug:3//prog:2
 function msql_read_b($dr,$nod,$in='',$u='',$ra=''){$f=msq_f($dr,$nod);
 //db_write(db_f($dr,$nod),$r);
-if(is_file($f))require $f; elseif($ra)msql_save($dr,$nod,$ra);
+if(is_file($f))require $f; elseif($ra){msql_save($dr,$nod,$ra); $r=$ra; p($r);}
 if($u)unset($r['_menus_']); if($r)return $in?$r[$in]:$r;}
 
 //plug:0//prog:3
@@ -519,7 +525,7 @@ if(is_array($v))$ret[]=implode('|',$v); else $ret[]=$v;
 return implode('¨',$ret);}
 
 //tabs
-function make_tabs($r,$ud='',$c=''){if(!$r)return; //$i=randid();
+function make_tabs($r,$ud='',$c=''){if(!$r)return;
 static $i; $i++; $id='tab'.$ud.'-'.$i; $ra=array_keys($r);
 $ib=$_SESSION['tbmd'.$id]; if(!$ib)$ib=1; $sp=btn('txtac',' ');
 foreach($r as $k=>$v){$b++; 
@@ -567,14 +573,14 @@ return $ret;}
 
 function menuderj_prep($pr,$id,$t,$opt=''){$rid=randid();//menuder_jb
 $j='popup_menuder___'.ajx(addslashes($pr)).'_'.$id.'_'.$rid.'_'.$opt;
-return lj('" id="adcat'.$rid,$j,$t?$t:picto('wait')).hidden('',$id,$t);}
+return lj('" id="adcat'.$rid,$j,$t?$t:picto('loading')).hidden('',$id,$t);}
 
 //bubslct
 function mkbub($d,$c='',$s='',$o=''){
+if($s=='1')$s='position:relative; text-decoration:none; display:inline-block;';
 return div(atd('bub').atc($c).ats($s).atb('onclick',$o),ul($d));}
 function bubslct($j,$t){$j=str_replace('_','.',$j); $ret=popbub($j,'bub',$t,'d');
-$s='position:relative; display:inline-block;'; $o='popz+=1; this.style.zIndex=popz;';
-return mkbub($ret,'',$s,$o);}
+return mkbub($ret,'','1','popz+=1; this.style.zIndex=popz;');}
 
 function select_jp($id,$f,$v='',$o='',$t=''){
 $j=$id.'_'.$f.'_'.ajx($v).'_'.ajx($o).'_'.$id; $h=input1($id,$v,3);
@@ -618,8 +624,10 @@ $d=str_replace(array(' isPermaLink="false"',' rel="stylesheet"',' type="text/css
 return read_rss_data($d,$t,$r);}
 
 function read_xml($f){////if(!joinable($f))return;
-$rss=@simplexml_load_file($f); 
-if(!$rss){$rss=@simplexml_load_string(get_file($f));}
+$d=get_file($f); $enc=embed_detect(strtolower($d),'encoding="','"');
+if($enc=='utf-8')$d=utf8_decode_b($d);
+$rss=@simplexml_load_string();
+//if(!$rss)$rss=@simplexml_load_file($f); 
 if(!$rss)return; //p($rss->channel);
 $xml=$rss->channel->item; if(!$xml)$xml=$rss->channel->entry;
 if(!$xml)$xml=$rss->items; if(!$xml)$xml=$rss->entry;
@@ -666,7 +674,7 @@ return $ret;}
 #builders
 function on2cols($r,$w,$p){$w1=$w/$p; $w2=$w-$w1;
 $css='" style="display:table-cell; width:'.$w1.'px;';
-$csb='width:'.$w2.'px;'; $csc='display:table-row;';
+$csb='min-width:'.$w2.'px;'; $csc='display:table-row;';
 if($r)foreach($r as $k=>$v){$ret.=divs($csc,divc('txtsmall'.$css,$k).divs($csb,$v?$v:'-'));}
 return $ret;}
 
@@ -681,19 +689,19 @@ for($i=1;$i<=$prm;$i++)$ret.=divs($css,$r[$i]);
 return $ret.divc('clear','');}
 
 function scroll($r,$d,$n,$w='',$h='',$id=''){$h=is_numeric($h)?$h.'px':$h;
-$max=is_numeric($r)?$r:count($r); if($w)$wa='min-width:'.$w.'px; ';
-$cb='id="scrll'.$id.'" style="overflow-y:scroll; '.$wa.'max-height:'.($h).';"';
+$max=is_numeric($r)?$r:count($r); if($w)$wa=' min-width:'.$w.'px; ';
+$cb=atd('scrll'.$id).ats('overflow-y:scroll;'.$wa.' max-height:'.($h).';');
 if($max>$n)return div($cb,$d); else return $d;}
 
-function scroll_b($r,$d,$n,$w='',$h='',$id=''){$h=$h?$h.'px':'calc(100vh - 140px)';
+function scroll_b($r,$d,$n,$w='',$h='',$id=''){$h=$h?$h.'px':'calc(100vh - 100px)';
 $max=is_numeric($r)?$r:count($r); $w=$w?$w:prma('content');
 $ca='width:calc(100% + 1px); height:'.$h.'px; overflow:hidden; padding-right:1px;';
-$cb='id="scrll'.$id.'" style="width:calc(100% + 16px); overflow:auto; height:'.$h.';"';
+$cb=' id="scrll'.$id.'" style="width:calc(100% + 16px); overflow:auto; height:'.$h.';"';
 if($max>$n)return divs($ca,div($cb,$d)); else return $d;}
 
 function iframe($d,$w='',$h=''){
 list($dc,$wb,$hb,$p,$o,$d)=subparams_a($d);//urlßw/h
-$w=$wb?$wb:$w; $h=$hb?$hb:($h?$h:'50%'); $w=$w?$w:'100%';
+$w=$wb?$wb:$w; $h=$hb?$hb:($h?$h:'400px'); $w=$w?$w:'100%';
 if(strpos($dc,'http')===false)$f='users/'.$dc;
 $prm=atb('width',$w).atb('height',$h).atb('name',$p).atb('seamless',$o).atb('srcdoc',$o);//
 return balb('iframe',' src="'.$dc.'" frameborder="0"'.$prm.' webkitallowfullscreen mozallowfullscreen allowfullscreen','');}
@@ -713,15 +721,17 @@ return str_replace($bad,$fixed,$d);}
 function repair_latin($d){//signes %u non utf8_decodÈs//proviennent de htmlentitydecode non iso
 return str_replace(array("≈ì"),array("&#339;"),$d);}
 
-function utf8_decode_b($d){//$d=clean_acc($d); //$d=html_entity_decode_b($d);
-//return iconv("UTF-8","ISO-8859-1//TRANSLIT",$d);
-$ra=array("‚Ä¢",'‚Ä"',"¬ñ","‚Äì","‚Äî","‚Ä¶",'‚Äô',"‚Äò","í√ª","í√©","í√®","í√™","≈ì","‚Ä¢","‚Äú","‚Äù","‚Äô","‚Äâ","¬ú","‚Ä®","¬ì","¬î");//,"≈'","√â","√©","√®","√","‡Æ","‡ß","‡™","‡¥"
-$rb=array("-","-","-","-","-","...","'","'","˚","È","Ë","Í","&#339;","ï",'"','"',"'"," ","ú",'','"','"');//,"å","…","È","Ë","‡","Ó","Á","Í","Ù"
-$d=str_replace($ra,$rb,$d); //$d=protect_utf($d); $d=clean_acc($d);
-return utf8_decode($d);}
+function utf8_decode_b($d){
+$ra=array("‚Ä¢",'‚Ä"',"¬ñ","‚Äì","‚Äî","‚Ä¶",'‚Äô',"‚Äò","í√ª","í√©","í√®","í√™","≈ì","‚Ä¢","‚Äú","‚Äù","‚Äô","‚Äâ","¬ú","‚Ä®","¬ì","¬î");//,'≈Ω','≈æ',"≈'","√â","√©","√®","√","‡Æ","‡ß","‡™","‡¥"
+$rb=array("-","-","-","-","-","...","'","'","˚","È","Ë","Í","&#339;","ï",'"','"',"'"," ","ú",'','"','"');//,'&#381;','&#382;',"å","…","È","Ë","‡","Ó","Á","Í","Ù"
+$d=str_replace($ra,$rb,$d);
+return mb_convert_encoding($d,'HTML-ENTITIES','UTF-8');}
 
 function html_entity_decode_b($v){$v=str_replace("&amp;",'&',$v);
-return str_replace(array("&nbsp;","&ndash;","%27","&#8216;","&#8217;","&#174;","&#175;","&#171;","&#187;","&#8211;","&#8220;","&#8221;","&quot;","&#8230;","&mdash;","&#8212;","&eacute;","&agrave;","&#287;","&#305;","&#304;","&#8617;","&#147;","&#148;","e&#768;","a&#768;","e&#769;","e&#770;","&#176;","&rsquo;","&#39;","&#8239;","&#8206;","&#8201;","&hellip;","&bdquo;","&ldquo;","&lsquo;","&rsquo;","&#8203;","&#039;","&thinsp;","&ensp;","&emsp;","&#160;","&#8194;","&#8195;","&#8201;","&#8208;"),array(" ","-","'","'","'","´","ª","´","ª","-",'"','"','"',"...","",'-',"È","‡","g","i","I","<-",'"','"',"Ë","‡","È","Í","∞","'","'"," "," "," ","...",'"','"',"'","'","","'"," "," "," "," "," "," "," ","-"),$v);}
+return str_replace(array("&nbsp;","&ndash;","%27","&#8216;","&#8217;","&#174;","&#175;","&#171;","&#187;","&#8211;","&#8220;","&#8221;","&quot;","&#8230;","&mdash;","&#8212;","&eacute;","&agrave;","&#287;","&#305;","&#304;","&#8617;","&#147;","&#148;","e&#768;","a&#768;","e&#769;","e&#770;","&#176;","&rsquo;","&#39;","&#8239;","&#8206;","&#8201;","&hellip;","&bdquo;","&ldquo;","&lsquo;","&rsquo;","&#8203;","&#039;","&thinsp;","&ensp;","&emsp;","&#160;","&#8194;","&#8195;","&#8201;","&#8208;","&#750;","&acute;"),array(" ","-","'","'","'","´","ª","´","ª","-",'"','"','"',"...","",'-',"È","‡","g","i","I","<-",'"','"',"Ë","‡","È","Í","∞","'","'"," "," "," ","...",'"','"',"'","'","","'"," "," "," "," "," "," "," ","-",'"',"'"),$v);}
+
+function specialspace($d){return 
+$d=str_replace(array(" "," "," "," ","&nbsp;","&thinsp;","&ensp;","&emsp;"),' ',$d);}
 //&#3647;//bitcoin
 
 function unescape($d){$n=strlen($d);//%u
@@ -761,11 +771,11 @@ $rb=array("'","'",'"','"',"...","-",'"',"'","");//'<!--','-->',"","",'http',
 return str_replace($ra,$rb,$v);}
 
 function clean_punct($in){$ret=clean_acc($in);
-$poub=array(" )","( "," ,"," ."," ;"," :",' !'," ?","´ "," ª",'0 0');//" '",
-$pouc=array(")","(",",",".","&nbsp;;","&nbsp;:","&nbsp;!","&nbsp;?","´&nbsp;","&nbsp;ª",'0&nbsp;0');//"´","ª"//"<<",">>"
+$poub=array(" )","( "," ,"," ."," ;"," :",' !'," ?","´ "," ª",'0 0',"<<",">>");
+$pouc=array(")","(",",",".","&nbsp;;","&nbsp;:","&nbsp;!","&nbsp;?","´&nbsp;","&nbsp;ª",'0&nbsp;0','"','"');
 return str_replace($poub,$pouc,$ret);}
 
-function clean_punct_b($v){
+function clean_punct_b($v){//del space after first and before last "
 $nbc=substr_count($v,'"'); if($nbc/2!=round($nbc/2))return $v;
 $r=strsplit($v); $n=count($r); $ia=2;
 for($i=0;$i<$n;$i++){if($r[$i]=='"'){$ia=$ia==2?1:2;
@@ -773,11 +783,12 @@ for($i=0;$i<$n;$i++){if($r[$i]=='"'){$ia=$ia==2?1:2;
 	if($ia==2 && $r[$i-1]==' ')unset($r[$i-1]);}}
 if($r)return implode('',$r);}
 
-function lowercase($v){$nb=strlen($v);
+function lowercase($v){$nb=strlen($v); $y=0;
 for($i=0;$i<$nb;$i++){$k=substr($v,$i,1);
 	if($y==0)$ret.=$k; else{$k=strtolower($k);
-		$ret.=strtr($k,'¿¡¬√ƒ«»… ÀÃÕŒœ—“”‘’÷Ÿ⁄€‹›','‡·‚„‰ÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˘˙˚¸˝');}
-	if($k==' ' or $k=="&nbsp;" or $k=="'" or $k=='"' or $k=='´')$y=0; else $y=1;}
+		$k=strtr($k,'¿¡¬√ƒ«»… ÀÃÕŒœ—“”‘’÷Ÿ⁄€‹›','‡·‚„‰ÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˘˙˚¸˝');
+		$ret.=$k;}
+	if($k==' ' or $k=="'" or $k=='"' or $k=='´')$y=0; else $y=1;}
 return $ret;}
 
 function delbr($d,$o){return str_replace(array('<br />','<br/>','<br>'),$o,$d);}
@@ -797,51 +808,54 @@ if($posb!==false)return substr($v,$posa,$posb-$posa);}
 
 //titles
 function clean_title($d){$nb="&nbsp;";
-$d=clean_acc($d); $d=utflatindecode($d); $d=html_entity_decode_b($d);
-$d=str_replace('´'.$nb,'"',$d); $d=str_replace('ª'.$nb,'"',$d); $d=str_replace($nb,'',$d);
-$d=clean_punct_b($d); $d=lowercase($d);
+$d=htmlentities($d);
+$d=html_entity_decode_b($d);
+$d=html_entity_decode($d);
+//$d=clean_acc($d);
+//$d=utflatindecode($d); 
+$d=clean_punct_b($d);
+$d=lowercase($d);
 if(substr($d,-1)=='"')$d=substr($d,0,-1).$nb.'ª';
 if(substr($d,0,1)=='"')$d='´'.$nb.substr($d,1);
 $d=str_replace(' "',' ´'.$nb,$d);
 $d=str_replace(array('" ','"'),$nb.'ª ',$d);
 $d=ereg_replace("[ ]{2,}",' ',$d);
-$d=clean_punct($d);
-$d=unescape($d);
-//$d=nodate($d);
+//$d=clean_punct($d);//add clean_acc
+//$d=unescape($d);
 return trim($d);}
 
 #img
 //force LH, cut and center
 function scale_img($w,$h,$wo,$ho,$s){$hx=$wo/$w; $hy=$ho/$h;
-if($s==2){$xb=($wo/2)-($w/2); $yb=($ho/2)-($h/2); $wo=$w; $ho=$h;}
-elseif($hy<$hx && $s){$yb=($ho-($h*$hx))/2; $ho=$ho/($hy/$hx);}//reduce_h (no_crop)
+if($s==2){$xb=($wo/2)-($w/2); $yb=($ho/2)-($h/2); $wo=$w; $ho=$h;}//center
+elseif($hy<$hx && $s){$yb=($ho-($h*$hx))/2; $ho=$ho/($hy/$hx);}//reduce_h
 elseif($hy>$hx && $s){$xb=($wo-($w*$hy))/2; $wo=$wo/($hx/$hy);}//reduce_w
-elseif($hy<$hx){$xb=($wo-($w*$hy))/2; $wo=$wo/($hx/$hy);}//adapt_h
+elseif($hy<$hx){$xb=($wo-($w*$hy))/2; $wo=$wo/($hx/$hy);}//adapt_h (no_crop)
 elseif($hy && $hx){$xb=0; $ho=$ho/($hy/$hx);}//adapt_w
-//else{$w=$wo/$hy;}//float_width
-//echo $wo.'--'.$ho.br();
 return array($w,$h,$wo,$ho,$xb,$yb);}
 
-function make_mini($in,$out,$w,$h,$s){
+function make_mini($in,$out,$w,$h,$s){//
 $w=$w?$w:140; $h=$h?$h:100; list($wo,$ho,$ty)=getimagesize($in); 
 list($w,$h,$wo,$ho,$xb,$yb)=scale_img($w,$h,$wo,$ho,$s);
 if(is_file($in))if(filesize($in)/1024>5000)return; //if($ho<$w or $wo<$h)return;
 //if($w>=$wo && $h>=$ho){if(is_file($out))unlink($out); return $in;}
 $img=imagecreatetruecolor($w,$h);
+//$c=imagecolorallocate($img,255,255,255); imagefill($img,0,0,$c);
 if($ty==2){$im=imagecreatefromjpeg($in);
 	imagecopyresampled($img,$im,$xa,$ya,$xb,$yb,$w,$h,$wo,$ho);
 	imagejpeg($img,$out,100);}
 elseif($ty==1){$im=imagecreatefromgif($in); imgalpha($img);
 	imagecopyresampled($img,$im,$xa,$ya,$xb,$yb,$w,$h,$wo,$ho);
 	imagegif($img,$out);}
-elseif($ty==3){$im=imagecreatefrompng($in); imgalpha($img);
+elseif($ty==3){$im=imagecreatefrompng($in); imgalpha($img);//
 	imagecopyresampled($img,$im,$xa,$ya,$xb,$yb,$w,$h,$wo,$ho);
 	imagepng($img,$out);}
 return $out;}
 
-function imgalpha($img){//imagefilledrectangle($im,0,0,$w,$h,$wh);
+function imgalpha($img){
 $c=imagecolorallocate($img,255,255,255); imagecolortransparent($img,$c);
-imagealphablending($img,false); imagesavealpha($img,true);}
+imagealphablending($img,false); 
+imagesavealpha($img,true);}
 
 //clrs
 function colors($d=''){return msql_read('system','edition_colors',$d,1);}
@@ -858,38 +872,30 @@ if(strlen($d)==1)$d='0'.$d; $ret.=$d=='0'||!$d?'00':$d;}
 return $ret;}
 	
 #mails
-function mails_list(){
-$r=msql_read('',$_SESSION['qb'].'_mails','',1);
-if($r)foreach($r as $k=>$v){if($v[1])$ret[$k]=$v[0].'<'.$k.'>';}
-return $ret;}
-function recup_mails_tosend(){$r=mails_list();
-if($r)return implode(",\n",$r);}
-
 function prep_mail_html($suj,$v,$url){
 	$http=$_SERVER['HTTP_HOST']; $qb=ses('qb'); $ban=bal('h3',lka(prep_host($qb),$http));
 	$css=$qb.'_'.'design_'.$_SESSION['prmd'].'.css';
 	if(strpos($url,'http')===false)$url='http://'.$http.'/'.$url;
 	return '<html><head><title>'.$suj.'</title>
 	<link href="http://'.$http.'/css/_global.css" rel="stylesheet" type="text/css">
+	<link href="http://'.$http.'/css/_pictos.css" rel="stylesheet" type="text/css">
 	<link href="http://'.$http.'/css/'.$css.'" rel="stylesheet" type="text/css">
 	</head><body>'.$ban.divs('margin:10px;',stripslashes($v)).'<br><br>'.
 	lkc('txtx',$url,$url).'</body></html>';}
 function send_mail_html($dest,$suj,$v,$from,$url){
-	$msg=prep_mail_html($suj,$v,$url); 
+	$msg=prep_mail_html($suj,$v,$url); $n="\r\n";
 	$admail=$_SESSION['qbin']['adminmail'];
 	$dest=$dest?$dest:$admail; $from=$from?$from:$admail;
-	$date=date("D, j M Y H:i:s"); $tet="From: $from \n";// -0600
-	$tet.="Cc: \n"; $tet.="Bcc: \n"; $tet.="Reply-To: $from \n";
-	$tet.="X-Mailer: PHP/".phpversion()."\n" ; $tet.="Date: $date \n";
-	$tet.='Content-Type: text/html; charset="iso-8859-1"';
-	if(mail($dest,$suj,$msg,$tet))return btn("txtyl",'mail_sent_to: '.$dest); 
-	else return btn("txtyl","not_sent");}
-function send_mail_txt($dest,$suj,$v,$from,$url){
-	$suj=html_entity_decode_b($suj); $tet="From: $from"."\n";
-	$msg="\n\n".$suj."\n\n".($v)."\n\n".'Source: '.prep_host(ses('qb')).$url;
-	if(mail($dest,$suj,$msg,$tet)){return btn("txtyl",'mail_sent_to: '.$dest);}}
+	$rh=array('Mime-Version'=>'1.0','Content-Type'=>'text/html; charset="'.ses('enc').'"','X-Priority'=>'1','From'=>$from,'To'=>$dest,'Cc'=>'','Bcc'=>'','Reply-To'=>$from,'X-Mailer'=>'PHP/'.phpversion(),'Date'=>date('D, j M Y H:i:s'));
+	foreach($rh as $k=>$v)$head.=$k.': '.$v.$n;
+	if(mail($dest,$suj,$msg,$head))return btn('txtyl','mail_sent_to: '.$dest); 
+	else return btn('txtyl','not_sent');}
+function send_mail_txt($dest,$suj,$v,$from,$url){$n="\r\n"; $v=wordwrap($v,70,$n);
+	$suj=html_entity_decode_b($suj); $head='From:'.$from.$n;
+	$msg=$v.$n.$n.prep_host(ses('qb')).$url;
+	if(mail($dest,$suj,$msg,$head)){return btn('txtyl','mail_sent_to: '.$dest);}}
 function send_mail($format,$to,$suj,$msg,$from,$url){
-	if($format=="html"){send_mail_html($to,$suj,$msg,$from,$url);}
+	if($format=='html'){send_mail_html($to,$suj,$msg,$from,$url);}
 	else{send_mail_txt($to,$suj,$msg,$from,$url);}}
 function contact($t,$c){return lj($c,'popup_track___'.ses('qb'),$t?$t:picto('mail'));}
 
@@ -994,7 +1000,7 @@ function prms($n){return $_SESSION['prms'][$n];}
 function prma($n){return $_SESSION['prma'][$n];}
 function prmb($n){return $_SESSION['prmb'][$n];}
 function nms($d){return $_SESSION['nms'][$d];}
-function yesnoses($d){return $_SESSION[$d]=$_SESSION[$d]?0:1;}
+function yesnoses($d){return $_SESSION[$d]=$_SESSION[$d]==1?0:1;}
 //ses
 function define_s($v,$d){$_SESSION[$v]=isset($_GET[$v])?$_GET[$v]:$_SESSION[$v];
 return $_SESSION[$v]=$_SESSION[$v]?$_SESSION[$v]:$d;}
@@ -1008,8 +1014,6 @@ function sesone($v,$p=''){if($p)return $_SESSION[$v]=$p;
 $p=$_SESSION[$v]; $_SESSION[$v]=''; return $p;}
 function sesmk($v,$p='',$b=''){if(!$_SESSION[$v] or $b or $_GET['id'])
 $_SESSION[$v]=call_user_func($v,$p); return $_SESSION[$v];}
-function sesf($v,$p='',$b=''){if(!$_SESSION[$v.$p] or $b or $_GET['id'])
-$_SESSION[$v.$p]=call_user_func($v,$p); return $_SESSION[$v]=$_SESSION[$v.$p];}
 class ses{static $ret; static function add($k,$v){self::$ret[$k]=$v;}}
 
 #access
@@ -1020,7 +1024,7 @@ function https($f){return str_replace('https','http',$f);}
 function http($f){return substr($f,0,4)!='http'?'http://'.$f:$f;}
 function ishttp($f){return substr($f,0,4)=='http'?1:0;}
 function nohttp($f){return str_replace(array('http://','https://','www.'),'',$f);}
-function http_domain($f){$f=nohttp($f); $p=strpos($f,'/'); 
+function http_domain($f){$f=nohttp($f); $p=strpos($f,'/'); ///
 	return $p?substr($f,0,$p):$f;}//preplink
 function http_root($f){$f=http_domain($f); $f=substr($f,0,strrpos($f,'.')); return $f;}
 function findroot_b($u){return substr($u,0,strpos($u,'/',8));}
@@ -1052,8 +1056,8 @@ $s="<link rel='canonical' href='"; if(strpos($d,$s))return embed_detect($d,$s,"'
 function ajx($v,$p=''){#dont edit!
 $r=array('*','_','(star)'); $a=$p?1:0; $b=$p?0:1;
 if(!$p){$a=0; $b=1; $c=2; $d=0;} else{$a=1; $b=0; $c=0; $d=2;}
-$ra=array($r[$a],$r[$b],'\'',"'",'#','"','+','=','&',"&sect",'?','.',':','/','%u');
-$rb=array($r[$c],$r[$d],'(aslash)','(quote)','(diez)','(dquote)','(add)','(equal)','(and)','(sect)','(qmark)','(dot)','(ddot)','(slash)','(pu)');
+$ra=array($r[$a],$r[$b],'\'',"'",'#','"','+','=','&',"&sect",'?','.',':','/','%u',' ');
+$rb=array($r[$c],$r[$d],'(aslash)','(quote)','(diez)','(dquote)','(add)','(equal)','(and)','(sect)','(qmark)','(dot)','(ddot)','(slash)','(pu)','(space)');
 $ret=$p?str_replace($rb,$ra,$v):str_replace($ra,$rb,$v);
 return $p?unescape($ret):$ret;}
 
@@ -1085,7 +1089,6 @@ if($_GET[$d])$_SESSION[$d]=$_GET[$d]==$csb?$g:''; $css=$_SESSION[$d]?$csa:$csb;
 return lkc($css,$l.'&'.$d.'='.$css,$v).' ';}
 
 #btns
-function plink($f){return lkt('popbt',$f,preplink($f));}
 function preplink($lk){$lk=nohttp($lk); $pos=strpos($lk,'/'); 
 if($pos===false)$pos=strpos($lk,'.'); return substr($lk,0,$pos);}
 function prepdlink($val){list($k,$v)=explode('ß',$val);
@@ -1100,9 +1103,8 @@ if($r[$d])return image('imgb/icons/flags/'.$r[$d].'.gif','14');}
 function ascii($d,$n=''){if(!$n)return '&#'.$d.';'; return balise('font',array(16=>'font-size:'.$n.'px; line-geight:'.$n.'px;'),'&#'.$d.';');}
 function svg($d){list($f,$w,$h)=subparams_a($d);
 return '<img src="'.'/imgb/icons/'.$f.'.svg'.'" width="'.$w.'" height="'.($h?$h:$w).'" />';}
-function picto($d,$s='',$c=''){$dc=$_SESSION['picto'][$d];//atb('title',$d).
-if(is_numeric($s))$s='font-size:'.$s.'px;'; if($c)$c=' '.$c;
-if($dc)return span(atc('philum'.$c).ats($s),$dc);}
+function picto($d,$s='',$c=''){if($c)$c=' '.$c; if(is_numeric($s))$s='font-size:'.$s.'px;';
+return span(atc('philum ic-'.$d.$c).ats($s),'');}
 function pictxt($p,$t='',$s=''){return picto($p,$s).($t?'&thinsp;'.btn('small',$t):'');}
 function pictit($p,$t,$s=''){return span(att($t),picto($p,$s));}
 function imgico($f,$t='',$h=''){return '<img src="'.$f.'"'.ats('vertical-align:-'.($h?$h:4).'px; border:0;').atb('title',$t).'/>';}
@@ -1112,7 +1114,8 @@ return is_file($f)?imgico($jc.$f,$t,$h):$t;}
 function ico($d,$t=''){list($p,$c)=explode(':',$d); if($c=='icon')return icon($p,$t); 
 elseif(is_numeric($c))return icosys($p,$c); elseif($c=='svg')return svg($p);
 elseif($p!==false)return picto($p); else return $t;}
-function callico($d,$t='',$s='',$c=''){$b=$_SESSION['icons'][$d];
+function icons_r(){return msql_read('system','program_pictos','',1);}
+function callico($d,$t='',$s='',$c=''){$r=sesmk('icons_r'); $b=$r[$d];
 if($b)return ico($b,$t?$t:$d); else return picto($d,$c.($s?' font-size:'.$s.'px;':''));}
 function icosys($d,$s=''){$s=$s?$s:16;
 return imgico('imgb/icons/system/philum/'.$s.'/'.$d.'.png');}
@@ -1147,34 +1150,22 @@ if(strpos($p,']'))return array($d,''); else return array(substr($d,0,$n),$p);}
 
 #plug
 //$r=array($tar,'plug',$id,$x,$plug,$func,$v1,$v2,$mv);
-function isplug($d){return is_file('plug/'.$d.'.php');}
 function clplug_j($d,$a='',$b=''){return 'popup_plup___'.$d.'_plug*'.$d.'_'.$a.'_'.$b;}
 function call_func($c,$r,$v){return lj($c,implode('_',$r),$v);}
-function call_plug_f($c,$t,$pl,$f,$p,$v){$po=$t=='popup'?'plup':'plug';
-return lj($c,$t.'_'.$po.'__3_'.$pl.'_'.$pl.'*'.$f.'_'.$p,$v);}
 function call_plug($c,$t,$f,$p,$v){$pl=$t=='popup'?'plup':'plug';
 return lj($c,$t.'_'.$pl.'__3_'.$f.'_plug*'.$f.'_'.$p,$v?$v:$p);}
 function plugin($d,$p='',$o='',$ob='',$res=''){reqp($d); $fc='plug_'.$d;
 if(function_exists($fc))return call_user_func($fc,$p,$o,$ob,$res);}
 function plugin_func($d,$fc,$p='',$o='',$res=''){reqp($d); $fc=$fc?$fc:'plug_'.$d;
 if(function_exists($fc))return call_user_func($fc,$p,$o,$res);}
-function plug_core($d,$p='',$o='',$res=''){reqp($d);
-return call_user_func($d,$p,$o,$res);}
-function search_engine($d){return plug_core('search','rech',$d,'30','');}
+function search_engine($d){return plugin_func('search','rech',$d,'30');}
 function call_finder($p,$o){req('spe,finder'); return finder($p,$o);}
 
-#app
-function loadapp($d){$r=explore('app','dirs',1);//p($r);
-foreach($r as $k=>$v){$f='app/'.$k.'/'.$d.'.php'; 
-if(file_exists($f))require_once $f;}}
-
-function openapp($d,$p=''){loadapp($d);
-$content=App::open($d,$p);
-$ret=Head::generate();
-return $ret.$content;}
-
 #eye
-function eye($p=''){$iq=ses('iq'); $qbd=ses('qbd'); $pag=implode_k($_GET,'&','='); 
+function eye($p=''){$iq=ses('iq'); $qbd=ses('qbd'); $pag=implode_k($_GET,'&','=');
+if($_GET['id']=='imgc/')exit;
+if($_SESSION['rstr'][22] && !auth(6)){
+	$_SESSION['crwl'][$iq]+=1; if($_SESSION['crwl'][$iq]>100)exit;}
 if($pag && $iq)insert('qdv','("","'.$iq.'","'.$qbd.'","'.$pag.'",NOW())');}
 
 #utils
@@ -1182,9 +1173,8 @@ function exc($d){if(auth(6))system(($d));}//escapeshellcmd
 function req($d,$j=''){$r=explode(',',$d); $n=count($r); $g=prog();//if($j)
 for($i=0;$i<$n;$i++)require_once(root().$g.$r[$i].'.php');}//once: iterative reqs
 function scanplug(){return explore('plug','dirs',1);}
-function reqp($d){$r=sesmk('scanplug','',0);
-if(is_file($f='plug/'.$d.'.php')){require_once($f); return;}
-if($r)foreach($r as $v){if(is_file($f='plug/'.$v.'/'.$d.'.php'))require($f);}}
+function reqp($d){if(is_file($f='plug/'.$d.'.php')){require_once($f); return 1;}
+if($r=sesmk('scanplug','',0))foreach($r as $v)if(is_file($f='plug/'.$v.'/'.$d.'.php'))require_once($f); return $v;}
 function checkupdate(){return read_file(philum().'/_public/plug/distribution.php?version==');}
 function checkversion(){return msql_read('system','program_version',1);}
 function utf($d){return $_SESSION['enc']=='utf-8'?utf8_encode($d):$d;}

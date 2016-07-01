@@ -29,5 +29,7 @@ $r["slideshow"]=array('[_7:text]
 ');
 $r["pubart"]=array('[_CAT§txtx:css] [_DATE _TAG§txtsmall2:css]
 [[_IMG1§44/44:thumb]§[float:left:style]:div][[_URL§_SUJ:url]§div||:balise][:clear]');
+$r["panart"]=array('[[[_AUTEURS§[small:class]:div][_URL§_SUJ:url]§[panart:class]:div]
+§[background:url(/img/_IMG1) center; background-size:cover; margin:10px 0;:style]:div]');
 
 ?>

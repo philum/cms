@@ -16,13 +16,8 @@ function track_errors($d){if($d)return helps('tracks_error'.$d); else return nms
 function track_answer($id){$nm=sql('name','qdi','v','id="'.$id.'"');
 return lj('popw','popup_plup___tracks_track*answmsg_'.$id,'@'.$nm).' ';}
 
-/*function track_quote($id){
-list($nm,$day,$msg)=sql('name,day,msg','qdi','r','id="'.$id.'"');
-$bt=lkc('txtblc',urlread($_SESSION['read']).'#trk'.$id,$nm); 
-$msg=correct_br($msg); $msg=miniconn($msg);
-$msg=correct_txt($msg,'','sconn'); $msg=embed_p($msg);
-$day=btn('txtsmall2',mkday($day,'y/m/d H:i'));
-return divc('track',$bt.' '.$day.br().$msg);}*/
+function trk_read($id){req('art,tri');
+return tracks_read($id);}
 
 function track_answmsg($id){return trk_publish($id,'');}
 
@@ -30,7 +25,7 @@ function f_inp_track($id,$msg=''){$w=currentwidth()-100; $user=$_GET['user'];
 if($_SESSION['USE'])$use=$_SESSION['USE']; else list($use,$ml)=sql('name,mail','qdi','r','host="'.hostname().'" ORDER BY id DESC LIMIT 1');
 $gn='" onkeyup="log_goodname(\'trkname\');';
 if($user)$ret.=btn("txtred",nms(29).' '.nms(34).': '.$user);
-$ret.=ljb('popsav','SaveBbd','track_'.($user?$user:$id).'_1',nms(29)).btd('bts','').' ';
+$ret.=ljb('popsav','SaveBbd','track_'.($user?$user:$id).'_1',nms(28)).btd('bts','').' ';
 if(rstr(2) && !auth(4))$ret.=btn('small',helps('tracks_moderation'));
 if($_SESSION['USE']){$ret.=hidden('name','trkname',$use).hidden('mail','trkmail','');
 	$ret.=hidden('sb','trkscr','').hidden('sc','trkscrvrf','');}//?$use:nms(38)
@@ -42,22 +37,27 @@ else{$ret.=autoclic('name" id="trkname'.$gn,$use,'8','50','',1).' ';//name
 $ret.=btd('bts'.$id,$sav).' '.hlpbt('trackhelp').' ';//.hlpbt('track_orth').' ';
 $ret.=lj('" title="'.nms(65),'popup_trkpreview_txtarea_',picto('view')).' ';
 //$ret.=divedit('txtarea','track','min-height:100px; min-width:320px;','',$d?$d:$msg);
-$ret.=micro_connedit('txtarea').br().txarea('txtarea',$d?$d:$msg,80,16,'console').br();
+$ret.=micro_connedit('txtarea').br().txarea('txtarea',$d?$d:$msg,80,16,atc('console')).br();
 return $ret.$r['html'];}
 
-function trk_publish($id,$o){req('spe,pop,art,tri');
+function trk_trash($id,$ok){
+if(!$ok)return lj('txtyl','trk'.$id.'_plug___tracks_trk*trash_'.$id.'_x',nms(43));
+if(auth(6))delete('qdi',$id);}
+
+function trk_publish($id,$o){req('spe,pop,art,tri,sav');
 if($o)publish_art($o,$id,'qdi');
 return tracks_read($id,'','');}
 
-function save_track($msg,$id,$name,$mail){$pdt=time(); $ip=hostname();
+function save_track($msg,$id,$name,$mail){$pdt=time(); $iq=hostname(); //ses('iq');
 if(is_numeric($id) or substr($id,0,4)=='wall')$local=true;
 if(!$msg)return;// btn('popdel','bruuu! '.helps('empty_msg'));
 req('sav'); $qb=$_SESSION['qb']; $base=$_SESSION['qdi'];
 $_GET['idy']='ok'; $_GET['insert']='ok'; $_POST['name']=$nm; $_POST['msg']=$msg;
 if(!rstr(2) or auth(4))$op=1; else $op=0;
 $here=host().'/?read='.$id; $msg=str_replace(":chat","",$msg); $msg=repair_latin($msg);
-$msg=embed_links($msg); $amsg=mysql_real_escape_string(stripslashes($msg));
-$nread=msquery("INSERT INTO $base VALUES ('','$ib','$name','$mail','$pdt','$qb','$id','$suj','$amsg','$op','','','','$ip')");
+$msg=embed_links($msg); //$amsg=mysql_real_escape_string(stripslashes($msg));
+$values=array($ib,$name,$mail,$pdt,$qb,$id,$suj,$msg,$op,$ip);//,'','',''
+$nread=insert('qdi',mysqlra($values));
 $suj=$local?suj_of_id($id):nms(84);
 $nmsg=lka($here.'#trk'.$nread,$local?helps('trackmail'):nms(84)).br().br();
 $nmsg.=nms(68).': '.$name.', '.mkday($pdt).br().br().format_txt($msg,'','');
@@ -69,8 +69,6 @@ if($kem!=$name){$kmail=sql('mail','qdu','v','name="'.$kem.'"');
 	if($admail!=$kmail)$rmails[$kmail]=1;} //send_track_to_user
 if($rmails && $op==1)send_mail_r(array_keys_b($rmails),'html',$suj,$nmsg,$mail,$id);
 if(!$local)return popup(nms(34),divc('',helps('formail')),'');
-//elseif(!$local)return btn('popbt',helps('formail'));
-//return output_trk(read_idy($id,"DESC"));
 return tracks_read($nread,'','');}
 
 //redit
@@ -80,7 +78,7 @@ update('qdi','msg',$v,'id',$id); return tracks_read($id,1,1);}
 
 function trk_redit($id){$msg=sql('msg','qdi','v','id='.$id);
 $ret=lj('popsav','trk'.$id.'_trkedit_trkedit_x_'.$id.'','save').btd('bts','').' ';
-$ret.=micro_connedit('trkedit').br().txarea('trkedit',$msg,80,16,'console').br();
+$ret.=micro_connedit('trkedit').br().txarea('trkedit',$msg,80,16,atc('console')).br();
 return $ret;}
 
 //form
@@ -97,7 +95,8 @@ return br().btn('',helps('formail'));}
 function micro_connedit($id){
 $r=array('b'=>'bold','i'=>'italic','u'=>'underline','q'=>'quote','list'=>'list');
 $ret=ljb('','embed_slct(\'[\',\']\',\''.$id.'\')','','[]');
-foreach($r as $k=>$v)$ret.=ljb('','embed_slct(\'[\',\':'.$k.']\',\''.$id.'\')','','['.$v.']');
+foreach($r as $k=>$v)
+$ret.=ljb('','embed_slct(\'[\',\':'.$k.']\',\''.$id.'\')','','['.$v.']');
 return btn('nbp',$ret);}
 
 function plug_tracks($p,$o){

@@ -30,7 +30,7 @@ $r[26]=array('mots');
 $r[27]=array('sauver');
 $r[28]=array('envoyer');
 $r[29]=array('publier');
-$r[30]=array('cacher');
+$r[30]=array('désactivé');
 $r[31]=array('jeter');
 $r[32]=array('vue');
 $r[33]=array('vues');
@@ -126,7 +126,7 @@ $r[122]=array('tester');
 $r[123]=array('phonétique');
 $r[124]=array('réduire');
 $r[125]=array('centrer');
-$r[126]=array('Proposer un article');
+$r[126]=array('proposer à la publication');
 $r[127]=array('après');
 $r[128]=array('avant');
 $r[129]=array('étendu');
@@ -148,5 +148,7 @@ $r[144]=array('votes');
 $r[145]=array('tag');
 $r[146]=array('tags');
 $r[147]=array('Suggestions');
+$r[148]=array('caché');
+$r[149]=array('confirmation');
 
 ?>

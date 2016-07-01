@@ -43,8 +43,8 @@ else{$ra=msql_read($dir,$node); if($ra['_menus_'])$ntkp=1;
 	if($ra){foreach($ra as $k=>$v){$i++; if($k==$va){$n=$i; $key=$k; $def=$v;}}
 	$keys=array_keys($ra); $kyb=ajx($key); $na=$n-$ntkp;
 	if($keys[$na-1] && $keys[$na-1]!='_menus_')
-		$pn.=lj('txtx','popup_'.$tg.'__x_'.$nod.'_'.($keys[$na-1]),picto('left')); 
-	if($keys[$na+1])$pn.=lj('txtx','popup_'.$tg.'__x_'.$nod.'_'.($keys[$na+1]),picto('right'));}
+		$pn.=lj('txtx','popup_'.$tg.'__x_'.$nod.'_'.ajx($keys[$na-1]),picto('left')); 
+	if($keys[$na+1])$pn.=lj('txtx','popup_'.$tg.'__x_'.$nod.'_'.ajx($keys[$na+1]),picto('right'));}
 	$ra=msql_read($dir,$node,$key);//$v
 	if(is_array($ra)){$i=0;//$r['_menus_']=imput_good($idn.'_menus_',$key);
 		foreach($ra as $k=>$v){$kys[]=$idn.$k; $i++;
@@ -101,16 +101,17 @@ input(1,'crvw',str_replace(',','/',$rb[1]).'§'.$s.':core','txtx').
 ljb('txtbox','jumpText_insert_b','crvw\',\'txarea','insert').br();}
 
 function core_view($d,$s){$js='crv_call___admin_core*view_';
-$r=msql_read('system','program_core','',1); $cat=msq_cat($r,4);
+$r=msql_read('system','program_core','',1); if($r)$cat=msq_cat($r,4);
 $ret.=slctmenusj($cat,$js,$d,' ').br();
-if($d){$r=msq_tri($r,4,$d); $cat=msq_cat($r,0);
+if($d){$r=msq_tri($r,4,$d); if($r)$cat=msq_cat($r,0);
 	if($s){$rb=$r[$cat[$s]]; return core_view_edit($rb,$s);}
 	foreach($r as $k=>$v)$ret.=divc('row',lj('popbt','popup_callp___admin_core*view_'.$d.'_'.ajx($v[0],''),$v[0].'('.$v[1].')').btn('poph" title="returns: '.$v[3],$v[2]));}
 return $ret;}
 
 //conn
 function conn_view($d,$s){$js='cnv_call___admin_conn*view_';
-$r=msql_read('system','connectors_all','',1); $r=msq_tri($r,0,'embed'); $cat=msq_cat($r,2);
+$r=msql_read('system','connectors_all','',1); 
+$r=msq_tri($r,0,'embed'); if($r)$cat=msq_cat($r,2);
 $ret.=slctmenusj($cat,$js,$d,' ').br().br(); $cat=msq_tri($r,2,$d);//p($cat);
 if($d){$r=msq_tri($r,2,$d);
 	if($s){$ret.=divc('',nl2br(stripslashes(msql_read('lang','connectors_all',$s)))).br();
@@ -191,7 +192,7 @@ return btn('txtyl','ok');}
 function data_brain($type){$slct=$_GET['slct'];
 if($_POST['titl'])$slct=$_POST['titl'];
 $goto='/?admin='.($type=='template'?'templates':$type);
-if($type=='template'){$lisb=array('articles','tracks','titles','pubart','book');
+if($type=='template'){$lisb=array('articles','tracks','titles','pubart','panart');
 	$ret.=hlpbt('templates').' ';} else $ret.=hlpbt('clbasic').' ';
 $ret.=btn_switch('pubase',1,$goto.'&slct='.$slct,'public').' ';
 $bs=($_SESSION['pubase']?'public':ses('qb')); $nod=$bs.'_'.$type;
@@ -220,7 +221,7 @@ if($type=='template' && $_GET['local']){
 	elseif($slct=='pubart')$msg=template_pubart();
 	elseif($slct=='tracks')$msg=template_tracks();
 	elseif($slct=='titles')$msg=template_titles();
-	elseif($slct=='book')$msg=template_book();
+	elseif($slct=='panart')$msg=template_panart();
 	elseif($slct=='products')$msg=template_product();}
 $ret.=codeline_editor($msg,$type,$slct);
 if(!$_SESSION['pubase'] && !$_GET['mkpub'])
@@ -402,18 +403,19 @@ return $ret;}
 
 function adm_newsletter($ok){req('adminx'); 
 $t='newsletter'; $voc=helps('see_'.$t,$t);
-$r['batch']=call_plug_f('popsav','popup',$t,'batch','',nms(28)).' ';
-$r['batch'].=call_plug('txtbox','popup','mailist','read',$voc).' ';
+$r['batch']=lj('popsav','popup_plup___'.$t.'_'.$t.'*batch',nms(28)).' ';
+$r['batch'].=lj('txtbox','popup_plup___mailist_'.$t.'*read',$voc).' ';
 $r['batch'].=msqlink('users',ses('qb').'_mails');
 $r['mails']=plugin($t,'edit');
 $r['edit']=divd('modules'.$t,console_block($t,1));
 return make_tabs($r,'nl');}
 
 #adm
-function adm_messages(){require_once('art.php'); require_once('spe.php');
-	if($_SESSION['auth']<1)return contact(nms(84),'txtcadr');
-	elseif($_SESSION['auth']>6)$ml=ses('qb'); else $ml=ses('USE');
-	$r=read_idy($ml,'DESC'); return divs('width:550px;',output_trk($r));}
+function adm_messages(){req('art,spe');
+if($_SESSION['auth']<1)return contact(nms(84),'txtcadr');
+elseif($_SESSION['auth']>6)$ml=ses('qb'); else $ml=ses('USE');
+$r=read_idy($ml,'DESC');
+return output_trk($r);}
 
 function adm_admin($adm,$va){
 $st=$_SESSION['admin']?$_SESSION['admin']:'=';
@@ -436,12 +438,23 @@ $r=sql('name,hub,active','qdu','',$wh);
 if($r)foreach($r as $k=>$v)$ret[]=array(lkc('','/'.$v[0],$v[1]?$v[1]:$v[0]),offon($v[2]));
 return make_table($ret);}
 
+function adm_killhub(){$qb=ses('qb'); $f='users/'.$qb;
+walk_dir($f,'remove'); rmdir($f);
+$f='msql/users/'.$qb.'_cache.php'; if(is_file($f))unlink($f);
+for($i=1;$i<10;$i++){
+	$f='msql/design/'.$qb.'_design_'.$i.'.php'; if(is_file($f))unlink($f);
+	$f='msql/design/'.$qb.'_clrset_'.$i.'.php'; if(is_file($f))unlink($f);
+	$f='msql/users/'.$qb.'_mods_'.$i.'.php'; if(is_file($f))unlink($f);}
+update('qda','nod','_'.$qb,'nod',$qb);
+//msquery('DELETE FROM '.ses('qdm').' WHERE id=(select id from '.ses('qda').' where name="'.$qb.'")');
+//msquery('DELETE FROM '.ses('qda').' WHERE name="'.$qb.'"');
+//msquery('DELETE FROM '.$qdu.' WHERE name="'.$qb.'" LIMIT 1');
+if($_SESSION['USE']==$qb)$_SESSION['USE']=''; relod(subdom(prms('default_hub')));}
+
 function adm_hubs($auth){$goto='/?admin=hubs';
 $qb=ses('qb'); $qdu=ses('qdu'); $USE=ses('USE');
-	if($mna && $auth>=5)$mna=$_SESSION['mn']+$mna; else $mna=ses('mn');
-	//if($mna)$ret.=balc('ul','panel',m_nodes_b($mna,1));
-	$ret.=hublist().br();
-	if(($auth>=6 && prms('create_hub')=='on') or $auth>=7){
+if($mna && $auth>=5)$mna=$_SESSION['mn']+$mna; else $mna=ses('mn');
+if(($auth>=6 && prms('create_hub')=='on') or $auth>=7){
 	$ret.=loged('','','create new hub').br();}
 if($_GET['rename_hub'] && $auth>=5){//renmae_hub
 	if($_POST['hub_name']){
@@ -453,15 +466,7 @@ if($_GET['rename_hub'] && $auth>=5){//renmae_hub
 	$ret.=form($goto.'&rename_hub==',btn('panel',$valu)).br();}
 elseif($auth>=5) $ret.=lkc('popsav',$goto.'&rename_hub==',nms(87)).' ';
 //kill_hub
-if($auth>=6 && $_GET['kill_hub']=='ok'){$f='users/'.ses('qb');
-	walk_dir($f,'remove'); rmdir($f);
-	$f='msql/users/'.$qb.'_cache.php'; if(is_file($f))unlink($f);
-	for($i=1;$i<10;$i++){
-		$f='msql/design/'.$qb.'_design_'.$i.'.php'; if(is_file($f))unlink($f);
-		$f='msql/design/'.$qb.'_clrset_'.$i.'.php'; if(is_file($f))unlink($f);
-		$f='msql/users/'.$qb.'_mods_'.$i.'.php'; if(is_file($f))unlink($f);}
-	msquery('DELETE FROM '.$qdu.' WHERE name="'.$qb.'" LIMIT 1');
-	$_SESSION['USE']=''; relod(subdom(prms('default_hub')));}
+//if($auth>=6 && $_GET['kill_hub']=='ok')adm_killhub();
 //reinit_hub
 if($auth>=6 && $_GET['reinit_hub']=='ok')makenew(ses('qb'),1);
 //publish
@@ -474,9 +479,9 @@ if($auth>=6){
 	$ret.=lkc('popsav',$goto.'&publish='.$ere.'#'.$id,offon($opened).' '.$st).' ';
 	$ret.=lkc('popsav',$goto.'&reinit==',nms(95).' '.nms(103)).' ';}
 if($_GET['reinit']=='=')$ret.=btn('txtx','restore all defaults ?').lkc('txtyl',$goto.'&reinit_hub=ok','ok').' ';
-if($auth>=6){$ret.=lkc('txtyl',$goto.'&kill_hub==',nms(76).' '.nms(100)).' ';
+if($auth>=6){$ret.=lkc('txtred',$goto.'&kill_hub==',nms(76).' '.nms(100)).' ';
 	if($_GET['kill_hub']=='=')$ret.=btn('txtx','All datas will be lost').lkc('txtyl',$goto.'&kill_hub=ok','ok');}
-return $ret.br();}
+return $ret.br().br().hublist();}
 
 function adm_nodes($auth,$goto){connect();
 $valu=autoclic('qd','node','15','255','').' ';
@@ -506,7 +511,7 @@ function adm_edit_plug(){}
 function update_ok(){$ret.=lkc('popbt','/?id==',helps('update_ok')).' ';
 if($_SESSION['dlnb'])$ret.='('.$_SESSION['dlnb'].' '.nms(52).')'.br().br();
 $upd=helps('update_ok_alert'); if($upd)$ret.=divc('alert',ico('alert').' '.$upd).br();
-$patch='160101';
+$patch='160606';
 if($patch){$pok=msql_read('server','program_patches',$patch);
 	if($pok==0)$ret.=lkc('popdel','/admin/update','patch!').br();}
 $ret.=adm_update_notes($_SESSION['philum']); $_SESSION['dlnb']='';
@@ -543,7 +548,7 @@ $uret.=btn('nbp',slct_menus(array('/','prog','progb','msql','plug','js','gallery
 $uret.=lkc('txtbox',$goto.'&update=all',picto('update').' '.$_SESSION['dest']).' ';
 if($_SESSION['dest']=='fonts'){$uret.=hlpbt('updfonts').' '.lkc('txtbox',$goto.'&update=del','del_obsoletes');}
 $uret.=br().br();
-$patch='160101';//patches//set update_ok//150521
+$patch='160606';//patches//set update_ok//150521
 if($patch){$pok=msql_read('server','program_patches',$patch);
 	$ptch=msql_read('system','program_patches',$patch);
 	if($pok==0 or $_GET['force']){
@@ -564,7 +569,7 @@ msq_copy('users',$nd.prmb(1),'users',$nd.$d);
 echo btn('txtyl','_mods_'.$d.' created from _mods_'.prmb(1));}}
 
 function adm_params($curauth,$rep){$auth=ses('auth'); $goto='/?admin=params'; $qb=ses('qb');
-req('boot,adminx'); connect();//$db
+req('boot,adminx'); $db=connect();
 if($auth>6 && $_GET['m_cnfg']=='='){$mcfg='&m_cnfg=='; $f='params/_'.$db.'_config.txt';
 	if(is_file($f))$prms=explode('#',read_file($f));
 	$arr=msql_read_prep('system','admin_config'); $hl='lang_admin*config_';}	
@@ -580,7 +585,8 @@ if($_GET['params']=='save' && $auth>=$curauth){
 		master_params('params/_'.$db,$qd,$aqb,$subd);
 		alert(lkt('txtyl',$f,$db.'_config'));}
 	else{$_SESSION['prmb']=$prms; update('qdu','config',$vaue,'name',$qb);}}
-$sty='" style="width:200px;';//read
+//read
+$sty='" style="width:200px;';
 foreach($arr as $t=>$ak){foreach($ak as $i=>$v){if($i!=22){
 	if($valmax<$i)$valmax=$i; $attr=array('name'=>'pms'.$i,'style'=>'width:200px;');
 	if($i==11 && !$_GET['m_cnfg'])
@@ -643,7 +649,7 @@ $ret.=lkc('txtblc','plug/dump.php?tb='.ses('qda'),'_art').' ';
 $ret.=lkc('txtblc','plug/dump.php?tb='.ses('qdi'),'_txt').' ';
 $ret.=lkc('txtblc','plug/dump.php?tb='.ses('qdu'),'_idy').br().br();
 $ret.=lkc('txtbox',$goto.'&backup_msql==','backup_msql');
-if($_GET['backup_msql']){require('plug/backup_msql.php'); $ret.=make_archive_msql('');}}
+if($_GET['backup_msql']){reqp('backup_msql'); $ret.=make_archive_msql('');}}
 return $ret;}
 
 function adm_mod_hlp($goto){
@@ -715,11 +721,10 @@ return $ret;}
 
 #articles
 
-function make_artlist($qr){
-$sqlm=$_SESSION['sqlimit']; $admin=$_GET['admin'];
+function make_artlist($qr){$admin=$_GET['admin'];
 $dig=$_GET['dig']?$_GET['dig']:$_SESSION['nbj'];
 if($dig)$sqlm='AND day>"'.calc_date($dig).'" AND day<"'.calc_date(time_prev($dig)).'"';
-else $sqlm='AND day <"'.$_SESSION['daya'].'" ';
+else $sqlm='AND day<'.$_SESSION['daya'].' ';
 if($admin=='all_arts')$wh='';
 elseif($admin=='my_arts')$wh.='AND name="'.$_SESSION['USE'].'"' ;// AND re>='1'
 elseif($admin=='users_arts')$wh.='AND name!="'.$_SESSION['USE'].'"' ;
@@ -764,7 +769,7 @@ foreach($_GET as $ka=>$va){$goto.=$ka.'='.$va.'&';} $goto.='publish=';
 foreach($r as $id=>$va){$cid='&art='.$id.'#'.$id;
 foreach($va as $k=>$v){
 switch($k){
-case("id"):$v='<a name="'.$v.'"></a>'.lkt("",'/?read='.$id,$v); break;
+case("id"):$v='<a name="'.$v.'"></a>'.lkt('',urlread($id),$v); break;
 case("day"):$v=mkday($v,1); break;
 case("suj"):$v=lj('','popup_editbrut___'.$id,$v); break;
 case("img"):$v=""; break;
@@ -794,21 +799,33 @@ $n_pages=nb_page($i,$npg,$page);
 $ret=make_tables($rtt,$rtr,'bkg','');
 return $n_pages.$ret.$n_pages;}
 
-function edit_categories(){
-$rub=urldecode($_GET['modif']);
+function cat2tag($d){req('meta'); $tg=$_POST['rdtg'];
+$r=sql('id','qda','k','nod="'.ses('qb').'" and frm="'.$d.'"');
+foreach($r as $k=>$v)sav_tag('',$k,$tg?$tg:'tag',$d);}
+
+function fixtag(){$r=sql('idart,idtag','qdta','kk','');//kill doublons
+foreach($r as $k=>$v)foreach($v as $ka=>$va)if($va==2)$rb[$k]=$ka; //pr($rb);
+if($rb)foreach($rb as $k=>$v){$id=sql('id','qdta','v','idart="'.$k.'" and idtag="'.$v.'" order by id desc'); echo $k.'-'.$v.':'.$id.br(); if($id)delete('qdta',$id);}}
+
+function edit_categories(){//fixtag();
+$rub=$_GET['modif'];
 $old_rub=$_POST['old_rub'];
 if($_SESSION['auth']>=6){//save
-	if($_POST['hide']){$rub='_'.$_POST['old_rub'];}
-	elseif($_POST['publish'] && substr($old_rub,0,1)=="_"){$rub=substr($old_rub,1);}
-	elseif($_POST['modif']){$rub=$_POST['modif'];}
+	if($_POST['totag'])cat2tag($_POST['modif']);
+	if($_POST['hide'])$rub='_'.$_POST['old_rub'];
+	elseif($_POST['publish'] && substr($old_rub,0,1)=="_")$rub=substr($old_rub,1);
+	elseif($_POST['modif'])$rub=$_POST['modif'];
 	if($_POST['hide'] or $_POST['publish'] or $_POST['modif'])msquery('UPDATE '.$_SESSION['qda'].' SET frm="'.$rub.'" WHERE nod="'.ses('qb').'" and frm="'.$old_rub.'"');}
 if($rub){//champs
 	$valu=input2('text" size="15" maxlength="255','modif',$rub,"").hidden('old_rub','',$rub).' '.input2('submit','Submit','modif',"").' ';
-	if(substr($rub,0,1)!="_")$valu.=input2('submit','hide','hide',"").' '; 
+	if(substr($rub,0,1)!="_")$valu.=input2('submit','hide','hide',"").' ';
 	else $valu.=input2('submit','publish','publish').' ';
+	$valu.=input2('submit','totag','make tag').' ';
+	$valu.=radiobtn(explode(' ','tag '.prmb(18)),'tag','rdtg');
+	if($_POST['totag'])$valu.=btn('txtyl',$rub.' was added as tag '.$_POST['rdtg']);
 	$inp=br().btn("",$valu);
-	$ret.=lkc('txtx',htac('cat').$rub,'go_to').' ';
-	$ret.=lkc('txtx','/?admin=all_arts&cat='.$rub,'all_arts_of:'.$rub).br();
+	$ret.=lkc('txtx',htac('cat').$rub,pictxt('url','go')).' ';
+	$ret.=lkc('txtx','/?admin=all_arts&cat='.$rub,pictxt('view',$rub)).br();
 	$ret.=form('/?admin=categories&modif='.$rub,$inp);}
 return $ret.br();}
 
@@ -818,13 +835,47 @@ $csa='txtbox" align="center'; $css='txtx';
 $r=sql('frm','qda','k','nod="'.ses('qb').'" ORDER BY frm');
 $rt=balc("tr","",balc("td",$csa,nms(9)).balc("td",$csa,'nb'));
 if($_SESSION['auth']>=6)$lk='/?admin=categories&modif='; else $lk='/cat/';
-if($r)foreach($r as $k=>$v){$lnkcat=lka($lk.$k,$k);
+if($r)foreach($r as $k=>$v){$lnkcat=lka($lk.urlencode($k),$k);
 $rt.=bal("tr",balc("td",$css,$lnkcat).balc("td",$css,$v));}		
 $ret.=bal("table",$rt);
 return $ret;}
 
+//overcat
+function overcatsav($cat,$id,$res){$over=ajxg($res);
+if($id)update('qdd','msg',$over.'/'.$cat,'id',$id);
+else insert('qdd','("","'.ses('qbd').'","surcat","'.$over.'/'.$cat.'")');
+return overcat();}
+function overcatdel($id){if(auth(6))delete('qdd',$id); return overcat();}
+
+function overcat(){
+$r=sql('id,msg','qdd','kv','ib="'.ses('qbd').'" and val="surcat"');
+if($r)foreach($r as $k=>$v){list($ov,$cat)=split_right('/',$v,1); $rb[$cat]=array($ov,$k);}
+$r=sql('frm','qda','k','nod="'.ses('qb').'" and substring(frm,1,1)!="_" order by frm');
+$ja='scat_call___admin_overcatsav_'; $jb='scat_call___admin_overcatdel_';
+$ret=helps('overcat').hlpbt('overcats_menu').br().br();
+if($r)foreach($r as $k=>$v){$id=randid(); //if(isset($rb[$k]))unset($rb[$k]);
+	$j=$ja.ajx($k).'_'.$rb[$k][1].'_'.$id;
+	$ret.=$k.' '.inp($id,$rb[$k][0]).lj('popbt',$j,'ok').' ';
+	if($rb[$k][1])$ret.=lj('popbt',$jb.$rb[$k][1],'x');
+	$ret.=br();}
+//if($rb)pr($rb);//unused cats
+return $ret;}
+
+function edit_overcat(){return divd('scat',overcat());}
+
+//arts//todo:old
+function dig_it($n,$send,$rid=''){$r=define_digr(); $g=$_GET[$send];
+if(!$r[$n])$r[$n]=$n>=365?round($n/365,2):$n; $cur=$r[$n]; $nprev=time_prev($n);
+$r[$n].=' '.($n<365?plurial($cur,3):plurial($cur,7));
+if($n!=1 && $n!=7)$r[$n]=$r[$nprev].' '.nms(36).' '.$r[$n];//from
+if($n>365)$r[$n]=date('Y',calc_date($n));//from
+//$dig=$_GET['dig']?$_GET['dig']:$_SESSION['nbj'];
+if($_SESSION['rstr'][3]!='1')
+if($rid)$ret=slctmenusja($r,'load'.$rid.'_api___'.$send.':'.ajx($g).'_',$n);
+else $ret=slct_menus($r,htacb($send,$g,'dig'),$n,"active","","");
+return btn('nb_pages',$ret);}
+
 function adminarts(){
-//if($_GET["publish"])publish_art($_GET["publish"],$_GET["art"],'qda');
 $qr=array("id","suj","frm","day","name","re");
 $qrt=array("id"=>"ID","suj"=>"Title (edit)","frm"=>"Category","day"=>"Date","name"=>"Author","re"=>"Published");
 $r=make_artlist($qr);
@@ -883,9 +934,9 @@ if($USE){
 	$w.=lkc('popw',htac('module').'Home',pictxt('home',$hubname)).' ';
 	$w.=btn("popbt",pictxt('user',$USE.' '.asciinb($auth)).' ('.nameofauthes($auth).')');}
 //fastmenu
-$fmn=array('console','params','restrictions','apps','tags','css','templates','connectors','plugin','msql','finder','pictos','stats','update');
-foreach($raf as $v){if(in_array($v,$fmn))
-	$tit.=lkc(active($admin,$v),htac('admin').$v,pictit(mimes_types($v),$v)).' ';}
+$fmn=array('console','restrictions','apps','params','tags','css','templates','connectors','plugin','finder','pictos','stats','update');
+foreach($fmn as $v){if(in_array($v,$raf))
+	$tit.=lkc(active($admin,$v),htac('admin').$v,pictit(mimes_types($v),$v,22)).' ';}
 $reta.=divc('right',$w.$alert); $tit.=lkc('txtit',htac('admin').$admin,$admin).' ';
 if($admin!="=")$reta.=div('',$tit);
 if($auth>=7 && $admin=='update')$ret=adm_update();
@@ -893,8 +944,9 @@ if($auth>=$curauth && $curauth){
 switch($admin){
 //global
 case('console'):$ret=adm_console($auth); break;
-case('apps'):require_once('adminx.php'); $ret=adm_apps($_GET['set'],'',$_GET['dig']); break;
-case('messages'):if($qb==$USE or $auth>=$curauth)$ret=adm_messages();
+case('apps'):req('adminx'); $ret=adm_apps($_GET['set'],'',$_GET['dig']); break;
+case('messages'):
+	if($qb==$USE or $auth>=$curauth)$ret=adm_messages();
 	else $ret=contact(nms(84),'txtcadr'); break;
 case('hubs'):$ret=adm_hubs($auth); break;
 case('nodes'):$ret=adm_nodes($auth,$goto); break;
@@ -909,10 +961,11 @@ case('faq'):$r=msql_read('system','program_faq','');
 if($_SESSION['set']=='Articles'){switch($admin){
 	case('create'):$ret=f_inp('',''); break;
 	case('categories'):$ret=catarts(); break;
+	case('overcat'):$ret=edit_overcat(); break;
 	case('trackbacks'):req('mod,art'); $ret=trkarts(''); break;
 	default:$ret=adminarts(); break;}}
 switch($admin){
-case('chat'):require_once('art.php'); $ret=output_trk(read_idy('microchat','DESC')); break;
+case('chat'):req('art'); $ret=output_trk(read_idy('microchat','DESC')); break;
 case('shop'):$ret=helps('shop_class'); break;
 case('book'):$ret=lkc('txtblc','/plug/book.php','book'); break;}
 //configs
@@ -921,10 +974,10 @@ case('restrictions'):$ret=adm_restrictions(); break;
 case('params'):$ret=adm_params($curauth,rep); break;
 case('avatar'):if($USE)$ret=adm_avatar(0); break;
 case('mail'):
-	if($_POST['amail']){if($USE==$qb)$_SESSION['qbin']['adminmail']=$_POST['amail'];
-		update('qdu','mail',$_POST['amail'],'name',$USE);}
-	$ml=sql('mail','sql','v','name="'.$USE.'"');
-	if($ml)$valu=input2('text','amail',$ml.'" size="35" maxlength="50').' '.input2('submit','Submit','modif_mail','');
+	if($_POST['amail'] && auth(6)){update('qdu','mail',$_POST['amail'],'name',$USE);
+		if($USE==$qb)$_SESSION['qbin']['adminmail']=$_POST['amail'];}
+	$ml=sql('mail','qdu','v','name="'.$USE.'"');
+	$valu=input2('text','amail',$ml.'" size="35" maxlength="50').' '.input2('submit','Submit','modif_mail','');
 	$ret=form($goto,$valu); break;
 case('password'):$ret=set_password($USE); break;
 case('banner'):$ret=set_ban(); break;

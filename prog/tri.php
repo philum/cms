@@ -109,13 +109,12 @@ list($pdoc,$xf)=split_one(':',$doc,1);
 if($xf && $pdoc!='http'){$d=sconn_defs_r($pdoc,$xf); if($d!=$doc)return $d;}
 if($xf){$d=sconn_defs_app($pdoc,$xf); if($d)return $d;}
 $xt=strtolower(strrchr($doc,"."));
-if($xt==".mp3"){$doc=goodroot($doc);//mp3
-	return embed_flsh_obj('fla/mp3.swf',"300","40",'soundFile='.$doc);}
+if($xt==".mp3"){$doc=goodroot($doc); return audio($doc);}
 if($xt==".pdf")return pdfdoc($doc,'img/',$media);//pdf
 if(is_image($doc) && strpos($doc,"§")===false && strpos($doc,"<")===false){//images
 	$large=currentwidth()-20; $largb=round($large*0.5);
 	if(strpos($doc,"http")!==false)return image($doc);
-	return place_image($doc,$media,$large,$largb,"","");}
+	return place_image($doc,$media,$large,$largb);}
 if(strpos($doc,"§") or strpos($doc,"http")!==false or strpos($doc,"@")!==false){//liens
 $lk=prepdlink($doc);
 if(is_image($lk[0])){
@@ -124,7 +123,7 @@ if(is_image($lk[0])){
 elseif(is_image($lk[1])==true){//link§im
 	if(is_numeric($lk[0]))$lk[0]=urlread($lk[0]);
 	if(strpos($lk[1],"http")!==false)return lka($lk[0],$lk[1]);
-	return lkc("",$lk[0],place_image($lk[1],$media,$large,$largb,"",""));}
+	return lkc("",$lk[0],place_image($lk[1],$media,$large,$largb));}
 elseif(strpos($lk[0],"http")!==false)return lka($lk[0],$lk[1]);
 elseif(strpos($lk[0],"/")!==false)return lka(goodroot($lk[0]),$lk[1]);
 elseif(substr($lk[0],0,1)=="/")return lka($lk[0],$lk[1]);
@@ -238,21 +237,6 @@ $ret=str_replace(array('[',']','¬','|','§')," ",$ret);//
 $ret=mb_ereg_replace("[ ]{2,}"," ",$ret);
 return $ret;}
 
-function parse_output($msg){
-$msg=str_replace($_SESSION['qb'].'_',host().'/img/'.$_SESSION['qb'].'_',$msg); 
-$msg=clean_internaltag($msg);//correct_txt($msg,'','delconn')
-if(strpos($msg,"\n")===false)$msg=delbr($msg,"\n");
-else{$msg=str_replace("<br>"," ",$msg);}
-//$msg=trim($msg,"\x00..\x1F");
-$msg=html_entity_decode($msg);
-$msg=stripslashes($msg);
-return $msg;}
-
-function parse_idy($m){
-$ret=str_replace(array("/?read=","&idy_","hide","#msg","erase=","X"),"",$m);
-$ret=stripslashes($ret);
-return $ret;}
-
 function antipirat($t){$re=explode("[-./_ ]",$t); $ratio=1.5; //nb_identical_words
 foreach($re as $k){$ter[$k]+=1;}
 if(count($ter)>count($re)/$ratio){return $t;}}
@@ -329,8 +313,6 @@ if(forbidden_img($v)!==false && (strpos($v,'puce')===false))return $v;}
 
 function clean_spaces($ret){
 $ret=str_replace("&nbsp;"," ",$ret);
-//$ret=str_replace(htmlentities(" ")," ",$ret);
-//$ret=str_replace(html_entity_decode("&nbsp;")," ",$ret);
 $ret=mb_ereg_replace("[ ]{2,}"," ",$ret);
 return $ret;}
 
@@ -338,7 +320,7 @@ function pre_clean($ret){
 $ret=clean_spaces($ret);
 $ret=clean_acc($ret);
 $ret=stupid_acc($ret);
-//$ret=html_entity_decode_b($ret);
+//$ret=html_entity_decode_b($ret);//create pb
 //$ret=html_entity_decode($ret);
 $r=array('b','i','em','strong','p');
 for($i=0;$i<4;$i++){
@@ -505,101 +487,6 @@ if($_POST["nobr"]=="ok")$ret=str_replace("\n","\n\n",$ret);
 //"<br />\n","\n<br />","<br>\n","\n<br>",
 return $ret;}
 
-function nodate($d){$r=explode('/',substr($d,-10));
-if(is_numeric($r[0]) && is_numeric($r[1]) && is_numeric($r[2]))return substr($d,0,-11);
-return $d;}
-
-function defcon_generic(){
-$r['philum']=array('<article','</article>','<h2>','</h2>');
-$r['blogspot']=array("<div class='post-body entry-content'",'',"<h3 class='post-title entry-title' itemprop='name'>",'</h3>','',1);
-$r['over-blog']=array('<div class="contenuArticle">','','<div class="divTitreArticle">','</div>','',1);
-$r['wordpress']=array('<div class="post-text">','<div id="jp-post-flair" class="sharedaddy sd-rating-enabled sd-like-enabled sd-sharing-enabled">','<h1 class="post-title">','</h1>','','','linewith:About these ads');
-$r['default']=array('<meta name="description" content="','"','<title>','</title>','','','');
-return $r;}
-
-function defcon_known_tx(){
-$r[]='<div class="entry-content">';
-$r[]='<div class="entry">';
-$r[]='<div class="texte">';
-$r[]='<div class="contenuArticle">';
-$r[]='<div class="post-content">';
-$r[]='<div class="content">';
-$r[]='<div class="post-body entry-content">';
-$r[]='<div class="post-body entry-content"';
-$r[]='<div id="content">';
-$r[]='<div class="article">';
-$r[]='<div class="post">';
-$r[]='<div class="entry-content clearfix">';
-$r[]='<div class="article-body">';
-$r[]='<div class="surlignable">';
-$r[]='<div class="chapo">';
-$r[]='<div class="article-content">';
-$r[]='<div class="post-header">';
-$r[]='<div class="entrytext">';
-$r[]='<section class="entry-content clearfix" itemprop="articleBody">';
-$r[]='<div class="content clearfix">';
-$r[]='<div class="main">';
-$r[]='<div class="post-body">';
-$r[]='<div class="post hentry">';
-$r[]='<div align="justify">';
-$r[]='<div class="text">';
-$r[]='<div class="entry-body">';
-return $r;}
-
-function defcon_known_tt(){
-$r[]='<h1 class="entry-title">';
-$r[]='<title>';
-$r[]='<h1 class="title">';
-$r[]="<h3 class='post-title entry-title'>";
-$r[]="<h3 class='post-title entry-title' itemprop='name'>";
-$r[]='<h2 class="post-title">';
-$r[]='<h1 class="post-title">';
-$r[]='<h1 class="titre">';
-$r[]='<h2 class="entry-title">';
-$r[]='<h1 itemprop="headline">';
-$r[]='<h3>';
-$r[]='<h1 itemprop="name">';
-$r[]='<h1 class="titre-article">';
-$r[]='<div class="divTitreArticle">';
-$r[]='<h3 class="entry-title">';
-$r[]='<h3 id="p1">';
-$r[]='<h1 class="title" id="page-title">';
-$r[]='<h2 class="title">';
-return $r;}
-
-function known_defcon($f,$d){$r=defcon_generic();
-if(strpos($d,'name="generator" content="philum'))return $r['philum'];
-if(strpos($f,'blogspot'))$ret=$r['blogspot'];
-if(strpos($f,'over-blog'))$ret=$r['over-blog'];
-//if(strpos($f,'wordpress'))$ret=$r['wordpress'];
-if(strpos($d,$ret[0]) && strpos($d,$ret[2]))return $ret;
-if(strpos($d,$r['default'][0]))return $r['default'];
-$rx=defcon_known_tx(); foreach($rx as $v)if(strpos($d,$v))$tx=$v;
-$rt=defcon_known_tt(); foreach($rt as $v)if(strpos($d,$v))$tt=$v;
-return array($tx,'',$tt,'','','','');}
-
-function auto_video($f,$o='',$t='',$op=''){if($t)$t='§'.$t; $fb=$f;
-if(strpos($f,'/')===false)return '['.$f.$t.':'.$o.'video]';
-$f=str_replace(array("http://","www."),'',$f); $fa=http_root($f); 
-if(strpos($f,'#'))$f=str_extract('#',$f,0,0); if(strpos($f,'?'))$f=str_extract('?',$f,1,1);
-$r=array('','youtube','youtu','dailymotion','vimeo','vk','livestream','google');//,'ted'
-if(in_array($fa,$r))switch($fa){
-	case('youtube'):if(strpos($f,'channel')!==false)return http($f);
-	$p=strpos($f,'v='); $f=substr($f,$p+2); $pe=strpos($f,'&');
-		if($pe!==false)$ret=subtopos($f,0,$pe); else $ret=$f; break;
-	case('youtu'):$p=strpos($f,'/'); $f=substr($f,$p+1); $pe=strpos($f,'?');
-		if($pe!==false)$ret=subtopos($f,0,$pe); else $ret=$f; break;
-	case('dailymotion'):$ret=embed_detect($f,'video/','-');
-		if(!$ret)$ret=substr($f,strpos($f,'video/')+6); break;
-	case('vimeo'):$ret=substr($f,strrpos($f,'/')+1); break;
-	case('vk'):$ret=embed_detect($f,'/video','_'); break;
-	case('livestream'):$ret=embed_detect($f,'com/','/'); break;
-	case('rutube'):$ret=embed_detect($f,'tracks/','.'); break;}
-elseif(strpos($f,'.mp4'))return $fb;
-if($ret){
-	if($op==1)return $ret.$t.':'.$o.'video'; //embed_btn
-	elseif($op==2)return $ret; else return '['.$ret.$t.':'.$o.'video]';}}
-
 function post_treat_batch($v,$t,$p){$todo=explode('|',$p);//admin/edit_msql_j
 foreach($todo as $ka=>$va){list($act,$pb)=split_one(':',$va,0);//global
 	if($act=='deltables' && $v)$v=del_tables($v);
@@ -632,6 +519,19 @@ $ret=repair_tags($ret);
 $ret=utflatindecode($ret);
 return trim($ret);}
 
+function defcon_known_tx(){
+return array('<div class="entry-content">','<div class="entry">','<div class="texte">','<div class="contenuArticle">','<div class="post-content">','<div class="content">',"<div class='post-body entry-content'",'<div class="post-body entry-content"','<div class="post-text">','<div id="content">','<div class="article">','<div class="post">','<div class="entry-content clearfix">','<div class="article-body">','<div class="surlignable">','<div class="chapo">','<div class="article-content">','<div class="post-header">','<div class="entrytext">','<section class="entry-content clearfix" itemprop="articleBody">','<div class="content clearfix">','<div class="main">','<div class="post-body">','<div class="post hentry">','<div align="justify">','<div class="text">','<div class="entry-body">','<meta name="description" content="');}
+
+function defcon_known_tt(){
+return array('<h1 class="entry-title">','<h1 class="title">',"<h3 class='post-title entry-title'>","<h3 class='post-title entry-title' itemprop='name'>",'<h2 class="post-title">','<h1 class="post-title">','<h1 class="titre">','<h2 class="entry-title">','<h1 itemprop="headline">','<h1 itemprop="name">','<h1 class="titre-article">','<div class="divTitreArticle">','<h3 class="entry-title">','<h3 id="p1">','<h1 class="title" id="page-title">','<h2 class="title">','<h1>','<h2>','<h3>','<title>');}
+
+function known_defcon($d){
+if(strpos($d,'name="generator" content="philum'))
+	return array('<article','</article>','<h2 id="fixit">','</h2>');
+$rx=defcon_known_tx(); foreach($rx as $v)if(strpos($d,$v))$tx=$v;
+$rt=defcon_known_tt(); foreach($rt as $v)if(strpos($d,$v))$tt=$v;
+if($tx or $tt)return array($tx,'',$tt,'','','','');}
+
 function add_defcon($d){$d=http_domain($d);
 return msqlink('',(rstr(18)?'public':$_SESSION['qb']).'_defcons',ajx($d));}
 
@@ -639,11 +539,51 @@ function stripslashes_r($r){
 foreach($r as $k=>$v)$ret[$k]=str_replace('\"','"',$v);
 return $ret;}
 
+function recognize_defcon($d){
+$base=rstr(18)?'public':$_SESSION['qb'];
+$r=msql_read('',$base.'_defcons','');
+if($r)foreach($r as $k=>$v){
+if($v[0])if(strpos($d,stripslashes($v[0])))$tx=stripslashes($v[0]);
+if($v[2])if(strpos($d,stripslashes($v[2])))$tt=stripslashes($v[2]);}
+if($tx or $tt)return array($tx,'',$tt,'','','','');}
+
+/*function recognize_defcon_0($d){
+$base=rstr(18)?'public':$_SESSION['qb'];
+$r=msql_read('',$base.'_defcons','');
+if($r)foreach($r as $k=>$v){
+if($v[0])if(strpos($d,stripslashes($v[0])))$rx[]=stripslashes($v[0]);
+if($v[2])if(strpos($d,stripslashes($v[2])))$rt[]=stripslashes($v[2]);}
+if($rx)foreach($rx as $v){$content=embed_detect_c($d,$v); if($content)$tx=$v;}
+if($rt)foreach($rt as $v){$content=embed_detect_c($d,$v); if($content)$tt=$v;}
+if($tx or $tt)return array($tx,'',$tt,'','','','');
+else return array('<article','','<title>','');}*/
+
 function verif_defcon($f){$f=http_domain($f);
 $base=rstr(18)?'public':$_SESSION['qb'];
-$r=msql_read("",$base.'_defcons',"");
-if($r)foreach($r as $k=>$v){$i++;
-if($f==$k)return array($k,stripslashes_r($v));}}
+$r=msql_read('',$base.'_defcons','');
+if($r)foreach($r as $k=>$v)if($f==$k)return array($k,stripslashes_r($v));}
+
+function auto_video($f,$o='',$t='',$op=''){if($t)$t='§'.$t; $fb=$f;
+if(strpos($f,'/')===false)return '['.$f.$t.':'.$o.'video]';
+$f=str_replace(array("http://","www."),'',$f); $fa=http_root($f); 
+if(strpos($f,'#'))$f=str_extract('#',$f,0,0); if(strpos($f,'?'))$f=str_extract('?',$f,1,1);
+$r=array('','youtube','youtu','dailymotion','vimeo','vk','livestream','google');//,'ted'
+if(in_array($fa,$r))switch($fa){
+	case('youtube'):if(strpos($f,'channel')!==false)return http($f);
+	$p=strpos($f,'v='); $f=substr($f,$p+2); $pe=strpos($f,'&');
+		if($pe!==false)$ret=subtopos($f,0,$pe); else $ret=$f; break;
+	case('youtu'):$p=strpos($f,'/'); $f=substr($f,$p+1); $pe=strpos($f,'?');
+		if($pe!==false)$ret=subtopos($f,0,$pe); else $ret=$f; break;
+	case('dailymotion'):$ret=embed_detect($f,'video/','-');
+		if(!$ret)$ret=substr($f,strpos($f,'video/')+6); break;
+	case('vimeo'):$ret=substr($f,strrpos($f,'/')+1); break;
+	case('vk'):$ret=embed_detect($f,'/video','_'); break;
+	case('livestream'):$ret=embed_detect($f,'com/','/'); break;
+	case('rutube'):$ret=embed_detect($f,'tracks/','.'); break;}
+elseif(strpos($f,'.mp4'))return $fb;
+if($ret){
+	if($op==1)return $ret.$t.':'.$o.'video'; //embed_btn
+	elseif($op==2)return $ret; else return '['.$ret.$t.':'.$o.'video]';}}
 
 function converthtml($ret){
 $ret=stripslashes($ret);
@@ -667,19 +607,22 @@ if(!$img)$img=embed_detect($d,'<meta property="og:image" content="','"');
 return array($tit,$txt,$img);}
 
 function vaccum_ses($f){$fb=nohttp($f);//if(joinable($f))
-if(!$_SESSION['vacuum'][$fb])$_SESSION['vacuum'][$fb]=get_file($f);
+if(!isset($_SESSION['vacuum'][$fb]))$_SESSION['vacuum'][$fb]=get_file($f);
 return $_SESSION['vacuum'][$fb];}
 
-function vacuum($f,$sj=''){$f=https($f); $f=http($f); $f=utmsrc($f); $reb=vaccum_ses($f);
+function vacuum($f,$sj=''){$f=https($f); $f=http($f);
+$f=utmsrc($f); 
+$reb=vaccum_ses($f);
 if(!$reb){$_SESSION['vacuum'][nohttp($f)]='';return array('nothing');}
 if($_POST['see'])eco($reb,1); 
-$encoding=embed_detect(strtolower($reb),'charset=','"');
-if(!$encoding)$encoding=mb_detect_encoding($reb);
+$enc=embed_detect(strtolower($reb),'charset=','"');
+if(!$enc)$enc=mb_detect_encoding($reb);
 list($defid,$defs)=verif_defcon($f);//defcons
-if(!$defs)$defs=known_defcon($f,$reb);
+if(!$defs)$defs=known_defcon($reb);
+if(!$defs)$defs=recognize_defcon($reb);
 $auv=auto_video($f,'pop');
 if(!$defs && !$auv){add_defcon($f); return array('Title',$f,$f,'','','');}
-if(strtolower($encoding)=='utf-8' or $_POST['utf'] or $defs[5])$reb=utf8_decode_b($reb);
+if(strtolower($enc)=='utf-8' or $_POST['utf'] or $defs[5])$reb=utf8_decode_b($reb);
 if($defs[2]){if(!$defs[3])$suj=embed_detect_c($reb,$defs[2]);//suj
 	elseif($defs[3])$suj=embed_detect($reb,$defs[2],$defs[3]); 
 	$suj=trim(del_n($suj)); $suj=interpret_html($suj,"ok");}
@@ -705,8 +648,8 @@ return array($title,$ret,$rec,$defid,$defs);}
 
 //suggest
 function sugnote(){$sg=$_SESSION['sugm']; $_SESSION['sugm']='';
-$r=msql_modif('users',ses('qb').'_suggest','ok',3,'val',$sg); 
-$mail=$r[$sg][2]; list($m,$a)=split("@",$mail); $id=lastid('qda')+1;
+$r=msql_modif('users',ses('qb').'_suggest','ok',1,'val',$sg); 
+$mail=$r[$sg][3]; list($m,$a)=split("@",$mail); $id=lastid('qda')+1;
 $msg=lkc('',host().urlread($id),helps('suggest_ok'));
 if($mail)send_mail_html($mail,nms(1).' '.nms(89),$msg,$_SESSION['qbin']['adminmail'],$id);
 if($m)return '['.nms(56).' '.nms(88).' '.$m.':q]'."\n";}
@@ -775,14 +718,15 @@ elseif($src){
 //		elseif(http_root($src)=='t')$mid='['.$rot.$src.'] ';
 		elseif(in_array_p($src,$rt)){
 			if(!is_image($txt) && !ishttp($txt)){$txb=$txt; $pop='';}
-			$mid="\n".auto_video($src,$pop,$txb)."\n";}
+			$mid=auto_video($src,$pop,$txb);}
 //		elseif(in_array(http_root($txt),$rt))$mid=auto_video($txt,'pop',$src);
 		elseif(strpos($src,"mailto:")!==false)$mid='['.substr($src,7).'] ';
 		elseif(is_image($src) && is_image($txt))$mid='['.$rot.$src.'] ';
 		elseif($txt && $src && strpos($txt,$src)!==false)$mid='['.$rot.$src.'] ';
 		elseif($rot.$src!=$txt){$txt=trim($txt);
 			if(is_image($src)){
-				if(!is_image($txt))$mid='['.$rot.$src.($txt?'§'.$txt:'').']';
+				if(!is_image($txt) && $txt!='https')
+					$mid='['.$rot.$src.($txt?'§'.$txt:'').']';
 				else $mid='['.$rot.$src.']';}
 			elseif(strpos($txt,'...')!==false && strpos($src,str_replace('...','',$txt))!==false)$mid='['.$rot.$src.'] ';
 			else $mid='['.$rot.$src.'§'.$txt.'] ';}
@@ -832,7 +776,6 @@ elseif($cl=='gl_dl')$balise='';
 return $balise;}
 
 function balise_converter($aa_balise,$aa_inner,$bb_balise,$balise){$br="\n";
-//if(!trim($balise))return;
 switch($aa_balise){// or strpos($balise,'http')!==false
 case("a"): if(strpos($balise,'@')!==false)$balise=interpret_html($balise,'ok');
 	else $balise=treat_link($aa_inner,$balise); break;
@@ -849,8 +792,8 @@ case("strong"): if(clarify_intag($balise,":b]"))$balise='['.$balise.':b]'; break
 case("bold"): if(clarify_intag($balise,":b]"))$balise='['.$balise.':b]'; break;
 case("em"):	if(clarify_intag($balise,":em]"))$balise='['.$balise.':i]'; break;
 case("h1"): if(clarify_intag($balise,":h]"))$balise=$br.$br.'['.$balise.':h]'.$br.$br; break;
-case("h2"): if(clarify_intag($balise,":b]"))$balise=$br.$br.'['.$balise.':h]'.$br.$br; break;
-case("h3"): if(clarify_intag($balise,":b]"))$balise=$br.$br.'['.$balise.':h]'.$br.$br; break;
+case("h2"): if(clarify_intag($balise,":h]"))$balise=$br.$br.'['.$balise.':h]'.$br.$br; break;
+case("h3"): if(clarify_intag($balise,":h]"))$balise=$br.$br.'['.$balise.':h]'.$br.$br; break;
 case("h4"): if(clarify_intag($balise,":b]"))$balise=$br.$br.'['.$balise.':h4]'.$br.$br; break;
 case("h5"): if(clarify_intag($balise,":b]"))$balise=$br.'['.$balise.':b]'.$br; break;
 case("i"): if(clarify_intag($balise,":i]"))$balise='['.$balise.':i]'; break;
@@ -872,16 +815,17 @@ case("div"): $taga=$br; $tagb=$br;
 	break;
 case("param"): if($_POST["objects"])$balise='<'.$aa_inner.'>';
 	elseif(strpos($aa_inner,'soundFile'))$balise=piege_mp3_b64($aa_inner); break;
-case("object"): $taga=$br; $tagb=$br; if($_POST["objects"])$balise='<object '.correct_widths($aa_inner).'>'.$balise.'</object>';
-elseif(strpos($balise,"<embed")===false && strpos($balise,"[")===false){
-	if(strpos($balise,".flv")!==false or strpos($balise,".mp")!==false)
-		$balise=piegemedia($balise);
-	elseif(strpos($aa_inner,".flv")!==false or strpos($aa_inner,".mp")!==false)
-		$balise=piegemedia($aa_inner);
-	elseif(strpos($aa_inner,'dailymotion')!==false)$balise=piege_daily($aa_inner);
-	elseif(strpos($aa_inner,'youtube')!==false)$balise=piege_utube($aa_inner);} break;
+case("object"): $taga=$br; $tagb=$br;
+	if($_POST["objects"])$balise='<object '.correct_widths($aa_inner).'>'.$balise.'</object>';
+	elseif(strpos($balise,"<embed")===false && strpos($balise,"[")===false){
+		if(strpos($balise,".flv")!==false or strpos($balise,".mp")!==false)
+			$balise=piegemedia($balise);
+		elseif(strpos($aa_inner,".flv")!==false or strpos($aa_inner,".mp")!==false)
+			$balise=piegemedia($aa_inner);
+		elseif(strpos($aa_inner,'dailymotion')!==false)$balise=piege_daily($aa_inner);
+		elseif(strpos($aa_inner,'youtube')!==false)$balise=piege_utube($aa_inner);} break;
 case("embed"): $taga=$br; $tagb=$br;
-if($_POST["objects"]){$balise='<'.correct_widths($aa_inner).'>';}
+	if($_POST["objects"])$balise='<'.correct_widths($aa_inner).'>';
 else{
 	if(strpos($aa_inner,'dailymotion')!==false)$balise=piege_daily($aa_inner);
 	elseif(strpos($aa_inner,'youtube')!==false)$balise=piege_utube($aa_inner);
@@ -901,9 +845,11 @@ case("iframe"):
 case("center"): $taga=$tagb=$br; break;//$balise=' ['.$balise.':center]';
 case("p"): $taga=$tagb=$br; break;
 case("dt"): $taga=$tagb=$br; break;
+case("dd"): $taga='['; $tagb=':q]'; break;
+case("dl"): $tagb=$br.$br; break;
 case("br"): if($_POST["nobr"]=="ok")$taga=$br; $tagb=$br; break;//
-case("blockquote"):$taga="["; $tagb=":q]"; break;
-case("dir"): $taga="["; $tagb=":q]"; break;}
+case("blockquote"):$taga='['; $tagb=':q]'; break;
+case("dir"): $taga='['; $tagb=':q]'; break;}
 return array($taga,$balise,$tagb);}
 
 function balise_converter_style($balise,$aa_inner){$bse=strtolower($aa_inner);

@@ -41,9 +41,9 @@ legend {border-color:#a3a3a3; padding:0 4px; border-radius:2px; border-width:1px
 .active {color:#bd0000;}
 .active a:hover {color:#bd0000;}
 .menu {margin:0 5px 5px 5px; padding:5px; background:#ddd; border:1px solid #ccc;}
-.table {border-collapse:separate; border-spacing:2px;}
+.table {border-collapse:separate; border-spacing:4px;}
 .row {display:table-row;}
-.cell {display:table-cell; padding:2px; border:1px solid #ccc; background:#ddd;}
+.cell {display:table-cell; padding:2px;}
 #editmsql td {word-wrap:break-word; vertical-align:middle;}
 .txtit {color:#000000; font-family:Museo700-Regular, Trebuchet MS;}
 .txtit a {color:#000000;}

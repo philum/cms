@@ -20,8 +20,8 @@ else{$cat=$p?$p:'tag';
 //$reb=tags_list($cat);
 $ra=sql('idtag,idart','qdta','k',''); arsort($ra);
 $rb=sql('id,tag','qdt','kv','cat="'.$cat.'"'); arsort($ra);
-foreach($ra as $k=>$v)if($rb[$k])$reb[str_replace(' ','&nbsp;',$rb[$k])]=$v;}
-if($o)$ret=tags_cloud($reb,12,27,' ','tag');
+foreach($ra as $k=>$v)if($rb[$k])$reb[$rb[$k]]=$v;}
+if($o)$ret=tags_cloud($reb,12,27,' ',$cat);
 else $ret=tg_list($reb,$go);
 return divc('txtcadr',count($reb).' '.($p?$p:'Tags')).$ret;}
 

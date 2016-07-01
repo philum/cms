@@ -53,7 +53,7 @@ $ret=btn('txtcadr',$voc['register']).' ';
 $ret.=input(1,'umail',$voc['form_mail'],'" size="22',1).' ';
 //$ret.=input(1,'uname',$voc['form_name'],'" size="10',1).' ';
 //$ret.=checkbox_j(1,'uopt','1','').' ';//|uopt
-$ret.=call_plug_f('txtbox','cbk','mailist','save','1_2_umail|','ok').' ';
+$ret.=lj('txtbox','cbk_mailist___mailist*save_1_2_umail','ok').' ';
 return $ret;}
 
 function mailist_unsc($p){$r=ml_rb(); $voc=sesmk('mailvoc');
@@ -73,15 +73,13 @@ function mailist_uns($o){$voc=sesmk('mailvoc');
 if($o)return mailist_unsb($a,$b,$o.'_');
 $ret=btn('txtcadr',$voc['unregister']).' ';
 $ret.=input(1,'unmail',$voc['form_mail'],'" size="14',1).' ';
-$ret.=call_plug_f('txtbox','cbk','mailist','unsb','1_2_unmail','ok').' ';
+$ret.=lj('txtbox','cbk_mailist___mailist*unsb_1_2_unmail','ok').' ';
 return $ret;}
 
-function mailist_read(){require_once('progb/mod.php'); 
-require_once('progb/art.php'); require_once('progb/pop.php'); 
-require_once('progb/spe.php'); require_once('progb/tri.php'); 
+function mailist_read(){req('mod,api,art,spe,pop,tri');
 return build_modules('newsletter','');}
 
-function plug_mailist($p,$o){
+function plug_mailist($p,$o){//$id=randid('cbk');
 if($p=='')$ret=mailist_form($o);
 if($p=='uns')$ret=mailist_uns($o);
 if($p=='read')$ret=mailist_read();

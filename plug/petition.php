@@ -8,7 +8,7 @@ if($arr[6]==1)return pet_hlp('alert_exists'); else $arr[6]=1;
 modif_vars('users',$nod,$arr,$_GET['confirm']);
 return divc('txtalert',pet_hlp('confirm_after')).br();}
 
-function pet_mail($id,$day,$mail,$name){$title=$_SESSION['raed'];
+function pet_mail($id,$day,$mail,$name){$title=suj_of_id($id);
 $msg=stripslashes(pet_hlp('confirm_mail'));
 $url='http://'.$_SERVER['HTTP_HOST'].'/?read='.$id.'&confirm='.$day;
 $msg=str_replace(array('_NAME','_TITLE','_URL'),array($name,$title,$url),$msg);

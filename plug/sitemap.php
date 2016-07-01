@@ -26,9 +26,9 @@ return $ret;}
 function flux_sitmap($r){
 foreach($r as $k=>$v){//0=day 1=frm 2=suj 3=img 4=nod 5=tag 6=lu 7=re
 	$url='http://'.$_SERVER['HTTP_HOST'].htacc('read').$k;
-	$date=date("Y-m-d",$v[0]); $freq='never';
-	if(strpos($v[5],'**')!==false)$prio=1;
-	elseif(strpos($v[5],'*')!==false)$prio=0.7; else $prio=0.5;
+	$date=date("Y-m-d",$v[0]); $freq='never'; $prio='';
+	if($v[11]==4)$prio=1; elseif($v[11]==3)$prio=0.8;
+	elseif($v[11]==2)$prio=0.5; elseif($v[11]==1)$prio=0.2;
 	$xml.=node_build('url',$url,$date,$freq,$prio);}
 return $xml;}
 

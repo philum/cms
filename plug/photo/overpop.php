@@ -8,10 +8,10 @@ $ov='document.getElementById(\'crt1'.$randid.'\').style.backgroundColor=\''.hexr
 $ot='document.getElementById(\'crt1'.$randid.'\').style.backgroundColor=\''.hexrgb($clr,$opac).'\'; document.getElementById(\'crt2'.$randid.'\').style.backgroundColor=\''.hexrgb($clr,1).'\';';
 $go=is_numeric($id)?'href="'.urlread($id).'"':atb('onclick',$id);
 //title
-$title=div('id="crt2'.$randid.'" style="font-family:'.$typo.'; font-size:24px; text-align:center; color:#'.invert_color($clr,1).'; padding:10px; width:140px; background-color:#'.$clr.'; margin:100px auto; vertical-align:middle; box-shadow:0 0 5px #'.$clr.'; text-shadow: 0 0 3px #'.invert_color($clr,0).';"',$t);// transition: all 1s ease;
+$title=div(' id="crt2'.$randid.'" style="font-family:'.$typo.'; font-size:24px; text-align:center; color:#'.invert_color($clr,1).'; padding:10px; width:140px; background-color:#'.$clr.'; margin:100px auto; vertical-align:middle; box-shadow:0 0 5px #'.$clr.'; text-shadow: 0 0 3px #'.invert_color($clr,0).';"',$t);// transition: all 1s ease;
 //rideau
 $sty='position:absolute; width:'.($w?$w:320).'px; height:'.($h?$h:240).'px; background-color:'.hexrgb($clr,$opac).'; text-align-center; vertical-align:middle; transition: all 1s ease; box-shadow:2px 2px 5px '.hexrgb('000000',0.5).'; display:inline-block;';
-$ret=div('style="'.$sty.'" id="crt1'.$randid.'"',$t?$title:'');
+$ret=div(' style="'.$sty.'" id="crt1'.$randid.'"',$t?$title:'');
 $ret='<a '.$go.atb('onmouseover',$ov).atb('onmouseout',$ot).'>'.$ret.'</a>';
 return $ret;}
 

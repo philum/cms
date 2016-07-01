@@ -16,7 +16,7 @@ return $ret;}
 function dirs(){$msqu='msql/users/public_';
 $ra=array("index.php","ajax.php","plug.php","app.php","htaccess.txt","favicon.ico","install.php","readme.txt","robots.txt","user.ini",
 $msqu.'defcons.php',$msqu.'connectors.php',$msqu.'modules.php',$msqu.'design.php',$msqu.'template.php',$msqu.'mods_1.php','msql/system','msql/lang',
-'css/_global.css','css/_admin.css','css/_classic.css','css/_default.css',
+'css/_global.css','css/_pictos.css','css/_admin.css','css/_classic.css','css/_default.css',
 'fla','imgb/icons/system','imgb/icons/flags','imgb/icons/finder','plug','prog','progb','pub','video',
 'js/colorpicker','js/live.js','js/jquery.js',
 'params/_connectx.php.txt',
@@ -47,7 +47,7 @@ return true;}
 
 function funcb($j,$k,$v,$io){$xt=substr($v?$v:$j,-3);
 if(valid_ext($xt) or (strpos($j,'imgb/icons')!==false && $xt=='.gz')){
-if((substr($j,0,1)!='_' && substr($v,0,1)!='_' && substr($v,-8,4)!='_sav' && strpos($j,'_notes/')===false) or $v=='_admin.css' or $v=='_global.css' or $v=='_default.css'){
+if((substr($j,0,1)!='_' && substr($v,0,1)!='_' && substr($v,-8,4)!='_sav' && strpos($j,'_notes/')===false) or $v=='_admin.css' or $v=='_global.css' or $v=='_pictos.css' or $v=='_default.css'){
 $dir='_public/'.$j;
 if(!is_dir($dir))mkdir_r($dir);
 $f=$j; $fb=$dir; if($v){$f.='/'.$v; $fb.='/'.$v;}

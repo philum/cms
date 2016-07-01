@@ -34,21 +34,20 @@ return $ret;}
 function retape_html($d){
 return str_replace('>'."\n",'>',$d);}
 
-function correct_br($msg){//blocks
-$r=array(':/2]',':/3]',':/4]',':table]',':h]',':h2]',':h3]',':photo]',':video]',':slider]',':msq_graph]',':2cols]',':php]',':q]',':popvideo]'); $n=count($r);
-//for($i=0;$i<$n;$i++)$msg=str_replace(array($r[$i]."\n\n",$r[$i]."\n"),$r[$i],$msg);
+function correct_br($msg){
+$r=array(':/2]',':/3]',':/4]',':table]',':h]',':h2]',':h3]',':ul]',':photo]',':video]',':slider]',':msq_graph]',':2cols]',':php]',':q]',':popvideo]'); $n=count($r);
 for($i=0;$i<$n;$i++)$msg=str_replace($r[$i]."\n\n",$r[$i]."\n",$msg);
 return $msg;}
 
 function embed_p($d){
-$d=str_replace("\n\n</","</",$d); //<a<img
-$r=explode("\n\n",$d); //p($r);
-$ex='<h1<h2<h3<h4<br<bl<hr<pr<di<if<li<ul<ta';//<a <img<ob<li<svg
+$d=str_replace("\n\n</","</",$d); $r=explode("\n\n",$d);
+$ex='<h1<h2<h3<h4<br<hr<pr<di<if<bl';//<im<a <ob<li<sv<ta<ul<li
 foreach($r as $k=>$v){if($v=trim($v)){$cn=substr($v,0,3);
 	if(strpos($ex,$cn)!==false)$ret.=$v; else $ret.='<p>'.($v).'</p>';}}
+//$ret=str_replace('<p></p>','',$ret);
 return $ret;}
 
-function retape($ret,$id){//0809
+function retape($ret,$id){
 	if(strin($ret,'<'.'br') or strin($ret,'{{') or $_SESSION['rtp'.$id]){//}}//for cv
 	$r=msq_ses('oldconn','system','connectors_old',1); if($r)$k=array_keys($r);
 	$ret=delbr($ret,"\n"); $ret=clean_br($ret); $ret=str_replace($k,$r,$ret);
@@ -63,9 +62,10 @@ return $xf;}
 
 #motor
 function add_im_img($nnw){
-	$dejm=sql('img','qda','v','id="'.$_SESSION['read'].'"');
-	if($dejm){$djm=$dejm;}
-	if(strpos($djm,$nnw)===false){msquery('UPDATE '.$_SESSION['qda'].' SET img="'.$djm.'/'.$nnw.'" WHERE id="'.$_SESSION['read'].'"');}}
+$dejm=sql('img','qda','v','id="'.$_SESSION['read'].'"');
+if($dejm)$djm=$dejm;
+if(strpos($djm,$nnw)===false)
+update('qda','img',$djm.'/'.$nnw,'id',$_SESSION['read']);}
 
 function add_im_msg($or,$mg){
 $mg=str_replace(array('users/','img/'),'',$mg);
@@ -76,27 +76,26 @@ if($or){$nmsg=str_replace($or.':img',$or,$nmsg);
 	$nmsg=str_replace($or,$mg,$nmsg);}
 elseif($_POST["atpos"]=="ok")$nmsg=str_replace(':img:','['.$mg.']',$nmsg);
 elseif($_POST["imatop"]=="ok")$nmsg='['.$mg.']'.$nmsg; else $nmsg.='['.$mg.']';
-msquery('UPDATE '.$_SESSION['qdm'].' SET msg="'.$nmsg.'" WHERE id="'.$_SESSION['read'].'"');}
+update('qdm','msg',$nmsg,'id',$_SESSION['read']);}
 
 function vacuum_image($doc,$id){
 if(strpos($doc,'?'))$dc=strdeb($doc,'?'); $xt=xt($dc);
 if(substr($doc,0,21)=='data:image/png;base64'){$b64=1; $dc=substr($doc,22);$xt='.png';}
-//if(substr($doc,0,22)=='data:image/jpeg;base64'){$b64=1; $dc=substr($doc,23);$xt='.jpg';}
+if(substr($doc,0,22)=='data:image/jpeg;base64'){$b64=1; $dc=substr($doc,23);$xt='.jpg';}
 if(!$xt or $xt=='.php' or $xt=='.jpeg')$xt='.jpg';
 if(forbidden_img($doc)===false)return;
-//if(!is_numeric($id))copy($doc,'users/'.ses('qb').'/'.strrchr_b($doc,'/'));
 if($id=='test')return $doc;
 if($id){$nmw=$_SESSION['qb'].'_'.$id.'_'.substr(md5($doc),0,6).$xt;
 	if($b64){write_file('img/'.$nmw,base64_decode($dc)); $ok=1;}
-	else{$dc=urlutf($doc,1); 
+	else{$dc=urlutf($doc,1);
 		$ok=@copy($dc,'img/'.$nmw);//error here stop display new art
 		if(!$ok){$d=curl_get_contents($dc);
-			if(strpos($d,'Forbidden')===false){write_file('img/'.$nmw,$d); $ok=1;}}}
+			if($d && strpos($d,'Forbidden')===false){write_file('img/'.$nmw,$d); $ok=1;}}}
 	if($ok){add_im_img($nmw); add_im_msg($doc,$nmw); return $nmw;} 
 	else return $doc;}
 else return $doc;}
 
-function place_image($doc,$media,$large,$largb,$txt='',$com=''){
+function place_image($doc,$media,$large,$largb,$txt=''){
 $nl=substr($_SESSION['nl'],0,2); $nla=substr($media,0,2); $p['id']='rez';
 if(substr($doc,0,4)=='http'){if(eradic_acc($doc)==$doc)$ok=joinable($doc);
 	if($ok)list($w,$h)=@getimagesize($doc);
@@ -104,14 +103,14 @@ if(substr($doc,0,4)=='http'){if(eradic_acc($doc)==$doc)$ok=joinable($doc);
 else $pre=jcim($doc);
 $dca=$pre.$doc;
 if($nl or $nla=='nl'){$http=host().'/'; $dca=str_replace('../','',$dca);}
-if(file_exists($dca)){list($w,$h)=getimagesize($dca); $_SESSION['lastimw']=$w;}
+if(file_exists($dca))list($w,$h)=getimagesize($dca);
 if(!$w && !$pre){$dca=$doc; $w=$largb;}
 if($media=="noimages")return;
 elseif($media!="nlc"){//rss
 	if(rstr(17))$largb/=2;
 	if(rstr(9) && !$com && $w<$largb)$p['style']='float:left; margin-right:10px;';
 	if($w && $w<$largb)$p['style'].=' width:'.$w.'px;';
-	$p['src']=$http.$dca; if($h>40)$br="\n\n";
+	$p['src']=$http.$dca; if(!rstr(9))$br="\n\n";//$h>40 or 
 	$ret='<img '.atr($p).' />';
 	$send='photo_'.str_replace('_','*',$dca).'_'.$w.'_'.$h;
 	if($txt && !$com){$icon=picto('img').' ';
@@ -120,25 +119,20 @@ elseif($media!="nlc"){//rss
 	if($w>$large && $large && !$com){
 		if($nl or $nla=='nl')return $ret.$br; 
 		else return ljb('','SaveBf',$send,$ret).$br;}
-	elseif($com){$attrb=' class="blocktext"';
-		if($w>$largb && ($nl or $nla=='nl'))return div($attrb,$ret.$txt);
-		else if($w>$large)return ljb('','SaveBf',$send,$ret).div($attrb,$txt);
-		else return divc('clear','').div('style="width:'.$w.'px;" '.$attrb,$ret.$txt);}
 	else return $ret.$br;}}
 
-function imcomment($d,$large,$largb,$media,$id){$w=$_SESSION['lastimw'];
-list($im,$txt)=good_param($d); if(substr($d,0,4)=='http')$im=vacuum_image($d,$id);
-if(!$im)return div(($w?'style="width:'.$w.'px;" ':'').'class="blocktext"',$txt);
-else return place_image($im,$media,$large,$largb,$txt,'1');}
-
-function imlabel($txt,$l){$w=$_SESSION['lastimw'];
-return divs($float.'width:'.($w<$l?$w:$l).'px;',bal('small',$txt));}
+function figure($d,$large){list($im,$t)=good_param($d);
+$pre=jcim($im); $im=$pre.$im; list($w,$h)=getimagesize($im);
+$send='photo_'.str_replace('_','*',$im).'_'.$w.'_'.$h;
+if($w>$large)$bt=ljb('','SaveBf',$send,picto('get')).' ';
+$ret=bal('figure',img($im).bal('figcaption',$bt.$t));
+return $ret;}
 
 function clvars(){return array_flip(explode(' ','br balise html div span size clear id class style name text url jurl anchor date title cut split'));}//:img:exec:conn
 
 #connectors
 function connectors($doc,$media,$id){$large=$_SESSION['prma']['content'];
-	$largb=round($large*0.5); $xt=strtolower(strrchr($doc,"."));
+	$largb=round($large*0.5); $xt=strtolower(strrchr($doc,'.'));
 	$xfp=strrpos($doc,':'); $xf=substr($doc,$xfp); $pdoc=substr($doc,0,$xfp);
 	if(rstr(70))$xf=retape_conn($xf,$id);
 	//list($d,$p)=good_param($pdoc);
@@ -160,7 +154,6 @@ case(':t'):return btn("txtit",$pdoc);break;
 case(':c'):return btn("txtclr",$pdoc);break;
 case(':s'):return btn("stabilo",$pdoc);break;
 case(':r'):return pub_clr($pdoc.'§ff0000');break;
-case(':code'):return bal('code',$pdoc);break;
 case(':list'):return make_li($pdoc,'ul');break;
 case(':css'):return pub_css($pdoc);break;
 case(':font'):return pub_font($pdoc);break;
@@ -171,8 +164,10 @@ case(':pub'):return pubart($pdoc);break;//pub
 case(':w'):return lkc('',goodroot($pdoc),$pdoc);break;
 case(':read'):return str_replace('<br />','',read_msg($pdoc,$media)); break;//read
 case(':photo'):return photo_thumbs($pdoc,$id);break;//gallery
-case(':photo1'):return gallery_flash($pdoc,$id);break;//flash
+case(':photo1'):return plugin('flashgallery',$pdoc,$id);break;//flash
 case(':photo2'):return gallery_j($pdoc,$id);break;//ajax
+case(':gallery'):return gallery($pdoc);break;
+case(':slides'):return slides($pdoc,$id);break;//diapo
 case(':slider'):return slider($pdoc,$id);break;//flash
 case(':sliderJ'):return sliderj($pdoc,$id);break;//ajax
 case(':jukebox'):return jukebox($pdoc,$media,$id);break;//jukebox
@@ -202,11 +197,11 @@ case(':nh'): if($media=='nl')return lka('#nb'.$pdoc.'" name="nh'.$pdoc,$pdoc);
 case(':nb'): if($media!='nl')$go=urlread($id);
 	return lka($go.'#nh'.$pdoc.'" name="nb'.$pdoc,$pdoc);break;//nbp
 case(':pre'):return bal("pre",entities($pdoc));break;
+case(':code'):return bal('pre',bal('code',$pdoc));break;
 case(':php'):return progcode($pdoc); break;
 case(':link'):return special_link($pdoc); break;
 case(':console'):return divc("console",$pdoc);break;
-case(':label'):return imlabel($pdoc,$large);break;
-case(':polaroid'):return imcomment($pdoc,$large,$largb,$media,$id);break;
+case(':figure'):return figure($pdoc,$large);break;
 case(':scan'):return scan_txt($pdoc);break;//fopen_txt
 case(':iframe'):return iframe($pdoc,'');break;
 case(':imgtxt'):return create_img_txt($pdoc);break;
@@ -233,10 +228,10 @@ case(':poptwit'):return poptwit($pdoc);break;
 case(':last-update'):return lastup($pdoc,$id);break;
 case(':pdf'):return pdfreader($pdoc); break;
 case(':swf'):return popswf($pdoc); break;
-case(':flv'):return popflv($pdoc,$large);break;
 case(':jpg'):return place_image($pdoc,$media,$large,$largb); break;
-case(':img'):$im=vacuum_image($pdoc.'.jpg',$id);
+case(':img'):$im=vacuum_image($pdoc,$id);
 	return place_image($im,$media,$large,$largb); break;//img
+case(':image'):return image($pdoc); break;
 case(':mini'):if(substr($pdoc,0,4)=='http')return vacuum_image($pdoc,$id);
 	return make_mini_b($pdoc,$id);break;//mini 
 case(':thumb'):return make_mini_c($pdoc); break;//thumb
@@ -262,18 +257,21 @@ case(':popbook'):return plugin('book',$pdoc,'x'); break;
 case(':track'):return tracks_read($pdoc); break;
 case(':2cols'):if($media>2)return columns($pdoc,2); else return $pdoc; break;
 case(':3cols'):if($media>2)return columns($pdoc,3); else return $pdoc; break;
-//case(':eco'):return txarea('',parse($pdoc),44,8); break;
 case(':svg'):return svg($pdoc); break;
 case(':svgcode'):list($p,$o)=split_one('§',$pdoc,1); return plugin_func('svg','svg_j',$p,$o); break;
+case(':plugin'):list($p,$o)=split_one('§',$pdoc,1); return plugin($p,$o); break;
 case(':plug'):list($p,$o,$conn)=decompact_conn($pdoc); return plugin($conn,$p,$o); break;
 case(':pluf'):list($fnc,$plg)=explode('§',$pdoc); return plugin_func($plg,$fnc,''); break;
-case(':plup'):list($p,$o,$conn)=decompact_conn($pdoc); list($plg,$bt)=split_one("§",$conn,1);
+case(':plup'):list($p,$o,$conn)=decompact_conn($pdoc); list($plg,$bt)=split_one('§',$conn,1);
 	return lj('','popup_plupin___'.$plg.'_'.ajx($p).'_'.ajx($o),$bt?$bt:$plg); break;
 case(':openapp'):list($p,$o,$d)=decompact_conn($pdoc); return openapp($d,$p,$o); break;
 case(':popapp'):list($p,$o,$d)=decompact_conn($pdoc); return lj('','popup_openapp___'.$d,$d); break;
-case(':apps'): return read_apps_link($pdoc);
+case(':apps'): return read_apps_link($pdoc); break;
 case(':bubble'):return bubble_menus($pdoc,'inline');
-case(':header'):Head::add('code',delbr($pdoc,"\n")); return; break; 
+case(':header'):list($d,$p)=explode('§',$pdoc);
+	Head::add($p?$p:'code',delbr($d,"\n")); return; break;
+case(':jscode'):Head::add('jscode',delbr($pdoc,"\n")); return; break;
+case(':jslink'):Head::add('jslink',delbr($pdoc,"\n")); return; break;
 case(':basic'):list($func,$var)=good_param($pdoc); return cbasic($func,$var); break;
 case(':bazx'):return plugin('bazx',$pdoc); break;
 case(':version'):return $_SESSION['philum']; break;
@@ -288,8 +286,8 @@ if(strpos($doc,"¬")!==false)return mk_dtable($doc);//tables
 if($xt==".mp3")return audio(goodroot($doc),$id);//mp3
 if($xt==".mp4")return video_html(goodroot($doc));//mp4
 if($xt==".pdf")return pdfdoc($doc,$media,$large);//pdf
-if($xt==".svg"){list($p,$w,$h)=subparams($doc); return image($p,$w,$h);}//svf
-if($xt==".flv")return jwplayer($doc,$large);//flv
+if($xt==".svg"){list($p,$w,$h)=subparams($doc); return image($p,$w,$h);}//svg
+//if($xt==".flv")return jwplayer($doc,$large);//flv
 if($xt==".swf")return flash_prep($doc,'');//swf
 if($xt==".txt"){$doc=goodroot($doc);
 	return lkt('',$doc,strrchr($doc,"/"));}
@@ -297,7 +295,7 @@ if($xt==".gz")return download($doc);//tar
 if($xt && $xt!="."){//video
 	if(strpos('.ogg.mp4.m4a.mov.mpg.wmv.h264.aac',$xt)!==false){
 	if($media!=3)return lj('txtx','pagup_popvideo___'.ajx($doc),pictxt('video',strrchr_b($doc,"/")));
-	if($xt=='.mp4' or $xt=='.m4a' or $xt=='.mov')return jwplayer($doc,round($large*(3/4)));}}
+	if($xt=='.mp4' or $xt=='.m4a' or $xt=='.mov')return video_html(goodroot($doc));}}
 if(substr($pdoc,0,1)=='@')return poptwit(substr($pdoc,1));
 //liens
 if((strpos($doc,'§')!==false or strpos($doc,'http')!==false or strpos($doc,'@')!==false) && strpos($doc,'<a href')===false){$lk=prepdlink($doc);
@@ -311,7 +309,7 @@ elseif(is_image($lk[1])){//link§image
 	if(substr($lk[1],0,4)=='http'){$lk[1]=vacuum_image($lk[1],$id);}
 	if(strpos($lk[0],'.pdf')!==false)return pdfdoc($doc,$media,$large);
 	if(is_numeric($lk[0]))$lk[0]=urlread($lk[0]);
-	return lkc('',$lk[0],place_image($lk[1],$media,$large,$largb,'',''))."\n\n";}
+	return lkc('',$lk[0],place_image($lk[1],$media,$large,$largb))."\n\n";}
 elseif(substr($lk[0],0,4)=='http')return lka($lk[0],$lk[1]);
 elseif(strpos($lk[0],'<img')!==false)return $lk[0].divc('blocktext',$lk[1]);
 elseif(strpos($lk[1],'<img')!==false)return $lk[0].' '.$lk[1];
@@ -320,10 +318,10 @@ elseif(strpos($lk[0],'/')!==false)return lkc('',goodroot($lk[0]),$lk[1]);
 elseif(strpos($lk[0],'.pdf')!==false)return pdfdoc($doc,$media,$large);
 elseif(substr($lk[0],0,1)=='#'){list($lien,$name)=explode('-',$lk[0]);
 	return lka($lien.'" name="'.$name,$lk[1]);}
-elseif(strpos($lk[0],'@')!==false && strpos($lk[0],".")!==false)
+elseif(strpos($lk[0],'@')!==false && strpos($lk[0],'.')!==false)
 	return lka('mailto:'.$lk[0],$lk[1]?$lk[1]:$lk[0]);
-elseif(substr($doc,0,1)=='@' && $tw=substr($doc,1))
-	return call_plug('','popup','twitter',ajx($tw),$doc);
+elseif(substr($doc,0,1)=='@' && $tw=substr($doc,1))return poptwit($tw);
+	//return call_plug('','popup','twitter',ajx($tw),$doc);
 elseif(is_numeric($lk[0]))return jread('',$lk[0],$lk[1]);}
 //cols
 if(substr($xf,0,2)==":/"){$nb=substr($xf,2); if(is_numeric($nb)){$nw=($large/$nb)-5;
@@ -339,7 +337,7 @@ if($xxf && $is && $xxf!='stop' && $xxf!='attr' && $xxf!='rect' && $xxf!='defs'){
 	if(!$func)$func=msql_read('','public_connectors',$xxf);
 	if($func && !is_array($func))return cbasic($func,$pdoc);
 	//plugin
-	if(isplug($xxf)){list($p,$o)=explode('§',$pdoc); $ret=plugin($xxf,$p,$o);}
+	if(reqp($xxf)){list($p,$o)=explode('§',$pdoc); $ret=plugin($xxf,$p,$o);}
 	if($ret)return delbr($ret,"\n");}
 return '['.$doc.']';}
 
@@ -439,29 +437,29 @@ if(!is_numeric($l) && is_file($dc))list($l,$h)=getimagesize($dc);
 if(!is_numeric($l))$l='100%'; if(!is_numeric($h))$h=400;
 return array($dc,$l,$h);}
 
-function decide_source($doc,$id){
+function decide_source($doc,$id){//goodroot()
 $doc=str_replace("\n",'',$doc); if(is_numeric($doc)){$id=$doc; $doc='';}
-if(strpos($doc,",")!==false){$r=explode(",",$doc);}
+if(strpos($doc,",")!==false)$r=explode(",",$doc);
 elseif(!$doc){$d=sql('img','qda','v','id="'.$id.'"');
-	$r=explode("/",substr($d,1)); $src='img/';}
+	$r=explode('/',substr($d,1)); $src='/img/';}
 else{if(substr($doc,-1)!='/')$doc.='/'; $src='users/'.$doc; $r=explore($src,'files',1);}
 return array($r,$src);}
 
 #conn_functions
 function pubart($d){list($v,$p)=split_one("§",$d,1);
+if(strpos($v,','))return m_pubart(array_flip(explode(',',$v)),'','');
 switch($p){case(1):return art_read_b($v,'',1,'');break;
 case(2):return art_read_b($v,'',2,'');break;
 case(3):return art_read_b($v,'',3,'');break;
-case(4):if(strpos($v,','))return m_pubart(array_flip(explode(',',$v)),'','');
-	else pub_art($v); break;
+case(4):return pub_art($v); break;
+case('pop'):return popart($v,'',suj_of_id($v)); break;
 default:return jread('',$v,suj_of_id($v)); break;}}
 
 function pdfdoc($doc,$nl='',$large=''){$lk=prepdlink($doc);
 if($nl=='nl')return $doc; $lk[0]=goodroot($lk[0]);
 if(is_image($lk[1]))$im=place_image($lk[1],$media,$large,'');
-else $im=picto('url').' '.$lk[1];
 if($_SESSION['nl'])return lkt('',$lk[0],$im);
-return lkt('',$lk[0],$im).' '.lj('','popup_poppdf___'.ajx($lk[0]).'_'.ajx($lk[1]),picto(txt));}
+return $im.lj('','popup_poppdf___'.ajx($lk[0]).'_'.ajx($lk[1]),picto('txt')).' '.lkt('',$lk[0],$lk[1]);}
 
 function pdfreader($d){if(substr($d,-3)!='pdf')$d.='.pdf';
 if(substr($d,0,4)!='http')$d=host().'/users/'.$d; $hlp=hlpbt('pdf');
@@ -548,7 +546,7 @@ function call_j($f,$d){list($lf,$lk)=good_param($f);
 $lk=$lk?$lk:suj_of_id($lf).' '.picto('get');
 return lj('','popup_'.$d.'___'.ajx($lf),$lk);}
 
-function call_pop($d){list($v,$k)=good_param($d); $id='bpop'.randid(); 
+function call_pop($d){list($v,$k)=good_param($d); $id=randid('bpop'); 
 if(strpos($k,"\n"))$k=strdeb($k,"\n"); sesr('temp',$k,$v);
 return lj('" id="bt'.$id,'popup_text___'.$id.'_'.ajx($k),$k.' '.picto('get'));}
 
@@ -577,7 +575,7 @@ return ljb($c.'" title="'.$tb,'SaveTg',$j,$t,'')."\n";}
 function poplk($d,$id){list($lk,$t)=split_right('§',$d,1); 
 return lj('" title="'.$tb,$id.'_ajxlnk___'.ajx($lk),pictoconn($t));}
 function toglk($d){list($lk,$t)=split_right('§',$d,1);
-return togbub('ajxlnk2','one_'.ajx($lk),pictoconn($t));}
+return togbub('ajxlnk',ajx($lk),pictoconn($t));}
 
 //pop=popup,onplace,o=closeable,closed,css
 function ajxlink($d,$id,$o,$pop){
@@ -601,17 +599,16 @@ return $ret.btd($here,$ter);}
 
 //rss
 function rssin_old($f){echo '-';//
-$rss=read_rss($f,"item",array("title","link","guid")); $nb=count($rss); //p($rss);
+$rss=read_rss($f,'item',array('title','link','guid')); $nb=count($rss);
 for($i=1;$i<=$nb;$i++){list($va,$lnk,$guid)=$rss[$i];
 	$va=trim(del_n($va)); $va=clean_title($va); 
 	if(!$lnk)$lnk=$guid; $lnk=utmsrc($lnk);
 	$ret[]=array($va,$lnk);}
 return $ret;}
 
-function rssin_xml($f){$rss=load_xml($f); //p($rss);
+function rssin_xml($f){$rss=load_xml($f);
 if($rss)foreach($rss as $k=>$v){list($va,$lnk,$dat)=$v; 
-	$va=trim(del_n(strip_tags($va))); $va=clean_title($va); 
-	//$va=unescape($va); $va=html_entity_decode($va);
+	$va=trim(del_n(strip_tags($va))); $va=clean_title($va);
 	$lnk=utmsrc($lnk); if($dat)$dat=rss_date($dat);
 	$ret[]=array($va,$lnk,$dat);}
 return $ret;}
@@ -644,26 +641,23 @@ $ret.=lj('','popup_msqledit___users_'.ses('qb').'*rssurl_'.$k.'_2',picto('flag')
 $ret.=lkt('txtsmall2',$f,picto('rss'));//urlencode
 return $ret;}
 
-function rssin($k,$v){$lk=prepdlink($v); $f=$lk[0]; 
-$f=https($f); if(substr($f,0,4)!='http' && $f)$f='http://'.$f;
+function rssin($k,$v){$lk=prepdlink($v); $f=$lk[0]; $f=http($f); //$f=https($f);
 $r=rssin_load($f); $nb=count($r); $ret=hidden('','addop',1); $t=rssin_t($k,$v,$f);
 foreach($r as $k=>$v){list($va,$lnk,$dat,$id)=$v; $btc=''; $lnj=ajx($lnk); $i++;
 	if(!$id){$btc=ljc('','popup','ajxf_batch*preview_'.$lnj,picto('view')); $fb=nohttp($lnk);
 		if(auth(4)){$mem=@$_SESSION['vacuum'][$fb]?'ok':picto('add');
 			$btc.=lj('" id="ars'.$i,'ars'.$i.'_batch___'.$lnj.'_p',$mem);
-			$btc.=saveiec($lnj,@$_SESSION['vaccat'][$fb],'rss'.randid(),'','','','',$va);
 			$btc.=lj('','popup_search__3_'.ajx($va).'_',picto('search'));}}
 else $btc.=popart($id).' ';
 $btc.=lkt('',$lnk,picto('url')); $btc.=btn('txtsmall',$dat);
 if($va)$ret.=balc('li','',$btc.' '.$va);}//$id?'hide':
 $ret=scroll_b($nb,$ret,16,320);
-return $t.balc("ul","panel pubart",$ret);}
+return $t.balc("ul",'panel',$ret);}
 
-function rssj($p,$o){$r=msql_read('',ses('qb').'_'.$p,'',1); //$r=msq_sort($r,1,'');
+function rssj($p,$o){$r=msql_read('',ses('qb').'_'.$p,'',1);
 if($r){foreach($r as $k=>$v){if($v[2]==$o or !$o){
-	if(substr($v[0],0,4)=='http')$v[0]=substr($v[0],7);
+	//if(substr($v[0],0,4)=='http')$v[0]=substr($v[0],7);
 	if($v[0])$ret[$v[2]].=toggle('','rsj'.$k.'_rssj_'.$k.'_'.ajx($v[0],''),$v[1]?$v[1]:preplink($v[0])).' '.btd('rsj'.$k,'').br();}}}//$v[2]
-//foreach($ret as $k=>$v){ksort($v); $ret[$k]=implode('',$v);}
 if(auth(6))$b=msqlink('',ses('qb').'_'.$p).' ';
 return make_tabs($ret,'rss','nbp').$b;}
 
@@ -744,7 +738,7 @@ if($bs){$nd=$nd?$nd:ses('qb');}else{$nd=ses('qb'); $bs=$d;}
 $r=msq_goodtable($da); $menu=$r['_menus_']; unset($r['_menus_']);
 if($r && $rep)foreach($r as $k=>$v){$i++; $bit[$k]=$v[$rep];}
 elseif($r && $op){foreach($r as $k=>$v){$i++; $bit[$k]=$v;}}
-$output='imgc/'.ses('qd').'_'.$_SESSION["read"].'_graph_'.$n.'.png';
+$output='/imgc/'.ses('qd').'_'.$_SESSION["read"].'_graph_'.$n.'.png';
 graphics($output,$large,140,$bit,$_SESSION['clrs'][$_SESSION['prmd']][7],'yes');///
 if($_GET["read"])return image($output,'','" style="border:0;')."\n";}
 
@@ -778,17 +772,18 @@ return lj('txtx','popup_plup__3_twit_twit*build_'.ajx($id),pictxt('tw',$nm?$nm:'
 function lastup($v,$id){
 $f='plug/_data/'.ses('qb').'_'.$id.'_lastupdate.txt';
 if(is_file($f))$last=read_file($f);
-if($_GET["continue"] && $id==$_SESSION["read"] && auth(4))
-write_file($f,mkday('',1));
+if($id==$_SESSION["read"] && auth(4))write_file($f,mkday('',1));//contnue
 if($last)return btn('txtsmall2',($v?$v.' ':nms(118).': ').$last);}
 
 function mk_table($d){
 list($doc,$opt)=good_param($d);
 if($opt=='div')return mk_dtable($doc);
-if($opt && !is_numeric($opt))
-	$doc=str_replace(array(($opt=='auto'?' ':$opt),"\n"),array('|','¬'),$doc);
-$doc=str_replace(array('|¬',"¬\n"),'¬',$doc);
-if(substr(trim($doc),-1)=="¬")$doc=substr(trim($doc),0,-1);
+if($opt=='auto')$doc=str_replace(array(' ',"\n"),array('|','¬'),$doc);
+if($opt=='nl')$doc=str_replace("\n",'¬',$doc);
+if(strpos($doc,'¬')===false && strpos($doc,'|') && strpos($doc,"\n"))
+	$doc=str_replace("\n",'¬',$doc);
+$doc=str_replace(array('|¬',"¬\n",' ¬'),'¬',$doc);
+if(substr(trim($doc),-1)=='¬')$doc=substr(trim($doc),0,-1);
 $taba='tr';$tabb='td';$tabc="table";
 $tr=explode('¬',$doc);
 if(!$opt)$csb='';
@@ -846,30 +841,29 @@ if(is_file($f))list($w,$h)=getimagesize($f);
 if($w)$img=make_thumb_b($v,$dir);
 return ljb('','SaveBf','photo_'.ajx($f).'_'.($w).'_'.($h).'_'.$id,$img);}
 
-function embed_gallery_manual_j($dir,$v,$id){$xt=strtolower(substr($v,-3));
-if($xt=='jpg' or $xt=='gif' or $xt=='png')$ret.=make_mini_j($dir,$v,$id);
-return $ret;}
-
 function photo_thumbs($doc,$id){
 list($r,$src)=decide_source($doc,$id);
 if(is_array($r)){foreach($r as $k=>$v){
 	if(!$src)$dir=jcim($v); else $dir=$src;
-	$ret.=embed_gallery_manual_j($dir,$v,$id);}}
+	$xt=strtolower(substr($v,-3));
+	if($xt=='jpg' or $xt=='gif' or $xt=='png')$ret.=make_mini_j($dir,$v,$id);}}
 return $ret;}
 
-function radio_x($d,$prm,$id){//_a
-list($d,$w,$h)=subparams($d);//w/h§name
-$w=$w=='auto'?currentwidth():$w; $w=$w?$w:160; $h=$h?$h:129;
-$fvars='&servr='.host().'/&rot='.$d.'&clr=e4e4e4';
-$nod=str_replace('_','*',$d);//$file='msql/radio/'.$nod.'.php'; 
-if($_SESSION['USE'])$add=lj('','popup_radioedit___'.$nod.'___'.$id,picto('edit'));
-if(!$_SESSION['nl'])return embed_flsh_obj('fla/radio.swf',$w,$h,$fvars).$add;}
+function gallery($d){$r=scandir('users/'.$d); if($r){rsort($r);
+foreach($r as $k=>$v){$f='users/'.$d.'/'.$v; if(is_file($f))$ret.=image($f);}}
+return $ret;}
+
+function slides($p,$id){
+$s=strpos($p,'--')?'--':"\n"; $r=explode($s,$p);
+foreach($r as $v)if($v)$rb[]=array($v);
+$r=msql_modif('',nod('slides_'.$id),$rb,array('val'),'arr','');
+return plugin('slides',$id);}
 
 function radio_song($d,$p){
 $r=msql_read_b('radio',$d,$p); return $r[1];}
 
 function radio($d,$p,$id){//$f=radio_slct($d,$p,$id);
-$r=msql_read_b('radio',$d,'',1); $rid='rad'.randid();
+$r=msql_read_b('radio',$d,'',1); $rid=randid('rad');
 if($r)foreach($r as $k=>$v){if($k==$p)$f=$v[1];
 	$ret.=lj('',$rid.'_radio___'.ajx($d).'_'.$k,$v[3]).br();}
 if($_SESSION['USE'])$add=lj('','popup_radioedit___'.$nod.'___'.$id,picto('edit'));
@@ -883,27 +877,12 @@ if(!$f)$nod=$id; else $nod=$f;
 $fvars='&servr='.host().'/&rot='.$nod.'&clr='.$clrs[6];
 $nod=str_replace('_','*',$nod); //$file='msql/gallery/'.$nod.'.php'; 
 if($_SESSION['USE'])$add=lj('','popup_slider___'.$nod.'_'.$id,picto('edit'));
-if(!$_SESSION['nl'])return embed_flsh_obj('fla/slider.swf',$w,$h,$fvars).$add;}
+if(!$_SESSION['nl'])return embed_flsh('fla/slider.swf',$w,$h,$fvars).$add;}
 
 function sliderj($d,$id){
 list($f,$o)=split_one('§',$d,1);
 require_once('plug/sliderJ.php');
 if(!$_SESSION['nl'])return plug_sliderJ($f,$id,$o);}
-
-function embed_gallery($f,$id){
-$w=currentwidth(); $h=$w*(3/4);
-if(!$f)$cachefile=$id;else $cachefile=$f;
-$fvars='&servr='.host().'/&rot='.$cachefile.'&clr='.$_SESSION['clrs'][$_SESSION['prmd']][6];
-$file='gallery/cache/'.str_replace("/","--",$cachefile.'/').'.php';
-$goto='gallery/gal.php?root='.$f.'&pid='.$id.'&rebuild==';
-if(!is_file($file))return lkt('red',$goto,picto('alert'));
-if($_SESSION['USE']) $add=lkt('',$goto,picto('builders'));
-return embed_flsh_obj('fla/gallery.swf',$w,$h,$fvars).$add;}
-
-function gallery_flash($f,$id){//list($r,$f)=decide_source($f,$id); p($f);	
-if($_SESSION['read'] or rstr(41)){$ret=embed_gallery($f,$id).$add;}
-else{$ret=btn('txtx',"PhotoGallery");}
-if(!$_SESSION['nl'])return $ret;}
 
 function gallery_j_slct($doc,$id,$d){$large=currentwidth();
 list($id,$idn)=explode('-',$id); $dcb=ajx($doc,''); $mp='impos'.$idn;
@@ -923,7 +902,7 @@ function gallery_j($doc,$id){static $i; $i++;
 $j='galj_'.$id.'-'.$i.'_'.ajx($doc,''); $_SESSION['impos'.$i]=0;
 $ret.=divc('',ljb('txtbox','SaveBb',$j.'_prev',picto('kleft')).$pp.ljb('txtbox','SaveBb',$j.'_next',picto('kright')));
 $img=gallery_j_slct($doc,$id.'-'.$i,0); 
-$ret.=div('id="galj'.$id.'-'.$i.'"',$img);
+$ret.=div(atd('galj'.$id.'-'.$i),$img);
 if(!$_SESSION['nl'])return $javs.$ret;}
 
 function jukebox($f,$media,$id){list($f,$o)=explode('§',$f);
@@ -961,24 +940,24 @@ function audio($d,$id=''){return '<audio controls>
 <source id="mp3'.$id.'" src="'.$d.'" type="audio/mpeg"></audio>';}
 function embed_flsh($fl,$xf,$yf,$fvar){$fl=substr($fl,0,4)!='http'?'../'.$fl:$fl;
 return '<embed src="'.$fl.'" width="'.$xf.'" height="'.$yf.'" wmode="transparent" FlashVars="'.$fvar.'" quality="high" allowfullscreen="true" />';}
-function embed_flsh_obj($fl,$xf,$yf,$fvar){//$emb=embed_flsh($fl,$xf,$yf,$fvar);
-return '<object data="'.$fl.'" width="'.$xf.'" height="'.$yf.'"><param name="movie" value="'.$fl.'"><param name="wmode" value="transparent"><param name="allowFullScreen" value="true"><param name="FlashVars" value="'.$fvar.'">'.$emb.'</object>';}
 function flash_prep($f,$id){if($f)list($movie,$l,$h)=decide_size($f);
 return embed_flsh($movie,'100%','100%',$fvar);}
 
 function video_providers($d){$nb=strlen($d);
-if(is_numeric($d))$vid='vimeo'; elseif($nb==32)$vid='rutube'; 
+if($nb==32)$vid='rutube';
 elseif($nb==11)$vid='youtube'; //elseif($nb==9)$vid='vk';
+elseif($nb==7 && is_numeric($d))$vid='rutube';
 elseif($nb==5 or $nb==6 or $nb==7 or $nb==18 or $nb==19)$vid='daily';
+elseif(is_numeric($d))$vid='vimeo'; 
 //elseif(strpos($d,'.'))$vid='ted'; 
 //else $vid='livestream';
 return $vid;}
 
-function video_url($d,$p,$t=''){
+function video_url($d,$p,$t=''){$t=$t?$t:$p;
 if($p=='vimeo')$u='vimeo.com/'.$d;
 elseif($p=='youtube')$u='youtube.com/watch?v='.$d;
 elseif($p=='daily')$u='dailymotion.com/video/'.$d;
-if($u)return lka('http://'.$u,pictxt('url',$t?$t:$p));}
+if($u)return lkt('','http://'.$u,$t); else return $t;}//pictxt('url',)
 
 function video_img($d,$p){
 if($p=='youtube')$ret='http://img.youtube.com/vi/'.$d.'/1.jpg';
@@ -991,26 +970,24 @@ if($p=='vimeo'){$f='http://vimeo.com/api/v2/video/'.$d.'.php';
 return $ret;}
 
 function popvideo($d){list($d,$t)=explode('§',$d); $p=video_providers($d);
+list($w,$h)=explode('/',$t); if(is_numeric($w))return video_players($d,$p,$w,$h,'');
 $j='pagup_video___'.ajx($d).'___autosize'; $url=video_url($d,$p,$t).' ';
-$im=video_img($d,$p); if($im && !$t)$img=lj('',$j,image($im,'120','90',''));
+$im=video_img($d,$p); if($im && !$t)$bt=lj('',$j,image($im,'120','90',''));
 $open=lj('',$j,pictxt('play','')).' ';
-if($img)return divc('',$img.' '.btn('small',$url));
+if($bt)return divc('',$bt.' '.btn('small',$url));
 else return btn('popbt',$open.$url);}
 
-function popflv($d,$l){list($d,$t)=explode('§',$d);
-return lj('','popup_popflv___'.ajx($d).'_'.$l,pictxt('play',$t?$t:$d));}
-
 function video_auto($doc,$l,$id,$media){//p§w/h
-if(substr($pdoc,0,4)=='http')$doc=auto_video($pdoc,'','',2);
+if(substr($doc,0,4)=='http')$doc=auto_video($doc,'','',2);
 return popvideo($doc);}
 
 function video_html($f){
 if(strpos($f,'.mp4'))$xt='mp4'; else $xt=substr(xt($f),1);
-return '<video controls width="100%"><source src="'.$f.'" type="video/'.$xt.'"></video> ';}
+return '<video controls width="100%"><source src="'.$f.'" type="video/'.$xt.'"></video>';}
 
-function video_players($d,$p,$w,$h,$id){
-$w-=40; $h=$w*(0.5).'px'; if($id){$w='100%'; $h='95%';}
-if($_SESSION['nl'])return lkc('txtx',urlread($id),'Video');
+function video_players($d,$p,$w,$h,$id){if($id){$w='100%'; $h='95%';}
+else{if($w==1)$w=''; if(!$h && $w)$h=$w*0.5; $w=$w?$w:440; $h=$h?$h:320; $w.='px'; $h.='px';}
+//if($_SESSION['nl'])return lkc('txtx',urlread($id),'Video');
 if($p=='youtube')return iframe('http://www.youtube.com/embed/'.$d.'?border=0&version=3&autohide=1&showinfo=0&rel=0&fs=1',$w,$h);
 elseif($p=='daily')return iframe('http://www.dailymotion.com/embed/video/'.$d,$w,$h);
 elseif($p=='vimeo'){return iframe('http://player.vimeo.com/video/'.$d,$w,$h);}
@@ -1021,16 +998,7 @@ elseif($p=='livestream')return iframe('http://cdn.livestream.com/embed/'.$d.'?la
 elseif($p=='rutube')return '<embed src="http://video.rutube.ru/'.$d.'" type="application/x-shockwave-flash" wmode="window" width="100%" height="auto" allowFullScreen="true">';
 else return video_html($d);}
 
-function jwplayer($doc,$l){$doc=goodroot($doc); $rid=randid();
-if(substr($doc,0,4)!='http')$bs=host().'/'; $nm=$rid.'emd'.substr(strrchr($doc,'/'),0,4);
-$add=divd($nm,lj('txtx',$nm.'_embed___'.ajx($bs.$doc,''),'source'));
-$flvr='&controlbar=over&file='.$bs.$doc.'&image=&mute=true&skin=video/lulu.xml&stretching=fill';//&plugins=viral-2d
-return embed_flsh("video/player.swf",$l,($l*0.7),$flvr).$add;}
-
 #log_system
-function reboot(){$r=array('qd','qb','USE','iq','dev');
-foreach($r as $v)$ret[$v]=$_SESSION[$v]; $_SESSION=$ret;}
-
 function loged($usr,$rg,$t){if($t)$ret=btn('popw',$t).' ';
 if(!$_SESSION['USE'] or !is_numeric($rg)){//nameofauthes(prmb(11))
 $nam='login'; $sty='" style="width:100px;';
@@ -1039,7 +1007,7 @@ $ret.=input2('password" size="8" placeholder="password','pass','','search');
 if(rstr(59))$ret.=checkbox_j('cook',1,'','stay loged').' '; else $ret.=hidden('','cook',1);
 $ret.=submitj('" title="'.helps('login').'','log',picto('logout'));
 return divd('valid','<form id="log" name="log" action="javascript:login(\'log\')" onKeyPress="checkEnter(event,\'log\')">'.$ret.'</form>');}
-else return lkc('popdel',htac('log').'out',pictit('logout',nms(54))).br();}
+else return lkc('popdel',htac('log').'out',pictit('logout','log out')).br();}
 
 function authes_levels(){return array(0=>'login',1=>'tracks',2=>'post',3=>'publish',4=>'edit',5=>'design',6=>'admin',7=>'host',8=>'dev');}
 function nameofauthes($i){if(!is_numeric($i))$i=0;
@@ -1118,7 +1086,7 @@ elseif(prmb(11)>=1 or $newhub or !$first or prms('create_hub')=="on"){$rl="ok";
 	log_result($user,$iq,$qb,$rl,$cook);}}}
 
 function modif_cnfgtxt($qb,$first){
-connect(); $f='params/_'.$db.'_config.txt';
+$db=connect(); $f='params/_'.$db.'_config.txt';
 if(is_file($f)){$d=read_file($f); $r=explode('#',$d);}
 else $r=array($_SESSION['qd'],'no','yes',$_SESSION['qb'],'','philum.net','','','','Europe/Paris','6135','4000');
 if(!$first)$r[3]=$qb; if($_SESSION['htacc'])$r[1]='yes';

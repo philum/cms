@@ -16,9 +16,9 @@ return make_table($ret);}
 function mq_tables($p,$o,$res=''){list($p,$o)=ajxp($res,$p,$o);
 $r=lstrc(rcptb($p)); 
 if($r)foreach($r as $v)$ret.=lj('','mqm_plug___mysqm_mq*cols_'.ajx($v).'_'.ajx($p),$v);
-//function mqt_w($k,$v,$p){return lj('','mqm_plug___mysqm_mq*cols_'.ajx($v).'_'.ajx($p),$v);}
 //$ret=walkeach($r,'mqt_w',$p);implode('',)
 return btn('list',$ret);}
+//function mqt_w($k,$v,$p){return lj('','mqm_plug___mysqm_mq*cols_'.ajx($v).'_'.ajx($p),$v);}
 
 //plugin('msqm',$p,$o)
 function plug_mysqm($p,$o){$p=$p?$p:db;

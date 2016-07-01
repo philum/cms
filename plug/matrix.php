@@ -5,7 +5,7 @@ function parent_prev($r,$d){//p($r);
 $n=count($r); for($i=0;$i<$n;$i++)if($r[$i]==$d)return $r[$i-1];
 return $k;}
 
-//array('date','cat','title','img','hub','tag','lu','author','lenght','url','ib','re'); 
+//array('date','cat','title','img','hub','tag','lu','author','length','url','ib','re'); 
 function matrix_rq(){return ses('rqt'); 
 req('art,boot,spe'); $_GET['dig']=30; //$r=sql_b($sql,'');
 list($slct,$in,$wh,$ord)=play_req(' and re>0');

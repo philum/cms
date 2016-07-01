@@ -67,7 +67,6 @@ $r["import"]=array('SaveJ','popup_emdpop___call*url','tools');
 $r["jconn"]=array('embed','','arts');
 $r["jopen"]=array('embed','','arts');
 $r["jukebox"]=array('embed','','media');
-$r["label"]=array('embed','','html');
 $r["last-update"]=array('embed','','tools');
 $r["last_saved"]=array('revert()','','tools');
 $r["lines"]=array('embed_slct','\',\'\',\'\',\'clean_n ','del');
@@ -96,7 +95,7 @@ $r["petition"]=array('embed','','media');
 $r["photo"]=array('SaveJ','popup_gallery','media');
 $r["plug"]=array('embed','','media');
 $r["plup"]=array('embed','','media');
-$r["polaroid"]=array('embed','','media');
+$r["figure"]=array('embed','','media');
 $r["pop"]=array('embed','','media');
 $r["popart"]=array('embed','','arts');
 $r["popmsqt"]=array('embed','','arts');
@@ -133,5 +132,8 @@ $r["mktable"]=array('embed_slct','\',\'\',\'\',\'mktable','filters');
 $r["svgcode"]=array('embed','','tools');
 $r["popmsql"]=array('embed','','arts');
 $r[":pre"]=array('conn','_delconn_pre','del');
+$r["image"]=array('embed','','media');
+$r["plugin"]=array('embed','','media');
+$r["slides"]=array('embed','','media');
 
 ?>

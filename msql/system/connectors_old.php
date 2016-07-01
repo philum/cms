@@ -21,5 +21,6 @@ $r["msq_template"]=array(':microtemplate');
 $r["msq_ads"]=array(':msq_html');
 $r["microform"]=array(':msq_conn');
 $r["microsql"]=array('msql');
+$r["polaroid"]=array('figure');
 
 ?>

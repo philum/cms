@@ -22,7 +22,7 @@ only long content is affected');
 $r[18]=array('public defcons','Définitions for importations of articles. 
 The public base represent a risk to loose his datas.
 Using private Defcon let upgrade from public base and informe it of new entries. (in 01L editor)');
-$r[19]=array('user thumbs','prepare datas of \'_IMG1\' for template (personalized thumbnails) : [_IMG1§100/100:thumb]');
+$r[19]=array('_img1','inject variable _IMG1 (first image of article) for template (personalized thumbnails) as this : [_IMG1§100/100:thumb]');
 $r[20]=array('menu home','display admin menu home');
 $r[21]=array('restricted_area','acces to pages reserved to members');
 $r[22]=array('bots','open to bots');
@@ -95,5 +95,9 @@ $r[88]=array('template read','activate a template dedicated to the read mode');
 $r[89]=array('meta','meta environment of current article');
 $r[90]=array('like','vote for an article');
 $r[91]=array('poll','system of polls');
+$r[92]=array('accessibility','rules of w3c');
+$r[93]=array('css thumbnail','create a thumbnail in the background of a css, using the class thumb, resizable with css');
+$r[94]=array('menubub','use the datas of the module MenuBub (as if the module is inactive)');
+$r[95]=array('overcats','use the datas of the admin/categories to build virtual folders where to put the categories of articles');
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 //philum_bubs
 session_start();
-//apps=array('button','type','process','param','option','condition','root','icon');
+//apps=array('button','type','process','param','option','condition','root','icon','hide','private');
 
 function rightarrow(){return; bts('float:right;','&#9658;');}
 function bub_adm($t,$j,$root,$ico){
@@ -45,13 +45,13 @@ foreach($r as $k=>$v){//if($v[2])//loadable //if($v[3])//callable //if($v[4])//i
 	else $ret[]=array($k,'plug',$k,'','','',$dr.'/'.$v[1],'conn');}
 return $ret;}
 
-
 //dev
 function bub_dev(){$r=array('dev','lab','prod');
-//$ret[]=array('cache','ajax','popup','rebuild__3xx','','','dev','reload');
 if(auth(4))foreach($r as $k=>$v)$ret[]=bub_l($v,'link','/dev/'.$v,'dev','phi2');
-if(auth(6))$ret[]=bub_l('push','link','/?dev2prod==','dev','down');
+//if(auth(6))$ret[]=bub_l('push','link','/?dev2prod==','dev','down');
+if(auth(6))$ret[]=array('push','ajax','popup','plup__3xx_dev2prod','','','dev','down');
 if(auth(7))$ret[]=bub_l('publish','linkt','/plug/publish_site','dev','export');
+if(auth(2))$ret[]=array('cache','ajax','popup','rebuild__3xx','','','dev','reload');
 return $ret;}
 //time
 function bub_timetravel(){req('spe,art'); $r=timetravel(); $travel=date('Y',ses('daya'));
@@ -206,10 +206,33 @@ return $ret;}
 
 //login
 function bub_exec($d){
-if($d=='login'){req('pop'); return div(atd('nob'),loged('','',''));}
+if($d=='login'){req('pop'); return div(atd('nob'),loged('','1',''));}
 if($d=='cache'){req('boot,spe,art'); $_SESSION['rqt']=''; $_GET['refresh']=1; 
-	return li(cache_arts());}
-}
+	return li(cache_arts());}}
+	
+//overcat
+function bub_overcats(){//mods/overcats
+$r=sql('msg','qdd','rv','ib="'.ses('qbd').'" and val="surcat"');
+if($r)foreach($r as $k=>$v){
+	list($over,$cat)=split_right('/',$v,1);
+	$ret[]=array($cat,'link','cat','//'.$cat,'','',$over,'url');}
+return $ret;}
+
+//bubmenu
+function bub_menu($d){//root,action,type,button,icon,auth
+//if($_SESSION['mnbb'][$b])return $_SESSION['mnbb'][$b];
+$r=msql_read('users',ses('qb').'_menubub_1','',1);
+if(!$_SESSION['line']){req('boot'); define_cats_rqt();}
+if($r)foreach($r as $k=>$v){$bt=$v[3]?$v[3]:$v[1];
+	if($v[2]=='plug')$ret[]=array($v[3],$v[2],$v[1],'','','',$v[0],$v[4],'',$v[5]);
+	elseif($v[2]=='module')$ret[]=array($v[3],'module',$v[1],'','','',$v[0],'','',$v[5]);
+	elseif($v[2]=='ajax')$ret[]=array($v[3],$v[2],$v[1],'','','',$v[0],$v[4],'',$v[5]);
+	elseif($v[2])$ret[]=array($v[3],$v[2],'',$v[1],'','',$v[0],$v[4],'',$v[5]);
+	else{if($_SESSION['line'][$v[1]])$lk=htac('cat').$v[1];
+	elseif(is_numeric($v[1]))$lk='/'.$v[1];	else $lk=$v[1];
+	$ret[]=array($v[3],'link','',$lk,'','',$v[0],$v[4],'',$v[5]);}}
+//$_SESSION['mnbb'][$b]=$ret;
+return $ret;}
 
 //user
 function bub_adm_user_fast(){
@@ -278,25 +301,32 @@ return $ret;}
 //build
 //apps=array('button','type','process','param','option','condition','root','icon');
 //$rc=array($v[0],$v[1],$v[2],$v[3],$v[4],$v[5],$v[6],$v[7]);
-function bub_apps($r,$d,$dir,$cond){//$r,,dir,cond//p($r); echo 'oo';
+function bub_apps($r,$d,$dir,$cond){//$r,,dir,cond
+if($dir=='zero'){$dir=''; $dd='d';}
 $dr=explode('/',$dir); $nd=$dir?count($dr):0;
 if($r)foreach($r as $k=>$v){$rc=array_flip(explode(' ',' '.$v[5]));
-if($rc[$cond?$cond:'menu'] or !$v[5]){
-	$rv=explode('/',$v[6]); $nv=$v[6]?count($rv):0; $t=$v[0]; 
+if($rc[$cond?$cond:'menu'] or !$v[5]){$t=$v[0];
+	$rv=explode('/',$v[6]); $nv=$v[6]?count($rv):0;
 	$ico=$v[7]?picto($v[7],'min-width:20px;').'&nbsp;':''; $rvb=$rv[$nv-1];
 	if($dir==$v[6])$is=true; else $is=match_vdir($dr,$nd,$rv);
-	if($is && $nv==$nd+1 && !$v[8] && auth($v[9])){//dirs
-		$rb[$rvb]=popbub($v[4]?$v[4]:$d,$v[6],picto('kright','20px').'&nbsp;'.$rvb,$dd,1);}
+	if($is && $nv>=$nd+1 && !$v[8] && auth($v[9])){$root=$v[6];//dirs
+		if($nv>=$nd+1){$rvb=$rv[$nd]; $rot='';
+			for($i=0;$i<=$nd;$i++)$rot[]=$rv[$nd-$i]; $rot=array_reverse($rot);
+			if($rot)$root=implode('/',$rot);}
+		$pc=picto('kright','20px').'&nbsp;'.$rvb;
+		if($dd)$pc=$rvb;
+		$rb[$rvb]=popbub($v[4]?$v[4]:$d,ajx($root),$pc,$dd,1);}
 	if($is && $nv>$nd)$is=false;
 	if($is && !$v[8] && (!$v[9] or auth($v[9]))){//noj
 		if($v[1]=='link')$rb[$t]=ljbub($ico.$t,$v[3],'','','','');
 		elseif($v[1]=='linkt')$rb[$t]=ljbub($ico.$t,$v[3],'','','','1');
 		elseif($v[1]=='js')$rb[$t]=ljbub($ico.$t,'',atj($v[2],$v[3]));
 		elseif($v[1]=='bub')$rb[$t]=popbub($v[2],$v[3],$ico.$t,'c',1);//d
+		elseif($v[1]=='module'){req('mod'); $rb[$t]=build_mod_r($v[2]);}
 		else{$j=read_apps($v); $rb[$t]=ljbub($ico.$t,'',sj($j));}}}}
 if($rb)$ret=implode('',$rb);
 //if($d=='arts')//$ret=desktop_build_ico($rb,'icones');
-$ret=scroll($rb,$ret,19);
+//$ret=scroll($rb,$ret,19);
 return $ret;}
 
 //rooter
@@ -304,8 +334,8 @@ function r_apps_cond($d){$r=msql_read_b('',ses('qb').'_apps','',1);
 if($r)foreach($r as $k=>$v)if($v[5]==$d){$v[5]=''; $ret[$k]=$v;} return $ret;}
 
 function r_apps_home($o){
-$r=msql_read_b('system','default_apps_home','',1); if($o)return $r; $rb=r_apps_cond('home');
-if(!rstr(56))$r=unset_in($r,'hubs',0);
+$r=msql_read_b('system','default_apps_home','',1); if($o)return $r; 
+$rb=r_apps_cond('home'); if(!rstr(56))$r=unset_in($r,'hubs',0);
 //if(!rstr(48))$r=unset_in($r,'boot',6);
 return array_merge_b($rb,$r);}
 
@@ -330,9 +360,11 @@ case('timetravel'): return bub_timetravel(); break;
 case('dev'): return bub_dev(); break;
 case('user'): return bub_adm_user(); break;
 case('plug'): return bub_plug($dir); break;
-case('bubses'): return $_SESSION['bubses'][$dir]; break;}}
+case('overcat'): return bub_overcats($dir); break;
+case('menubub'): return bub_menu($dir); break;
+case('bubses'): return $_SESSION['bubses']; break;}}
 
-function bub_root($d,$dir){switch($dir){//pre-rendered, intercepte navigation
+function bub_root($d,$dir=''){switch($dir){//pre-rendered, intercepte navigation
 case('batch'): req('tri,pop,ajxf'); return batch('','c');break;
 case('fastmenu'): return bub_adm_admin_fast();break;
 case('search'): return bub_search_btn('',18,'srchb');break;
@@ -343,7 +375,7 @@ case('user'): return bub_adm_user_fast(); break;
 case('exec'): return bub_exec($d); break;
 case('hubs'): $r=bub_hubs_fast(); break;
 case('bub'): $r=bub_slct($d); break;}
-if(!$r)$r=bub_root_slct($d,$dir); //if($d==navs)p($r);
+if(!$r)$r=bub_root_slct($d,$dir); //if($d==navs)
 return bub_apps($r,$d,$dir,$cond);}
 
 ?>

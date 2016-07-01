@@ -126,7 +126,7 @@ $r['bb']=$rd;
 for($i=0;$i<=4;$i++)$ret.=lkc('txtx','/plug/umbin/'.$i,$i);
 
 //return make_table($r);
-$pub=popart(1275); 
+//$pub=popart(1275); 
 return $ret.br().make_table_clr($r,ub_clr()).$pub;
 }
 

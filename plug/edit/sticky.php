@@ -2,7 +2,7 @@
 //philum_plugin_sticky
 
 function popup_stick($d){
-return div('id="popu" style="width:320px; background-color:#ffd500; color:#000; padding:4px;"',$d);}
+return div(atd('popu').ats('width:320px; background-color:#ffd500; color:#000; padding:4px;'),$d);}
 
 function plug_sticky($d){$d=$d!=''?$d:1; $id='np'.randid(); $ret=hidden('','cka','m'.$d);
 $ret.=ljb('poph" id="ckb','mem_storage',$id.'_m'.$d.'_1_1_ckb'.$d,picto('reload'));

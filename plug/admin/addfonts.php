@@ -52,7 +52,7 @@ if($n>0)$ret=lj('txtbox','cbk_plug___addfonts_addf*inject','add '.$n.' typos').b
 return $ret.make_table($r,'txtblc','txtx');}
 
 function plug_addfonts($d){$here='addfonts';
-//$ret=headers_r($here,array(array('css'=>'../css/_admin.css'),array('js'=>'../progb/ajx.js'),array('js'=>'../progb/utils.js'),array('csscode'=>''),array('jscode'=>'')));
+//Head::add('css','../css/_admin.css')); Head::add('js','../progb/ajx.js'));
 $r=msql_read('','public_addfonts','');
 $ret.=divc('txtalert','coller la classe @face-font (avec url absolue)').br();
 $ret.=txarea('txt','',60,10);

@@ -33,7 +33,7 @@ else $j='popup_plup__x_chat_chatnm_'.$p.'__msg'.$p;
 //$jb=' getbyid(\'msg'.$p.'\').value=\'\';';
 $d.=ljb('popbt',sj($j).$jb,'',picto('kright'));
 return '<form name="chat'.$p.'" action="javascript:'.sj($j).$jb.'">'.$d.'</form>';
-//$ret=temporize("chatimer","SaveD('cht".$p.'_chat_chatread_'.$p."');",($mx?$mx:5*1000));
+//$ret=js_code(temporize("chatimer","SaveD('cht".$p.'_chat_chatread_'.$p."');",($mx?$mx:5*1000)));
 return $ret;}
 
 function plug_chat($p,$msg,$res=''){//$_SESSION['muse']='';

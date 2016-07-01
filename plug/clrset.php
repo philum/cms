@@ -21,5 +21,5 @@ Head::add('jslink','../css/_admin.css');
 Head::add('jslink','../prog'.$g.'/ajx.js');
 Head::add('jslink','../js/live.js#css');
 echo Head::get();
-echo div('panel',f_inp_clr_manage_j());
+echo divc('panel',f_inp_clr_manage_j());
 ?>

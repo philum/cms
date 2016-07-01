@@ -3,7 +3,7 @@
 
 function arts_j($p,$o,$res=''){
 list($p,$o)=ajxp($res,$p,$o);
-req('pop,art,tri,spe,mod');
+req('api,pop,art,tri,spe,mod');
 $r=array('articles',$p,'Articles','','multi','');
 sesone('nl',$o);
 $ret=build_mods($r);

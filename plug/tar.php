@@ -60,12 +60,13 @@ fclose($fp);}
 function targz($f,$r){tar($f,$r);
 $s=file_get_contents($f); 
 $ok=file_put_contents($f.'.gz',gzencode($s,9));
-if($ok)echo $f; unlink($f);
+if($ok)unlink($f);
 return $f.'.gz';}
 
-function read_dir($dr,$o=''){$fp=opendir($dr); static $ret; static $i;
+function read_dir($dr,$o=''){$fp=opendir($dr); static $i; $ret=array();
 while($d=readdir($fp)){$drb=$dr.'/'.$d; $i++;
-if(is_dir($drb) && $d!='..' && $d!='.' && $d!='_notes' && !$o)read_dir($drb);
+if(is_dir($drb) && $d!='..' && $d!='.' && $d!='_notes' && !$o)
+	$ret=array_merge($ret,read_dir($drb));
 elseif(is_file($drb) && $d!='.php')$ret[$i]=$drb;}
 return $ret;}
 
@@ -74,6 +75,13 @@ $ret.=autoclic($id,$p?$p:$o,44,1000,'',1);
 $ret.=lj('popsav',$rid.'_plug__xd_del_delj_'.$o.'__'.$id,'ok').' ';
 $ret.=btd($rid,'').br();
 return $ret;}
+
+function tar_extract($f,$to='/'){
+require('plug/tar/pclerror.lib.php');
+require('plug/tar/pcltrace.lib.php');
+require('plug/tar/pcltar.lib.php');
+PclTarExtract($f,$to,'','');
+return 'ok';}
 
 function plug_tar($f,$dir){
 $r=read_dir($dir); //p($r);

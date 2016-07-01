@@ -34,8 +34,8 @@ if($r)foreach($r as $k=>$v){$i++; $imn='gallery/mini/'.$v[1];
 	if(is_file($imn)){$im=image($imn,$v[5],$v[6]);
 	$gdp=(0-$wa+(($w/2)-($v[5]/2))); if($gdp<$limit)$gdp=$limit; if($gdp>0)$gdp=0;
 	$ret.=ljb('','sliderjnav_'.$a,$gdp.'\',\''.$k,$im); $wa+=$v[5];}}
-$ret=div('id="sdjv'.$a.'" style="margin-left:0px;"',$ret);
-$ret=div('style="overflow:hidden; width:'.($w).'px; height:75px;"',$ret);
+$ret=div(' id="sdjv'.$a.'" style="margin-left:0px;"',$ret);
+$ret=div(' style="overflow:hidden; width:'.($w).'px; height:75px;"',$ret);
 return $ret;}
 
 function sliderJ_javs($f,$a){
@@ -43,7 +43,7 @@ Head::add('jscode','
 function sliderjnav_'.$a.'(v,i){
 	SaveJ("sdj"+'.$a.'+"_plug___sliderJ_sliderJ*img_'.ajx($f,"").'_"+i+"-'.$a.'");
 	var curv=Number(document.getElementById("sdjv"+"'.$a.'").style.marginLeft.replace("px",""));
-	Timer("slide","sdjv"+"'.$a.'",curv,v,2);}';}
+	Timer("slide","sdjv"+"'.$a.'",curv,v,2);}');}
 
 function sliderJ_nav($n,$na,$nb,$f){
 $j='sdj'.$na.'_plug__2_sliderJ_sliderJ*img_'.ajx($f,'').'_';

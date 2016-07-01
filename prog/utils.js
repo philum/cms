@@ -265,7 +265,9 @@ function active_list_finder(div,n){
 
 function active_list_bubble(ul){var li=ul.getElementsByTagName("li"); //change
 	if(li.length>0)for(i=0;i<li.length;i++){var liul=li[i].getElementsByTagName("ul");
-		if(liul[0]){liul[0].style.display='none';}}}// li[i].className='';
+		if(liul[0]){liul[0].style.display='none';}}}
+function global_actlistbub(){var bubs=document.getElementsByClassName('inline');
+	for(var i=0;i<bubs.length;i++)active_list_bubble(bubs[i]);}
 function closechild(li){var ul=li.getElementsByTagName("ul"); //desactive
 	for(i=0;i<ul.length;i++){ul[i].style.display='none';}}
 function closebub(e){active_list_bubble(e.parentNode); eb=e.parentNode.parentNode;//btn
@@ -279,7 +281,8 @@ function clbub(op,bid){var div=getbyid('clbub');
 	if(op){addEvent(div,'mousedown',function(){clbub(0,bid)}); 
 		div.style.width='100%'; div.style.height='100%';} 
 	else{div.style.width=0; div.style.height=0;
-		if(bid)Hide(bid); else{var bub=getbyid('bub'); active_list_bubble(bub);}}}
+		if(bid)Hide(bid); else{var bub=getbyid('bub'); 
+		active_list_bubble(bub); global_actlistbub();}}}
 //close popbub
 function clpop(e,id){var n=clp.length; var fix='';
 	if(id)clp[n]=id; else if(n){if(e)var m=mouse(e); else m={x:0,y:0};
@@ -463,15 +466,15 @@ function mem_storage(val){//tar_var_copy_type
 		if(vn[4])getbyid('cka').value=vn[1];
 		if(vn[3])ob.innerHTML=lc; //encode_conn()
 		else if(txt==undefined)insert_b(lc,vn[0]); 
-		else ob.value=obj.replace(txt,lc);}
+		else ob.value=obj.replace(txt,lc);
+		poprepos();}
 	else{var val=txt?txt:(obj);//copy
 		if(vn[1]=='cka')var key=getbyid('cka').value; else var key=vn[1];
 		localStorage[key]=val;}
-	if(vn[4])sav_btn(vn[4]);}
+	if(vn[4])sav_btn(vn[4],vn[5]);}
 
-function sav_btn(id,n){btn=getbyid(id); cln=btn.className;
-	tit=btn.innerHTML; tics=cln+' active'; btn.className="txtyl";
-	setTimeout("btn.className=tics",900); setTimeout("btn.innerHTML=tit",1000);}
+function sav_btn(id,div){var mnu=getbyid(div); var rmn=mnu.getElementsByTagName('a');
+	for(i=0;i<rmn.length;i++)if(rmn[i].id==id)rmn[i].className='active'; else rmn[i].className='';}
 
 function conn(val){
 	var vn=val.split("_"); vn[0]=vn[0]?vn[0]:'txtarea';
@@ -597,15 +600,16 @@ function offon(f,d){
 	setTimeout(function(){addjs(f,d,p)},1000);
 	SaveJ('offonbt'+d+'_offon___'+p);}
 
-function poplist(id){var icon='l'; var list='=';//pictos
+function poplist(id){var icon='é'; var list='=';//pictos
 	bt=getbyid(id);
-	if(bt.innerHTML==icon){var c=''; var s='16px'; var d='inline'; bt.innerHTML=list;} 
+	if(bt.innerHTML==icon){var c='pubart'; var s='16px'; var d='inline'; bt.innerHTML=list;}
 	else{var c='icones'; var s='32px'; var d='block';  bt.innerHTML=icon;}
 	var popu=getbyid('popu'+curid);
 	var div=popu.getElementsByTagName('a'); 
 	for(i=0;i<div.length;i++){var dv=div[i].childNodes[0]; dv.className=c;
 		var dve=dv.getElementsByTagName('span');
-		dve[0].style.fontSize=s; dve[1].style.display=d;}}
+		dve[0].style.fontSize=s; dve[1].style.display=d;}
+	poprepos();}
 
 function getScroll(){
 	if(window.pageYOffset!=undefined)return[pageXOffset,pageYOffset];
@@ -624,17 +628,18 @@ function artlive2(div){var ret=''; var ia=0;
 	var pos=getPosition(load);
 	var last=mnu[mnu.length-1]; 
 	var id=last.id;
-	var idx=exs.indexOf(id);
+	var idx=exs.indexOf(id); //alert(idx);
 	if(idx==-1 && scrl>pos.y){exs.push(id);
-		var rq=getbyid('hid'+div); //alert(rq.value);
-		if(rq.value!='undefined'){var req=rq.value;
-			SaveJ(div+'_apij__14_'+req+'__'+id);}}}
+		var rq=getbyid('hid'+div);
+		if(rq.value!='undefined'){
+			SaveJ(div+'_apij__14_'+rq.value+'__'+id);}}}//addiv()
 //addEvent(document,'scroll',function(){artlive2('content')});
 
 function artlive(){var ret=''; var ia=0;
 	var scrl=pageYOffset+innerHeight;
-	var mnu=getbyid('content').getElementsByTagName("div");
-	for(i=0;i<mnu.length;i++){
+	var mnud=getbyid('content');
+	if(mnud!=undefined){var mnu=mnud.getElementsByTagName("div");
+	if(mnu.length)for(i=0;i<mnu.length;i++){
 		if(parseInt(mnu[i].id)>1){var id=mnu[i].id;
 			if(mnu[i].innerHTML==''){
 				var pos=getPosition(mnu[i]); var pos=pos.y;
@@ -643,7 +648,7 @@ function artlive(){var ret=''; var ia=0;
 					if(ia==20)i=mnu.length;//stop loop
 					if(idx==-1 && ia<20){
 						exs.push(id); if(mnu[i])var md=mnu[i].className;
-						SaveJ(id+'_artone___'+id+'_'+md);}}}}}}
+						SaveJ(id+'_artone___'+id+'_'+md);}}}}}}}
 						
 if(typeof read==='string' && flow==1)
 	addEvent(document,'scroll',function(){artlive()});
@@ -657,8 +662,9 @@ function scrolltoup(o){if(o)var p=-400; else var p=400;
 function fixdiv(){var scrl=pageYOffset;
 	var div=getbyid('fixtit'); var pdiv=getPosition(div);
 	var mnu=getbyid('fixit'); var pmnu=getPosition(mnu);
+	var bub=getbyid('bub'); var inl=bub.className;
 	var mna=mnu.getElementsByTagName('a');
 	if(mna[0]!=undefined)var mnt=mna[0]; else var mnt=mnu; 
 	var bt='<a onclick="scrolltoup(0);" class="small">'+mnt.innerHTML+'</a> ';
-	if(scrl>pmnu.y)div.innerHTML=bt; else div.innerHTML='';}
+	if(scrl>pmnu.y && inl=='inline')div.innerHTML=bt; else div.innerHTML='';}
 if(typeof read==='string' && read>1)addEvent(document,'scroll',function(event){fixdiv()});

@@ -15,7 +15,7 @@ $ov='getbyid(\''.$id.'\').style.background-color:rgba(0,0,0,0);';
 $ret=lkh($oc,$ov,$thumb);
 $sty='position:absolute; width:340px; height:240px; background-color:rgba(0,0,0,0.5); text-align-center; vertical-align:center;';
 $title=divs('width:140px; height:40px; background-color:#;',$t);
-$ret.=div('style="'.$sty.'" id="'.$id.'"','');
+$ret.=div(' style="'.$sty.'" id="'.$id.'"','');
 //return imgico($a.'" onmouseover="this.src=\''.$b.'\'" onmouseout="this.src=\''.$a.'\'');
 return $ret;}
 

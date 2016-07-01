@@ -3,14 +3,14 @@
 $r["_menus_"]=array('description','help','option','command');
 $r["All"]=array('All articles','Give a title','preview ; auto depend of stars','');
 $r["BLOCK"]=array('call a block of modules','specify the name of a block','','');
-$r["Banner"]=array('image if there is one, else title of hub','','','');
+$r["Banner"]=array('text with image in background','p=image, t=title','height','');
 $r["Board"]=array('articles with priority &gt; 1','specify number of columns','','');
 $r["Hubs"]=array('list of Hubs','Give a title','','');
 $r["LOAD"]=array('Component who give the result of the page (home, category, read)','','preview ; auto depend of stars','');
 $r["MenusJ"]=array('Ajax Menus of modules','param/title/command/option:module->target§button[,]','not closable','');
 $r["Page_titles"]=array('show the titles of the page, including the navigation','','parent articles','');
 $r["Wall"]=array('seed of articles with only content','option: category','','');
-$r["agenda"]=array('articles of futur','Give a title','','');
+$r["agenda"]=array('articles with the tag \'agenda\' set in the future','Give a title','','');
 $r["app_link"]=array('button to an App','syntaxe or id of the line in the user apps table, or of the table of the param \'command\'','','');
 $r["app_menu"]=array('predefined apps','- predefined: home all hubs plan taxonomy agenda categories lang hub
 - existing: key or val0 of the line (of the table of the command)
@@ -33,7 +33,7 @@ $r["blocks"]=array('each word is a DIV, which is a block of module','list of blo
 $r["br"]=array('add a line','','','');
 $r["bridge"]=array('make a bridge with anoter philum server','param : server without \'html\', option : ID of article ;
 console url : /module/bridge/philum.org/1130','ID of article or url console (/module/bridge/philum.net/236)','');
-$r["calendrier"]=array('calendar','Give a title','','');
+$r["calendar"]=array('calendar','Give a title','','');
 $r["cart"]=array('Articles added to cart','Give a title','','');
 $r["cat_arts"]=array('articles from a category','specify the category','','');
 $r["categories"]=array('list of categories','Give a title','nb cols or display nb of articles, or home menu','');
@@ -56,21 +56,17 @@ $r["clear"]=array('clear:left disable float:left','','','');
 $r["codeline"]=array('return html from Codeline','ex: [[_URL§_SUJ:link]§h2:html] [[_OPT§txtsmall2:css]','','');
 $r["columns"]=array('place each module on a column','command of modules (comline)','','');
 $r["conn"]=array('result of a simple connector','','','');
-$r["connector"]=array('result of a connector','examples:
-- \'24:read\' :read content
-- \'24:pub\' : pub of an article
-- [[104:pub]:/2][[106:pub]:/2] : (this one put 2 titles on 2 columns)','article balise','');
+$r["connector"]=array('write code using connectors','the editor is copied in the field of param','article balise','');
 $r["contact"]=array('mail to admin','title','css','');
 $r["content"]=array('used by system to determine the width of the page','max width of content for images or videos','','');
 $r["create_art"]=array('form to add articles','','','');
 $r["credits"]=array('philum','','','');
 $r["csscode"]=array('add css in the header','','','');
-$r["cssfonts"]=array('add predefined font-faces in the header','','','');
 $r["deja_vu"]=array('visited articles','Give a title','','');
 $r["design"]=array('determinate the design to use','n>3 of css page, classic, default','css sublayer','');
 $r["desktop_arts"]=array('display articles in desktop','script of command of articles (nothing = those from cache)','','');
 $r["desktop_files"]=array('build virtual folders from files','global|virtual (default : local|real)','position of root','');
-$r["desktop_varts"]=array('virtual articles: build folders from meta \'folder\' of articles','filter on results : script of command of articles (nothing = from all articles, \'cache\' = those from cache) ','','');
+$r["desktop_varts"]=array('virtual articles: build folders from meta \'folder\' of articles','from [nb of days]','','');
 $r["disk"]=array('Files of a directory of the user disk_space','specify a directory','','');
 $r["favs"]=array('selected articles by the visitor','','','');
 $r["finder"]=array('Open Finder','param (folder) : hub/root/dir...
@@ -161,7 +157,7 @@ $r["taxo_nav"]=array('list of nodes with openable menu','','','');
 $r["taxonomy"]=array('','','','');
 $r["template"]=array('template of articles','name of the template','','');
 $r["text"]=array('free text','specify a text','','');
-$r["tracks"]=array('','','','');
+$r["tracks"]=array('comments','nb of days','title','');
 $r["twitter"]=array('receive a Twitter channel','specify the hashtag (without the #); option: nb of sec','','');
 $r["user_menu"]=array('site navigation','predefined links :
 - key: Home, ID, catégorie, module
@@ -183,5 +179,14 @@ $r["api_arts"]=array('Api using Load builder','command type get','','');
 $r["api_mod"]=array('Api using Api builders','command type json','','');
 $r["api"]=array('Application to serve datas','enter a command','','');
 $r["rssin"]=array('channels of rss received','','','');
+$r["module"]=array('ID of module (used to simplify the calling of a module)','','','');
+$r["folders_varts"]=array('Articles in virtual folders','nb of days','','');
+$r["panel_arts"]=array('panel on presentation for articles','Api command or id','','');
+$r["overcats"]=array('Superiors menus, where are attached the categories (see /admin/overcat)','display a menu, in javascript or ajax with the command bub','','');
+$r["MenuBub"]=array('Openable menus using bubbles and msql table','alternative number of version of table menubub_1','','');
+$r["last_tags"]=array('last tags added','number of tags','specify a classe of tags','');
+$r["app_popup"]=array('open an app in a popup','params : button,type,process,param
+ex: hello,art,auto,(id article)','','');
+$r["jslink"]=array('add js link in the header ','','','');
 
 ?>

@@ -59,10 +59,12 @@ list($p,$o)=ajxp($res,$p,$o); req('spe');
 require_once('plug/tiers/Twitter.php');
 $t=new Twitter;
 $suj=suj_of_id($p);
+$author=sql_inner('tag','qdt','qdta','idtag','v','where cat="auteurs" and idart="'.$p.'"');
+if($author)$suj.=', '.ucfirst(nms(88)).' '.$author;
 $url=host().urlread($p);
 $j=atj('strcount','twpost');
 $s=atb('onclick',$j).atb('onkeypress',$j).atc('console');
-$ret=balise('textarea',atd('twpost').atb('cols',40).atb('row',4).$s,$suj.' '.$url).br();
+$ret=balise('textarea',atd('twpost').atb('cols',50).atb('rows',5).$s,$suj.' '.$url).br();
 $ret.=lj('popbt',$rid.'_plug___twit_twit*post___twpost',picto('get')).' ';
 $ret.=span(atd('strcount').atc('txtsmall'),'');
 return divd($rid,$ret);}

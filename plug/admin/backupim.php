@@ -58,8 +58,7 @@ while($r=mysql_fetch_row($rq)){
 	$rb=backupim_findim($r[0],'.gif');
 	if($rb)foreach($rb as $vb)if($vb)if(is_file($vb))$rc[]=$vb;
 	$rb=backupim_findim($r[0],'.png');
-	if($rb)foreach($rb as $vb)if($vb)if(is_file($vb))$rc[]=$vb;
-	}
+	if($rb)foreach($rb as $vb)if($vb)if(is_file($vb))$rc[]=$vb;}
 //p($rc);
 $ret=$min.'-'.$max.' ('.count($rc).') ';
 $f='_backup/img_'.$min.'-'.$max.'.tar';

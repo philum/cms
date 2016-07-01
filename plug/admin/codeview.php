@@ -53,7 +53,7 @@ foreach($r as $v)save_funcs('progb/'.$v.'.php',$v);}
 function savefunc_plug(){//save_all
 $r=explore('plug','full',1); //pr($r);
 $ra=array('edit','dev','admin','ummo','photo'); //$ra=explore('plug','dirs',1);
-if($ra)foreach($ra as $v){$rb=explore('plug/'.$v,'full'); p($rb);
+if($ra)foreach($ra as $v){$rb=explore('plug/'.$v,'full');
 //if($rb)foreach($rb as $vb)$r[]=$vb;
 }
 foreach($r as $v)if($v!='userdl.tar.gz'){

@@ -173,7 +173,7 @@ function cutat($d){$r=explode(' ',$d); $n=count($r);
 for($i=0;$i<$n;$i++){$nb+=strlen($r[$i]); if($nb<256)$ret.=$r[$i].' ';}
 if($nb>=256)$dot=' (...)'; return $ret.$dot;}
 
-function medit_shot($d,$nd,$k,$ka,$res){$v=ajxg($res); $rid='mdt'.randid();
+function medit_shot($d,$nd,$k,$ka,$res){$v=ajxg($res); $rid=randid('mdt');
 $r=msql_read_b($d,$nd,$k,'',$ka); $va=msq_data($r[$ka]);
 $j=ajx($d).'_'.ajx($nd).'_'.ajx($k).'_'.ajx($ka).'_'.$rid;
 return assistant($rid,'SaveJ',ajx($k.'-'.$ka).'_msqlmodif__x_'.$j,$va,'');}
@@ -192,14 +192,13 @@ foreach($r as $k=>$v){$ra='';$i++;
 	if($k=='_menus_' && $ra){
 		foreach($ra as $ka=>$va)$ra[$ka]=lka(sesm('url').$murl.'&sort='.$ka,$ka.':'.$va);
 		array_unshift($ra,lka(sesm('url').$murl.'&sort=k','keys')); 
-		if(auth(4))array_unshift($ra,ljb('','chkall','','²'));}
+		if(auth(4))array_unshift($ra,'');}
 	elseif(is_array($ra)){
 		foreach($ra as $ka=>$va)$ra[$ka]=medit_shot_bt($va,$k,$ka,$dr,ajx($nd));
-		if(auth(4))array_unshift($ra,$edit.lj($css,'popup_editmsql___'.$jurl,$k));
-		else array_unshift($ra,$k);
-		if($k!="_menus_" && auth(4))array_unshift($ra,checkbox('c'.$k,$k,'',0));}
+		if(auth(4))array_unshift($ra,lj($css,'popup_editmsql___'.$jurl,$k));
+		if(auth(4))array_unshift($ra,$edit); else array_unshift($ra,$k);}
 	$datas[$k]=$ra;}
-return make_table_bypage($datas,'txtblc','');}//txtx
+return make_table_bypage($datas,'popw','');}//txtx
 
 function make_table_bypage($r,$csa,$csb){
 if($r["_menus_"]){foreach($r["_menus_"] as $k=>$v)$td.=balc("td",$csa,$v);
@@ -502,7 +501,7 @@ elseif(is_file(sesm('root').$folder.$prefix.'.php') && $table){
 if($dir && !is_dir($root.$folder)){$folder=$base.'/'; $dir='';}
 $files=tables($root.$folder); //pr($files);
 $ra[0]=explore($root,'dirs',1); //bases
-	if($auth<6){$rdel=array('lang','server','clients','radio','stats','gallery','db');//'system',
+	if($auth<6){$rdel=array('lang','server','clients','radio','stats','gallery','db','system');//'system',
 		foreach($rdel as $v)unset($ra[0][$v]);}
 $ra[1]=$base;//base
 if($dir)$ra[2]=explore($root.$base.'/','dirs',1);//dirs
@@ -510,7 +509,7 @@ $ra[3]=$dir;//dir
 if($files && $base){$ra[4]=array_keys($files);//prefixes
 	foreach($ra[4] as $k=>$v)
 		if(($base=='users' && $v!='public' && $v!=ses('qb')) or 
-			($auth<6 && $v!='public' && $base!='system'))unset($ra[4][$k]);}
+			($auth<6 && $v!='public'))unset($ra[4][$k]);}
 $ra[5]=$prefix;
 $ra[6]=$files;
 	if($files && $auth<=$ath){foreach($files as $k=>$v){
@@ -648,7 +647,9 @@ if(!$_GET['def']){//called
 		$ret['utl'].=lkc('txtx',$lkb.'edit_conn==',$lh[16][0]).' ';
 		$ret['utl'].=lkc('txtx" title="'.$lh[6][1],$lkb.'inject_defs==',$lh[18][0]).' ';
 		$ret['utl'].=lkc('txtx',$lkb.'edit_csv==','csv').' ';
-		if(auth(6))$ret['utl'].=lkc('txtx',$lkb.'export_mysql==','create mysql').' ';
+		$ret['utl'].=lkc('txtx',$lkb.'json==','json').' ';
+		if(auth(6))$ret['utl'].=lkc('txtx',$lkb.'export_mysql==','sql').' ';
+		if(auth(6))$ret['utl'].=lkc('txtx',$lkb.'create_mysql==','create mysql').' ';
 		$ret['utl'].=lj('txtx','popup_msql___lang_helps_msql','?');
 	}
 	#-fieldset
@@ -690,19 +691,27 @@ if($_GET['inject_defs']=='='){
 	$ret[]=divc('','paste $r[1]=array(1,2,3)').form($lkb,txarea('inject_defs',$datas,60,14).br().input2('submit','replace','replace','txtbox').input2('submit','inject','inject','txtbox').checkbox('mono','1','key=>value','').checkbox('sql','1','mysql','')).hr().br();}
 
 //export_mysql
-if($_GET['export_mysql']=='=' && auth(6)){
+if($_GET['create_mysql']=='=' && auth(6)){
 	$ok=plugin_func('mysql','import_msql',$defs,$node);
 	$ret[]=divc('txtalert','create table '.$node.': '.$ok);}
 
+if($_GET['export_mysql']=='=' && auth(6))
+	$ret[]=txarea('',mysqlrb($defs),60,40);
+
 //csv
 if($_GET['edit_csv']=='='){
-	foreach($defs as $k=>$v)if($v)$edittable.=(is_array($v)?implode(',',$v):$v)."\n";
+	foreach($defs as $k=>$v)if($v)
+		$edittable.=$k.':'.(is_array($v)?implode(',',$v):htmlentities($v))."\n";
 	$ret[]=divc('','paste csv using "," for cells and lines for rows').form($lkb.'def='.$def,txarea('edit_csv',$edittable,60,14).br().checkbox('aid','ok','auto_increment','1').input2('submit','save','import','txtbox')).hr().br();}
+
+//csv
+if($_GET['json']=='='){
+	foreach($defs as $k=>$v)if($v)$edittable.='"'.$k.'":'.(is_array($v)?'["'.implode('","',$v).'"]':'"'.htmlentities($v[0])).'",';
+	$ret[]=txarea('edit_csv','{'.$edittable,60,14).'}'.br();}
 
 //see_table
 if($defs && !$_GET['def']){// && (!$def or $_POST['save'])//called
 $out=divd('editmsql',draw_table($defs,$murl,''));
-if($auth>4)$out=form($lkb.'del_multi==&page='.ses('page'),$out.input2('submit','del',nms(76),''));
 $ret[]=$out.br();}
 else $ret[]=divd('editmsql','');
 

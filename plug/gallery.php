@@ -15,7 +15,7 @@ if(!$q){//gallerygl
 		$ret.=lj('popbt','popup_gallery__x_manual',"manual").' ';}
 	$ret.=lj('popbt','popup_gallery__x_dir',"user/directory");}
 else $ret.=lj("popbt",'popup_gallery',$q=="dir"?"user_directory":$q);
-if($imgs)$ret.=br().txarea('dpl" id="source" class="popw" style="border:1px solid black;',$imgs,40,10);//pb name=src
+if($imgs)$ret.=br().txarea('dpl',$imgs,40,10,atd('source').atc('popw').ats('border:1px solid black'));//pb name=src
 if($dirs)$ret.=$dirs;
 if($q!="dir" && $q){
 	$ret.=br().bal("b","type:").' ';

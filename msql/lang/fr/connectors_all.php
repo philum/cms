@@ -84,7 +84,6 @@ $r["import"]=array('importe un article depuis son Url');
 $r["jconn"]=array('appelle un connecteur sur place en ajax : [248:read§open:jconn]');
 $r["jopen"]=array('ouvre un contenu sur place en ajax : [ID:jopen]');
 $r["jukebox"]=array('lecteur des mp3 d\'un répertoire [hub/dossier:jukebox]');
-$r["label"]=array('commentaire d\'image');
 $r["last-update"]=array('date de la dernière modification d\'un document');
 $r["last_saved"]=array('revient à la dernière action d\'enregistrement');
 $r["lines"]=array('efface les sauts de ligne du texte sélectionné');
@@ -120,10 +119,10 @@ $r["paste"]=array('coller du html et récupérer des connecteurs');
 $r["pdf"]=array('lecteur PDF ; ex: doc:pdf');
 $r["petition"]=array('pétition en ligne');
 $r["photo"]=array('geleries photo');
-$r["plug"]=array('[param§option:plugin:plug]');
+$r["plug"]=array('connecteur imbriqué : [param§option:plugin:plug]');
 $r["plup"]=array('plugin dans une popup 
 [param§option:plugin§button:plup]');
-$r["polaroid"]=array('[image.jpg§texte:polaroid]');
+$r["figure"]=array('[image.jpg§texte:figure]');
 $r["pop"]=array('ouvre le contenu dans une popup [texte§titre:pop]');
 $r["popart"]=array('ouvre un article Philum (local ou distant) dans une popup');
 $r["popmsqt"]=array('affiche le contenu d\'une entrée msql dans une popup ; [system_program*gnu_1§GNU:popmsqt] ');
@@ -165,7 +164,9 @@ $r["webpage"]=array('affiche une page web dans une popup (utilisant le plugin \'
 $r["mktable"]=array('formate les données csv en tableau (virgule et saut de ligne) ');
 $r["svgcode"]=array('crée un svg depuis des connecteurs. §width/height');
 $r["popmsql"]=array('affiche le contenu d\'une base msql dans une popup ; [public_atomic§GNU:popmsql]');
-$r[1]=array('');
-$r[":pre"]=array('');
+$r[":pre"]=array('efface les connecteurs :pre');
+$r["image"]=array('ouvre comme image sans l\'importer, n\'importe quel format');
+$r["plugin"]=array('se comporte comme un connecteur habituel : name§param:plugin');
+$r["slides"]=array('crée un diaporama d\'après les données dans le connecteur, séparées par un saut de ligne ou par --');
 
 ?>

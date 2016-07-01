@@ -27,13 +27,9 @@ $ret.=meta('name','hub',$_SESSION['qb']);
 $ret.=meta('name','viewport','user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1, width=device-width');//prmb(4)
 $ret.=meta('name','google-site-verification',prms('goog'));
 $ret.=css_link('/css/_global.css'.$cst);//css
+$ret.=css_link('/css/_pictos.css'.$cst);//icons
 if($_GET['admin'] or $_GET['msql'])$ret.=css_link('/css/_admin.css');
-else{
-	if($_SESSION['csslayer'])$ret.=css_link('/css/'.$_SESSION['csslayer'].'.css'.$cst);
-	$ret.=css_link('/css/'.$meta["css"].'.css'.$cst);}
-if($_SESSION['prma']['cssfonts'])$ret.=define_fonts(randid());
-if($_SESSION['prma']['csscode'])$ret.=css_code($_SESSION['prma']['csscode']);
-if($_SESSION['prma']['jscode'])$ret.=js_code($_SESSION['prma']['jscode']);
+else $ret.=css_link('/css/'.$meta["css"].'.css'.$cst);
 $ret.=js_code('cutat='.$_SESSION['jbuffer'].'; fixpop="'.$_SESSION['mobile'].'"; 
 fulpop="1"; read="'.$read.'"; flow="'.$flow.'";');
 $ret.=js_link('/prog'.$g.'/ajx.js');//ajax
@@ -45,15 +41,15 @@ $ret.='</head>'."\n";
 if($_GET['admin'])$sp=' spellcheck="false"';
 $ret.='<body'.atb('onload',$onload).' onclick="clpop(event)" onmousemove="popslide(event)"'.$sp.'>'."\n";//
 $ret.=divd('clbub','')."\n";
-$ret.=popadmin();
+$ret.=$madmin;
 $ret.=divd('desktop','')."\n";
 $ret.='<div id="page">'."\n";
 if($out)$ret.=implode('',$out);
-if($rout)$ret.=$rout;
+//if($rout)$ret.=$rout;
 $ret.='</div>'."\n";
 $ret.=divd('popup','')."\n";
 $ret.=divd('popw','')."\n";
-$ret.=divd('fs','')."\n";
+//$ret.=divd('fs','')."\n";
 $ret.=hidden('','socket','')."\n";
 $ret.='</body></html>';
 echo utf($ret);

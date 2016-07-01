@@ -90,7 +90,7 @@ return $ret;}
 $view=strrchr($view,'/');
 if(substr($va,0,2)!='<'.'?php')$va='<'."? //philum$view\n\n//$func\n$va\n\n//end\n?".'>';
 $reb=highlight_string($va,true); //$reb=str_replace($ra,$rb,$reb);
-return div('style="max-width:600px; max-height:400px; overflow:auto; wrap:true; padding:10px; border:1px solid black;"',$reb);}*/
+return div(ats('max-width:600px; max-height:400px; overflow:auto; wrap:true; padding:10px; border:1px solid black;'),$reb);}*/
 
 function func_sav($fa,$fb,$va){
 if(!auth(6))return;
@@ -198,8 +198,8 @@ return $res;}
 
 function plug_dev(){
 $_SESSION['rec']=array();
-$ret.=div('id="edc" style="display:inline-block; width:50%;"',func_edit('hello_world','progb','lib','p'));
-$ret.=div('id="results" style="float:right; width:40%; margin-left:10px;"','');
+$ret.=div(' id="edc" style="display:inline-block; width:50%;"',func_edit('hello_world','progb','lib','p'));
+$ret.=div(' id="results" style="float:right; width:40%; margin-left:10px;"','');
 $ret.=divc('clear','');
 $ret.=lkc('txtx','/plug/exec','exec').' ';
 $ret.=lkc('txtx','/plug/codev','codev');

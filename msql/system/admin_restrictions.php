@@ -93,5 +93,8 @@ $r[89]=array('menu admin','env. meta','1');
 $r[90]=array('social','like','1');
 $r[91]=array('social','poll','1');
 $r[92]=array('config','accessibility','0');
+$r[93]=array('config arts','css thumb','1');
+$r[94]=array('menu admin','menubub','1');
+$r[95]=array('menu admin','overcats','1');
 
 ?>

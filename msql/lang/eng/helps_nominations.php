@@ -30,7 +30,7 @@ $r[26]=array('words');
 $r[27]=array('Save');
 $r[28]=array('Send');
 $r[29]=array('publish');
-$r[30]=array('hide');
+$r[30]=array('disabled');
 $r[31]=array('trash');
 $r[32]=array('view');
 $r[33]=array('views');
@@ -126,7 +126,7 @@ $r[122]=array('test');
 $r[123]=array('phonetic');
 $r[124]=array('reduce');
 $r[125]=array('center');
-$r[126]=array('Purpose an article');
+$r[126]=array('purpose to publication');
 $r[127]=array('after');
 $r[128]=array('before');
 $r[129]=array('extented');
@@ -148,5 +148,7 @@ $r[144]=array('polls');
 $r[145]=array('tag');
 $r[146]=array('tags');
 $r[147]=array('suggest');
+$r[148]=array('hidden');
+$r[149]=array('confirm');
 
 ?>

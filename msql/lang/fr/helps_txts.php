@@ -270,7 +270,8 @@ $r["search"]=array('Astuces :
 ex: mot1;mot2:tag;mot3:auteurs (\'auteurs\' est une classe de tags)
 - ligne de commande d\'articles : priority=4&from=01-02-13&cat=public (cat, nocat, tag, notag, until, nbdays)
 - le bouton \'del\' permet d\'effacer le cache
-- le bouton \'creuser\' permet de laisser la recherche continuer sur des périodes antérieures jusqu\'à ce qu\'une réponse soit trouvée');
+- le bouton \'creuser\' permet de laisser la recherche continuer sur des périodes antérieures jusqu\'à ce qu\'une réponse soit trouvée
+- \'last\' renvoie le dernier article publié');
 $r["defcons"]=array('Les définitions d\'importation de sites sont des points d\'ancrage où commence et se termine la copie des parties qui nous intéressent dans la page.
 
 Ce sont le titre et le corps du texte, et en option un chapeau.
@@ -281,9 +282,10 @@ $r["apps"]=array('la restriction 61 est activée : le menu Apps par défaut est lo
 $r["apps_add"]=array('Apps prédéfinies : tous les paramètres peuvent en être modifiés (icône, nom, cible, fonction).
 Le bouton \"update\" remplacera toutes vos apps ! (faites des backups)
 le menu permet de choisir d\'autres tables plus spécialisées');
-$r["trackhelp"]=array('- urls, images et vidéos (youtube etc...) sont interprétés
+$r["trackhelp"]=array('- urls, images et vidéos (youtube etc...) sont interprétés automatiquement
 - lien vers un article : 1234:pub (renvoie le titre) ou 1234§mot
 - 123:track permet un rappel du commentaire 123
+- :web affiche un lien + titre + image du lien
 - #public : appelle le canal \'public\' du chat');
 $r["suggest"]=array('Coller l\'url de l\'article. 
 Une prévisualisation tentera de s\'afficher. 
@@ -296,17 +298,15 @@ Ainsi quand on appelle la page /context/name tous les modules appartenant à ce c
 $r["console_mods"]=array('Le [menu de mods:b] n\'affecte que la session en cours. Pour que les effets prennent effet pour le visiteur, il faut l\'appliquer, pour que le numéro de version de la table de module figure dans [config/param/modules_table:l].');
 $r["scripts"]=array('param/titre/commande/option/en cache/masquer/template/br:module§button[,]');
 $r["video"]=array('Youtube, Dailymotion, Vimeo, Rutube, vk.com, Livestream');
-$r["popvideo"]=array('option §1:video = popup');
+$r["popvideo"]=array('- option §1 : lance la vidéo sur place 
+- option §440/320 : largeur/hauteur');
 $r["pdf"]=array('Le lecteur PDF de Google nécessite d\'y être logué');
 $r["art_render"]=array('Le mode de rendu d\'articles est défini par les restrictions 5 et 41 (config arts), et peut être supplanté par un de ces paramètres : false, preview, full, read, auto');
 $r["desklr"]=array('attributs du Desktop :
 top,#_4,#_2
-top,#_5,#_8
-to bottom,#023c63,#000000
-to bottom,#098FE3,#787878
-to bottom,#322f5c,#2b2b2b,#8a7971
 to bottom,#002594,#06999e,#878787,#bf1755,#4f004f
-philum/photo/space/crabhubble.jpg');
+philum/photo/space/crabhubble.jpg
+philum/photo/space (random img du dossier)');
 $r["submod_types"]=array('types de sous-modules: mod plug art msql link finder ajax admin');
 $r["chatxml"]=array('- ChatXml fonctionne entre serveurs Philum (serveur d\'appel :  \'admin/params\')
 - le bouton \'live\' rafraîchit le chat toutes les 4 secondes
@@ -351,5 +351,12 @@ $r["api"]=array('L\'API permet de réaliser des tris complexes via une commande.
 - /module/api/{command} : affiche le résultat
 - /api/{command] : flux open data en json');
 $r["like"]=array('Les Likes sont publics');
+$r["overcats"]=array('Une sur-catégorie peut exister avec un champ vide, dans ce cas la catégorie est répertoriée à la racine.');
+$r["overcats_menu"]=array('Overcats peut être utilisé comme module, comme menu admin, ou comme objet de bureau, en utilisant une App avec les params type=desktop et process=overcats');
+$r["menubub"]=array('types de menububs : 
+- (aucun type) : interprète (a-z) = catégorie, (0-9) = article, /module/... = link
+- module : ouvre le contenu d\'un module (ex: ///lines/4///1:categories )
+- plug : (ouvre un plug)
+- ajax : (ex: popup_track___admin)');
 
 ?>

@@ -174,10 +174,8 @@ function uclock_head(){
 function plug_uclock($p,$o){//$rid='plg'.randid();
 	//echo mktime(4,0,0,7,26,2003); //1059184800
 	//echo mktime(4,0,0,7,9,2003); //1057716000
-
-
 	uclock_head();
-	if($_GET['callj'])$head=headers_r($d?$d:'plugins').'<body>';
+	//if($_GET['callj'])$head=Head::generate();
 	$ret=balise('div',array('id'=>'clock'),'');
 	//landmarkUiwSub
 	for($i=0;$i<60;$i++){

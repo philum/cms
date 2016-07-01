@@ -1,9 +1,10 @@
 <?php
-//philum_microsql_admin_authes
+//philum_microsql_admin_authes_sav
 $r["_menus_"]=array('category');
 $r["console"]=array('console');
 $r["restrictions"]=array('restrictions');
 $r["params"]=array('params');
+$r["apps"]=array('apps');
 $r["finder"]=array('Finder');
 $r["css"]=array('css');
 $r["hubs"]=array('hubs');
@@ -28,14 +29,14 @@ $r["banner"]=array('banner');
 $r["descript"]=array('descript');
 $r["google"]=array('google');
 $r["fonts"]=array('fonts');
-$r["connectors"]=array('connectors');
+$r["plugin"]=array('plugin');
 $r["modules"]=array('modules');
 $r["templates"]=array('templates');
-$r["code"]=array('code');
-$r["plugin"]=array('plugin');
+$r["connectors"]=array('connectors');
+$r["dev"]=array('dev');
+$r["exec"]=array('exec');
 $r["backup"]=array('backup');
 $r["htaccess"]=array('htaccess');
-$r["microsql"]=array('microsql');
 $r["mails"]=array('mails');
 $r["links"]=array('links');
 $r["rssurl"]=array('rssurls');
@@ -44,14 +45,9 @@ $r["messages"]=array('messages');
 $r["mail"]=array('mail');
 $r["password"]=array('password');
 $r["members"]=array('members');
-$r["tools"]=array('tools');
+$r["tags"]=array('tools for tags');
 $r["icons"]=array('iconography');
 $r["pictos"]=array('pictography');
-$r["Global"]=array('Global');
-$r["Articles"]=array('Articles');
-$r["User"]=array('User');
-$r["Builders"]=array('Builders');
-$r["Microsql"]=array('Microsql');
-$r["Actions"]=array('Actions');
+$r["overcat"]=array('over categories');
 
 ?>

@@ -1,5 +1,6 @@
 <?php
 //philum_plug-in_upload
+session_start();
 
 function upurlsav($dr,$o,$u){$u=ajxg($u);
 if(!is_image($u))return'no'; $ret=get_file($u); $nm=strrchr($u,'/');
@@ -21,22 +22,22 @@ $ret.='<form name="form1" method="post" action="../ajax.php?callj=upload&'.$go.'
 return $ret;}
 
 function up_iframe($d,$p){
-return $bt.'<iframe src="plug/upload.php?open==&go='.ajx($d).'&chk='.$p.'" frameborder="0" margin="0" hspace="0" scrolling="no" style="width:300px; height:26px;"></iframe>';}
+return '<iframe src="/plug/upload.php?open==&go='.ajx($d).'&chk='.$p.'" frameborder="0" margin="0" hspace="0" scrolling="no" style="width:300px; height:26px;"></iframe>';}
 
 function up_back($d){return '<a href="'.$d.'" target="_parent" class="txtx">refresh</a>';}
 
-function upload_sav(){req('sav'); $id=ses('read'); if($id)req('pop');
-$ret=css_link('../css/_global.css').js_link('../progb/ajx.js').js_link('../progb/utils.js');
+function upload_sav($d,$p){req('sav'); $id=ses('read'); if($id)req('pop');
+$ret=css_link('/css/_global.css').js_link('/prog/ajx.js').js_link('/prog/utils.js');
 $_POST["imnot"]=1; list($er,$url)=save_img(); $t=$er?$er:'saved'; 
-foreach($_GET as $k=>$v)if($k=='opdir' or $k=='mode' or $k=='read')$lk.='&'.$k.'='.$v;
-$tb=$t?strrchr_b($t,'/'):'empty';
-$ret.=lj('txtyl','upl_jump',pictxt('get',$t));//$ret.='open portfolio ->';
-if($_GET['chk'])$ret.=up_back('/?read='.$id);
+//foreach($_GET as $k=>$v)if($k=='opdir' or $k=='mode' or $k=='read')$lk.='&'.$k.'='.$v;
+//$tb=$t?strrchr_b($t,'/'):'empty';
+$ret.=up_form($_GET['go'],$_GET['chk']);
+if($_GET['chk'])$ret.=up_back(urlread($id));
 //if($_GET['mode']=="banim")$ret.=up_back('/?admin=banner');
 return $ret;}
 
 function plug_upload($d,$p){
-if($_GET['im'])return upload_sav(); else return up_iframe($d,$p);}
+if($_GET['im'])return upload_sav($d,$p); else return up_iframe($d,$p);}
 
 if($_GET['open'] && $_SESSION['auth']>4)echo up_form($_GET['go'],$_GET['chk']);
 

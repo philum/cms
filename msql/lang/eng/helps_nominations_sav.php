@@ -1,5 +1,5 @@
 <?php
-//philum_microsql_helps_nominations
+//philum_microsql_helps_nominations_sav
 $r["_menus_"]=array('title');
 $r[1]=array('article');
 $r[2]=array('articles');
@@ -30,7 +30,7 @@ $r[26]=array('words');
 $r[27]=array('Save');
 $r[28]=array('Send');
 $r[29]=array('publish');
-$r[30]=array('hide');
+$r[30]=array('disabled');
 $r[31]=array('trash');
 $r[32]=array('view');
 $r[33]=array('views');
@@ -73,7 +73,7 @@ $r[69]=array('Home');
 $r[70]=array('boolean');
 $r[71]=array('Title');
 $r[72]=array('titles');
-$r[73]=array('virtual dir');
+$r[73]=array('virtual folder');
 $r[74]=array('shared');
 $r[75]=array('not shared');
 $r[76]=array('erase');
@@ -134,5 +134,21 @@ $r[130]=array('ouvert');
 $r[131]=array('fermé');
 $r[132]=array('import');
 $r[133]=array('export');
+$r[134]=array('dig');
+$r[135]=array('user');
+$r[136]=array('mail');
+$r[137]=array('password');
+$r[138]=array('related');
+$r[139]=array('Thank You');
+$r[140]=array('reclassify');
+$r[141]=array('with');
+$r[142]=array('in');
+$r[143]=array('poll');
+$r[144]=array('polls');
+$r[145]=array('tag');
+$r[146]=array('tags');
+$r[147]=array('suggest');
+$r[148]=array('hidden');
+$r[149]=array('confirm');
 
 ?>
