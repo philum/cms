@@ -2,7 +2,7 @@
 // _philum_installer
 //|_| |_| | |  | | |\/|
 //|   | | | |_ |_| |  |
-//http://philum.net 2004-2015
+//http://philum.net 2004-2018
 session_start();
 error_reporting(6135);
 ini_set('display_errors','1');
@@ -34,6 +34,9 @@ function menu($r,$d){
 foreach($r as $k=>$v){
 	if($v)$ret.=str_replace(array("[k]","[v]"),array($k,$v),$d);}
 return $ret;}
+
+function test_mysql(){
+return mysqli_num_rows(mysqli_query($_SESSION['qr'],'SHOW TABLES'));}
 
 /*--dirs--*/
 function read_dir($dr){ 
@@ -71,11 +74,14 @@ if($v!="submit")$ret.=balise("label",'for="'.$k.'"',$k).br();}
 return balise("form",'name="form" method="post" action="'.$go.'"',$ret);}
 
 function connect_file(){
-return w(1).' $dbp=mysql_pconnect("'.$_POST['localhost'].'","'.$_POST['root'].'","'.$_POST['password'].'"); $db="'.$_POST['database'].'"; $dbq=mysql_select_db($db,$dbp); '.w(0);}
+return w(1).'
+$db="'.$_POST['database'].'";
+$_SESSION["qr"]=mysqli_connect("'.$_POST['localhost'].'","'.$_POST['root'].'","'.$_POST['password'].'",$db);
+'.w(0);}
 
 function test_connection(){
 $f='params/_connectx.php'; if(is_file($f)){require($f);
-if(mysql_num_rows(mysql_query('SHOW TABLES')))return $db.': database ok';}
+if(test_mysql())return $db.': database ok';}
 else return 'pas de connexion';}
 
 function connexion(){$r=mkconn();
@@ -89,28 +95,33 @@ return $ret;}
 /*--databases--*/
 function make_sql_tables($qd,$qb,$r){
 if(!$qd)$qd="pub"; $qd=normalize($qd); if($qb=="sys")$qd="";
-$collate='collate latin1_general_ci ';
+if(ses('enc')=='utf-8')$charset='utf8mb4'; else $charset='latin1';
+$langset=$charset.'_general_ci';
+$collate='collate '.$langset;
 $sql='CREATE TABLE IF NOT EXISTS `'.$qd.'_'.$qb.'` ('."\n";
 foreach($r as $k=>$v){
 	switch($v){
 	case("ia"): $sql.='`'.$k.'` int(11) NOT NULL auto_increment,'."\n"; break;
 	case("int"): $sql.='`'.$k.'` int(11),'."\n"; break;
+	case("bint"): $sql.='`'.$k.'` bigint(26),'."\n"; break;
 	case("tin"): $sql.='`'.$k.'` tinytext '.$collate.'NOT NULL,'."\n"; break;
 	case("vc"): $sql.='`'.$k.'` varchar(255) '.$collate.'NOT NULL default "",'."\n"; break;
-	case("med"): $sql.='`'.$k.'` mediumtext '.$collate.'NOT NULL default "",'."\n"; break;
+	case("vc11"): $sql.='`'.$k.'` varchar(11) '.$collate.'NOT NULL default "",'."\n"; break;
+	case("vc2"): $sql.='`'.$k.'` varchar(2) '.$collate.'NOT NULL default "",'."\n"; break;
+	case("vc3"): $sql.='`'.$k.'` varchar(3) '.$collate.'NOT NULL default "",'."\n"; break;
+	case("med"): $sql.='`'.$k.'` mediumtext '.$collate.'NOT NULL,'."\n"; break;
 	case("long"): $sql.='`'.$k.'` longtext '.$collate.'NOT NULL,'."\n"; break;
 	case("time"): $sql.='`'.$k.'` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,'."\n"; break;}}
 $sql.=$r["key"]."\n";
-$sql.=') ENGINE=MyISAM collate latin1_general_ci; '."\n";
-$req=mysql_query($sql) or die(mysql_error()); 
+$sql.=') ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE='.$langset.'; '."\n";
+	$req=mysqli_query($_SESSION['qr'],$sql);
+	if(mysqli_connect_errno())p(mysqli_connect_error());
 if($req)$ret.=bal("p",$qd.'_'.$qb.': ok');
 return $ret;}
 
-function save_database($qd){
-$_SESSION['qd']=$qd;
-$r=tables_defs();
-foreach($r as $k=>$v){
-$ret.=make_sql_tables($qd,$k,$v);}
+function save_database($qd){$_SESSION['qd']=$qd;
+$f='/plug/install.php'; if(is_file($f)){require($f); return plug_install($qd);}
+$r=tables_defs(); foreach($r as $k=>$v)$ret.=make_sql_tables($qd,$k,$v);
 return $ret;}
 
 function install_node(){
@@ -133,7 +144,7 @@ function install_databases(){//$r=mktables();
 $db=test_connection();
 if($_GET['install_databases']=="node"){return install_node();}
 if($_GET['install_databases']=="sav"){return save_database($_POST["qd"]);}
-elseif(mysql_num_rows(mysql_query('SHOW TABLES'))) return "database installed";
+elseif(test_mysql()) return "database installed";
 else return instlink("install_databases","node");}
 
 /*--htacc--*/
@@ -261,39 +272,48 @@ function mkconn(){return array("localhost"=>"text","root"=>"text","database"=>"t
 function mkcfng(){return array("master_of_puppets"=>"text","htaccess"=>"text","create_hub_privilege"=>"text","first_hub"=>"text","create_master_config"=>"submit");}
 function mkhub(){return array("user"=>"text","mail"=>"text","password"=>"text","ok"=>"submit");}
 function tables_defs(){//make_sql_tables
-$table["art"]=array("id"=>"ia","ib"=>"int","name"=>"vc","mail"=>"vc","day"=>"int","nod"=>"vc","frm"=>"vc","suj"=>"vc","re"=>"int","lu"=>"int","img"=>"med","thm"=>"med","host"=>"vc","key"=>"PRIMARY KEY (`id`), KEY `nod_frm` (`day`,`frm`), KEY `suj` (`suj`), KEY `nod_day` (`day`,`nod`)");
+$table["art"]=array("id"=>"ia","ib"=>"vc","name"=>"vc","mail"=>"vc","day"=>"int","nod"=>"vc","frm"=>"vc","suj"=>"vc","re"=>"int","lu"=>"int","img"=>"med","thm"=>"med","host"=>"vc","key"=>"PRIMARY KEY (`id`), KEY `nod_frm` (`day`,`frm`), KEY `suj` (`suj`), KEY `nod_day` (`day`,`nod`)");
 $table["txt"]=array("id"=>"ia","msg"=>"long","key"=>"PRIMARY KEY  (`id`)");
-$table["idy"]=array("id"=>"ia","ib"=>"int","name"=>"vc","mail"=>"vc","day"=>"int","nod"=>"vc","frm"=>"vc","suj"=>"vc","msg"=>"long","re"=>"int","lu"=>"int","img"=>"vc","thm"=>"vc","host"=>"vc","key"=>"PRIMARY KEY (`id`), KEY `nod_frm` (`day`,`frm`), KEY `nod_suj` (`day`,`suj`), KEY `nod_nod` (`day`,`nod`)");
+$table["trk"]=array("id"=>"ia","ib"=>"int","name"=>"vc","mail"=>"vc","day"=>"int","nod"=>"vc","frm"=>"vc","suj"=>"vc","msg"=>"long","re"=>"int","host"=>"vc","key"=>"PRIMARY KEY (`id`), KEY `nod` (`nod`), KEY `suj_nod` (`suj`,`nod`), KEY `day_nod` (`day`,`nod`)");
 $table["user"]=array("id"=>"ia","name"=>"vc","pass"=>"vc","mail"=>"vc","day"=>"int","clr"=>"vc","ip"=>"vc","rstr"=>"vc","mbrs"=>"med","hub"=>"vc","nbarts"=>"int","config"=>"med","struct"=>"med","dscrp"=>"med","menus"=>"med","active"=>"int","key"=>"PRIMARY KEY (`id`), UNIQUE KEY `one` (`name`)");
-$table["data"]=array("id"=>"ia","ib"=>"vc","qb"=>"vc","day"=>"int","cat"=>"vc","val"=>"vc","msg"=>"med","key"=>"PRIMARY KEY (`id`), KEY `qb` (`qb`,`cat`,`val`)");
+$table["data"]=array("id"=>"ia","ib"=>"vc","val"=>"vc","msg"=>"med","key"=>"PRIMARY KEY (`id`), KEY `ib_val` (`ib`,`val`)");
 $table["sys"]=array("id"=>"ia","name"=>"vc","page"=>"vc","maj"=>"int","func"=>"med","key"=>"PRIMARY KEY (`id`,`name`), KEY `id` (`id`,`maj`)");
 $table["live"]=array("id"=>"ia","iq"=>"int","qb"=>"int","page"=>"vc","time"=>"time","key"=>
 "PRIMARY KEY (`id`), KEY `qb` (`qb`)");
+$table["live2"]=array("id"=>"ia","iq"=>"int","qb"=>"int","page"=>"vc","time"=>"time","key"=>
+"PRIMARY KEY (`id`), KEY `qb` (`qb`)");
 $table["ips"]=array("id"=>"ia","ip"=>"vc","nav"=>"vc","ref"=>"vc","nb"=>"int","time"=>"time","key"=>
 "PRIMARY KEY (`id`), KEY `ip` (`ip`)");
-$table["stat"]=array("id"=>"ia","qb"=>"vc","day"=>"int","pag"=>"long","nbu"=>"int","nbv"=>"nbv","key"=> "PRIMARY KEY (`id`), KEY `qb` (`qb`,`day`)");
+$table["stat"]=array("id"=>"ia","qb"=>"vc","day"=>"int","nbu"=>"int","nbv"=>"int","key"=>"PRIMARY KEY (`id`), KEY `qb` (`qb`,`day`)");
+$table["meta"]=array("id"=>"ia","cat"=>"vc","tag"=>"vc","key"=> "PRIMARY KEY (`id`)");
+$table["meta_art"]=array("id"=>"ia","idart"=>"int","idtag"=>"int","key"=> "PRIMARY KEY (`id`)");
+$table["poll"]=array("id"=>"ia","ib"=>"int","iq"=>"int","poll"=>"int","key"=> "PRIMARY KEY (`id`)");
+$table["yandex"]=array("id"=>"ia","ref"=>"vc11","txt"=>"long","lang"=>"vc2","key"=>"PRIMARY KEY (`id`)");
+$table["web"]=array("id"=>"ia","typ"=>"vc3","url"=>"vc","tit"=>"vc","txt"=>"long","img"=>"vc","key"=>"PRIMARY KEY (`id`)");
+$table["twit"]=array("id"=>"ia","ib"=>"int","twid"=>"bint","name"=>"vc","screen_name"=>"vc","date"=>"vc","text"=>"med","media"=>"vc","reply_id"=>"bint","reply_name"=>"vc","favs"=>"int","retweet"=>"int","followers"=>"int","friends"=>"int","quote_id"=>"bint","quote_name"=>"vc","key"=>"PRIMARY KEY (`id`)");
 return $table;}
 function htacc_opt(){return 'php_flag "allow_url_fopen" "On"
 php_flag "allow_url_include" "On"';}
 function htacc_data(){//AddDefaultCharset iso-8859-1
 return 'RewriteEngine on
-Options +Indexes
-Options -Multiviews
-Options +FollowSymlinks
-RewriteEngine on
 RewriteRule ^([0-9]+)$ /?read=$1 [L]
 RewriteRule ^read/([^/])$ /?read=$1#$1 [L]
 RewriteRule ^read/(.+)/page/([0-9]+) /?read=$1&page=$2#pages [L]
-RewriteRule ^source/(.+)/([0-9]+)/page/([0-9]+)$ /?source=$1&dig=$2&page=$3#pages [L]
+RewriteRule ^source/(.+)/([0-9]+)/page/([0-9]+)$ /?source=$1&dig=$2&page=$3 [L]
 RewriteRule ^source/(.+)/([0-9]+)$ /?source=$1&dig=$2 [L]
 RewriteRule ^source/(.+)$ /?source=$1 [L]
+RewriteRule ^search/(.+)/([0-9]+)/page/([0-9]+)$ /?search=$1&dig=$2&page=$3 [L]
+RewriteRule ^search/(.+)/([0-9]+)$ /?search=$1&dig=$2 [L]
+RewriteRule ^source/(.+)$ /?source=$1 [L]
+RewriteRule ^auteurs/(.+)$ /?auteurs=$1 [L]
 RewriteRule ^plugin/([^.]+)/([^.]+)/([^.]+)$ /?plug=$1&p=$2&o=$3 [L]
 RewriteRule ^plugin/([^.]+)/([^.]+)$ /?plug=$1&p=$2 [L]
 RewriteRule ^plugin/([^.]+)$ /?plug=$1 [L]
-RewriteRule ^plug/([^.]+)/([^.]+)/([^.]+)$ /plug.php?call=$1&p=$2&o=$3 [L]
-RewriteRule ^plug/([^.]+)/([^.]+)$ /plug.php?call=$1&p=$2 [L]
+RewriteRule ^plug/([^/]+)/([^/]+)/([^.]+)$ /plug.php?call=$1&p=$2&o=$3 [L]
+RewriteRule ^plug/([^/]+)/([^.]+)$ /plug.php?call=$1&p=$2 [L]
 RewriteRule ^plug/([^.]+)$ /plug.php?call=$1 [L]
 RewriteRule ^rss/([^.]+)$ /plug/rss.php?hub=$1 [L]
+RewriteRule ^api/([^.]+)$ /plug/api.php?query=$1 [L]
 RewriteRule ^module/([^/]+)/page/([0-9]+)$ /?module=$1&page=$2 [L]
 RewriteRule ^module/([^/]+)/([^.]+)/page/([0-9]+)$ /?module=$2:$1&page=$3 [L]
 RewriteRule ^module/([^/]+)/([^.]+)/([^.]+)/page/([0-9]+)$ /?module=$2/$3:$1&page=$4 [L]
@@ -303,27 +323,31 @@ RewriteRule ^module/([^/]+)/([^.]+)/([^.]+)/([^.]+)/([^.]+)$ /?module=$2/$3/$4/$
 RewriteRule ^module/([^/]+)/([^.]+)/([^.]+)/([^.]+)$ /?module=$2/$3/$4:$1 [L]
 RewriteRule ^module/([^/]+)/([^.]+)/([^.]+)$ /?module=$2/$3:$1 [L]
 RewriteRule ^module/([^/]+)/([^.]+)$ /?module=$2:$1 [L]
+RewriteRule ^admin/([^/]+)/([0-9]+)/([0-9]+)$ /?admin=$1&dig=$2&page=$3 [L]
+RewriteRule ^admin/([^/]+)/([0-9]+)$ /?admin=$1&dig=$2 [L]
+RewriteRule ^admin/([^/]+)/(.+)$ /?admin=$1&set=$2 [L]
 RewriteRule ^msql/(.+)/(.+)/(.+)/([0-9]+)$ /?msql=$1/$2&page=$4 [L]
 RewriteRule ^msql/(.+)$ /?msql=$1 [L]
-RewriteRule ^([^.]+)/(.+)/(.+)/page/([0-9]+)$ /?$1=$2&dig=$3&page=$4#pages [L]
-RewriteRule ^([^.]+)/(.+)//page/([0-9]+)$ /?$1=$2&page=$3#pages [L]
-RewriteRule ^([^.]+)/(.+)/page/([0-9]+) /?$1=$2&page=$3#pages [L]
-RewriteRule ^([^.]+)/(.+)/([0-9]+)$ /?$1=$2&dig=$3 [L]
-RewriteRule ^admin/([^/]+)/([^/]+)$ /?admin=$1&set=$2 [L]
-RewriteRule ^reload/(.+) /?id=$1&refresh== [L]
+RewriteRule ^app/([^/]+)/([^/]+)/([^/]+) /app.php?app=$1&p=$2&o=$3 [L]
+RewriteRule ^app/([^/]+)/([^/]+) /app.php?app=$1&p=$2 [L]
+RewriteRule ^app/([^/]+) /app.php?app=$1 [L]
+RewriteRule ^hub/([^.^/]+)$ /?hub=$1 [L]
+RewriteRule ^([^.]+)/(.+)/([0-9]+)/page/([0-9]+)$ /?$1=$2&dig=$3&page=$4#pages [L]
+RewriteRule ^([^.]+)/(.+)/page/([0-9]+)$ /?$1=$2&page=$3#pages [L]
+RewriteRule ^([^.]+)/(.+)/([^.]+)$ /?$1=$2&dig=$3 [L]
 RewriteRule ^([^.]+)/([^.^/]+)$ /?$1=$2 [L]
+RewriteRule ^reload/(.+) /?id=$1&refresh== [L]
 RewriteRule ^reload /?refresh== [L]
 RewriteRule ^home /?module=Home [L]
 RewriteRule ^all /?module=All [L]
 RewriteRule ^admin /?admin=console [L]
+RewriteRule ^update /?admin=update&update=program [L]
 RewriteRule ^login /?module=login [L]
 RewriteRule ^logon /?log=on [L]
 RewriteRule ^logout /?log=out [L]
 RewriteRule ^logoff /?log=off [L]
 RewriteRule ^reboot /?log=reboot [L]
 RewriteRule ^shutdown /?log=down [L]
-RewriteRule ^dev /?dev=dev [L]
-RewriteRule ^lab /?dev=lab [L]
 RewriteRule ^([^.]+)$ /?id=$1 [L]';}//AddType x-mapp-php5 .php
 
 function menus_t(){return array("","phpini","connexion","databases","program","htaccess","usefull","fin");}
@@ -345,7 +369,7 @@ case("phpini"): $ret='php version: '.$_SESSION['phpv'].br();
 case("connexion"): 
 	if($connect=='pas de connexion')$ret=instlink('connexion','='); else $ret=$c; break;
 case("databases"): 
-	if($connect!="pas de connexion")if(!mysql_num_rows(mysql_query('SHOW TABLES'))) 
+	if($connect!="pas de connexion")if(!test_mysql()) 
 	$ret=instlink('install_databases','='); else $ret=$c; w_master_p(); break;
 case("program"): $nbp=count($_SESSION['progam']); $_SESSION['progam']='';
 	if(count(dl_dirs())==$nbp)$ret=$c; else $ret=dl_prog(); break;

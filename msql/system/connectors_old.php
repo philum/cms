@@ -17,10 +17,17 @@ $r[":google"]=array(':video');
 $r[":vimeo"]=array(':video');
 $r[":ted"]=array(':video');
 $r[":jukebox2"]=array('§2:jukebox');
-$r["msq_template"]=array(':microtemplate');
-$r["msq_ads"]=array(':msq_html');
-$r["microform"]=array(':msq_conn');
-$r["microsql"]=array('msql');
-$r["polaroid"]=array('figure');
+$r[":msq_template"]=array(':msq_read');
+$r[":msq_ads"]=array(':msq_conn');
+$r[":microform"]=array(':msq_form');
+$r[":microsql"]=array(':msql');
+$r[":polaroid"]=array(':figure');
+$r[":popvideo"]=array(':video');
+$r[":2cols"]=array(':cols');
+$r[":3cols"]=array(':cols');
+$r[":/2"]=array(':block');
+$r[":/3"]=array(':block');
+$r[":twit_cache"]=array(':twitter');
+$r[":poptwit"]=array(':twitter');
 
 ?>

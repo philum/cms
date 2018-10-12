@@ -7,5 +7,5 @@ list($daym,$dayx)=explode(' ',microtime()); $stime=$dayx+$daym;
 if($_SESSION['dev']=='dev' or $_SESSION['dev']=='lab')$g='b';
 $r=array('lib','pop','spe','art','api','tri','mod','boot','sys','index');
 for($i=0;$i<10;$i++)require('prog'.$g.'/'.$r[$i].'.php');
-mysql_close();
+mysqli_close($_SESSION['qr']);
 ?>

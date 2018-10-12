@@ -55,7 +55,7 @@ $r[34]=array('110420','[support des sous-domaines ::b]
 $r[35]=array('110420','javascript d\'empêchement d\'affichage des caractères interdits au moment de la création du hub ; Le logiciel ne supporte plus les noms de hubs avec \'_\', \'-\', ou \'.\' ;');
 $r[36]=array('110421','ajout de [\'words\':b] : utilitaire côté utilisateur qui recense les mots d\'un article qui sont référencés dans chacune des classes de tags, ce qui permet d\'avoir une vue rapide de son contenu. Cette option d\'articles est désactivale dans \'config/restrictions/arts\')
 
-[http://philum.net/img/philum_296_editwords.jpg]');
+[http://philum.fr/img/philum_296_editwords.jpg]');
 $r[37]=array('110422','\'vacuum\' dans l\'onglet du menu d\'édition \'utils\' devient en ajax (importation d\'un article à la place du courant) ;');
 $r[38]=array('110423','dans admin / update : bouton \'update_program\' permet désormais d\'updater le logiciel en une seule opération (on peut toujours le faire dossier par dossier, fichier par fichier, ou forcer un fichier apparemment à jour à être downloadé à nouveau).');
 $r[39]=array('110424','ajout d\'un système interne pour les patches, qui apparaîtront dans \'admin/update\' lorsqu\'ils seront nécessaire. Les patches seront cumulatifs, et donc ils seront tous toujours référencés (parce que l\'utilisateur peut très bien arriver après que plusieurs patches aient eu à être appliqués...)');

@@ -1,0 +1,5 @@
+<?php //philum/microsql/connectors_basic
+$r=["_menus_"=>['description'],"[ ]"=>['detect: html link, image or media (mp3,mp4,wmv,flv,swf...)'],"url"=>['[url§text] apply the URL to the selected text'],"pub"=>['points to an article: 
+1234§ title:ad] : specifies title
+1234:ad] or[1234§(1-4):ad] auto title + options
+title:ad] : finds article in current language'],"img"=>['upload image'],"video"=>['video : youtube, dailymotion, google, ted, livestream, rutube'],"h"=>['balise: h3'],"b"=>['balise: bold'],"i"=>['balise: italic'],"u"=>['balise: underline'],"s"=>['css: \'stabilo\''],"r"=>['red text'],"k"=>['balise: strike'],"l"=>['balise: small'],"center"=>['align to center'],"right"=>['align to right'],"table"=>['table (option = vertical separator)'],"list"=>['list (for each line)'],"q"=>['blockquote'],"notes"=>['footer notes'],"--"=>['horizontal line'],"nbsp"=>['indivisible space'],"select"=>['select all'],"copy"=>['copy'],"paste"=>['paste'],"deline"=>['reduce new lines'],"delconn"=>['delete connector'],"findconn"=>['select connector'],"del"=>['delete'],"nl"=>['new line']];

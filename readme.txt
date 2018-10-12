@@ -1,10 +1,10 @@
-@philum 2016
-Free License GNU/GPL
+@philum 2018
+GNU/GPL
 
 ==================
 
 CMS
-Agregator
+Agregator of articles
 
 Overview :
 - save articles from the web
@@ -60,7 +60,7 @@ Extremely fast :
 - pages (and ajax calls) are displayed in less of 0.1 second
 
 Philum assume to be the fastest CMS actually (comparing to it's complexity), 
-works on low-cost servers, or can support high-frequentation (100K/Day).
+works on low-cost servers, or can support high-charge (100K/Day).
 
 The users can :
 - get updates of software
@@ -73,9 +73,5 @@ The users can :
 
 ==================
 
-version 160104
-
-==================
-
-Credits DavH 2004-2016
-http://philum.net
+Credits DavyHoyau 2004-2018
+http://philum.fr

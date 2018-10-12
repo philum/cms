@@ -1,13 +1,2 @@
-<?php
-//philum_microsql_default_clr_1
-$r[1]=array('eaeaea');
-$r[2]=array('dbdbdb');
-$r[3]=array('ffffff');
-$r[4]=array('cbcbcb');
-$r[5]=array('bd0000');
-$r[6]=array('eeeeee');
-$r[7]=array('000000');
-$r[8]=array('424242');
-$r[9]=array();
-
-?>
+<?php //philum/microsql/default_clr_1
+$r=[1=>['f2f2f2'],2=>['dcdcdc'],3=>['ededed'],4=>['777777'],5=>['bd0000'],6=>['ffffff'],7=>['141414'],8=>['333333'],9=>['cccccc']];

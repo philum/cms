@@ -1,17 +1,2 @@
-<?php
-//philum_microsql_default_config
-$r["_menus_"]=array('name','default');
-$r[1]=array('htaccess','yes');
-$r[2]=array('create_hub privilege to blogers','yes');
-$r[3]=array('first_node','default_hub');
-$r[4]=array('sub_domain','yes');
-$r[5]=array('update server','philum.net');
-$r[6]=array('gdf_ability','yes');
-$r[7]=array('google-site-verification','');
-$r[8]=array('time_zone','Europe/Paris');
-$r[9]=array('error_reporting','6135');
-$r[10]=array('ajax_buffer','2000');
-$r[12]=array('upload','250');
-$r[13]=array('updates','');
-
-?>
+<?php //philum/microsql/default_config
+$r=["_menus_"=>['name','default'],1=>['htaccess','yes'],2=>['create_hub privilege to blogers','yes'],3=>['first_node','default_hub'],4=>['sub_domain','yes'],5=>['update server','philum.fr'],6=>['gdf_ability','yes'],7=>['google-site-verification',''],8=>['time_zone','Europe/Paris'],9=>['error_reporting','6135'],10=>['ajax_buffer','4000'],12=>['upload','250'],13=>['updates',''],26=>['fr en es',''],27=>['thumb size','100/100']];

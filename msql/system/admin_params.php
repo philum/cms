@@ -1,22 +1,2 @@
-<?php
-//philum_microsql_admin_params
-$r["_menus_"]=array('category','name');
-$r[1]=array('config','modules_table');
-$r[2]=array('access','restricted area');
-$r[3]=array('articles','kmax');
-$r[4]=array('access','viewport');
-$r[5]=array('access','auto_design');
-$r[6]=array('articles','nb_arts_by_page');
-$r[9]=array('articles','art_order');
-$r[11]=array('access','new_users');
-$r[16]=array('config','nb_days');
-$r[17]=array('config','date_format');
-$r[18]=array('meta','usertags');
-$r[19]=array('meta','usertags:pictos');
-$r[21]=array('articles','forbidden_images');
-$r[23]=array('config','upload_extensions');
-$r[25]=array('access','lang');
-$r[26]=array('meta','articles_lang');
-$r[27]=array('config','thumbnails');
-
-?>
+<?php //philum/microsql/admin_params
+$r=["_menus_"=>['category','name'],1=>['config','modules_table'],2=>['access','restricted area'],3=>['articles','kmax'],4=>['access','viewport'],5=>['access','auto_design'],6=>['articles','nb_arts_by_page'],7=>['meta','art_types'],9=>['articles','art_order'],11=>['access','new_users'],16=>['config','nb_days'],17=>['config','date_format'],18=>['meta','usertags'],19=>['meta','usertags:pictos'],21=>['articles','forbidden_images'],23=>['config','upload_extensions'],25=>['access','lang'],26=>['meta','articles_lang'],27=>['config','thumbnails']];

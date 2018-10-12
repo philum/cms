@@ -1,0 +1,141 @@
+#menuH a{
+display:block;
+cursor:pointer;
+}
+#menuH li a{
+background:url() 0 0 no-repeat;
+/*height:23px;*/
+}
+#menuH li a:hover{}
+#menuH li li a{
+background:none;
+padding:0 5px;
+/*line-height:20px;*/
+/*color:#e85711;*/
+}
+#menuH ul li ul li a:hover{
+background:none;
+}
+#menuH ul li a:hover,
+#menuH ul li ul li ul li a:hover{
+/*color:#e85711;*/
+}
+#menuH, #menuH ul{
+/*float:left;*/
+list-style:none;
+margin:0;
+padding:0;
+}
+#menuH li li{
+padding:0;
+background:none;
+}
+#menuH ul ul a{
+display:block;
+text-decoration:none;
+width:auto;
+text-transform:none;
+font-size:1.1em;
+text-align:left;
+}
+#menuH li{
+/*float:left;*/
+padding:0;
+/*background:none;
+height:23px;*/
+}
+#menuH ul li{
+position:relative;
+padding:0;
+}
+#menuH li ul{
+top:22px;
+position:absolute;
+left:-999em;
+height:auto;
+width:150px;
+font-weight:normal;
+border-width:0;
+margin:0;
+padding:0;
+/*opacity:0.5;*/
+}
+#menuH ul{
+padding:0;
+margin:0;
+/*margin-left:2px;*/
+}
+#menuH li li{
+/*float:left;*/
+padding:0;
+width:150px;
+}
+#menuH li ul ul{
+/*margin:-23px 0 0 150px;*//*to reactive*/
+}
+#menuH li:hover ul ul, 
+#menuH li:hover ul ul ul,
+#menuH li:hover ul ul ul ul,  
+#menuH li.sfhover ul ul, 
+#menuH li.sfhover ul ul ul, 
+#menuH li.sfhover ul ul ul ul{
+left:-999em;
+}
+#menuH li:hover ul, 
+#menuH li li:hover ul, 
+#menuH li li li:hover ul, 
+#menuH li li li li:hover ul,
+#menuH li.sfhover ul, 
+#menuH li li.sfhover ul, 
+#menuH li li li.sfhover ul,
+#menuH li li li li.sfhover ul{
+left:auto;
+}
+/*parents hors-hover*/
+#menuH li:hover, #menuH li.sfhover{
+left:auto;
+}
+/*parents*/
+#menuH li:hover a, #menuH li.sfhover a{}
+/*restantes*/
+#menuH li li:hover a, #menuH li li.sfhover a{}
+/*hover en cours #e85711*/
+#menuH li li:hover a:hover, #menuH li li.sfhover a:hover{}
+#menuH ul ul a{
+background:none;
+}
+#menuH li.active{}
+#menuH li li.active{
+background:none;}
+
+#leftbar #menuH ul li{width:100%; margin:0;}
+#leftbar #menuH li a{display:block; padding:0 4px; line-height:20px;}
+/*#leftbar #menuH li ul{margin:-22px 0 0 150px;}*/ /*to reactive*/
+
+#rightbar #menuH ul li{width:100%; margin:0;}
+#rightbar #menuH li a{display:block; padding:0 4px; line-height:20px;}
+/*#rightbar #menuH li ul{margin:-22px 0 0 -150px;}*/ /*to reactive*/
+
+/*admin*/
+.popbt{font-family:Arial,sans-serif; font-size:12px; background:white; color:black; line-height:auto; padding:0px 4px; margin:1px 1px; border-radius:10px; border:1px solid #999; box-shadow: 0px -4px 7px #ddd inset, 0 2px 4px #ccc inset;}
+.popbt:hover{box-shadow: 0px -4px 7px #97d8e8 inset, 0 2px 4px #ccc inset; cursor:pointer;}
+
+#menuA {font-color:#000; padding:1px 4px; text-align:right; position:fixed; top:0; right:0; z-index:9999; background:#ddd; opacity:0.95; box-shadow:0 0 4px #444; border-radius:0 0 0 10px;}
+#menuA a{font-color:#000;}
+#menuA, #menuA ul{list-style:none;}/*float:right;*/
+#menuA li{display:inline; margin:0; padding:0;}
+#menuA li:hover{right:0;}
+#menuA li:hover ul{right:0;}
+#menuA li:hover ul ul{right:-999em;}
+#menuA li ul{position:absolute; right:-999em; margin:0px 0 0 -165px; display:block; 
+background:#ddd; box-shadow:0 0 4px #444; border-radius:0 0 0 10px; padding:2px 4px;}
+#menuA ul li{position:relative;}
+
+#menuB {padding:4px; background:#ddd; opacity:0.9; box-shadow:0 0 4px #444; border:0; width:auto; top:0;}
+
+.txtaa, .txtab, .txtac {margin:0px; padding:0 2px; background:0; 
+border-style:solid; border-width:1px 1px 0 1px; border-color:#999; 
+border-radius:4px 4px 0px 0px; box-shadow: 0px 3px 4px #fff inset;}
+.txtab:hover {box-shadow: 0px 2px 4px #fff inset; cursor:pointer;}
+.txtab {border:1px solid #999; box-shadow: 0px 2px 4px #ccc inset;}
+.txtac {border-width:0 0 1px 0; box-shadow:none; padding:0;}

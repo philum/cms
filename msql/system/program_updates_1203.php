@@ -6,7 +6,7 @@ le paramètre limite la croissance, 118 par défaut');
 $r[2]=array('0302','l\'index du répertoire \'plug\' est destiné à afficher le résultat d\'un plugin, dans une iframe, à destination de n\'importe quel site.
 Les css classiques, javascript basiques et l\'affichage d\'une popup font partie de ses capacités par défaut.
 (on appelle un plugin par \'?call=plugin&p=param1&o=param2\')
-ex: http://philum.net/plug/index.php?call=spitable&p=118');
+ex: http://philum.fr/plug/index.php?call=spitable&p=118');
 $r[3]=array('0303','la suggestion d\'article à un ami obtient un champ qui permet de rédiger un message');
 $r[4]=array('0304','plugin \'phi\' renvoie le nombre Phi d\'après l\'algorithme y=1+1/y découvert par Davy');
 $r[5]=array('0305','tout bête mais l\'ajout d\'un texte sur un lien pdf n\'était pas implémenté [url.pdf§text:on] ');

@@ -46,7 +46,7 @@ $r[12]=array('0409','- toutes les images sont renommées en randomname et la déte
 $r[13]=array('0410','- adaptation du module \'submenus\' au système des bulles ;
 - suppression des 17 classes associées \'menuH\' du css \'global\', et les 17 du design par défaut
 - ajout du connecteur \"bubble\" qui fait comme le module \'submenus\' (avec les menus sur une ligne)');
-$r[14]=array('0411','- nouvelle promo, avec 3 slideshows et une centaine d\'images commentées : http://philum.net/129
+$r[14]=array('0411','- nouvelle promo, avec 3 slideshows et une centaine d\'images commentées : http://philum.fr/129
 - amélioration de la commodité et petites réparations au moment de la création des slideshows');
 $r[15]=array('0411','- rénovation de la radio et du jukebox, qui sont un peut vieillots...');
 $r[16]=array('0412','- ajout du module \'Wall\', système de publication rapide (commentaires attachés à un paramètre)
