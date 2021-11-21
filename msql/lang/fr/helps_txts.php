@@ -1,26 +1,47 @@
-<?php //philum/microsql/helps_txts
-$r=["_menus_"=>['description'],"philum_pub_txt"=>['[[http://philum.fr/236§[phi1§32::picto]:popart] [v[:ver]§txtsmall2:css] [http://philum.fr§[logo:picto]]:center]'],"update_ok_alert"=>[''],"conn_help_txt"=>['Les connecteurs remplacent le code html par des fonctions interrogeables avec une séquence de variables, du type de celles-ci :
+<?php //philum/msql/helps_txts
+$r=["_menus_"=>['description'],"philum_pub_txt"=>['[http://philum.fr/2§[phi1§32::picto]:popart] [v[:ver]§txtsmall2:css] [http://philum.fr§[philum:picto]]'],"update_ok_alert"=>[''],"conn_help_txt"=>['Principe général
+
+Les connecteurs sont rédigés entre des crochets contenant un \":\".
+Ils sont situés à droite et non à gauche pour des raisons d\'optimisation.
+[param§option:conn]
 
 Connecteurs de mise en forme :
-- [lien§mot] : \'mot\' attaché à un \'lien\' ;
-- [mot:b] : \'mot\' en \'bold\' ;
-- [[http://lien.com§exemple]:b] ou [http://lien.com§[exemple:b]] : les connecteurs sont itératifs ;
-- [lien.extension] : certains médias [.jpg.mp3.flv.pdf.swf] font appel à des lecteurs
+- [http://url.com§mot] : \'mot\' attaché à une url
+- [mot:b] : \'mot\' en \'bold\'
+- [[http://lien.com§exemple]:b] ou [http://lien.com§[exemple:b]] : les connecteurs sont ont des connecteurs associés : .jpg, .mp3, .mp4, .pdf, .webm etc.
 
-Connecteurs logiciels :
-- [:connector] : appel minimal
-- [value:connector] : indique une valeur
-- [value§param:connector] : précise un paramètre
-- [value§param1/param2:connector] : paramètre multiple, ex: [img.jpg§140/140:thumb]
-- [param1/param2§value.extension] : (param à gauche) ex: [640/480/&flvar=true§MyFlashMovie.swf]
-- [ID:read§open:jconn] : un connecteur comme valeur
+Certains connecteurs acceptent des options multiples (largeur/hauteur) :
+[img.jpg§140/140:thumb]
 
-Codeline (pour le html)
-- [_VAR§div:bal] : une balise div qui s\'affiche si _VAR est non vide ;
-- [_VAR§div|id|css:balise] : une balise qui s\'affiche même si _VAR est vide ;
+Pour afficher un connecteur en deuxième instance d\'un bouton, il suffit de faire :
+[param§option:conn§button]
 
-Instructions
-- [param/title/command/option:module->target§button[,]] : la plus compliquée, appelle une série de modules depuis un connecteur, en précisant leurs paramètres en plus des paramètre du connecteur (\'module\' ou \'ajax\')'],"shop_class"=>['Cette section est laissée à l\'abandon
+Pour ouvrir un connecteur sur place, dans un menu ouvrable, il y a un connecteur spécial pour cela :
+- [ID:read§open:jconn]
+
+Le connecteur pour appeler un module (objets de pagination) :
+Les 4 premiers paramètres d\'un module sont : \"param/title/mode/option\"
+Module \"recents\" pour une catégorie \"public\", un titre \"hello\", un mode d\'affichage \"panel\" et une limite à 10 entrées :
+- [public/hello/panel/10:recents:module]
+
+Connecteurs pour appeler un plugin :
+Les plugins ne reçoivent qu\'un paramètre et une option :
+- [microarts:plug]
+- [hello§1:connectors:plug] //ici l\'option rajoute des crochets
+Pour créer un bouton :
+- [hello§1:connectors:plug§bt] //mais ça ne marche pas si \"hello\" est remplacé par \"hello:b\" parce qu\'il sera interprété en première instance, et renverra son code html
+
+On peut appeler un plugin à travers un module : 
+- [microarts:plug:module]
+
+Connecteur de l\'Api :
+[minday:14,order:id DESC,lang:all:api]
+
+Le principe des connecteurs est décliné en quatre autres dispositifs :
+- Les Templates, qui reçoivent des variables pré-nommées (pour les opérations lourdes qui nécessite une grande vitesse d\'exécution) ;
+- Le micro-template Vue, qui peut recevoir un connecteur [varable_name:var] et renvoyer des résultats récurrents (une liste d\'objets) ;
+- Le Codeline : permet de concevoir des connecteurs simples, en utilisant _VAR et _OPT qui proviennent de la commande du connecteur personnalisé ;
+- Le Basic, un langage de connecteur concaténés (et sans crochets), qui peut également servir pour fabriquer des connecteurs et des modules, en utilisant les ressources de la librairie du Framework.'],"shop_class"=>['Cette section est laissée à l\'abandon
 
 - créer un article par produit
 - le module \'cart\' affiche les éléments ajoutés au panier
@@ -141,7 +162,7 @@ Quelques exemples sont fournis parmi les connecteurs, templates et modules publi
 Pour les autres templates que celui de l\'article, il faut activer la restriction 55 \'user templates\', et enregistrer une version modifiée du template par défaut, du même nom. 
 En l\'absence de template utilisateur, le logiciel cherche un template public avant de se réfèrer à celui par défaut.
 
-Si la restriction \'user templates\' (55) est activée, la machine ira chercher le template utilisateur puis le public, avant d\'utiliser celui par défaut. Pour éviter qu\'un template public ne supplante celui par défaut, il suffit de sauver ce dernier pour en faire un template utilisateur.'],"track_follow"=>['Indiquer un mail pour recevoir les autres commentaires'],"track_captcha"=>['copier le code ici'],"update_ok"=>['Le logiciel a été mis a jour'],"update_help"=>['si une erreur survient, entrer en'],"upload_folder"=>['sélectionner le répertoire où envoyer le document ;
+Si la restriction \'user templates\' (55) est activée, la machine ira chercher le template utilisateur puis le public, avant d\'utiliser celui par défaut. Pour éviter qu\'un template public ne supplante celui par défaut, il suffit de sauver ce dernier pour en faire un template utilisateur.'],"track_follow"=>['Indiquer un mail pour recevoir les autres commentaires'],"track_captcha"=>['copier le code ici'],"update_ok"=>['Le logiciel est à jour'],"update_help"=>['Si une erreur survient, télécharger l\'image complète depuis l\'installateur'],"upload_folder"=>['sélectionner le répertoire où envoyer le document ;
 pour envoyer un répertoire d\'images il suffit de les contenir dans une archive .tar'],"bool"=>['Méthode booléenne : résultats communs aux recherches faites sur chaque mot'],"dev"=>['Le répertoire /progb contient une copie du programme. Il faut passer en mode Dev (/?dev=dev) pour que les modifs prennent effet.
 \'2prod\' copie les fichiers de /progb dans /prog. (les fichiers doivent avoir une permission suffisante)'],"blocsystem"=>['Le bloc \'system\' n\'est pas considéré comme une Div (un élément de la mise en page).
 Il définit les paramètres globaux. Certains modules sont critiques.'],"import_art"=>['URL de l\'article à importer'],"public_design"=>['Ceci affectera le design visible par le public'],"modules"=>['- content : prévu pour la div du contenu principale ;
@@ -203,21 +224,21 @@ Le répertoire virtuel permet de générer des classements publiques ; \'server/sha
 [a-z] : contexte d\'une catégorie existante
 [a-z] : contexte déclenché par l\'url /context/nom'],"updfonts"=>['Après avoir téléchargé une typo il faut aller dans admin/fonts et faire un \'inject\' ; ça consiste à décompresser le fichier, l\'installer, et signaler son existence à la table des typos du serveur, qui n\'est pas concerné par les mises à jour, contrairement à celle du système.'],"updpictos"=>['Le système a besoin de pictogrammes, il faut télécharger la police \'philum\' dans l\'onglet \'pictos\''],"breadcrumb"=>['Le Breadcrumb reçoit le nom de la catégorie, le nombre d\'articles et si besoin, la topologie à laquelle appartient l\'article. 
 La restriction Access/user_template (55) permet d\'utiliser le template nommé \'titles\' afin de contrôler l\'ordre et l\'apparence.'],"login"=>['log-in / nouvel utilisateur'],"mail_article"=>['Envoyer l\'article par mail'],"log_no"=>['nom d\'utilisateur requis'],"log_nopass"=>['mauvais mot de passe'],"log_nohub"=>['pas d\'inscription possible'],"log_newser"=>['S\'enregistrer comme nouvel utilisateur, de niveau :'],"empty_msg"=>['Message vide'],"meta_related"=>['ID d\'articles séparés par un espace'],"newsletter_ok"=>['Newsletter envoyée avec succès'],"newsletter_ko"=>['pas de résultat'],"newsletter_uns"=>['se désinscrire'],"conn_pub"=>['Les connecteurs remplacent le html pour gagner de l\'espace et permettent de rédiger des commandes pour des applications'],"search"=>['Boutons :
-- score : classement par quantité de résultats trouvés
-- booléen : intersection en cascade des recherches victorieuses
+- score : classement par quantité de résultats
 - segment : mot entier
+- booléen : plusieurs mots (séparés par un espace)
 - lang, cat, tag : inclure ou exclure des mots-liés (métas)
 - limit : nombre minimum d\'occurrences (attention à la casse)
 
 Astuces :
 - recherche vide : porte seulement sur des paramètres
 - id : l\'id d\'un article permet de l\'ouvrir immédiatement
-- * à la fin : déclenche une recherche booléenne
-- date : articles de la période ciblée (Y-m ou Y-m-d)
+- date : articles avant le Y-m ou Y-m-d : \"2000-01\"
 - bouton \'del\' : efface le cache
-- \'last\' renvoie le dernier article publié
+- \'1\' renvoie le dernier article publié
 - bouton \'avance-rapide\' : recherche continue sur d\'autres champs temporels jusqu\'à trouver une réponse (si cette option est active)
-- script de l\'API, ex : \"from:2012-01-01,until:2014-01-01\" (au moins une \',\' et un \':\')'],"defcons"=>['Les définitions d\'importation de sites sont des points d\'ancrage où commence et se termine la copie des parties qui nous intéressent dans la page.
+- script de l\'API, (utiliser un \':\' et une \',\') ex : \"search:mot1|mot2,avoid:mot3,cat:Justice,tag:justice|injustice\"
+- date précise (API) : \"date:1967,\" ou \"date:-08-15\" (tous les 15 aoûts)'],"defcons"=>['Les définitions d\'importation de sites sont des points d\'ancrage où commence et se termine la copie des parties qui nous intéressent dans la page.
 
 Ce sont le titre et le corps du texte, et en option un chapeau.
 Si le point de sortie n\'est pas spécifié c\'est la fin normale de la balise qui sera choisie (ça peut ne pas marcher).
@@ -228,9 +249,11 @@ le menu permet de choisir d\'autres tables plus spécialisées'],"trackhelp"=>['- 
 - lien vers un article : 1234:pub (renvoie le titre) ou 1234§mot
 - 123:track permet un rappel du commentaire 123
 - :web affiche un lien + titre + image du lien
-- #public : appelle le canal \'public\' du chat'],"suggest"=>['Coller l\'url de l\'article. 
-Une prévisualisation tentera de s\'afficher. 
-Le champ mail est optionnel et renvoie une mention \"Proposé par [préfixe du mail]\". Vous serez averti lors de la publication.'],"suggest_ok"=>['Votre article a été publié'],"console_cond"=>['Les modules (les éléments de la page) appartiennent à un [contexte:b]. Par défaut, ils sont : \"home\", \"cat\" (pour une catégorie d\'articles) et \"art\" (lecture d\'un article). On peut créer des contextes personnalisés, déclinés de cat et art.
+- #public : appelle le canal \'public\' du chat'],"suggest"=>['Vous pouvez importer un contenu web à partir de l\'url de l\'article, une prévisualisation tentera de s\'afficher. Ne vous inquiétez pas si la page ne s\'affiche pas correctement.
+
+Le champ mail permet d\'ajouter une mention \"Proposé par [préfixe du mail]\". Vous serez averti lors de la publication.
+
+Merci pour votre contribution !'],"suggest_ok"=>['Votre article a été publié'],"console_cond"=>['Les modules (les éléments de la page) appartiennent à un [contexte:b]. Par défaut, ils sont : \"home\", \"cat\" (pour une catégorie d\'articles) et \"art\" (lecture d\'un article). On peut créer des contextes personnalisés, déclinés de cat et art.
 
 Ainsi quand on appelle la page /context/name tous les modules appartenant à contexte \"name\" s\'affichent.
 
@@ -256,37 +279,46 @@ philum/photo/space (random img du dossier)'],"submod_types"=>['types de sous-mod
 - conjugaison : le verbe s\'accorde avec le sujet (attention aux é, és ées)
 
 Règles typographiques : 
-- espaces après une virgule, pas avant ; sauf pour le point-virgule : et les deux-points, mais pas dans les (parenthèses) ni dans les \"guillemets\".'],"tracks_error1"=>['Captcha mal renseigné'],"tracks_error2"=>['Merci d\'indiquer un nom'],"tracks_error3"=>['Message vide'],"retape"=>['Des connecteurs obsolètes ont été remplacés'],"prmb5"=>['Le param \'auto_design\' (5) est actif : il supplante le design utilisateur'],"flog"=>['fast-log: retenez votre ID pour être reconnu et retrouver vos données'],"memstorage"=>['les contenus sont stockés dans les variables locales de votre navigateur'],"blocmenu"=>['Le bloc \'menu\' a de particulier ses css qui lui permettent de gérer correctement les menus présentés dans des ul<li'],"bloctest"=>['ne s\'affiche pas, permet de tester des modules'],"ftext"=>['le contenu et l\'édition sont publics'],"first_user"=>['Créer le compte Admin'],"new_user"=>['Création de compte'],"meta_lang"=>['ID des versions dans une autre langue.'],"tracks_moderation"=>['les commentaires sont modérés'],"twitter_oAuth"=>['Paramètres d\'authentification de l\'API twitter 1.1 (https://apps.twitter.com/)'],"tag_rename"=>['Renommer un tag va, s\'il existe déjà, le détruire et associer les articles au tag existant'],"usertags"=>['Ajouter des tags à cet article et retrouvez-les dans vos favoris.
+- espaces après une virgule, pas avant ; sauf pour le point-virgule : et les deux-points, mais pas dans les (parenthèses) ni dans les \"guillemets\".'],"tracks_error1"=>['Captcha mal renseigné'],"tracks_error2"=>['Merci d\'indiquer un nom'],"tracks_error3"=>['Message vide'],"retape"=>['Des connecteurs obsolètes ont été remplacés'],"prmb5"=>['Le param \'auto_design\' (5) est actif : il supplante le design utilisateur'],"flog"=>['Retenez votre numéro de jeton pour retrouver vos données'],"memstorage"=>['les contenus sont stockés dans les variables locales de votre navigateur et ne sont accessibles que par vous'],"blocmenu"=>['Le bloc \'menu\' a de particulier ses css qui lui permettent de gérer correctement les menus présentés dans des ul<li'],"bloctest"=>['ne s\'affiche pas, permet de tester des modules'],"ftext"=>['le contenu et l\'édition sont publics'],"first_user"=>['Créer le compte Admin'],"new_user"=>['Création de compte'],"meta_lang"=>['ID des versions dans une autre langue.'],"tracks_moderation"=>['les commentaires sont modérés'],"twitter_oAuth"=>['Paramètres d\'authentification de l\'API twitter 1.1 (https://developer.twitter.com/)'],"tag_rename"=>['Renommer un tag va, s\'il existe déjà, le détruire et associer les articles au tag existant'],"usertags"=>['Ajouter des tags à cet article et retrouvez-les dans vos favoris.
 Les tags utilisateurs sont publics.'],"api"=>['L\'API permet de réaliser des tris complexes via une commande.
 - /module/api/{command} : affiche le résultat
-- /api/{command] : flux open data en json'],"like"=>['Les Likes sont publics'],"overcats"=>['Une sur-catégorie peut exister avec un champ vide, dans ce cas la catégorie est répertoriée à la racine.'],"overcats_menu"=>['Overcats peut être utilisé comme module, comme menu admin, ou comme objet de bureau, en utilisant une App avec les params type=desktop et process=overcats'],"menubub"=>['types de menububs : 
+- /api/{command] : flux open data en json'],"like"=>['Les Likes sont publics'],"overcats"=>['Une sur-catégorie peut exister avec un champ vide, dans ce cas la catégorie est répertoriée à la racine.'],"overcats_menu"=>['Overcats peut être utilisé comme module, comme menu admin, ou comme objet de bureau, en utilisant une App avec les params type=desktop et process=overcats'],"menubub_edit"=>['types de menububs : 
 - (aucun type) : interprète (a-z) = catégorie, (0-9) = article, /module/... = link
 - module : ouvre le contenu d\'un module (ex: ///lines/4///1:categories )
 - plug : (ouvre un plug)
 - ajax : (ex: popup_track___admin)'],"spitable"=>['On ne pourra jamais dessiner réellement un atome. Une représentation graphique de la réalité ne fait que tenir compte d\'un certain nombre de paramètres.
 
-Les atomes sont représentés au moyen de leur configuration électronique. Le numéro atomique, sur la table, est situé sur le dernier emplacement électronique de l\'atome. C\'est la même table pour dénombrer les atomes que pour dénombrer les électrons de chaque atome.
+Sur cette table on peut voir les couronnes et les sous-couronnes.
+Chaque sous-couronne exprime une famille chimique.
+Chaque couronne contient un nombre de sous-couronnes égal au rang de la couronne (1:1, 2:2, ...).
 
-Les électrons sont répartis en couronnes, et chacune possède potentiellement autant de sous-couronnes que le numéro de cette celle-ci (la 5ième peut posséder 5 sous-couronnes). 
-Chaque sous-couronne a une configuration identique, faite d\'un nombre d\'emplacements électroniques qui augmente de 4 à chaque niveau orbital. Le nombre d\'électrons à chaque sous-couronne est la somme des sous-couronnes (ex: 32 est composé de 2+6+10+14).
+Chaque atome est représenté par sa configuration électronique. Le plus souvent le nombre atomique correspond à la position du dernier électron de cet atome.
+
+Le nombre d\'emplacement de chaque sous-couronne augment de 4 à chaque sous-couronne.
 
 L\'intérêt de cette représentation est de mettre en évidence le fait que les sous-couronnes sont parlantes des familles chimiques auxquelles appartiennent les atomes qui y sont représentés.
 
-La périodicité (spirale) des éléments est ainsi définie par un algorithme très simple (qui ne tient pas compte de certaines variations sur les gros atomes).
-On peut voir que la structure globale (petit - grand - petit) est conservée à toutes les échelles, et que cette table peut s\'étendre indéfiniment.
+La périodicité (spirale) des éléments est ainsi définie par un algorithme très simple (utilisé pour dessiner les cases).
+On peut voir que la construction que produit cet algorithme permet une croissance infinie.
 
-Dans la version /spigrow ont été représentés la position réelle des électrons sur les couronnes, qui subit parfois quelques variations par rapport au modèle idéal de la table.'],"fav_fav"=>['Articles ajoutés aux favoris'],"fav_tags"=>['Articles référencés par un tag'],"fav_com"=>['Paramètres de génération de flux'],"fav_poll"=>['Articles votés'],"fav_visit"=>['Articles visités'],"fav_shar"=>['Articles partagés'],"fav_edit"=>['Script de l\'Api'],"levenshtein"=>['utilise l\'algorithme de distance de Levenshtein'],"study"=>['Coller un texte dans le champ va créer un tableau composé de chaque phrase du texte dans une cellule associée à d\'autres où on peut ajouter des commentaires'],"tlex"=>['Publier sur Tlex : ajouter le oAuth de l\'Api Tlex dans la table users/(hub)_tlex
+Les anomalies par rapport à l\'algorithme de remplissage électronique sont signalées graphiquement, de sorte à visualiser la configuration électronique réelle de chaque atome.'],"fav_fav"=>['Articles favoris'],"fav_tags"=>['Articles référencés par un tag'],"fav_com"=>['Paramètres de génération de flux'],"fav_poll"=>['Articles votés'],"fav_visit"=>['Articles visités'],"fav_shar"=>['Articles partagés'],"fav_edit"=>['Script de l\'Api'],"fav_like"=>['Articles Likés'],"levenshtein"=>['utilise l\'algorithme de distance de Levenshtein'],"study"=>['Permet de créer une étude de texte, phrase par phrase.'],"tlex"=>['Publier sur Tlex : ajouter le oAuth de l\'Api Tlex dans la table users/(hub)_tlex
 Il peut y avoir plusieurs comptes'],"twit"=>['Conditions générales d\'utilisation : les informations obtenues ne doivent pas servir à des fins commerciales ou de nuisance physique ou morale.
 Politique de confidentialité : les informations obtenues ne peuvent être relayées sans l\'autorisation des personnes concernées.
 '],"meta_abilities"=>['Abilités déléguées aux utilisateurs'],"umrennum"=>['Renumérote les articles par date et en classant les favoris, retweets et status'],"search_cases"=>['Cliquer plusieurs fois dans le menu des métas (lang,cat,tag) pour :
 - inclure exclusivement 
 - exclure 
 - ne pas tenir compte (par défaut)
-du ou des mots-liés.'],"star"=>['exemple 1, avec dc (déclinaison), ra (ascension droite) et dist (degrés et AL) : 
-dc > -23.432, dc < -21.82, ra > 255.25, ra < 270.83, dist < 100
+du ou des mots-liés.'],"star"=>['- ra (ascension droite en heures), dc (déclinaison en degrés), et dist (distance en AL)
+ex: ra>15,ra<21,dc>-1,dc<5,dist>13,dist<19
 
-exemple 2, une liste d\'étoiles nommées (hip par défaut) :
-HD 150680, hd150680, hip 99461, 88601, 2021'],"gaia"=>['exemple 1, avec dc (déclinaison), ra (ascension droite) et dist (degrés et AL) : 
+- paramètre radius (degrés par défaut, h, m, rad, mas)
+ex: ra=18,dc=2,dist=16,radius=3
+
+- autour d\'une étoile
+ex: 88601,dist<30,radius=1h
+
+- une liste d\'étoiles nommées (HIP par défaut) :
+HD 150680, hd150680, hip99461, 88601, 2021'],"gaia"=>['exemple 1, avec dc (déclinaison), ra (ascension droite) et dist (degrés et AL) : 
 dc > -23.432, dc < -21.82, ra > 255.25, ra < 270.83, dist < 100
 
 - une liste d\'étoiles nommées par leur id Gaia (nombre à 19 chiffres) séparés par un espace'],"umrec"=>['- Pour appeler un message précis : 
@@ -294,6 +326,21 @@ http://oumo.fr/context/compile/O6-144
 - Pour l\'intégrer dans une page web via une iframe (utiliser l\'id) :
 http://oumo.fr/plug/umrec/1464
 - Depuis l\'éditeur (article ou commentaires) :
-[1464:umcom:on]'],"mercury"=>['Lecteur web universel :
+[1464:umcom:on] affiche le bloc
+[1464§1:umcom:on] affiche un lien vers le bloc'],"mercury"=>['Lecteur web universel :
 permet de lire le contenu brut d\'une page web.
-Utilise l\'API Mercury. Si votre site n\'y répond pas, il est préférable de s\'y conformer.'],"mercurykey"=>['Admin : ajouter l\'api_key (mercury.com) dans la table mercury, ligne 1 colonne 0'],"searchlang"=>['recherche multilingue'],"umsearchlang"=>['recherche multilingue']];
+Utilise l\'API Mercury. Si votre site n\'y répond pas, il est préférable de s\'y conformer.'],"mercurykey"=>['Admin : ajouter l\'api_key (mercury.com) dans la table mercury, ligne 1 colonne 0'],"searchlang"=>['recherche multilingue'],"umsearchlang"=>['recherche multilingue'],"not_published"=>['Article indisponible'],"tables"=>['Séparateurs : 
+- colonnes :\"|\" ou virgules
+- lignes : \"¬\" ou saut de ligne'],"menubub"=>['N° de table des menus'],"tweetfeed"=>['Diffusion Twitter'],"tweetfeed_help"=>['Utiliser uniquement un ou plusieurs modules \'api_arts\' ;
+la clef twitter utilisée est la N°4'],"purpose"=>['Ajoutez et votez des propositions ; vous ne pouvez effacer votre entrée que le jour courant.'],"nodes"=>['Ceci permettra de créer une nouvelle couche de Hubs (un Node).
+Url du node : /?qd=nodename
+Écrivez $qd=\"pub2\" ; dans _connectx pour attribuer un nom de domaine au n&oelig;ud \"pub2\".'],"updatenotes"=>['notes de mise à jour'],"lastupdate"=>['Dernière synchronisation en date du'],"softwareupdated"=>['Le logiciel a été mis à jour'],"softwarever"=>['version locale'],"softwaredist"=>['version distante'],"updatedetails"=>['détails de la dernière mise à jour'],"updateno"=>['Ce serveur n\'est pas configuré pour recevoir des mises à jour'],"cookie"=>['Le cookie nommé \"iq\" contient l\'id de votre IP, ce qui permet de ne considérer qu\'un seul visiteur même si votre IP change. Voir [privacy:help§politique de confidentialité des données].'],"privacy"=>['Le site ne procède à aucune utilisation ni revente des données liées aux visiteurs, hormis pour les statistiques de fréquentation du site.
+Toutes les activités sur le site sont supprimées tous les ans en moyenne.'],"umrsrch"=>['Rechercher :
+- un id (1873)
+- un titre (Oay-126)
+- une date ymd (150706)
+- un terme dans n\'importe quelle langue
+- une liste d\'id ou de titres (ot-100,1873,312-14) (aussi en mode tableur)'],"starmap"=>['étoiles HD ou HIP (HIP par défaut)
+ex : HD 150680, hd150680, hip99461, 88601, 2021
+commandes pré-établies : knownstars, allstars
+Accepte les requêtes de Star (ra, dc, dist, radius)']];

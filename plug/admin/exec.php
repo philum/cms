@@ -1,60 +1,70 @@
 <?php
 //philum_exec
 
-function f_inp_insert($r){
+class exec{
+static function form_insert($r){
 if($r)foreach($r as $k=>$v){
 	if($v=="<-")$vb='\n';else $vb=$v;
 	$ret.=ljb("txtx","insert",$vb,$v).' ';}
 return $ret;}
 
-function strip_r($r){
+static function strip_r($r){
 foreach($r as $k=>$v){
-	if(is_array($v))$ret[$k]=strip_r($v);
+	if(is_array($v))$ret[$k]=self::strip_r($v);
 	else $ret[$k]=stripslashes($v);}
 return $ret;}
 
-function readfunc($d){
-$r=msql_read('system','program_core',$d); unset($r['_menus_']);
-$r=strip_r($r);
+static function readfunc($d){
+$r=msql::read('system','program_core',$d,1);
+$r=self::strip_r($r);
 $ret=on2cols($r,340,7);
 $stl=strlen($r['function']);
 $vrs=substr($r['variables'],$stl+1,-1);
-$ret.=input(1,'fprm',$vrs);
+$ret.=input1('fprm',$vrs);
 $ret.=ljb('txtbox','jumpMenuIns',$r['function'],'insert');
 return $ret;}
 
-function exc_lib(){
-$rf=msql_read('system','program_core','',1);
-$ref=array_keys_r($rf,0); asort($ref);
-foreach($ref as $k=>$v){$ret.=lj('','popup_plup___exec_readfunc_'.$k,$v).br();}
-return divs('width:180px; overflow:auto; height:240px;',$ret);}
+static function lib(){$ret='';
+$r=msql::read('system','program_core','',1);
+$rb=msql::sort($r,0);
+foreach($rb as $k=>$v)
+	$ret.=ljb('','insert_b',[$v[0].'('.$v[1].');','codarea'],$v[0].'('.$v[1].')');
+return divc('list',$ret);}
 
-function exc_fast(){$ref=array('{}','[]','if()','foreach($r as $k=>$v)','$ret=;','strpos($d,\'x\')!==false','return $ret;','.br()','echo \'ee\';',"\r");
-foreach($ref as $k=>$v)$ret.=ljb('txtx','insert',($v),$v).br();
-return divs('width:180px; overflow:auto; height:240px;',$ret);}
+static function fast(){$ref=['function done(){}','{}','[]','if()','foreach($r as $k=>$v)','$ret=;','strpos($d,\'x\')!==false','return $ret;','.br()','echo \'ee\';',"\r"]; $ret='';
+foreach($ref as $k=>$v)$ret.=ljb('txtx','insert',[$v,'codarea'],$v);
+return divc('list',$ret);}
 
-function exc_js(){echo js_code('function jumpMenuIns(fc){
+static function js(){return 'function jumpMenuIns(fc){
 	var vr=document.getElementById(\'fprm\').value;
 	var lk=fc+\'(\'+vr+\')\';
-	insert(lk);}');}
+	insert_b(lk,\'codarea\');}';}
 
-function exc_run($a,$b,$res){$d=ajxg($res);
+static function run($a,$b,$res){$d=ajxg($res);
 if(!auth(6))return;
-$f='plug/_data/exec.php?'.randid();
+if(hostname()!='86.49.245.213.rev.sfr.net')return;
+$f='_datas/exec'.date('ymd').'.php'; mkdir_r($f);
 if(is_file($f))unlink($f);
+//$d=str_replace(['sql(','rq('],'',$d);
 if($d)write_file($f,'<?php '.$d);
-if(is_file($f))require($f);}
+if(is_file($f))require($f);
+//if(!$ret)$ret='nothing';
+return isset($ret)?$ret:'';}
 
-function plug_exec(){exc_js(); $rid='plg'.randid();
-$j=$rid.'_plug__2_exec_exc*run___txtarea'; $sj='SaveJ(\''.$j.'\')';
-if($_SESSION["auth"]<6)$btn.=btn('txtalert','need auth>=7');
-else{$btn.=lj('',$j,picto('reload')).' ';
-	$btn.=lj('txtx',"popup_plup___exec_exc*lib","lib").' ';
-	$btn.=lj('txtx',"popup_plup___exec_exc*fast","fast").' ';
-	$btn.=msqlink('system','program_core').' ';
-	$btn.=lj('txtx',"exec","x").' ';
-	$btn.=lj('popsav',$j,'exec').br();}
-$ret.=txarea('txtarea',$p,61,18,atc('console'));//atb('onkeyup',$sj)..atb('onclick',$sj)
-return $btn.divc('row',$ret).div(atd($rid).atc('row'),'');}
-
+static function home($p){$rid='plg'.randid();
+//Head::add('jscode',self::js());
+$j=$rid.'_exec,run__2_____codarea';
+if($_SESSION['auth']<6)$bt=btn('txtalert','need auth>6');
+else{$bt=lj('',$j,picto('ok')).' ';
+	$bt.=lj('txtx','popup_exec,lib','lib').' ';
+	$bt.=lj('txtx','popup_exec,fast','fast').' ';
+	//$bt.=select($r,'');
+	$bt.=msqbt('system','program_core').' ';
+	//$bt.=lj('txtx',"exec","x").' ';
+	$bt.=lj('popsav',$j,'exec').br();}
+$ret=js_code(self::js());
+$sj=sjt($j); //$onk=atjr('autocomp','codarea');
+$ret.=textarea('codarea',$p?$p:'$ret=\'hello\';',44,32,atc('console').atk($sj).atkp($sj));
+return $bt.div(atc('grid-pad').ats('min-width:640px'),divc('col1',$ret).div(atd($rid).atc('col2'),''));}
+}
 ?>

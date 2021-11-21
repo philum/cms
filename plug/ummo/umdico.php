@@ -3,15 +3,18 @@
 
 function udc_source(){//AADOAUGOO
 $r=msql_read('users','ummo_umvoc_1','');
-$sql='where nod="ummo" and substring(frm,1,1)!="_" and frm!="études" and frm!="Idéogrammes"  and frm!="AiooyaaOaxiiboo" and re>0 and msg like ';
+$ry=['','word','expression','name','planet','unit','math'];
+$sql='where nod="ummo" and substring(frm,1,1)!="_" and frm!="Etudes" and frm!="Blog" and substring(frm,1,2)!="ES" and re>0 and msg like ';
 if($r)foreach($r as $k=>$v){if($k!='_menus_')
 	$rb=sql_inner('frm','qdm','qda','id','k',$sql.'"% '.$v[0].' %"','');
-	if($rb){$rb=array_keys($rb); $v[3]=count($rb)?implode(', ',$rb):''; $rc[$k]=$v;}}
-$r=msql_modif('','ummo_umvoc_1',$rc,'','arr','');}
+	$v[2]=is_numeric($v[2])?$ry[$v[2]]:$v[2];
+	if($rb){$rb=array_keys($rb); $v[3]=count($rb)?implode(', ',$rb):'';}
+$rc[$k]=$v;}
+$r=msql::modif('','ummo_umvoc_1',$rc,'arr','','');}
 
 function udc_imz($f,$n='2'){
-list($w,$hb)=fwidth($f);
-$w=round($w/$n);$h=round($h/$n);
+list($w,$h)=fwidth($f);
+$w=round($w/$n); $h=round($h/$n);
 return divs('width:'.$w.'px;',image('/'.$f,$w,$h));;}
 
 function udc_build($p){
@@ -28,13 +31,24 @@ if($ra)foreach($ra as $k=>$v){
 	$rb[$k][]=stripslashes($v[1]);
 	$rb[$k][]=lj('','popup_search___'.ajx($k),picto('search',16));
 	$rb[$k][]=$v[3];}
-return make_table($rb);}
+return tabler($rb);}
+
+function umdc_update(){
+$ra=msql_read('users','ummo_umvoc_1','',0);//voc,def,typ,ref
+$r=sql('voc,def,typ','dico','',''); //voc,def,snd,typ
+if($r)foreach($r as $k=>$v){
+	$kb=in_array_r($ra,$v[0],0);
+	if(!$kb && $v[1])$rb[]=[$v[0],$v[1],$v[2],''];}
+$rc=array_merge_b($ra,$rb);//pr($rc);
+if($rb)msql::modif('','ummo_umvoc_1',$rc,'arr','','');
+return 1;}
 
 function plug_umdico($p,$o){
 ses('qdvoc',qd('umvoc'));
 ses('qdvoc_b',qd('umvoc_arts'));
+//if(auth(6))$p=umdc_update();//import defs from dicoum and update ref
 $ret=udc_build($p);
-$ret.=msqlink('','ummo_umvoc_1','').' ';
+$ret.=msqbt('','ummo_umvoc_1','').' ';
 $ret.=lkt('','/plug/umvoc',picto('link'));
 return $ret;}
 

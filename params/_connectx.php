@@ -1,6 +1,5 @@
 <?php
-//generated while install
-$db='database';
-$dbb=mysql_pconnect('localhost','root','password'); 
-$dbq=mysql_select_db($db,$dbb);
+$db='phinfo';
+if($_SESSION['dev']=='lab')$db='';
+$_SESSION['qr']=mysqli_connect('localhost','root','',$db);
 ?>

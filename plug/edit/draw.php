@@ -60,7 +60,7 @@ $(document).ready(function(){
 ';}
 
 function draw_save($d){$f='img/draw_temp.png'; //$d.='=';
-//echo txarea('',$d,20,10);//(substr($d,22));
+//echo textarea('',$d,20,10);//(substr($d,22));
 write_file($f,base64_decode(substr($d,22)));
 return image($f);}
 
@@ -70,7 +70,7 @@ function draw_css(){return '#canvas{border:1px solid #999; margin:0; display:blo
 #couleurs a{display:inline-block; width:10px; height:10px; margin-right:10px; text-indent:-4000px; overflow:hidden;}
 #couleurs a.actif{width:20px; height:20px;}';}
 
-function plug_draw($w,$h){if(!$w)$w=400;//currentwidth();
+function plug_draw($w,$h){if(!$w)$w=400;//cw();
 Head::add('jslink','/js/jquery.js');
 Head::add('jscode',draw_js());
 Head::add('csscode',draw_css());
@@ -80,11 +80,11 @@ for($i=0;$i<$n;$i++){
 	$c='" style="background: none repeat scroll 0% 0% '.$r[$i].';" data-couleur="'.$r[$i];
 	$cl.=balc('li','',lka($c,$r[$i]));}
 $ret.=balc('ul','" id="couleurs',$cl);
-$inp=label('largeur_pinceau','','','width');
-$inp.=input('range','largeur_pinceau',5,'" min="2" max="20" size=1');
+$inp=label('largeur_pinceau','width');
+$inp.=input0('range','largeur_pinceau',atz(1).atb('min',2).atb('max',20));
 //$inp.=balc('output','" id="output','pixels');
-$inp.=input('reset','reset','reset','');
-$inp.=input('button','save','save','');
+$inp.=input0('reset','reset','reset');
+$inp.=input0('button','save','save');
 $ret.='<form id="largeurs_pinceau">'.$inp.'</form>';
 return $ret;}
 

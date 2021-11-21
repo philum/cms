@@ -1,51 +1,51 @@
 <?php
 //philum_microsql_admin
 
-function msqlang(){return msql_read('lang','helps_msql','');}
-function gpage($p=''){return $p?'/page/'.($p?$p:$_SESSION['page']):'';}
+function gpage($p=''){return $p?'&page='.($p?$p:$_SESSION['page']):'';}
 
 //msql_menu
-function msql_menu($r,$type,$slct,$url){$r=explode(' ',$r);//j
+function msql_menu($r,$type,$slct,$url){$r=explode(' ',$r);
 foreach($r as $k=>$v){if($v)$ret.=lkc($v==$slct?'txtnoir':'txtx',$url.$v,$v).br();}
 return $ret;}
 
-function msql_repair($dr,$nod){$f=$dr.$nod.'.php'; 
-if(is_file($f)){require($f); if($$nod)save_vars($dr,$nod,$$nod);}}
-
 function msqm_lnk($r,$nurl,$vf,$cs1,$cs2,$kv){
+$nurl=str_replace('/msql/','',$nurl); $ret='';
 foreach($r as $k=>$v){
-	if($kv=="k")$v=$k; elseif($kv=="v")$k=$v;
+	if($kv=='k')$v=$k; elseif($kv=='v')$k=$v;
 	$lk=str_replace('#',$k,$nurl); $cs=$vf==$k?$cs1:$cs2; 
 	if($k==$_SESSION['qb'] && $vf!=$k)$cs='txtblc';
-	if($v=='lang' && strpos($lk,'lang'))$lk=str_replace('lang','lang/'.prmb(25),$lk);
-	if($v)$ret.=lkc($cs,$lk,$v).' ';}
+	if($v=='lang' && strpos($lk,'lang')!==false)$lk=str_replace('lang','lang/'.prmb(25),$lk);
+	//if($v)$ret.=lkc($cs,$lk,$v).' ';
+	if($v)$ret.=lj($cs,'msqdiv_msqladm___'.ajx($lk),$v).' ';}
 return $ret;}
 
+function msql_slct($id,$k,$murl){
+return select_j($id.$k,'msqlc','',$murl,'','2');}
+
 function msql_menus($ra){
-list($bases,$base,$dirs,$dir,$prefixes,$prefix,$files,$table,$ver,$folder)=$ra;
-$rb=$files[$prefix]; $rc=$rb[$table]; $url=sesm('url');
-$b=$base.'/'; if($dir)$d=$dir.'/'; $p=$prefix; $t='_'.$table; $tb=$table.'_'.$ver; 
+//$b=$base.'/'; if($dir)$d=$dir.'/'; $p=$hub; $t='_'.$table; $tb=$table.'_'.$ver;
+list($bases,$base,$dirs,$dir,$hubs,$hub,$files,$table,$ver,$folder)=$ra;
+$rb=$files[$hub]??''; $rc=$rb[$table]??''; $url=sesm('url'); $ret='';
+$b=$base.'/'; $d=$dir?$dir.'/':''; $p=$hub; $t='_'.$table; $tb=$table.'_'.$ver;
 if(is_array($bases)){asort($bases); $nurl=$url.'#/'.$d.$p.$t;//base
-	$rt['base']=msqm_lnk($bases,$nurl,$base,'txtnoir',"txtx","k");}
+	$rt['base']=msqm_lnk($bases,$nurl,$base,'txtnoir','txtx','k');}
 if(is_array($dirs)){asort($dirs); $nurl=$url.$b.'#/'.$p.$t;//dir
-	$rt['directory'].=msqm_lnk($dirs,$nurl,$dir,"txtnoir","txtx","k");}
-if($prefixes){asort($prefixes); $nurl=$url.$b.$d.'#'.$t;//prefix
-	$rt['prefix']=msqm_lnk($prefixes,$nurl,$prefix,'txtnoir','txtx','v');}
-if($rb){asort($rb); $nurl=$url.$b.$d.$p.'_#';//table
+	$rt['directory']=msqm_lnk($dirs,$nurl,$dir,'txtnoir','txtx','k');}
+if($hubs){asort($hubs); $nurl=$url.$b.$d.'#'.$t;//hub
+	$rt['hub']=msqm_lnk($hubs,$nurl,$hub,'txtnoir','txtx','v');}
+if($rb){ksort($rb); $nurl=$url.$b.$d.$p.'_#';//table
 	$rt['table']=msqm_lnk($rb,$nurl,$table,'txtnoir','txtx','k');}
-if(count($rc)>0){//version
+if(is_array($rc)){//version
 	foreach($rc as $k=>$v)$rs[$v]=strprm($v,1,'_'); ksort($rs);
-	$nurl=$url.$b.$d.$p.'_#'; $btn=msqm_lnk($rs,$nurl,$tb,'txtnoir','txtx','');
-	if($btn)$rt['version']=$btn;}
+	$nurl=$url.$b.$d.$p.'_#'; $bt=msqm_lnk($rs,$nurl,$tb,'txtnoir','txtx','');
+	if($bt)$rt['version']=$bt;}
 $s='display:table-cell; padding:5px; margin:5px; background:#ddd; border:1px solid #ccc;';
 foreach($rt as $k=>$v)$ret.=divc('cell',$v);
-//$ret=onxcols($rt,4,'',''); //$ret=implode(br(),$rt); $ret=msq_flap($rt);
-//return divc('menu',lka('msql/','root')).$ret);
 return divc('table',$ret).divc('clear','');}
 
-function msql_menus_j($ra){$top=rstr(69)?'':'d';
-list($b,$d,$p,$t,$ver,$def)=$_SESSION['murl'];
-if($d)$bdr='/'.$d; $tn=$t; if($ver)$tn.='_'.$ver;
+function msql_menus_j($ra){$top='d';//rstr(69)?'':'d';
+list($b,$d,$p,$t,$ver,$def)=$_SESSION['murl']; $ret='';
+$bdr=$d?'/'.$d:''; $tn=$t; if($ver)$tn.='_'.$ver;
 $ret.=popbub('admsq','',picto('msql'),$top,1);
 if($d)$ret.=popbub('admsq',$b.$bdr,$d,$top,1);
 else $ret.=popbub('admsq',$b.$bdr,$b,$top,1);
@@ -53,253 +53,364 @@ if($p)$ret.=popbub('admsq',$b.$bdr.'/'.$p,$p,$top,1);
 if($t)$ret.=popbub('admsq',$b.$bdr.'/'.$p.'/'.$t,$tn,$top,1);
 return $ret;}
 
-#admin 
-//lists
-function slctmenuder($r,$h){
-$ret='<form><select onchange="MM_jumpMenu(\'parent\',this,1)">';
-foreach($r as $k=>$v){$chk=$k==$h?'" selected="selected':'';
-	$ret.='<option value="'.($k).$chk.'">'.($k).'</option>';}
-return $ret.'</select></form>'."\n";}
+#nav
+function normaliz($v){$v=normalize($v);
+return str_replace(['-','_'],'',$v);}
 
-function normaliz_c($v){$v=normalize($v);
-return str_replace(array("-","_"),"",$v);}
-
-function array_list($r,$n){
-foreach($r as $k=>$v){if($k!="_menus_" && $v[$n])$ret[$v[$n]]+=1;}
-if($ret)ksort($ret); //arsort($ret,SORT_NUMERIC); 
-return $ret;}
-
-/*function add_after_x($defs){$ret=' '.btn('txtsmall2',nms(127));//after
-$ra['']=0; if(is_array($defs))$ra+=array_flip(array_keys($defs));
-return $ret.balise("select",array(2=>'pos',16=>"width:100px;"),batch_defil($ra));}*/
-
-function add_after($defs){
-return btn('txtsmall2',nms(127)).' '.select_j('pos','msql','',sesm('murl'));}
-
-function f_inp_m($defs,$defsb,$def){
-$vals=$defs[$def]; if(!$vals)$vals=$defsb; $lk=sesm('lk');
-if($defs['_menus_'] && $def!='_menus_')
-	if(in_array('last-update',$defs['_menus_']))
-		$dateup=array_search('last-update',$defs['_menus_']);
-$ret.=btn('imgr',prevnext($defs,$def));
-if(auth(4) or $_SESSION['ex_atz']){
-	$ret.=hidden('def','',$def);
-	if($def!="_menus_")$ret.=input2('text','dfn',$def,'').' ';
-	$ret.=add_after($defs).' ';
-	if(auth(4)){
-		$ret.=checkbox('erase',$def,nms(43),'').' ';
-		//$ret.=checkbox_j('erase',$def,nms(43)).' ';
-		$ret.=input2("submit",'save',nms(57),'').' ';
-		if(auth(5))$ret.=lkc("txtx",$lk.'&newfrom='.$def,nms(44)).' ';
-		$ret.=lkc('txtx',$lk,'x');}}
-$ret.=br().br();
-foreach($vals as $k=>$v){$v=msq_data($v);
-	if($k==$dateup && $dateup)$v=date('ymdHi',time());
-	$retb=btn('txtsmall" style="float:left; width:100px;',$defsb[$k]);
-	$retb.=goodarea($v,'val'.$k,'','',60);
-	if(auth(6))$retb.=msql_slct('val',$k,sesm('murl').':'.$k);
-	//$retb.=togbub('hidden','val'.$k.'_msqlc__'.ajx(sesm('murl').':'.$k).'_'.'val'.$k,$k);
-$ret.=divc('',$retb);}
-$cl=$_GET['called']?'&called='.$_GET['called']:'';
-return divc('menu',form($lk.'&def='.$def.$cl,$ret));}
-
-function prevnext($r,$d){$lk=sesm('lk'); $r=msq_prevnext($r,$d);
+function prevnext($r,$d){$lk=sesm('lk'); $r=msql::prevnext($r,$d);
 return lkc('txtblc',$lk.'&def='.$r[0],'prev').' '.lkc('txtblc',$lk.'&def='.$r[1],'next');}
 
-function f_inp_add($defs,$defsb,$def){
-$ret.=autoclic('add','auto-increment',10,100,'',1).' '.hidden('def','',$def);
-$ret.=input2('submit','save',nms(92),'').' '.add_after($defs); 
-return form(sesm('lk').'&def='.$def,$ret);}
-
-function msq_search($murl){list($dr,$nd,$vn)=murl_vars($murl);
+function msql_search($murl){list($dr,$nd,$vn)=murl_vars($murl);
 $ret=autoclic('msqsr','',10,100,'search',1).' ';
 $ret.=lj('popbt','editmsql_msqlfind___'.ajx($dr).'_'.ajx($nd).'___msqsr',nms(24));
 return $ret;}
 
-function msql_find($dr,$nd,$o,$sr){$r=msql_read_b($dr,$nd,'',1); $sr=ajxg($sr); 
+function msql_find($dr,$nd,$o,$sr){$r=msql::read_b($dr,$nd,'',1); $sr=ajxg($sr); 
 if(!is_array($r) or !$sr)return;
 foreach($r as $k=>$v)if(strpos($k,$sr)!==false)$ret[$k]=$v;
 	else foreach($v as $ka=>$va)if(strpos($va,$sr)!==false)$ret[$k]=$v;
 return !$ret?'no result':draw_table($ret,sesm('murl'),'');}
 
-function save_defs($fld,$node,$defs,$def,$base){
-$f=$fld.$node.'.php'; $p=$_POST; $dfn=$p["dfn"]; $lk=sesm('lk');
-$add=str_replace(array('"',"'",),'',$p["add"]);
-if($add){if($add!="auto-increment" && !$defs[$add])$def=$add; 
-	else $def=findnextkey($defs,1);
-	if($cn=count($defs["_menus_"]))$defs[$def]=array_fill(0,$cn,'');}// $relod=1;
-elseif($p["erase"]){
-	if($def=="_menus_"){unlink($f); exit(relod($lk));}
-	else{unset($defs[$def]);}}// $relod=1;
-if($defs[$def]){
-	if($p["pos"]){unset($defs[$def]);
-		foreach($defs as $k=>$v){$defc[$k]=$v; $i++;
-			if($i+2==$p["pos"]+2)foreach($v as $ka=>$va)$defc[$def][$ka]=$p['val'.$ka];}
-		$defs=$defc;}
-	else foreach($defs[$def] as $k=>$v)$defs[$def][$k]=$p['val'.$k];}
-if($dfn && $dfn!=$def){$defs=rename_array($defs,$def,$dfn); $def=$dfn;}
-unset($defs[0]); if($def)$lk.='_'.$def; if($cd=get('called'))$lk.='&called='.$cd;
-save_vars($fld,$node,$defs); $_GET['def']=$def;
-//if($relod)relod($lk);
-return array($defs,$def);}
-
-function rename_array($defs,$def,$d){
-foreach($defs as $k=>$v)if($k==$def)$ret[$d]=$v; else $ret[$k]=$v;
-return $ret;}
-
-function newbase($base,$prefix,$table,$version){
-$prefix=$prefix?$prefix:'prefix';
-$table=$table?$table:'table';
-$version=msq_find_last($base,$prefix,$table);
-$idt=$version?$version:'version';
-if(auth(5))$ret.=input2(1,'prfx',$prefix).'';
-elseif($prefix!=$_SESSION['USE'])return btn('txtx','forbidden');
-else $ret.=input2('text','prfx',$prefix,'').btn('txtx',$prefix).'';
-$ret.=input2(1,'hbname',$table).'';
-$ret.=input2(1,'hbnb',$idt).' ';
-$ret.=autoclic('nbc','nb cols',4,255,'txtx',1).' ';
-$ret.=input2('submit','save',nms(99),'txtbox');
-$go=sesm('url').murl_build($base,'',$prefix,$table,$version).'&create=='.gpage();
-return form($go,$ret);}
-
 #draw 
 function tables($base){$r=explore($base,'files',1);
 if($r){foreach($r as $k=>$v){$v=substr($v,0,-4);
-list($nd,$bs,$sv,$op)=split('_',$v); if(!$nd)$nd='root';
+list($nd,$bs,$sv,$op)=opt($v,'_',4); if(!$nd)$nd='root';
 if($nd && $sv!='sav' && $op!='sav')$ret[$nd][$bs][$sv]=$bs.($sv?'_'.$sv:'');}
 return $ret;}}
 
-function cutat($d){$r=explode(' ',$d); $n=count($r);
+function displaydata($d,$o=''){$d=stripslashes_b($d);
+if(strpos($d,'<')!==false or strpos($d,'>')!==false)$d=entities($d);//$d=htmlentities_b($d);
+if($o)$d=nl2br($d); return $d;}
+
+function cutat($d){$r=explode(' ',$d); $n=count($r); $ret=''; $dot=''; $nb=0;
 for($i=0;$i<$n;$i++){$nb+=strlen($r[$i]); if($nb<256)$ret.=$r[$i].' ';}
 if($nb>=256)$dot=' (...)'; return $ret.$dot;}
 
-function medit_shot($d,$nd,$k,$ka,$res){$v=ajxg($res); $rid=randid('mdt');
-$r=msql_read_b($d,$nd,$k,'',$ka); $va=msq_data($r[$ka]);
-$j=ajx($d).'_'.ajx($nd).'_'.ajx($k).'_'.ajx($ka).'_'.$rid;
-return assistant($rid,'SaveJ',ajx($k.'-'.$ka).'_msqlmodif__x_'.$j,$va,'');}
-//return input(1,$rid,$va).lj('popbt',ajx($k.'-'.$ka).'_msqlmodif__x_'.$j,'save');
-
-function medit_shot_bt($va,$k,$ka,$b,$nd){$id=ajx($k.'-'.$ka); if(!trim($va))$va='-';
-return  '<a id="'.$id.'" ondblclick="'.sj('popup_msqledit___'.$b.'_'.$nd.'_'.ajx($k).'_'.ajx($ka)).'">'.$va.'</a>';}
-//return togbub('msqledit',$b.'_'.$nd.'_'.$k.'_'.$ka,$val);
+function tabler_bypage($r,$csa,$csb,$murl){$td=''; $tr='';
+if(isset($r['_menus_'])){foreach($r['_menus_'] as $k=>$v)$td.=balc('th',$csa,$v);
+	$tr=balc('tr','',$td); unset($r['_menus_']);}
+$n=count($r)+1; $page=$_SESSION['page']; $npg=500;
+req('spe'); //$ret=nb_page($n,$npg,$page,'');
+$ret=btpages($npg,$page,$n,'msqdiv_msqladm___'.ajx($murl).'_');//!
+$min=($page-1)*$npg; $max=$page*$npg; $i=0;
+if(is_array($r))foreach($r as $k=>$v){$td=''; $i++;
+	if($i>=$min && $i<$max && is_array($v))
+		foreach($v as $ka=>$va)$td.=balc('td',$csb,$va);
+	if($td)$tr.=balc('tr','',$td);}
+return divd('msqpg',$ret.balc('table','',$tr).$ret);}
 
 function draw_table($r,$murl,$adm=''){//adm=saving
-list($dr,$nd,$n)=murl_vars($murl);
-foreach($r as $k=>$v){$ra='';$i++;
-	if(is_array($v))foreach($v as $ka=>$va)$ra[]=msq_data(cutat($va),1);
-	$css=$k==$_GET['def']?'txtyl':'txtbox'; $jurl=ajx($murl).'_'.ajx($k);
-	$edit=lka(sesm('url').$murl.':'.($k).gpage(),picto('editor'));//ajx
+list($dr,$nd,$n)=murl_vars($murl); $jurl=ajx($murl); $def=get('def'); $i=0;
+if($r)foreach($r as $k=>$v){$ra=[]; $i++;
+	if(is_array($v))foreach($v as $ka=>$va)$ra[]=displaydata(cutat($va),1);
+	$css=$k==$def?'popsav':'popbt';
+	$open=lj($css,'popup_editmsql___'.$jurl.'_'.ajx($k),$k);
+	//$edit=lk(sesm('url').$murl.':'.($k).gpage(),picto('editor'));
+	if(auth(6))$del=lj('popdel','editmsql_delmsql___'.$jurl.'_'.$k,pictit('del',nms(76))).' ';
 	if($k=='_menus_' && $ra){
-		foreach($ra as $ka=>$va)$ra[$ka]=lka(sesm('url').$murl.'&sort='.$ka,$ka.':'.$va);
-		array_unshift($ra,lka(sesm('url').$murl.'&sort=k','keys')); 
-		if(auth(4))array_unshift($ra,'');}
-	elseif(is_array($ra)){
-		foreach($ra as $ka=>$va)$ra[$ka]=medit_shot_bt($va,$k,$ka,$dr,ajx($nd));
-		if(auth(4))array_unshift($ra,lj($css,'popup_editmsql___'.$jurl,$k));
-		if(auth(4))array_unshift($ra,$edit); else array_unshift($ra,$k);}
+		foreach($ra as $ka=>$va)$ra[$ka]=lk(sesm('url').$murl.'&sort='.$ka,$ka.':'.$va);
+		array_unshift($ra,lk(sesm('url').$murl.'&sort=k','keys'));}
+	elseif(is_array($ra))if(auth(4)){if(get('del'))$open=$del.$open;
+		foreach($ra as $ka=>$va){$rid=normalize('msqedt'.$k.'-'.$ka);
+			$ra[$ka]=divd($rid,medit_shot_bt(trim($va),$k,$ka,$murl,$rid));}
+		array_unshift($ra,$open);}
+	else array_unshift($ra,$k);
 	$datas[$k]=$ra;}
-return make_table_bypage($datas,'popw','');}//txtx
+return tabler_bypage($datas,'popw','',$murl);}
 
-function make_table_bypage($r,$csa,$csb){
-if($r["_menus_"]){foreach($r["_menus_"] as $k=>$v)$td.=balc("td",$csa,$v);
-	$tr=balc("tr",'',$td); unset($r["_menus_"]);}
-$n=count($r)+1; $page=$_SESSION['page']; $npg=1000;
-req('spe'); $ret=nb_page($n,$npg,$page,'');
-$min=($page-1)*$npg; $max=$page*$npg;
-if(is_array($r))foreach($r as $k=>$v){$td=""; $i++;
-	if($i>=$min && $i<$max && is_array($v))
-		foreach($v as $ka=>$va)$td.=balc("td",$csb,$va);
-	if($td)$tr.=balc("tr","",$td);}
-return $ret.balc("table",'',$tr).$ret;}
+#sav
+function node_decompil($d){
+$r=split_right('/',$d,1);
+if(!$r[0])$r[0]='users';
+return $r;}
 
-#tools 
+function edit_msql_sav($id,$rg,$res){$_GET['msql']=$id;
+list($dir,$node)=node_decompil($id); $r=ajxr($res); $rk=array_shift($r);
+if($rk!=$rg && substr($rg,0,1)!='@'){msql::modif($dir,$node,$rg,'mdfk',$rk); $rg=$rk;}
+return msql::modif($dir,$node,$r,$rg);}
 
-function find_command(){$g=$_POST&&$_GET?$_POST+$_GET:($_GET?$_GET:$_POST);
-$arr=array_flip(array('','restore','import_old','import_defs','import_keys','merge_defs','append_update','import_conn','inject_defs','edit_csv','reset_menus','del_menus','permut','add_col','del_col','sort','sort_table','del_file','repair','repair_cols','update','append_values','del_table','del_multi','newfrom','reorder','add_keys','del_keys'));//detect 0
-foreach($g as $k=>$v)if($arr[$k])return $k;}
+function edit_msql_del($id,$va){//delmsql
+list($dir,$node)=node_decompil($id);
+$r=msql::modif($dir,$node,$va,'del');
+return edit_microsql($id,$r);}
 
-function msq_filters($r,$d){$g=$_GET[$d];
-return call_user_func($d,$r,$g);}
+function edit_msql_displace($id,$va,$res){$to=ajxg($res);
+list($dir,$node)=node_decompil($id); $_GET['def']=$va;
+$r=msql::read($dir,$node);
+$r=msql::displace($r,$va,$to);
+$r=msql::modif($dir,$node,$r,'arr');
+return edit_microsql($id,$r);}
 
-function msql_modifs($defs,$defsb,$folder,$pre,$node,$basename,$modif){
-switch($modif){
-case('restore'): $defs=read_vars($folder,$node.'_sav',$defsb); break;
-case('import_old'):$defs=$$table; break;
-case('del_menus'):unset($defs['_menus_']); break;
-case('del_file'): save_vars($folder,$node.'_sav',$defs);
-	unlink($basename.'.php'); relod('/'.$folder.$pre); break;
-case('del_table'):$r["_menus_"]=$defs["_menus_"]; $defs=$r; break;
-//auto
-case('append_update'):$defs=append_update($defs,$_GET["append_update"]); break;
-case('import_defs'):$defs=import_defs($defsb,$_GET["import_defs"]); break;
-case('import_keys'):$defs=import_keys($defs,$_GET["import_keys"]); break;
-case('merge_defs'):$defs=merge_defs($defs,$_GET["merge_defs"]); break;
-case('permut'):$defs=permut($defs,$_GET["permut"]); break;
-case('reset_menus'):$defs=reset_menus($defs); break;
-case('add_col'):$defs=add_col($defs); break;
-case('del_col'):$defs=del_col($defs,$_GET["del_col"]); break;
-case('repair_cols'):$defs=repair_cols($defs); break;
-case('sort'):$defs=sort_table($defs,$_GET['sort'],1); $_GET['del_file']=1; break;
-case('sort_table'):$defs=sort_table($defs,$_GET['sort_table']); break;
-case('append_values'):$defs=append_values($defs,$_GET["append_values"]); break;
-case('del_multi'):$defs=del_multi($defs); break;
-case('reorder'):$defs=reorder($defs); break;
-case('add_keys'):$defs=add_keys($defs); break;
-case('del_keys'):$defs=del_keys($defs); break;
-//post
-case('import_conn'):$defs=import_conn($defs,$_POST["import_conn"],$_POST["aid"]); break;
-case('inject_defs'):$defs=inject_defs($defs,$_POST["inject_defs"]); break;
-case('edit_csv'):$defs=edit_csv($defs,$_POST["edit_csv"]); break;
-case('update'):$defs=update_table($node,$defs); break;
-case('repair'):$defs=repair($defs); break;
-case('newfrom'):$defs=new_from_defs($defs,$_GET["newfrom"],$folder,$node);break;
-//default:msq_filters($defs,$modif); break;
-}
-if(!$_GET["del_file"] && $defs)save_vars($folder,$node,$defs);
-return $defs;}
+function edit_microsql($nod,$r=''){
+list($dir,$node)=node_decompil($nod);
+$defs=$r?$r:msql::read_b($dir,$node,'');
+if($defs)return draw_table($defs,$nod,1);}
 
-function new_from_defs($r,$d){$nb=findnextkey($r,1); $r[$nb]=$r[$d]; //p($r[$d]);
-	save_vars($folder,$node,$r); relod(sesm('lk').'&def='.$nb);}
+/*function msq_slct_displace($dr,$nod){
+$r=msql::read_b($dr,$nod);
+foreach($r as $k=>$v)
+return $ret;}*/
+
+function medit_ksav($murl,$key,$res=''){$rid=normalize($murl);
+if($res){list($dr,$nod)=node_decompil($murl); $d=ajxg($res); $r=msql::read_b($dr,$nod);
+foreach($r as $k=>$v)if($k==$key)$ret[$d]=$v; else $ret[$k]=$v; msql::save($dr,$nod,$ret);}
+$mx=strlen($key)>24?24:strlen($key); $ret=input1($rid,$d?$d:$key,$mx);
+$ret.=lj('small','edt'.$rid.'_call___msql_medit*ksav_'.ajx($murl).'_'.$key.'_'.$rid,'ok');
+return divd('edt'.$rid,$ret);}
+
+#msqledit
+function medit_shot($murl,$k,$ka,$res){$v=ajxg($res); $rid=randid('mdt');
+list($dr,$nd,$n)=murl_vars($murl); $id=normalize('msqedt'.$k.'-'.$ka);
+$v=msql::val($dr,$nd,$k,$ka); $va=displaydata($v); if($va==='')$va='-';
+$j=ajx($murl).'_'.ajx($k).'_'.ajx($ka).'_'.$id.'_'.$rid; //$va=deln($va); 
+$va=nl2br($va);
+return divarea($rid,'','',sj($id.'_msqlmodif___'.$j),$va,1);
+//return divarea('','','',sj($id.'_msqlmodif___'.$j),$va,1);
+//return input1($rid,$va).lj('popbt',ajx($k.'-'.$ka).'_msqlmodif__x_'.$j,'save');
+return assistant($rid,'SaveJ',$id.'_msqlmodif___'.$j,$va,'');}
+
+function medit_shot_bt($va,$k,$ka,$murl,$rid){//randid().
+if(!trim($va)==='')$va='-'; $j=ajx($murl).'_'.ajx($k).'_'.ajx($ka).'_'.$rid;//.$id
+//return divarea($rid,'','',sj($rid.'_msqlmodif___'.$j),$va,1);
+//return togbub('msqledit',$j,$va);
+return '<a onclick="'.sj($rid.'_msqledit___'.$j).'">'.($va).'</a>';}
+
+function editmsql_defcons(){return 'line:1|line:last|line:title|del:|linewith:|boldline:1|linenolink:1|del-link:|striplink:|delconn:s|replconn-pre-q|deltables|delqmark|delblocks|cleanmail|since:|to:|-??|???';}
+
+function codearea($k,$v){$n=40; $h=20; $s=ceil(strlen($v)/$n); if($s>5)$s=5;
+if(strpos($v,'<')!==false)$v=htmlentities_b($v);
+$p='style="height:'.(($s?$s:1)*$h).'px;" onkeyup="goodheight(this,'.($n).','.$h.');"';
+return textarea($k,$v,$n,'1',$p);}
+
+function editmsql($nod,$va,$o,$ob){
+$qb=$_SESSION['qb']; $tg=$ob?'socket':'editmsql'; $rid=randid();
+list($dir,$node)=node_decompil($nod); $nodb=ajx($nod); $pn=''; $rc=[]; $kb='';
+$r=msql::read_b($dir,$node); $h=isset($r['_menus_'])?1:0; if($r)$rh=$h?$r['_menus_']:current($r);
+if($r)$nxtk=msql::nextentry($r); $idn=randid();
+if($va=='add'){$u=$o; $o=domain(strtolower($u));
+	$va=$o?$o:findnextkey($r,0); $ry=array_fill(0,count($rh),'');
+	if(is_array($rh))$ra[$va]=array_combine($rh,$ry); else $ra[$va]=$ry; if(!isset($r[$va]))$r=$ra;
+	$rw=conv::recognize_defcon($u); //pr($rw);
+	$ti='text start'; if(isset($r[$va][$ti]))$r[$va][$ti]=$rw[0]?$rw[0]:'entry-content::';
+	$ti='title start'; if(isset($r[$va][$ti]))$r[$va][$ti]=$rw[2]?$rw[2]:'::h1';}
+if($rh)$ntkp=1; else $ntkp=0; $i=0; $key=''; $def='';
+if($r){foreach($r as $k=>$v){$i++; if($k==$va){$n=$i; $key=$k; $def=$v;}
+	if(!$key){$key=$va; $n=$i+1; $def='';}}
+	$keys=array_keys($r); $kyb=ajx($key); $na=$n-$ntkp;
+	if(isset($keys[$na-1]) && $keys[$na-1]!='_menus_')$kt=$keys[$na-1]; else $kt=$keys[$na];
+		$pn.=lj('txtx','popup_editmsql__x_'.$nodb.'_'.ajx($kt),picto('before')); 
+	if(isset($keys[$na+1]))$kt=$keys[$na+1]; else $kt=$keys[$na];
+		$pn.=lj('txtx','popup_editmsql__x_'.$nodb.'_'.ajx($kt),picto('after'));}
+if(isset($ra))$r=$r[$va]; elseif($key)$r=msql::read_b($dir,$node,$key);
+if(is_array($r)){$i=0; $kys[]='k'.$rid;//keys to shift from array
+	foreach($r as $k=>$v){$kb=normaliz($idn.$k); $kys[]=$kb; $i++;
+		if(substr($node,-7)=='defcons'){$rhk=$rh[$k]??'';
+			if($rhk=='post-treat')$opt=br().jump_btns($kb,editmsql_defcons(),'|'); else $opt=''; 
+			if($rhk=='last-update')$v=date('ymdhi',time());}
+		else $opt=msql_slct($idn,$k,$dir.'/'.$node.':'.($i-1));//slct
+		if(!is_array($v)){$t=isset($rh[$i-1])&&$h?$rh[$i-1]:$k;
+			$rc[$t]=codearea($kb,displaydata($v)).$opt;}}
+	$keys=ajx(implode('|',$kys));}//
+elseif($kb){$keys=$kb; $opt=msql_slct($idn,$k,$dir.'/'.$node.'-0');
+	$rc[$va-$ntkp]=codearea($keys,$def).$opt; $keys=ajx($keys);}
+else{$kb=randid('k'); $rc[1]=codearea($kb,''); $keys='k'.$rid.'|'.$kb;}//new
+//$ret=medit_ksav($nod,$key,$res);
+$ret=input1('k'.$rid,$key,strlen($key));
+$ret.=on2cols($rc,470,5);//render
+if(substr($nod,0,4)=='lang'){$lg=strprm($nod,1,'/'); if($lg=='fr')$lg='en'; else $lg='fr';
+$bt=lj('popbt','popup_editmsql___lang/'.$lg.'/helps*txts_'.ajx($va),$lg);}
+if(auth(4)){
+	$jx=$nodb.'_'.$kyb.'_'.$ob.'__'.$keys;//edit_msql_sav
+	$bt=lj('popsav',$tg.'_savmsql__x_'.$jx,nms(57)).' ';//sav
+	$bt.=lj('popbt',$tg.'_savmsql___'.$jx,nms(66)).' ';//apply
+	//$bt.=lj('popbt',$tg.'_savmsql__x_'.$nodb.'_'.$nxtk.'___'.$keys,nms(44)).' ';//new
+	$bt.=lj('popbt',$tg.'_savmsql__x_'.$nodb.'_@'.$kyb.'___'.$keys,nms(44)).' ';//new
+	$bt.=$pn.' ';//prevnext
+	if(strpos($nod,'_defcons'))$bt.=lj('popbt',$idn.'0,'.$idn.'1,'.$idn.'2,'.$idn.'3_conv,recognize*defcon___'.ajx($o),nms(195));//suggestions
+	$bt.=select_j('pos'.$rid,'msql',$key,$nod,'');//displace
+	$bt.=lj('popbt',$tg.'_dismsql___'.$nodb.'_'.ajx($key).'___pos'.$rid,nms(158)).' ';
+	$bt.=lj('popdel',$tg.'_delmsql___'.$nodb.'_'.$kyb,pictit('del',nms(76))).' ';}//del
+$bt.=msqbt($dir,$node);
+$ret=divs('padding-bottom:4px',btd('bts','').$bt).$ret;
+return $ret;
+return popup($dir.'/'.$node.'§'.$key,$ret,550);}
+
+#operations
+function create_table($p){
+list($dr,$nod)=node_decompil($p);
+list($hub,$table,$version)=opt($nod,'_',3);
+$hub=$hub?$hub:'hub';
+$table=$table?$table:'table';
+$idt=msql::findlast($dr,$hub,$table);
+$ret=input1('dir',$dr,8);
+if(auth(5))$ret.=input1('hub',$hub,8);
+elseif($hub!=$_SESSION['USE'])return btn('txtyl','forbidden');
+else $ret.=hidden('prfx',$hub);
+$ret.=input1('nod',$table,8);
+$ret.=input1('ver',$idt,4).' ';
+$ret.=lj('','editmsql_msqlops__url_'.ajx($p).'_create*table___dir|hub|nod|ver',picto('ok'));
+return $ret;}
+
+function msql_ops($p,$md,$res='',$o=''){
+if($o)return msql_opsup($p,$md,$res);//intercept action
+list($dr,$nod)=node_decompil($p);
+if(strpos($res,'_'))$d=ajxr($res); else $d=ajxg($res);
+$r=msql_tools($dr,$nod,$md,$d);
+if($md=='create_table'||$md=='del_file'||$md=='del_backup'||$md=='rename_table'||$md=='duplicate_table')return $r;//reload
+return edit_microsql($p,$r);}
+
+function msql_opsup($p,$md,$res=''){
+if($md=='sort_table')$d='k or col number';
+elseif($md=='permut')$d='0/1';
+elseif($md=='del_col')$d='0';
+else $d=$p;
+if($md=='export_csv'){list($dr,$nod)=node_decompil($p); $r=msql::read($dr,$nod); return csvfile($nod,$r,$nod,1);}
+$ret=input1('msqop',$d,32);
+$rl=$md=='rename_table'||$md=='duplicate_table'?'url':'x';
+$ret.=lj('','editmsql_msqlops__'.$rl.'_'.ajx($p).'_'.ajx($md).'_'.$res.'__msqop',picto('ok'));
+return $ret;}
+
+function msq_dump_a($r,$p){$ret=''; if($r)foreach($r as $k=>$v){$re=[];
+if($v)foreach($v as $ka=>$va)$re[]="'".addslashes(stripslashes($va))."'";
+$ret.='$r['.(is_numeric($k)?$k:'"'.$k.'"').']=['.implode(',',$re).'];'."\n";}
+return "<?php //philum/microsql/$p\n$ret";}
+
+//edit
+function msql_editors($p,$md){
+list($dr,$nod)=node_decompil($p);
+$r=msql::read($dr,$nod); if(!$r)return;
+if($md=='inject_defs')$d=str_replace('<?php ','',msq_dump_a($r,$nod));
+if($md=='inject_defs2')$d=str_replace('<?php ','',msql::dump($r,$nod));
+if($md=='import_conn')$d=msqdt_conn($r);//use "|" for cells and "¬" for lines
+if($md=='import_csv')$d=msqdt_csv($r);
+if($md=='import_json')$d=msqdt_json($r);
+$ret=textarea($md,$d,60,10);
+$ret.=lj('','editmsql_msqlops___'.ajx($p).'_'.ajx($md).'___'.ajx($md),picto('ok'));
+return $ret;}
+
+//msqlops
+function msql_tools($dr,$nod,$md,$d){
+$r=msql::read($dr,$nod); $ok='';
+switch($md){
+case('create_table'):list($dr,$nod,$r)=create_table_sav($d); $rl=1; break;
+case('backup'):$r=msql::save($dr,$nod.'_sav',$r); $ok=1; break;
+case('restore'):$r=msql::read_b($dr,$nod.'_sav'); break;
+case('add_row'):$r[]=array_fill(0,count(current($r)),''); break;
+case('del_menus'):unset($r['_menus_']); break;
+case('del_file'):msql::save($dr,$nod.'_sav',$r); del_table($dr,$nod); $ok=1; $rl=1; break;
+case('trunc_table'):$ra['_menus_']=$r['_menus_']??''; $r=$ra; break;
+case('append_update'):$r=append_update($r,$d); break;
+case('import_defs'):$r=import_defs('',$d); break;
+case('import_keys'):$r=import_keys($r,$d); break;
+case('merge_defs'):$r=merge_defs($r,$d); break;
+case('permut'):$r=permut($r,$d); break;
+case('reset_menus'):$r=reset_menus($r); break;
+case('add_col'):$r=add_col($r); break;
+case('del_col'):$r=del_col($r,$d); break;
+case('repair_cols'):$r=repair_cols($r); break;
+case('repair_enc'):$r=utf_r($r); break;
+case('renove'):$r=import_defs('','philum.fr/msql/'.$dr.'/'.$nod); break;
+case('sort'):$r=sort_table($r,$d,1); $ok=1; break;
+case('sort_table'):$r=sort_table($r,$d); break;
+case('append_values'):$r=append_values($r,$d); break;
+case('del_multi'):$r=del_multi($r); break;
+case('reorder'):$r=reorder($r); break;
+case('add_keys'):$r=add_keys($r); break;
+case('del_keys'):$r=del_keys($r); break;
+case('import_conn'):$r=import_conn($r,$d,$aid=''); break;
+case('inject_defs'):$r=inject_defs($r,$d); break;
+case('inject_defs2'):$r=inject_defs($r,$d); break;
+case('import_csv'):$r=import_csv($r,$d); break;
+case('compare'):$r=msql_compare($r,$d); $ok=1; break;
+case('intersect'):$r=msql_intersect($dr.'/'.$nod,$d); $ok=1; break;
+case('connexions'):$r=msql_connexions($dr.'/'.$nod,$d); $ok=1; break;
+case('import_json'):$r=import_json($d); break;
+case('import_jsonlk'):$r=import_json($d); break;
+case('rename_table'):list($dr,$nod)=op_table($dr,$nod,$d,0); $ok=1; $rl=1; break;
+case('duplicate_table'):list($dr,$nod)=op_table($dr,$nod,$d,1); $ok=1; $rl=1; break;
+case('del_backup'):del_table($dr,$nod,1); break;
+case('update'):$r=update_table($nod,$r); break;
+case('repair'):$r=repair($r,$dr,$nod); $ok=1; break;}
+if(!$ok && $r)$r=msql::save($dr,$nod,$r);
+if(isset($rl))return 'msql/'.$dr.'/'.$nod;
+return $r;}
+
+//import
+function msqdt_export_mysql($r,$p){$ok=plugin_func('mysql','import_msql',$r,$p);
+return divc('txtalert','create table '.$node.': '.$ok);}
+function msqdt_mysql($r){$ret=''; if($r)foreach($r as $k=>$v)if($v)$ret.='"'.$k.'":'.(is_array($v)?'["'.implode('","',$v).'"]':'"'.htmlentities($v[0])).'",'; return $ret;}
+function msqdt_json($r){$ret=''; if($r)foreach($r as $k=>$v)if($v)$ret.='"'.$k.'":'.(is_array($v)?'["'.implode('","',$v).'"]':'"'.htmlentities($v[0])).'",'; return '{'.$ret.'}';}
+function msqdt_csv($r){$rc=[]; //return array2csv($r);//import_csv
+if($r)foreach($r as $k=>$v){$rb=[$k];
+	foreach($v as $ka=>$va)$rb[]=str_replace([';',"\n"],[',','<br/>'],$va);
+	$rc[]=implode(';',$rb);}
+return implode("\n",$rc);}
+function msqdt_conn($r){$ret=''; if($r)foreach($r as $k=>$v)$ret.=$k.'|'.implode('|',str_replace(['|','¬'],[':BAR:',':LINE:'],$v)).'¬'."\n"; return $ret;}
+
+#modif apps
+function create_table_sav($r){if(!auth(6))return;
+list($dir,$lang)=opt($r[0],'/'); $dir=normaliz($dir); if($lang)$dir.='/'.$lang;
+$hub=normaliz($r[1]); $table=normaliz($r[2]);
+if($r[3] && $r[3]!='version')$version=$r[3]; if(!$r[3])$version='';
+$rb=auto_cols(1); $node=mnod($hub,$table,$version);
+return [$dir,$node,$rb];}
+
+function auto_cols($n){$r['_menus_']=[];
+for($i=1;$i<=$n;$i++)$r['_menus_'][]='col_'.$i;
+return $r;}
 
 function del_multi($defs){
 foreach($defs as $k=>$v){$g=$_POST['c'.$k]; if(!$g)$ret[$k]=$v;}
 return $ret;}
 
 function import_defs($defsb,$d){
-if(strpos($d,'msql/')!==false){require('plug/microxml.php'); return clkt($d);}
-else{list($a,$b)=split_one('/',$d,1); if(substr($a,5)!='msql/')$a=sesm('root').$a;
-return read_vars($a.'/',$b,$defsb);}}
+if(strpos($d,'msql/')!==false){reqp('microxml'); return mx_call($d);}
+else{list($a,$b)=split_one('/',$d,1);
+//return msql::read_b($a,$b,$defsb);//??
+return msql::read($a,$b,'','',$defsb);}}
+
+function import_json($d){
+if(substr($d,0,4)=='http')$d=get_file($d);
+$r=json_decode($d,true);
+if(isset($r[0])){$rh['_menus_']=$r[0]; unset($r[0]); $r=$rh+$r;}
+if(isset($r['_'])){$rh['_menus_']=$r['_']; unset($r['_']); $r=$rh+$r;}
+return utf_r($r,1);}
+
+function op_table($dr,$nd,$d,$o=0){
+$u=msql::url($dr,$nd); list($dr,$nd)=split_right('/',$d,1); $ub=msql::url($dr,$nd);
+if($o)copy($u,$ub); else rename($u,$ub);
+return [$dr,$nd];}
+
+function del_table($dr,$nd,$o=0){
+$u=msql::url($dr,$nd,$o); unlink($u);}
 
 function import_keys($r,$d){
-list($a,$b)=split_one('/',$d,1); $rb=msql_read_b($a,$b);
+list($a,$b)=split_one('/',$d,1); $rb=msql::read_b($a,$b);
 if($rb['_menus_'])$r['_menus_']=$rb['_menus_']; return $r;}
 
 function merge_defs($r,$d){
-list($a,$b)=split_one('/',$d,1); $rb=msql_read_b($a,$b,'',1);
+list($a,$b)=split_one('/',$d,1); $rb=msql::read_b($a,$b,'',1);
 return array_merge_b($r,$rb);}
 
 function append_values($r,$d){
-list($a,$b)=split_one('/',$d,1); $rb=msql_read_b($a,$b);
-foreach($r as $k=>$v){$vb=$rb[$k]; $n=count($vb);
-	for($i=0;$i<$n;$i++){$r[$k][]=$vb[$i];}}
-return $r;}
+list($a,$b)=split_one('/',$d,1); $rb=msql::read_b($a,$b); return array_append($r,$rb);}
 
 function reset_menus($r){
 if($r){reset($r); $first=key($r);}
 if($first=='_menus_'){next($r); $first=key($r);}
 $nb=count($r[$first]);
-for($i=0;$i<$nb;$i++){$ret["_menus_"][]='val'.$i;}
+for($i=0;$i<$nb;$i++){$ret['_menus_'][]='val'.$i;}
 if($ret && $r)return $ret+$r;
 else return $r;}
 
-function permut($r,$mu){list($a,$b)=split("/",$mu);
+function permut($r,$mu){list($a,$b)=explode('/',$mu);
 if($a!==false && $b!==false && $r){
 foreach($r as $k=>$v){$obj=$v[$a]; $v[$a]=$v[$b]; $v[$b]=$obj; $ret[$k]=$v;}}
 return $ret;}
 
 function add_col($r){
-if(!$r['_menus_'])$r['_menus_']=msq_menus($r);
-foreach($r as $k=>$v){$v[]=$k=='_menus_'?'val'.(count($v)+1):''; $ret[$k]=$v;}
+if(!isset($r['_menus_']))$r['_menus_']=msql::menus($r);
+foreach($r as $k=>$v){$v[]=$k=='_menus_'?'col'.(count($v)+1):''; $ret[$k]=$v;}
 return $ret;}
 
 function del_col($r,$n){$col=$n; 
@@ -307,71 +418,109 @@ foreach($r as $k=>$v){if($n=='=')$col=count($v)-1; unset($v[$col]); $ret[$k]=$v;
 return $ret;}
 
 function sort_table($r,$n,$y=''){$y=$y?yesnoses('sort'):'';
-$ret["_menus_"]=$r["_menus_"]; unset($r["_menus_"]);
+$ret['_menus_']=$r['_menus_']; unset($r['_menus_']);
 if(is_numeric($n) or !$n){foreach($r as $k=>$v)$re[$k]=$v[$n]; $y?arsort($re):asort($re);
 	foreach($re as $k=>$v)$ret[$k]=$r[$k];}
 else{$y?krsort($r):ksort($r); $ret+=$r;}
 return $ret;}
 
-function repair_cols($r){$nb=count($r['_menus_']);
-foreach($r as $k=>$v){$ra='';
-	for($i=0;$i<$nb;$i++)$ra[$i]=$v[$i];
-	$ret[$k]=$ra;}
+function repair_cols($r){
+$rm=$r['_menus_']??[]; $n=1; $ret=[]; if(isset($rm))$n=count($rm);
+else{foreach($r as $k=>$v)$n=count($v)>$n?count($v):$n; $ret['_menus_']=array_pad([],$n,'');}
+foreach($r as $k=>$v)for($i=0;$i<$n;$i++)$ret[$k][]=$v[$i]??'';
 return $ret;}
 
-function repair($r){
-if($r)foreach($r as $k=>$v){
+function repair($r,$dr,$nod){
+if(!$r)msql_repair($dr,$nod);
+else foreach($r as $k=>$v){
 	if(!is_array($v))$v=array($v);
 	if($k && $v[0])$rb[$k]=$v;}
-if($rb[0])unset($rb[0]);
-return $rb;}
+if(isset($rb[0]) && array_sum(array_keys($rb))>0)$rb=msql::reorder($rb);
+if(isset($rb))return $rb;}
+
+function msql_repair($dr,$nod){$f=msql::url($dr,$nod); if(!is_file($f))return;
+require($f); if(isset($$nod))return msql::save($dr,$nod,$$nod);
+$d=read_file($f); if(strpos($d,'<?php')===false)write_file($f,'<?php'.substr($d,2));
+require($f); if(isset($r))return $r;}
+
+function msql_compare($ra,$d){
+$rh=$ra['_menus_']; $n=1;
+if(isset($ra['_menus_']))unset($ra['_menus_']);
+list($b,$d)=explode('/',$d);
+$rb=msql_read($b,$d,'','1');
+//if(is_array(current($ra)))
+$ra=array_keys_r($ra,$n);
+//if(is_array(current($rb)))
+$rb=array_keys_r($rb,$n);
+if($ra && $rb){$r1=array_diff($ra,$rb); $r2=array_diff($rb,$ra); $r3=array_intersect($ra,$rb);}
+eco($r1); eco($r2); eco($r3);
+if($r1)foreach($r1 as $v)$ret[]=[$v]; $ret[]=$rh;
+if($r2)foreach($r2 as $v)$ret[]=[$v];
+//echo tabler($ret);
+//echo div('',array_conn($r1));
+return $ret;}
+
+function msq_intersect($r){$ra=[]; $rb=[]; $rc=[]; $re=[]; $rt=[]; $rtb=[];
+foreach($r as $k=>$v){[$dr,$nod]=split_right('/',$v,1); $r0=msql::read($dr,$nod,'',1);
+	if($r0){$ra[$k]=array_column($r0,0); $re=array_merge($re,$r0);}else echo 'x:'.$dr.$nod.' ';}//
+foreach($r as $k=>$v)foreach($ra[$k] as $ka=>$va)if($va!=$v && in_array($va,$ra[$k]))$rb[$va][]=1;//pr($rb);
+foreach($rb as $k=>$v){$n=count($v); if($n>1)$rc[$k]=$n;} arsort($rc);//pr($rc);
+foreach($re as $k=>$v)if($rc[$v[0]]??'')$rt[$v[0]]=$v;//pr($rt);
+foreach($rc as $k=>$v)$rtb[$k]=$rt[$k];//pr($rt);
+return [$rc,$rtb];}
+
+function msql_intersect($d0,$d){
+$r=explode(',',$d0.','.$d); $na=count($r);//echo msql_opsup($d,'intersect');
+[$dr0,$nod0]=node_decompil($d0); $nd=struntil($nod0,'_');
+foreach($r as $k=>$v){[$dr,$nod]=split_right('/',$v,1); if(!$dr){$dr=$dr0; $nod=$nd.'_'.$nod;} $r[$k]=$dr.'/'.$nod;}
+[$rc,$rtb]=msq_intersect($r);
+$rid=substr(md5($d0.$d),0,6); $nodb=nod('frn_'.$rid); msql::save('',$nodb,$rtb);
+$ret=divb(substr(md5($d0.$d),0,6).' - '.count($rc).' results ','popbt'); 
+$ret.=textarea('msqop2',$d).lj('','editmsql_msqlops___'.ajx($d0).'_intersect___msqop2',picto('ok'));
+$ret.=lj('popbt','editmsql_msqlops__3_'.ajx($d0).'_connexions___msqop2','iterate');
+$ret.=lj('popbt','popup_datavue,call__3_'.ajx($d0.','.$d).'_','datas');
+$ret.=lj('popbt','popup_datavue,call__3_'.$rid.'_2','iterated datas');
+echo $ret.=eco($rc,1).msqbt('',$nodb); //ses::$r[]=$ret;
+return $rtb;}
+
+function msql_connexions($d0,$d){
+$rtb=msql_intersect($d0,$d); $ret='';
+foreach($rtb as $k=>$v){$pb=msql::url('',nod('frn_'.str_replace('_','-',$v[1])).'-'.date('ymd'));
+	if(!is_file($pb))$ret.=twit::call($v[1],'frnb'); else $ret.=btn('txtx','alx:'.$pb);}
+echo $ret;
+return $rtb;}
 
 function update_table($d,$r){
-$ret["_menus_"]=$r["_menus_"];
-$defs=msql_read_b('system',$d);
-foreach($defs as $k=>$v)
-$ret[$k]=$r[$k]?$r[$k]:array_pad(array(),count($r["_menus_"]),"");
+$ret['_menus_']=$r['_menus_'];
+$defs=msql::read_b('system',$d);
+foreach($defs as $k=>$v)$ret[$k]=isset($r[$k])?$r[$k]:array_pad(array(),count($r['_menus_']),'');
 return $ret;}
 
-function import_conn($defs,$it,$aid){$ret=$defs['menus'];
+function import_conn($defs,$it,$aid){$ret=$defs['menus']??[];
 if(substr($it,0,1)=='[')$it=substr($it,1); $it=str_replace(':table]','',$it); 
-$r=explode("¬",$it);
-foreach($r as $k=>$v){$ra=explode("|",$v);
-	if(is_array($ra)){$rb=''; 
+if(strpos($it,'¬')===false)$r=explode("\n",$it); else $r=explode('¬',$it);
+foreach($r as $k=>$v)if(trim($v) && $v!='//'){$ra=explode('|',$v);
+	if(is_array($ra)){$rb=[]; 
 		foreach($ra as $ka=>$va){
-			$va=str_replace(array(':BAR:',':LINE:'),array('|','¬'),$va);
+			$va=str_replace([':BAR:',':LINE:'],['|','¬'],$va);
 			$rb[]=trim($va);} $ra=$rb;}
 	if($aid=='ok')$ret[$k+1]=$ra;
-	else{$va=$ra[0]; unset($ra[0]); $ret[$va]=$ra;}}
+	else{$ret[]=$ra;}} //$va=$ra[0]??$k; unset($ra[0]); $va
 return $ret;}
 
-function findnextkey($r,$nb){
-static $nb; $nb+=1; if($r[$nb])$nb=findnextkey($r,$nb);
+function findnextkey($r,$nb){$nb+=1;
+if(isset($r[$nb]))$nb=findnextkey($r,$nb);
 return $nb;}
 
-function app_des_free($da,$db){
-$a=explode(';',str_replace(array('; ',";\n","\n"),array(';',';',''),$da)); 
-$b=explode(';',str_replace(array('; ',";\n","\n"),array(';',';',''),$db)); 
-if($b)foreach($b as $k=>$v){if($a)$in=in_array($v,$a); 
-	if(trim($v) && (($a && !$in) or !$a))$a[]=trim($v);}
-if($a){$n=count($a); for($i=0;$i<$n;$i++)if($a[$i])$ret.=$a[$i].'; ';
-	return $ret;}}
-
-function append_design($a,$b){
-foreach($a as $k=>$v){$va=trim($v[0].$v[1].$v[2]); $vrf[$va]=$k;}
-foreach($b as $k=>$v){$va=trim($v[0].$v[1].$v[2]); $kb=$vrf[$va];
-	if($kb){$a[$k][6]=app_des_free($a[$k][6],$v[6]);}
-	else $a[]=$v;}
-return $a;}
-
 function append_update($defs,$d){
-list($a,$b)=split_right('/',$d,1); $r=msql_read_b($a,$b);
-if($a=='design')return append_design($defs,$r);
-foreach($r as $k=>$v)if(($v['last-update'] && $v['last-update']>=$defs[$k]['last-update']) or !$defs[$k])$defs[$k]=$v;
+list($a,$b)=split_right('/',$d,1); $r=msql::read_b($a,$b);
+if($a=='design'){req('styl'); return append_design($defs,$r);}
+foreach($r as $k=>$v){$up=$v['last-update']??''; $upa=valr($defs,$k,'last-update');
+	if(($up && $up>=$upa) or !isset($defs[$k]))$defs[$k]=$v;}
 return $defs;}
 
-function reorder($r){$i=0; 
-if($r['_menus_'])$rb['_menus_']=array_shift($r);//sort($r);
+function reorder($r){$i=0;
+if(isset($r['_menus_'])){$rb['_menus_']=$r['_menus_']; unset($r['_menus_']);}//sort($r);
 foreach($r as $k=>$v){$i++; $rb[$i]=$v;}
 return $rb;}
 
@@ -382,135 +531,80 @@ return $ret;}
 
 function del_keys($r){
 foreach($r as $k=>$v){
-if(is_array($v)){
-	if($k=='_menus_')$kb='_menus_'; else $kb=$v[0]; 
-	array_shift($v);}
-$ret[$kb]=$v;}
+	if(is_array($v)){if($k==='_menus_')$kb='_menus_'; else $kb=$v[0]; array_shift($v);}
+	$ret[$kb]=$v;}
 return $ret;}
 
-function inject_mono($r,$d){//verticalize
-$d=embed_detect($d,'array(',');',''); $rb=explode(',',$d);
-foreach($rb as $k=>$v){
-	if(strpos($v,'=>'))list($ka,$va)=split("=>",$v); else $va=$v;
-	$ka=str_replace(array('"',"'",' '),'',$ka);
-	$r[$ka]=array(str_replace(array('"',"'",' '),'',$va));}
+function inject_defs($ra,$d){if(!$d)return $ra;
+$f='_datas/r.php'; write_file($f,'<?php '.$d); require($f);
 return $r;}
 
-function inject_sql($r,$d){
-$d=str_replace(') VALUES','),',$d); 
-$d=str_replace(array('`',", ''","''"),array('',", '-'","\'"),$d);
-$rb=explode("), '",$d);//very bad
-foreach($rb as $k=>$v){
-	if(substr($v,0,6)=='INSERT')$m=1; else $m=0;
-	$v=str_extract('(',$v,0,1);
-	list($key,$v)=split_right(", '",$v); //echo $key.'-'.$v.br();
-	$v=trim($v); $rd='';
-	if($m)$rc=explode(',',$v); elseif($v)$rc=explode("', '",$v); //p($rc);
-	foreach($rc as $vc){
-		if(substr($vc,0,1)=="'")$vc=substr($vc,1);
-		if(substr($vc,-1)=="'")$vc=substr($vc,0,-1);
-		$rd[]=trim($vc);}
-	if($m)$r['_menus_']=$rd; elseif($key && $rd)$r[trim($key)]=$rd;}
-return $r;}
-
-function inject_defs($r,$d){if(!$d)return $r;
-if($_POST['sql'])return inject_sql($r,$d);
-if($_POST['mono'])return inject_mono($r,$d);
-$rb=explode('$',$d); echo $_POST['save'];
-foreach($rb as $k=>$v){
-	$key=embed_detect($v,'[',']',''); $key=str_replace(array("'",'"'),'',$key);
-	$value=embed_detect($v,'array(',');',''); $value=str_replace(array("'",'"'),'',$value);
-	if(substr($value,0,1)=="#")$value='&'.$value;
-	if(strpos($value,",")!==false)$rc=explode(',',$value); else $rc=array($value);
-	if($key && $value)$rd[$key]=$rc;}
-if($_POST['replace'])$r=$rd; else $r+=$rd;
-return $r;}
-
-function edit_csv($r,$d){if(!$d)return $r; 
-$ra=explode("\n",$d); $rb['menus']=$r['menus'];
-if($ra)foreach($ra as $k=>$v)$rb[]=explode(",",$v); p($rb);
-if($rb[0]){$rb['menus']=$rb[0]; unset($rb[0]);}
-return $rb?$rb:$r;}
+function import_csv($r,$d){
+$ra=explode("\n",$d); $rc=[];
+foreach($ra as $k=>$v){$rb=explode(';',$v);
+	foreach($rb as $kb=>$vb)$rc[$k][$kb]=delbr($vb,"\n");}
+$rc=del_keys($rc);
+return $rc?$rc:$r;}
 
 function backup_msql(){
 if(auth(7))return plugin('backup_msql','');}
 
-#render 
-function msql_adm_head($u,$base,$prefix,$table,$version){
-Head::add('jscode','//slctmenuder
-	function MM_jumpMenu(targ,selObj,restore){
-	eval(targ+".location=\''.$u.'&def="+selObj.options[selObj.selectedIndex].value+"\'");
- 	if(restore)selObj.selectedIndex=0;}
-function goto(g){
-	if(g=="sort_table")var aff="k or col number";
-	else if(g=="permut")var aff="0/1";
-	else if(g=="del_col")var aff="0";	
-	else var aff="'.$base.'/'.$prefix.'_'.$table.'_'.$version.'";
-	var go=prompt(g,aff);
-	if(go!=null && go!="'.$base.'/'.$prefix.'_'.$table.'_'.$version.'" && go!="")
-		window.location="'.$u.'&"+g+"="+go;}
-function delfile(g){var ok=confirm("'.nms(43).'?"); if(ok)window.location=g;;}
-function jumpMenu(n,selObj){
-	var add=selObj.form.elements["c"+n].options[selObj.form.elements[\'c\'+n].selectedIndex].value;
-	document.getElementById("val"+n).value=add;}
-function display_all(k){val=document.getElementById(\'cln\'+k).value;
-	document.getElementById(\'cnt\'+k).innerHTML=val;}
-function chkall(){var inp=document.getElementsByTagName("input");
-	for(i=0;i<inp.length;i++){if(inp[i].type=="checkbox"){
-	if(inp[i].checked=="")inp[i].checked="checked"; else inp[i].checked="";}}}');}
-
-#core
+#render
 function sesm($k,$v=''){return sesr('mu',$k,$v);}
 
 function murl_read($u){
+if(!$u)$u='users/'.ses('qb');//default
 if(substr($u,0,4)=='lang')list($base,$dir,$node)=explode('/',$u);
 else list($base,$node)=split_one('/',$u,1);
 list($node,$row)=split_one('|',$node,1);
-//92,190:no,191,657,msqlink,admin:msqlj:54,ajax:"msql"
 list($node,$line)=split_one(':',$node,1);
 list($b,$d)=split_one('/',$base,0); 
-list($p,$t,$v,$l)=explode('_',$node); $l=$l?$l:$line;
+list($p,$t,$v,$l)=opt($node,'_',4); $l=$l?$l:$line;
 if(!$b){$b=$p; $p='';} if(!$b)$b='users'; if($b=='lang')$d=$dir?$dir:prmb(25);
-return array($b,$d,$p,ajx($t),ajx($v),ajx($l));}
+return [$b,$d,$p,ajx($t),ajx($v),ajx($l)];}
 
 function mnod($p,$t,$v){return $p.($t?'_'.$t:'').($v?'_'.$v:'');}
 function murl($b,$d,$p,$t,$v){
 if($_SESSION['htacc'])return ($b?$b.'/':'').($d?$d.'/':'').mnod($p,$t,$v);
 else return '/?msql='.$b.'&dir='.$d.'&msql='.mnod($p,$t,$v);}
 function murl_vars($u){list($b,$d,$p,$t,$v,$n)=murl_read($u);
-return array($b.($d?'/'.$d:''),mnod($p,$t,$v),$n);}
+return [$b.($d?'/'.$d:''),mnod($p,$t,$v),$n];}
 
 function murl_build($b,$d,$p,$t,$v){
 list($base,$dir,$node,$pr,$tb,$vn)=murl_read(sesm('murl'));
 $base=$b?$b:$base; $dir=$d?$d:$dir; 
-$prefix=$p?$p:$pr; $table=$t?$t:$tb; $version=$v?$v:$vn;
-return murl($base,$dir,$prefix,$table,$version);}
+$hub=$p?$p:$pr; $table=$t?$t:$tb; $version=$v?$v:$vn;
+return murl($base,$dir,$hub,$table,$version);}
+
+function murl_boot(){
+list($b,$dr,$nd,$pr,$tb,$vn)=murl_read(sesm('murl'));
+$ret=murl($b,$dr,$nd?$nd:ses('qb'),$pr,$tb);
+return $ret;}
 
 #boot
 function msql_boot($msql){$auth=$_SESSION['auth']; $ath=6; $root='msql/';//sesm('root')
 $_SESSION['murl']=murl_read($msql);
-list($base,$dir,$prefix,$table,$version,$def)=$_SESSION['murl'];
-if($def)$_GET['def']=$def; $folder=$base.'/'.($dir?$dir.'/':'');
-//echo $base.'-d:'.$dir.'-p:'.$prefix.'-t:'.$table.'-v:'.$version.'-d:'.$def.br();
-if($_GET['def'])$def=$_GET['def'];
-elseif(is_file(sesm('root').$folder.$prefix.'_'.$table.'_'.$version.'.php'))$_GET['def']=$def;
-elseif(is_file(sesm('root').$folder.$prefix.'_'.$table.'.php') && $version){
+list($b,$dir,$hub,$table,$version,$def)=$_SESSION['murl'];
+if($def)$_GET['def']=$def; $folder=$b.'/'.($dir?$dir.'/':'');
+//echo $b.'-d:'.$dir.'-p:'.$hub.'-t:'.$table.'-v:'.$version.'-d:'.$def.br();
+if($def=get($def))$def;
+elseif(is_file($root.$folder.$hub.'_'.$table.'_'.$version.'.php'))$_GET['def']=$def;
+elseif(is_file($root.$folder.$hub.'_'.$table.'.php') && $version){
 	$_GET['def']=ajx($version,1); $version='';}
-elseif(is_file(sesm('root').$folder.$prefix.'.php') && $table){
-	$_GET['def']=$table; $table=''; $version='';}
-if($dir && !is_dir($root.$folder)){$folder=$base.'/'; $dir='';}
-$files=tables($root.$folder); //pr($files);
-$ra[0]=explore($root,'dirs',1); //bases
-	if($auth<6){$rdel=array('lang','server','clients','radio','stats','gallery','db','system');//'system',
+if($dir && !is_dir($root.$folder)){$folder=$b.'/'; $dir='';}
+$files=tables($root.$folder);
+$ra[0]=explore($root,'dirs',1);//bases
+	if($auth<6){$rdel=['lang','server','clients','radio','stats','gallery','db','system'];
 		foreach($rdel as $v)unset($ra[0][$v]);}
-$ra[1]=$base;//base
-if($dir)$ra[2]=explore($root.$base.'/','dirs',1);//dirs
+$ra[1]=$b;//base
+$ra[2]=$dir?explore($root.$b.'/','dirs',1):'';//dirs
 $ra[3]=$dir;//dir
-if($files && $base){$ra[4]=array_keys($files);//prefixes
+if($files && $b){$ra[4]=array_keys($files);//hubes
 	foreach($ra[4] as $k=>$v)
-		if(($base=='users' && $v!='public' && $v!=ses('qb')) or 
+		if(($b=='users' && $v!='public' && $v!=ses('qb')) or 
 			($auth<6 && $v!='public'))unset($ra[4][$k]);}
-$ra[5]=$prefix;
+else $ra[4]='';
+$ra[5]=$hub;
 $ra[6]=$files;
 	if($files && $auth<=$ath){foreach($files as $k=>$v){
 		if($k==$_SESSION['USE'] && $k==$_SESSION['qb'])$filb[$k]=$v;
@@ -523,200 +617,157 @@ $ra[9]=$folder;
 $ra[10]=mnod($ra[5],$ra[7],$ra[8]);
 return $ra;}
 
-/*
-//structure: root/base/dir/prefix_table_version //b/d/p_t_v
+/*//structure: root/base/dir/hub_table_version //b/d/p_t_v
 //où b=niveau 0 et d=option root
 root: /msql, /msql/db
 base: default:users //p
-dir: fr/eng, auto with lang
+dir: fr/en/es, auto with lang
 folder:root+base+dir+/
-1: prefix
+1: hub
 2: table
 3: version
-nod: prefix+table: nod
-node: prefix+table+version: //o
-murl: base/dir/prefix_table_version (msql url)
+nod: hub+table: nod
+node: hub+table+version: //o
+murl: base/dir/hub_table_version (msql url)
 url: ?msql=
-lk: url+murl
-*/
+lk: url+murl*/
+
+//ses('msql','db/');
+
+function bt_msqop($d,$jurl,$lh,$o=''){$a=$o?'popup':'editmsql';//msql_opsup
+$rl=$d=='del_file'||$d=='del_backup'?'url':'';
+return lj('txtx',$a.'_msqlops__'.$rl.'_'.$jurl.'_'.ajx($d).'__'.$o,$lh[0],att($lh[1])).' ';}
+function bt_msqdt($d,$jurl,$lh,$o=''){$a=$o?'popup':'editmsql';//msql_opsup
+return lj('txtx','popup_callp___msql_msql*editors_'.$jurl.'_'.ajx($d),$lh[0],att($lh[1])).' ';}
 
 #ok, go
-
-function lj_goto($d,$n){$lh=sesmk('msqlang');
-return ljb('txtx" title="'.$lh[$n][1],'goto',$d,$n?$lh[$n][0]:$d).' ';}
-
-function msql_adm($msql=''){//echo br();
+function msql_adm($msql='',$pg=''){
 $root=sesm('root','msql/');
 $auth=$_SESSION['auth']; $ath=6;//auth_level_mini
-$wsz=define_s('wsz',700);
-$msql=$msql?$msql:$_GET['msql'];
-$_SESSION['page']=$_GET['page']?$_GET['page']:1;
+$wsz=sesg('wsz',700);
+$msql=$msql?$msql:get('msql');
+$_SESSION['page']=$pg?$pg:1;
 #boot
-if($msql && $msql!='='){$url=sesm('url','/msql/');
+if($msql && $msql!='='){
+	if($_SESSION['htacc'])$url=sesm('url','/msql/'); else $url=sesm('url','/?msql=');
 	$ra=msql_boot($msql); $_SESSION['msql_boot']=$ra;
-	list($bases,$base,$dirs,$dir,$prefixes,$prefix,$files,$table,$version,$folder,$node)=$ra;
+	list($bases,$base,$dirs,$dir,$hubs,$hub,$files,$table,$version,$folder,$node)=$ra;
 	//build url
-	$murl=sesm('murl',murl($base,$dir,$prefix,$table,$version));//b/d/p_t_v
+	$murl=sesm('murl',murl($base,$dir,$hub,$table,$version));//b/d/p_t_v
 	$basename=$root.$folder.$node;
 	$is_file=is_file($basename.'.php');
 	$lk=sesm('lk',$url.$folder.$node.gpage());
-	$folder=$root.$folder;//conformity
-	msql_adm_head($lk,$base,$prefix,$table,$version);}
-$def=ajx($_POST['def']?$_POST['def']:$_GET['def'],1);
-if($_GET['see'])$ret[]=verbose($ra,'dirs');
+	$folder=$root.$folder;}//conformity
+$def=ajx(get('def'),1);
+if(get('see'))$ret[]=verbose($ra,'dirs');
 //auth
-if($base=='users' && $prefix==$_SESSION['USE'])$_SESSION['ex_atz']=1;
-if($auth>=$ath && $_SESSION['ex_atz'] or $auth>=6)$authorized=true;
-$lkb=$lk.'&';
+if($base=='users' && $hub==$_SESSION['USE'])$_SESSION['ex_atz']=1;
+if($auth>=$ath && ses('ex_atz') or $auth>=6)$authorized=true;
 #load
-//reqp('msql'); $msq=new msql($base,$node); if($is_file)$defs=$msq->load();
+//if($is_file)$defs=msql::read($base,$node);
 if(get('repair'))msql_repair($folder,$node);//old
-if($is_file)$defs=read_vars($folder,$node,$defsb);
+$defs=[];
+//if($is_file)$defs=msql::read_b($dir?$dir:$base,$node); //pr($defs);
+if($is_file)$defs=msql::read_b($base.($dir?'/'.$dir:''),$node); //pr($defs);
 //if(!$defs)$ret[]=verbose($ra,'');
-if($defs['_menus_'])$defsb['_menus_']=$defs['_menus_'];
-//save
-if($def && !$defs[$def])$_POST['add']=$def;
-if(($_POST['def'] or $_POST['add']) && $authorized)
-	list($defs,$def)=save_defs($folder,$node,$defs,$def,$base);
+if(isset($defs['_menus_']))$defsb['_menus_']=$defs['_menus_'];
 //savb
-if($_GET['sav'])save_vars($folder,$node.'_sav',$defs,1);
-//create
-if($_GET['create'] && $authorized){
-	$prefix=normaliz_c($_POST['prfx']);
-	$table=normaliz_c($_POST['hbname']);
-	if($_POST['hbnb'] && $_POST['hbnb']!='version')$version=$_POST['hbnb'];
-	if(!$_POST['hbnb'])$version='';
-	if(is_numeric($_POST['nbc'])){$defsb['_menus_']='';
-		$nbc=$_POST['nbc']; $nbc=$nbc>1?$nbc:1;
-		for($i=1;$i<=$nbc;$i++)$defsb['_menus_'][]='col_'.$i;}
-	elseif($defs['_menus_'])$defsb['_menus_']=$defs['_menus_'];
-	else $defsb['_menus_']=array('');
-	$node=mnod($prefix,$table,$version);
-	if($folder && $prefix)read_vars($folder,$node,$defsb);
-	relod(sesm('url').murl_build('','',$prefix,$table,$version));}
-#modifs
-//save_modif
-$do=find_command(); if($do && $auth>=$ath)
-	$defs=msql_modifs($defs,$defsb,$folder,$prefix.'_'.$table,$node,$basename,$do);
-
+//if(get('sav'))write_file($folder.$node.'.php',msql::dump($r,$node))
+if(get('sav'))msql::save($dir?$dir:$base,$node.'_sav',$defs);
 #render
-$lh=sesmk('msqlang');
-	#-menus
-	if(!$_GET['def'])$ret['menus']=msql_menus($ra);//auth(3) && 
-if(!$_GET['def']){//called
+$lh=sesmk('msqlang','helps_msql',0);
+$lkb=$lk.'&';
+$jurl=ajx($murl);
+#-menus
+if(!$def && auth(6)){//called
+	$ret['menus']=msql_menus($ra); $ret['fls']='';
 	#-files
-	//add
-	if(auth(4))$ret['fls']=lkc('txtblc',$lkb.'new==',pictxt('add',$lh[9][0])).' ';
-	if($table && $authorized && $prefix && $is_file){//$defs && 
-		$ret['fls'].=lkc('txtx',$lkb.'sav==',$lh[2][0]).' ';
-		if(is_file($basename.'_sav.php'))
-			$ret['fls'].=lkc('txtx',$lkb.'restore==',$lh[3][0]).' ';
-		$ret['fls'].=lj_goto('import_defs',5);
-		//$ret['fls'].=lj_goto('import_old','');
-		$ret['fls'].=lj_goto('import_keys',17);
-		$ret['fls'].=lj_goto('merge_defs',6);
-		$ret['fls'].=lj_goto('append_update',7);
-		$ret['fls'].=lj_goto('append_values',8);}
-	else $ret['fls'].=$bckp;
-	if($files[$prefix] && ($auth>$ath or $prefix==$_SESSION['USE']))
-	if($auth>=$ath && $table && $prefix && $is_file){
-		$ret['fls'].=lkc('txtx',$lkb.'del_table==',$lh[10][0]).' ';
-		$ret['fls'].=ljb('txtblc','delfile',$lkb.'del_file==',$lh[11][0]).' ';
-		//$ret['fls'].=lkc('txtyl',$lkb.'del_file==',$lh[11][0]).' ';
-		if(!$defs or isset($defs[0]))$ret['fls'].=lkc('txtyl',$lkb.'repair==',$lh[12][0]).' ';}
+	if(auth(4))$ret['fls']=lj('txtblc','popup_callp___msql_create*table_'.$jurl,$lh[9][0]).' ';
+	if($table && $authorized && $hub && $is_file){//$defs && 
+		$ret['fls'].=bt_msqop('backup',$jurl,$lh[2]).' ';//sav==
+		if(is_file($basename.'_sav.php')){
+			$ret['fls'].=bt_msqop('restore',$jurl,$lh[3]).' ';
+			$ret['fls'].=bt_msqop('del_backup',$jurl,$lh[30],1);}
+		$ret['fls'].=bt_msqop('import_defs',$jurl,$lh[5],1).' ';
+		$ret['fls'].=bt_msqop('import_keys',$jurl,$lh[17],1).' ';
+		$ret['fls'].=bt_msqop('merge_defs',$jurl,$lh[6],1).' ';
+		$ret['fls'].=bt_msqop('append_update',$jurl,$lh[7],1).' ';
+		$ret['fls'].=bt_msqop('append_values',$jurl,$lh[8],1).' ';}
+	if(isset($files[$hub]) && ($auth>$ath or $hub==$_SESSION['USE']))
+	if($auth>=$ath && $table && $hub && $is_file){
+		$ret['fls'].=bt_msqop('rename_table',$jurl,$lh[31],1);
+		$ret['fls'].=bt_msqop('duplicate_table',$jurl,$lh[32],1);
+		$ret['fls'].=bt_msqop('trunc_table',$jurl,$lh[10]).' ';
+		$ret['fls'].=bt_msqop('del_file',$jurl,$lh[11]).' ';
+		if(!$defs or isset($defs[0]))
+			$ret['fls'].=bt_msqop('repair',$jurl,$lh[12]).' ';}
+		if(auth(6))//($base=='system' or $hub=='public') && 
+			$ret['fls'].=bt_msqop('renove',$jurl,['renove','import from philum.fr']);
 	if($ret['fls'])$ret['fls'].=br();
-	//$ret['fls']=divc('menu',$ret['fls']);
-	//new
-	if($_GET['new'])$ret['fls'].=newbase($base,$prefix,$table,$version);
 	#-util
-	if($table && $authorized && $prefix && $is_file){
-		$ret['utl'].=lkc('txtblc',$lkb.'def=_menus_',$lh[1][0]).' ';
-		$ret['utl'].=lkc('txtx',$lkb.'reset_menus==',$lh[22][0]).' ';
-		$ret['utl'].=lkc('txtx',$lkb.'del_menus==',$lh[23][0]).' ';
-		$ret['utl'].=lkc('txtx',$lkb.'add_keys==',$lh[24][0]).' ';
-		$ret['utl'].=lkc('txtx',$lkb.'del_keys==',$lh[25][0]).' ';
-		$ret['utl'].=lkc('txtx',$lkb.'def=_menus_&add_col==',$lh[14][0]).' ';
-		$ret['utl'].=lj_goto('del_col',15);
-		if($is_file)$ret['utl'].=lkc('txtx" title="'.$lh[13][1],$lkb.'repair_cols==',$lh[13][0]).br();
+	$ret['utl']='';
+	if($table && $authorized && $hub && $is_file){
+		$ret['utl']=lj('txtblc','popup_editmsql___'.$jurl.'_*menus*',$lh[1][0]).' ';
+		$ret['utl'].=bt_msqop('reset_menus',$jurl,$lh[22]);
+		$ret['utl'].=bt_msqop('del_menus',$jurl,$lh[23]);
+		$ret['utl'].=bt_msqop('add_keys',$jurl,$lh[24]);
+		$ret['utl'].=bt_msqop('del_keys',$jurl,$lh[25]);
+		$ret['utl'].=bt_msqop('add_col',$jurl,$lh[14]);
+		$ret['utl'].=bt_msqop('del_col',$jurl,$lh[15],1);
+		if($is_file)$ret['utl'].=bt_msqop('repair_cols',$jurl,$lh[13]);
+		if($is_file)$ret['utl'].=bt_msqop('repair_enc',$jurl,['enc','repair utf8']);
+		$ret['utl'].=bt_msqop('compare',$jurl,$lh[29],1);
+		$ret['utl'].=bt_msqop('intersect',$jurl,$lh[33],1);
+		//$ret['utl'].=bt_msqop('connexions',$jurl,['connexions','connexions'],1);
+		$ret['utl'].=br();
 		if($base!='system' && is_file(sesm('root').'system/'.$node.'.php'))
-			$ret['utl'].=lkc('txtblc',$lkb.'update==',$lh[26][0]).' ';
-		$ret['utl'].=lj_goto('sort_table',19);
+			$ret['utl'].=bt_msqop('update',$jurl,$lh[26]);
+		$ret['utl'].=bt_msqop('sort_table',$jurl,$lh[19],1);
 		if($table!='restrictions' && $table!='params')
-			$ret['utl'].=lkc('txtx',$lkb.'reorder==',$lh[20][0]).' ';
-		$ret['utl'].=lj_goto('permut',21);
-		$ret['utl'].=lkc('txtx',$lkb.'edit_conn==',$lh[16][0]).' ';
-		$ret['utl'].=lkc('txtx" title="'.$lh[6][1],$lkb.'inject_defs==',$lh[18][0]).' ';
-		$ret['utl'].=lkc('txtx',$lkb.'edit_csv==','csv').' ';
-		$ret['utl'].=lkc('txtx',$lkb.'json==','json').' ';
-		if(auth(6))$ret['utl'].=lkc('txtx',$lkb.'export_mysql==','sql').' ';
-		if(auth(6))$ret['utl'].=lkc('txtx',$lkb.'create_mysql==','create mysql').' ';
-		$ret['utl'].=lj('txtx','popup_msql___lang_helps_msql','?');
-	}
+			$ret['utl'].=bt_msqop('reorder',$jurl,$lh[20]);
+		$ret['utl'].=bt_msqop('permut',$jurl,$lh[21],1);
+		$ret['utl'].=bt_msqdt('import_conn',$jurl,$lh[16],1);
+		$ret['utl'].=bt_msqdt('inject_defs',$jurl,$lh[18],1);
+		$ret['utl'].=bt_msqdt('inject_defs2',$jurl,$lh[18],1);
+		$ret['utl'].=bt_msqdt('import_csv',$jurl,['csv',''],1);
+		$ret['utl'].=bt_msqdt('import_json',$jurl,['json',''],1);
+		$ret['utl'].=bt_msqop('import_jsonlk',$jurl,['jsonlink',''],1);
+		$ret['utl'].=bt_msqop('export_csv',$jurl,['export_csv',''],1);
+		if(auth(6))$ret['utl'].=bt_msqdt('export_mysql',$jurl,['mysql',''],1);
+		$ret['utl'].=lj('txtx','popup_msql___lang_helps_msql','?');}
 	#-fieldset
 	if($ret['fls'].$ret['utl'])
 		$ret['utils']=divc('menu',$ret['fls'].$ret['utl']); $ret['fls']=$ret['utl']='';
 	//if($ret['nfo'])$ret['nfo'].=br();
 }//called
 #-infos
+$ret['nfo']='';
 if($table && $is_file){
-	$ret['nfo']=lkc('popsav',$lk,$murl).' ';
+	$ret['nfo']=lkc('popbt',$lk,pictxt('msql',$murl)).' ';
+	if($authorized)//add
+		$ret['nfo'].=lj('txtblc','popup_editmsql___'.$jurl.'_add',pictit('add',$lh[28][0])).' ';
+	$ret['nfo'].=lj('txtx','editmsql_call___msql_edit*microsql_'.$jurl,picto('refresh')).' ';
 	$wurl=$_SERVER['HTTP_HOST'].'/msql/'.$murl;
 	$ret['nfo'].=lj('popbt','popup_text___'.ajx($wurl).'_weburl_console',pictit('link','web url'));
-	$wcon='['.$murl.$kdef.($def?':'.$def:'').':microsql]';
+	$wcon='['.$murl.($def?':'.$def:'').':msql]';
 	$ret['nfo'].=lj('popbt','popup_text___'.ajx($wcon).'_connector_console',pictit('conn','connector'));
-	$ret['nfo'].=lkt('popbt','/plug/microxml.php?table='.$murl,pictit('rss','xml')).' - ';
-	$ret['nfo'].=btn('txtsmall2',count($defs).' '.plurial(count($defs),116)).' - ';
-	if($is_file)$ret['nfo'].=btn('txtsmall2',fsize($basename.'.php')).' - ';
+	$ret['nfo'].=lkt('popbt','/plug/microxml.php?table='.$murl,pictit('rss','xml'));
+	$ret['nfo'].=lkt('popbt','/call/msqj/'.str_replace('/','|',$murl),pictit('emission','json')).' - ';
+	if(is_array($defs))$n=count($defs); else $n=0; if(isset($defs['_menus_']))$n-=1;
+	$ret['nfo'].=btn('txtsmall2',$n.' '.plurial($n,116)).' - ';
+	if($is_file)$ret['nfo'].=btn('txtsmall2',fsize($basename.'.php',1)).' - ';
 	$ret['nfo'].=btn('txtsmall2',ftime($basename.'.php')).' ';
-	$ret['nfo'].=msq_search($murl);}
+	$ret['nfo'].=msql_search($murl);}
 if($ret['nfo'])$ret['nfo']=divc('menu',$ret['nfo']);
 
-//entries
-//if($defs)$ret['edt'].=slctmenuder($defs,$def?$def:'_menus_');
-//add
-if($is_file && $authorized && !$_GET['called'] && $defs && !$_GET['def'])
-	$ret['edt'].=divc('menu',f_inp_add($defs,$defsb,$def)).br();
-//edit
-//echo verbose($ra,'');
-if($def && $defs[$def])$ret['edt'].=f_inp_m($defs,$defsb['_menus_'],$def);
-//edit_conn
-if($_GET['edit_conn']=='='){
-	if($defs)foreach($defs as $k=>$v){
-		$v=str_replace(array('|','¬'),array(':BAR:',':LINE:'),$v);
-		$edittable.=implode('|',$v).'¬'."\n";}//(!is_numeric($k)?$k.'|':'')
-	$ret[]=divc('','paste a table as created by transductor from html table :: use "|" for cells and "¬" for lines of cells').form($lkb.'def='.$def,txarea('import_conn',$edittable,60,14).br().checkbox('aid','ok','auto_increment','1').input2('submit','save','import','txtbox')).hr().br();}
-//array
-if($_GET['inject_defs']=='='){
-	$datas=str_replace(array('<'.'?php','?'.'>'),'',read_file($basename.'.php'));
-	$ret[]=divc('','paste $r[1]=array(1,2,3)').form($lkb,txarea('inject_defs',$datas,60,14).br().input2('submit','replace','replace','txtbox').input2('submit','inject','inject','txtbox').checkbox('mono','1','key=>value','').checkbox('sql','1','mysql','')).hr().br();}
-
-//export_mysql
-if($_GET['create_mysql']=='=' && auth(6)){
-	$ok=plugin_func('mysql','import_msql',$defs,$node);
-	$ret[]=divc('txtalert','create table '.$node.': '.$ok);}
-
-if($_GET['export_mysql']=='=' && auth(6))
-	$ret[]=txarea('',mysqlrb($defs),60,40);
-
-//csv
-if($_GET['edit_csv']=='='){
-	foreach($defs as $k=>$v)if($v)
-		$edittable.=$k.':'.(is_array($v)?implode(',',$v):htmlentities($v))."\n";
-	$ret[]=divc('','paste csv using "," for cells and lines for rows').form($lkb.'def='.$def,txarea('edit_csv',$edittable,60,14).br().checkbox('aid','ok','auto_increment','1').input2('submit','save','import','txtbox')).hr().br();}
-
-//csv
-if($_GET['json']=='='){
-	foreach($defs as $k=>$v)if($v)$edittable.='"'.$k.'":'.(is_array($v)?'["'.implode('","',$v).'"]':'"'.htmlentities($v[0])).'",';
-	$ret[]=txarea('edit_csv','{'.$edittable,60,14).'}'.br();}
-
-//see_table
-if($defs && !$_GET['def']){// && (!$def or $_POST['save'])//called
+#see_table
+if($defs && !get('def')){
 $out=divd('editmsql',draw_table($defs,$murl,''));
 $ret[]=$out.br();}
 else $ret[]=divd('editmsql','');
 
 if($auth>6)$ret[]=lkc('txtx',$lkb.'backup_msql==','backup').' ';
-	if($_GET['backup_msql'])$ret[]=backup_msql();
-return divd('content',implode('',$ret));}//end msql_adm
+if(get('backup_msql'))$ret[]=backup_msql();
+return divd('msqdiv',implode('',$ret));}//end msql_adm
 
 ?>

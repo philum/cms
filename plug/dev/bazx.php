@@ -24,13 +24,13 @@ list($ob,$op)=split_right(':',$d);
 list($od,$oq)=split_one('/',$op);
 //echo $ob.'-'.$od.'-'.$oq.br();
 if($oq)switch($od){
-case('bal'):return bal($oq,$ob);break;
+case('bal'):return balb($oq,$ob);break;
 case('plug'):return plugin($oq,$ob);break;
 }
 else switch($op){
 case('br'):return br();break;
-case('b'):return bal($op,$ob);break;
-case('u'):return bal($op,$ob);break;
+case('b'):return balb($op,$ob);break;
+case('u'):return balb($op,$ob);break;
 }
 return '('.$d.')';}
 
@@ -40,15 +40,15 @@ $ret=baz_x($p,$o);
 return $ret;}
 
 function baz_m($p,$o,$rid){
-$ret.=txarea('tx',$p,44,11,atc('console')).' ';
-$ret.=lj('',$rid.'_plug__2_bazx_baz*j___tx',picto('reload')).' ';
+$ret.=textarea('tx',$p,44,11,atc('console')).' ';
+$ret.=lj('',$rid.'_plug__2_bazx_baz*j___tx',picto('ok')).' ';
 return $ret;}
 
 //plugin('baz',$p,$o)
 function plug_bazx($p,$o){$rid='plg'.randid();
 $bt=baz_m($p,$o,$rid); 
 $ret=baz_x($p,$o);
-//$bt.=msqlink('',ses('qb').'_baz');
+//$bt.=msqbt('',ses('qb').'_baz');
 return $bt.divd($rid,$ret);}
 
 ?>

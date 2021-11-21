@@ -1,6 +1,6 @@
 <?php
 //philum_plugin_microsql_dial 
-if($_GET['table'])require_once('../prog/lib.php');
+if(isset($_GET['table']))require_once('../prog/lib.php');
 
 function parse_msg_xml($msg){
 $ar1=array("&","<",">");//'"',
@@ -18,16 +18,16 @@ foreach($main as $k=>$v){if($k>$lst or !$lst){$i++;
 	$ret.=balc('item','',$xml)."\n";}}
 return str_replace(htmlentities("&nbsp;")," ",$ret);}
 
-function server(){
-list($dr,$nod)=split_right('/',$_GET['table'],1);
-$main=msql_read($dr,$nod,''); //p($main);
+function mx_stream($nod){//echo is_dir('plug')?'is':'isnot';
+list($dr,$nod)=split_right('/',$nod,1);
+$main=msql_read($dr,$nod,''); //p($main);//echo $dr.'-'.$nod;
 if($main)$dscrp=flux_xml($main); $host=$_SERVER['HTTP_HOST'];
 //$dscrp=str_replace('users/','http://'.$host.'/users/',$dscrp);
 //$dscrp=str_replace('img/','http://'.$host.'/img/',$dscrp);
 $xml='<'.'?xml version="1.0" encoding="utf-8" ?'.'>'."\n";//iso-8859-1//
 $xml.='<rss version="2.0">'."\n"; 
 $xml.='<channel>'."\n"; 
-$xml.='<title>http://'.$host.'/msql/'.$_GET['table'].'</title>'."\n";
+$xml.='<title>http://'.$host.'/msql/'.$nod.'</title>'."\n";
 $xml.='<link>http://'.$host.'/</link>'."\n"; 
 $xml.='<description>'.count($main).' entries</description>'."\n"; 
 $xml.=$dscrp;
@@ -39,23 +39,33 @@ if($_GET["b64"])return base64_encode($xml);
 return utf8_encode($xml);}
 
 //msql/users/philum_cache
-function clkt($d,$lst=''){
+function mx_call($d,$lst=''){
 $http='http://'; if(substr($d,0,7)!=$http)$d=$http.$d;
-$pos=strpos($d,'msql/');
+$pos=strpos($d,'msql/'); $re=[]; $ret=[]; $call='';
 if($pos!==false){$site=substr($d,0,$pos); $nod=substr($d,$pos+5);
-	$call=$site.'plug/microxml.php?table='.$nod.'&last='.$lst;}
-$keys=array('key'); for($i=0;$i<20;$i++){$keys[]=''.$i;}//val
-$rss=read_rss($call,"item",$keys); //p($rss); 
+	$call=$site.'plug/microxml.php?table='.$nod.'&last='.$lst;
+	//echo $call=$site.'call/microxml/server/'.$nod;
+	}
+$keys=['key']; for($i=0;$i<20;$i++){$keys[]=''.$i;}//val
+$rss=rss::read_rss($call,'item',$keys);//p($rss);
 foreach($rss as $k=>$v){$key=$v[0]; array_shift($v);
-	if($key=='_menus_')$keys=$v;
+	if($key=='_menus_')$keys=$v; $n[$k]=0;
 	foreach($v as $ka=>$va){if($va)$n[$k]++;}
 	if($key)$re[$key]=$v;}
 if($n){$max=max($n);
-foreach($re as $k=>$v){for($i=0;$i<$max;$i++){$ret[$k][$i]=($v[$i]);}}//$keys[$i]
+foreach($re as $k=>$v)for($i=0;$i<$max;$i++){
+	if(ses('enc')=='utf-8')$ret[$k][$i]=utf8_encode_b(val($v,$i));//iso2ascii
+	else $ret[$k][$i]=(val($v,$i));}//$keys[$i]
 return $ret;}}
 
+function microxml_build($p,$o){
+return mx_call($p,$o);}
+
+function plug_microxml($p,$o){
+return mx_stream($p,$o);}
+
 //if($_GET['table']=='server/shared_files'){require_once('../progb/finder.php'); distrib_share();}
-if($_GET['table'])echo server();
-if($_GET['call'])echo clkt($_GET['call']);
+if(isset($_GET['table']))echo mx_stream($_GET['table']);
+if(isset($_GET['call']))echo mx_call($_GET['call']);
 
 ?>

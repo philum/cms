@@ -19,12 +19,12 @@ if($r)foreach($r as $k=>$v){$font=normalize($v[0]);
 	if(!$vra[$font]){$rb=array($font,'','','',''); 
 		for($i=1;$i<count($v);$i++){$f=$font.'.'.$vr[$i]; $rc[]=$dir.$f; 
 			$ret.=addf_copy($v[$i],$dir.$f).br();}//u
-		//msql_modif('server','edition_typos',$rb,$dfb,'push','');
-		//modif_vars('','public_addfonts',$k,'del');
+		//msql::modif('server','edition_typos',$rb,'push',$dfb,'');
+		//msql::modif('','public_addfonts',$k,'del');
 		if($rc)PclTarCreate($diru.$font.'.tar.gz',$rc,'','','');
 		$ret.=btn('txtblc',lka($diru.$font.'.tar.gz')).' '.btn('txtx','saved').br();}
 	else $ret.=$font.' already_exists'.br();}
-//if($rb)msql_modif('server','edition_typos',$rb,$dfb,'add','');
+//if($rb)msql::modif('server','edition_typos',$rb,'add',$dfb,'');
 $ret.=lkc('txtbox','/?admin=fonts&inject==','inject datas (admin/fonts)').br();
 return $ret;}
 
@@ -38,27 +38,28 @@ list($attrb,$value)=split_right(':',$ra[$i],0);
 	if($attrb=='font-family')$rb['name']=$value;
 	$rab=explode(',',$ra[$i]); if($rab)foreach($rab as $k=>$va){
 		$rt=embed_detect($va,'url(',')',''); //echo $rt.br().br();
-		if($rt && !$rk[$rb['name']]){$rs=str_extract('#',$rt,0,0); $xt=strrchr_b($rt,'.');
+		if($rt && !$rk[$rb['name']]){$rs=strto($rt,'#');
+			$xt=strend($rt,'.'); if(strpos($xt,'#'))$xt=strend($rt,'#');
 			if($xt && substr($rs,0,4)=='http' && $xt!='eot?')$rb[$xt]=$rs;
 			else $noturl=1;}}}
-if($rb[0])$rb=msq_reorder($rb); //p($rb);
-$dfb['_menus_']=array('name','eot','woff','svg','ttf');
-if(count($rb)>1){$r=msql_modif('users','public_addfonts',$rb,$dfb,'push',''); //p($rb);
+//if($rb[0])$rb=msql::reorder($rb); //pr($rb);
+$dfb['_menus_']=array_keys($rb);
+if(count($rb)>1){$r=msql::modif('users','public_addfonts',$rb,'push',$dfb,''); //pr($r);
 	return addf_read($r);}
 else return btn('txtred',$noturl?'not absolte url':'already_exists');}
 
 function addf_read($r){$n=count($r)-1;
 if($n>0)$ret=lj('txtbox','cbk_plug___addfonts_addf*inject','add '.$n.' typos').br().br();//xd
-return $ret.make_table($r,'txtblc','txtx');}
+return $ret.tabler($r,0,1);}
 
 function plug_addfonts($d){$here='addfonts';
 //Head::add('css','../css/_admin.css')); Head::add('js','../progb/ajx.js'));
 $r=msql_read('','public_addfonts','');
 $ret.=divc('txtalert','coller la classe @face-font (avec url absolue)').br();
-$ret.=txarea('txt','',60,10);
-$ret.=lj('txtbox','cbk_plug___'.$here.'_addfonts*j_1_2_txt','save').br().br();//xd
+$ret.=textarea('txtcss','',60,10);
+$ret.=lj('txtbox','cbk_plug___'.$here.'_addfonts*j_1_2_txtcss','save').br().br();//xd
 if($_SESSION['auth']>4)$ret.=divd('cbk',addf_read($r));
-$ret.=msqlink('','public_addfonts');
+$ret.=msqbt('','public_addfonts');
 $ret=divd('page',divd('content',$ret));
 return $ret;}
 

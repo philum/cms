@@ -8,7 +8,7 @@ if(auth(6))return exc($p);}
 
 function plug_exsys($p,$o=''){$rid='plg'.$p;
 $ret.=autoclic('param',$p,10,244,'',1).' ';
-$ret.=lj('',$rid.'_plug___exsys_sys___param',picto('reload'));
+$ret.=lj('',$rid.'_plug___exsys_sys___param',picto('ok'));
 return $ret.divd($rid,plugin($plg,$p,$o));}
 
 ?>

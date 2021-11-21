@@ -40,13 +40,13 @@ $ret=statsrv_build($p,$o);
 return $ret;}
 
 function statsrv_menu($p,$o,$rid){
-$ret.=input(1,'inp',$p,'').' ';
-$ret.=lj('',$rid.'_plug__2_statsrv_statsrv*j___inp',picto('reload')).' ';
+$ret.=input1('inp',$p,'').' ';
+$ret.=lj('',$rid.'_plug__2_statsrv_statsrv*j___inp',picto('ok')).' ';
 return $ret;}
 
 function plug_statsrv($p,$o){$rid='plg'.randid();
 $bt=statsrv_menu($p,$o,$rid); $ret=statsrv_j($p,$o);
-//$bt.=msqlink('',ses('qb').'_statsrv');
+//$bt.=msqbt('',ses('qb').'_statsrv');
 return $bt.divd($rid,$ret);}
 
 ?>

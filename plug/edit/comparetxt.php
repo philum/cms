@@ -21,8 +21,8 @@ $ret.=lj('txtx',$rid.'_plug__2_comparetxt_comptxt*j_lines__inp1','lines').' ';
 $ret.=lj('txtx',$rid.'_plug__2_comparetxt_comptxt*j_words__inp1','words').br();
 $ex1="version.\nversion\nversion v f d";
 $ex2="version.\nversion\nversion v f b";
-$ret.=txarea('inp1',$ex1,54,8).' ';
-$ret.=txarea('inp2',$ex2,54,8).' ';
+$ret.=textarea('inp1',$ex1,54,8).' ';
+$ret.=textarea('inp2',$ex2,54,8).' ';
 return $ret;}
 
 function plug_comparetxt(){

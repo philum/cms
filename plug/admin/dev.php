@@ -1,31 +1,55 @@
 <?php
 //philum_dev
-require('plug/lib.php');
+//require('plug/lib.php');
+
+#files
+function scrut_txt_b($f){$fp=fopen($f,'r'); if(!$fp)return; $ret='';
+while(!feof($fp)){$ret.=fread($fp, 8192);}//fgets//fgetc=chars//fread
+fclose($fp); return $ret;}
+
+function recup_fileinfob($doc){
+if(is_file($doc))return date('d-m-Y',filemtime($doc)).'-'.round(filesize($doc)/1024).'Ko';}
+
+function scrut_dirb($dr){$ret=[];//dev
+if(is_dir($dr)){$dir=opendir($dr);
+	while($f=readdir($dir)){$drb=$dr.'/'.$f;
+	if(is_dir($drb) && $f!='..' && $f!='.' && $f)$ret[$f]=scrut_dirb($drb);
+	elseif(is_file($drb))$ret[$drb]=recup_fileinfob($drb);}}
+return $ret;}
+
+function explode_dirc($rep,$j,$func){
+static $i; $i++; $io=0; $ret='';
+if(is_array($rep)){
+foreach($rep as $k=>$v){$io++;
+	if(!is_array($v)){$ret.=call_user_func_array($func,array($j,$k,$v,$i.'_'.$io));}
+	else{$ret.=explode_dirc($v,$j.'/'.$k,$func);$i--;}}
+return $ret;}}
 
 #read
-function scrut_func($r,$i,$deb,$end){
-	$deb+=substr_count($r[$i],'{');
-	$end+=substr_count($r[$i],'}');
-	if($r[$i]) $ret.=$r[$i]."\n";
-	if($deb>$end){
-		$reb=scrut_func($r,$i+1,$deb,$end);
-		if($reb[0]) $ret.=$reb[0];
-		$i=$reb[1];}
+function scrut_func($r,$i,$deb,$end){$ret='';
+$deb+=substr_count($r[$i],'{');
+$end+=substr_count($r[$i],'}');
+if($r[$i])$ret=$r[$i]."\n";
+if($deb>$end){
+	$reb=scrut_func($r,$i+1,$deb,$end);
+	if($reb[0]) $ret.=$reb[0];
+	$i=$reb[1];}
 return array($ret,$i);}
 
-function splitfuncs($v){$r=explode("\n",$v);
+function splitfuncs($v){
+$r=explode("\n",$v); $rec=[];
 for($i=0;$i<count($r);$i++){$v=$r[$i]; 
 	if(substr($v,0,2)=='//'){$ret[$i]=$v."\n";}
 	if(substr($v,0,1)=='#'){$ret[$i]=$v."\n";}
-	if($v==''){$ret[$i]="\n";}
+	if(!$v){$ret[$i]="\n";}
 	if(substr($v,0,8)=='function'){
-		$c=embed_detect_b($v,'function ',')','').')';
-		$rec[$c]=embed_detect_b($v,'function ','(','');
+		$c=embed_detect($v,'function ',')').')';
+		$rec[$c]=embed_detect($v,'function ','(');
 		$reb=scrut_func($r,$i,0,0);
 		$ret[$i]=$reb[0]; 
 		$i=$reb[1];}}
 if(is_array($ret))$rea=implode('',$ret);
-return array($rea,$rec);}
+return [$rea,$rec];}
 
 function find_end($ret,$start,$a,$b){
 	$posa=strpos($ret,$start);
@@ -37,14 +61,14 @@ function find_end($ret,$start,$a,$b){
 		$nbop=substr_count($temp,'{');}
 	return subtopos($ret,$posa,$posb+1);}
 
-function treat_funcs($j,$k,$v,$i){
-$view=strpos($_GET['view'],'params/')===false?$_GET['view']:'';//protect_logs
+function treat_funcs($j,$k,$v,$i){$ret=''; $g=get('view');
+$view=strpos($g,'params/')===false?$g:'';//protect_logs
 if(is_file($k) && $view==$k){//echo $k.' ';
 	$v=scrut_txt_b($k);
 	$reb=splitfuncs($v);
 	$rea=$reb[0];
 	if(is_array($reb[1]))$_SESSION['rec']+=$reb[1];
-	if($_GET['func']){
+	if(get('func')){
 		$ret=find_end($rea,'function '.$_GET['func'].'(','{','}');
 		$ret=str_replace(array('<'.'?php','?'.'>'),'',$ret);}//$ret=htmlentities($ret);
 	else $ret=$v;}
@@ -54,7 +78,7 @@ function functions_list($view,$f){
 $_SESSION['rec']=array();
 if($view)$_GET['view']=$view;
 if($f)$_GET['func']=$f;
-$dr=str_extract('/',$view,1,0);
+$dr=struntil($view,'/');
 if(!$view)$dr='plug';
 if(substr($dr,-1)=='/')$dr=substr($dr,0,-1);
 $rep=scrut_dirb($dr); if($rep)ksort($rep);
@@ -67,13 +91,13 @@ return str_replace(array('progb/','plug/','msql/','js/','.php'),'',$d);}
 
 #cancel
 function cancel_preview($d){
-$r=msql_read('server','program_dev',$d);
-return divc('txtblc',nl2br($r[3]));}
+$ret=msql::val('server','program_dev',$d,3);
+return divc('txtblc',nl2br($ret));}
 
-function cancel_menu($del){
+function cancel_menu($del){$i=0; $ret='';
 $r=msql_read('server','program_dev',''); //1=>array('','','')
-if($del=='all'){$r=array(); modif_vars('server','program_dev',$r,'repl');}
-if($del){unset($r[$del]); modif_vars('server','program_dev',$del,'del');}
+if($del=='all'){$r=array(); msql::modif('server','program_dev',$r,'arr');}
+if($del){unset($r[$del]); msql::modif('server','program_dev',$del,'del');}
 //$ret.=lj('txtx','popup_plup__2_dev_cancel*menu_all','empty').br();
 if($r)foreach($r as $k=>$v){$i++; $jx=ajx($v[0].'|'.$v[1].'|'.$v[2],'');
 $ret.=toggle('txtblc',$k.'_plug_dev_cancel*preview_'.$k,$i.'-'.$v[2],0).' ';
@@ -99,10 +123,10 @@ $fb=$d.'/'.$p.'.php'; $va=substr(ajx($va,1),0,-1);
 if(is_file($fb)){//echo $fab;
 	$t=read_file($fb);
 	$od=find_end($t,'function '.$f.'(','{','}');
-	$t=str_replace($od,$va.'}',$t); //echo txarea('',$od,40,20);
+	$t=str_replace($od,$va.'}',$t); //echo textarea('',$od,40,20);
 		$va=str_replace("\r","\n",$va);
 	$defs=array($d,$p,$f,$va);
-	msql_modif('server','program_dev',$defs,$dfb,'one',time());
+	msql::modif('server','program_dev',$defs,'one',$dfb,time());
 	echo write_file($fb,$t);}
 return btn('txtyl','saved');}
 
@@ -113,7 +137,7 @@ if($view!='=')list($rep,$res)=functions_list($view,$f);
 return func_edit($res,$d,$p,$f);}
 
 function func_edit_jr($d){//restore
-$r=msql_read('server','program_dev',$d);
+$r=msql::row('server','program_dev',$d);
 return func_edit(stripslashes($r[3]),$r[0],$r[1],$r[2]);}
 
 function func_hist_del($f){$_SESSION['crfnc'][$f]='';}
@@ -126,7 +150,7 @@ function func_edit($v,$d,$p,$f){$view=$d.'/'.$p.'.php';
 //if($p)$_SESSION['crpag'][$p]=$d;
 if($f)$_SESSION['crfnc'][$f]=array($d,$p,$f);
 if($d)$fd=round(filesize($view)/1024,2).'Ko'; //$vb=clean_f($view);
-$ret.=btn('txtcadr',$d.'/'.$p.'/'.$f.' ('.$fd.')').' ';
+$ret=btn('txtcadr',$d.'/'.$p.'/'.$f.' ('.$fd.')').' ';
 $jx='edsv_plug__xd_dev_func*sav_'.$d.'|'.$p.'|'.ajx($f,'').'__txtarea';
 if(auth(6))$ret.=lj('popsav',$jx,'save');//save
 $ret.=btd('edsv','').' ';
@@ -138,7 +162,7 @@ $ret.=lj('popbt','popup_plup___dev_func*menus_'.$d,'open').' ';
 $ret.=hlpbt('dev').br().br();
 $ret.=openfuncs();
 //if($d=='progb')$ret.=ljb('txt','SaveJ','edc_plug___dev_func*copy','prod').' ';
-$ret.=txarea('txtarea',parse($v),64,20,atc('console').atb('onclick','detctfunc(this)').atb('ondblclick','findfunc(this)').atb('wrap','on'));
+$ret.=textarea('txtarea',parse($v),64,20,atc('console').atb('onclick','detctfunc(this)').atb('ondblclick','findfunc(this)').atb('wrap','on'));
 //$v=parse($v); $v=highlight_string('<'.'?php'.$v.'?'.'>',true);
 //$v=str_replace(array('FF8000','007700','0000BB','DD0000','0000BB'),array('FF8000','00ee00','afafff','eeeeee','ffbf00'),$v);
 //$sj='SaveG(this,event,\'txarec_plug_dev_dev*render\')'; 
@@ -149,7 +173,8 @@ return $ret;}
 $ret.=lj('txtx','funcmenu_plug___dev_func*menus_'.$v.'|'.ajx($k,''),$k).' ';}
 return $ret;}*/
 function close_page($p){unset($_SESSION['crfnc'][$p]); return func_edit_j('');}
-function openfuncs(){$r=$_SESSION['crfnc']; $jx='edc_plug__2_dev_func*edit*j_';
+function openfuncs(){$ret='';
+$r=$_SESSION['crfnc']; $jx='edc_plug__2_dev_func*edit*j_';
 if($r)foreach($r as $k=>$v){
 if($v[2])$ret.=btn('txtab',lj('',$jx.$v[0].'|'.ajx($v[1]).'|'.ajx($v[2]),$v[2]).' '.
 lj('txtx','edc_plug__2_dev_close*page_'.ajx($k),'x')).' ';}
@@ -163,10 +188,10 @@ return btn('txtyl','modifs are now public (false)');}
 #menus
 function d_menus($d){return divs('overflow-y:scroll; max-height:400px;',divc('list',$d));}
 function funcmenu_fnc($r,$d,$p){//p($r);
-foreach($r as $k=>$v){$pb=clean_f($p);
+foreach($r as $k=>$v){$pb=clean_f($p); $ret='';
 $ret.=lj('','edc_plug__2_dev_func*edit*j_'.$d.'|'.$pb.'|'.ajx($v,''),$v);}
 return d_menus($ret);}
-function funcmenu_pag($r,$d,$p){
+function funcmenu_pag($r,$d,$p){$ret='';
 if($r)foreach($r as $k=>$v){$ka=clean_f($k); if(!is_dir($k))
 if($ka)$ret.=lj('','funcmenu_plug__2_dev_func*menus_'.$d.'|'.ajx($ka,''),$ka);}
 return d_menus($ret);}
@@ -175,13 +200,13 @@ foreach($r as $k=>$v){$ret.=lj('','funcmenu_plug___dev_func*menus_'.$v,$v);}
 return d_menus($ret);}
 
 function func_menus($s){//echo $s;
-if($s)list($d,$p,$f)=explode('|',$s);
+list($d,$p,$f)=opt($s,'|',3);
 if($d)$_SESSION['crdir']=$d;
 if($p)$vw=$d.'/'.$p.'.php'; else $vw=$d; 
 list($rep,$res)=functions_list($vw,$f);
 $cs1=$cs2=$cs3='txtx'; $rec=$_SESSION['rec']; $nb=count($rec);
 if($p && $nb>1)$cs3='popsav';elseif($d)$cs2='popsav';else $cs1='popsav';
-$ret.=lj($cs1,'funcmenu_plug___dev_func*menus','dirs',0).' ';
+$ret=lj($cs1,'funcmenu_plug___dev_func*menus','dirs',0).' ';
 if($d)$ret.=lj($cs2,'funcmenu_plug___dev_func*menus_'.$d,$d,0).' ';//pages
 if($p)$ret.=lj($cs3,'funcmenu_plug___dev_func*menus_'.$d.'|'.$p,$p,0).' ';//funcs
 if($p && $nb>1)$ret.=funcmenu_fnc($rec,$d,$p);
@@ -197,15 +222,13 @@ $res=ajx($res,1);
 return $res;}
 
 function plug_dev(){
-$_SESSION['rec']=array();
-$ret.=div(' id="edc" style="display:inline-block; width:50%;"',func_edit('hello_world','progb','lib','p'));
+$_SESSION['rec']=[];
+$ret=div(' id="edc" style="display:inline-block; width:50%;"',func_edit('hello_world','progb','lib','p'));
 $ret.=div(' id="results" style="float:right; width:40%; margin-left:10px;"','');
 $ret.=divc('clear','');
 $ret.=lkc('txtx','/plug/exec','exec').' ';
 $ret.=lkc('txtx','/plug/codev','codev');
 $ret.=divc('clear','');
 return $ret;}
-
-
 
 ?>

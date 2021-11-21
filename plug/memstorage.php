@@ -11,7 +11,7 @@ function plug_memstorage($d){
 Head::add('jscode',mstr_j());
 $ret.=ljb('txtbox','mem_recap()','','echo').br().br();
 $ret.=divd('cbk','').br();
-//$ret.=txarea('cbk','',60,10);
+//$ret.=textarea('cbk','',60,10);
 return $ret;}
 
 ?>

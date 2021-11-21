@@ -18,14 +18,14 @@ list($p,$o)=ajxp($res,$p,$o);//$resultant des champs
 $ret=sun_build($p,$o);
 return $ret;}
 
-function sun_menu($p,$o,$rid){$ret=input(1,'inp',$p?$p:mkday('','ymdHis'),'').' ';
-$ret.=lj('',$rid.'_plug__2_sun_sun*j___inp',picto('reload')).' ';
+function sun_menu($p,$o,$rid){$ret=input1('inp',$p?$p:mkday('','ymdHis'),'').' ';
+$ret.=lj('',$rid.'_plug__2_sun_sun*j___inp',picto('ok')).' ';
 return $ret;}
 
 //plugin('sun',$p,$o)
 function plug_sun($p,$o){$rid='plg'.randid();
 $bt=sun_menu($p,$o,$rid); $ret=sun_j($p,$o);
-//$bt.=msqlink('',ses('qb').'_sun');
+//$bt.=msqbt('',ses('qb').'_sun');
 return $bt.divd($rid,$ret);}
 
 ?>

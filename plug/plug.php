@@ -2,7 +2,7 @@
 //philum_plugin_plug
 
 function plug_slct(){
-$r=msql_read('system','program_plugs','',1); //p($r);
+$r=msql_read('system','program_plugs','',1);
 //ksort($r);
 foreach($r as $k=>$v){
 	if($v[2]=='1' && !$v[3] && !$v[5] && $v[1])$rb=tri_tag(str_replace(' ',',',$v[1]));
@@ -10,16 +10,19 @@ foreach($r as $k=>$v){
 return divc('',make_tabs($ret));}//onxcols($ret,6,'')
 
 function plug_call($p='',$o='',$res=''){
-list($plg,$p,$o)=ajxr($res);
-return plugin($plg,$p,$o);}
+list($d,$p,$o)=ajxr($res,3);
+if(method_exists($d,'home'))$ret=$d::home($p,$o);
+else $ret=plugin($d,$p,$o);
+return $ret;}
 
-function plug_plug($plg,$p='',$o='',$res=''){$rid='plg'.$plg.$p;
+function plug_plug($plg,$p='',$o='',$res=''){$rid=randid('plg');
 if($res)list($plg,$p,$o)=ajxr($res);
-$ret.=lj('',$rid.'_plug__3_plug_plug*call___plugin|plugp|plugo',picto('reload')).' ';
-$ret.=select_j('plugin','plug','','','','2');
-$ret.=input(1,'plugin',$plg?$plg:'plugin','',1).' ';
-$ret.=input(1,'plugp',$p?$p:'param','',1).' ';
-$ret.=input(1,'plugo',$o?$o:'option','',1).' ';
+$ret=select_j('plugin','plug','','','','2').' ';
+$j=$rid.'_plug__3_plug_plug*call___plugin|plugp|plugo';
+$ret.=inputj('plugin',$plg?$plg:'plugin',$j,'',1).' ';
+$ret.=lj('',$j,picto('ok'));
+$ret.=input1('plugp',$p?$p:'param','','',1).' ';
+$ret.=input1('plugo',$o?$o:'option','','',1).' ';
 return $ret.divd($rid,plugin($plg,$p,$o));}
 
 ?>

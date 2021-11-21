@@ -15,10 +15,10 @@ require("params/_connectx.php");
 /**/
 if($_SESSION["auth"]==7 && $_GET["dw"]){
 @set_time_limit(600);
-@mysql_connect($host,$user,$pass)
+@mysqli_connect($host,$user,$pass)
 or die("Impossible de se connecter - Pb sur le 'Hostname' ou sur le 'User' ".
 "ou sur le 'Password'");
-@mysql_select_db("$db")
+@mysqli_select_db($db)
 or die("Impossible de se connecter - Pb sur le 'Nom de la Data Base'");
 if($tb){ header("Content-disposition: filename=$tb.sql");}
 else{ header("Content-disposition: filename=$output.sql");}
@@ -31,8 +31,8 @@ $schema_create="";
 if(!empty($drop))
 $schema_create .= "DROP TABLE IF EXISTS $table;$crlf";
 $schema_create .= "CREATE TABLE $table ($crlf";
-$result=mysql_db_query($db,"SHOW FIELDS FROM $table") or mysql_die();
-while($row=mysql_fetch_array($result)){
+$result=mysqli_db_query($db,"SHOW FIELDS FROM $table") or mysqli_die();
+while($row=mysqli_fetch_array($result)){
 $schema_create .= "   $row[Field] $row[Type]";
 if(isset($row["Default"]) 
 && (!empty($row["Default"]) || $row["Default"]== "0"))
@@ -43,8 +43,8 @@ if($row["Extra"] != "")
 $schema_create .= " $row[Extra]";
 $schema_create .= ",$crlf";}
 $schema_create=ereg_replace(",".$crlf."$","",$schema_create);
-$result=mysql_db_query($db,"SHOW KEYS FROM $table") or mysql_die();
-while($row=mysql_fetch_array($result)){
+$result=mysqli_db_query($db,"SHOW KEYS FROM $table") or mysqli_die();
+while($row=mysqli_fetch_array($result)){
 $kname=$row['Key_name'];
 if(($kname != "PRIMARY") && ($row['Non_unique']== 0))
 $kname="UNIQUE|$kname";
@@ -62,19 +62,19 @@ $schema_create .= " KEY $x (" . implode($columns,",") . ")";}
 $schema_create .= "$crlf)";
 return (stripslashes($schema_create));}
 function get_table_content($db,$table,$handler){
-$result=mysql_db_query($db,"SELECT * FROM $table") or mysql_die();
+$result=mysqli_db_query($db,"SELECT * FROM $table") or mysqli_die();
 $i=0;
-while($row=mysql_fetch_row($result)){
+while($row=mysqli_fetch_row($result)){
 $table_list="(";
-for($j=0; $j<mysql_num_fields($result);$j++)
-$table_list .= mysql_field_name($result,$j).",";
+for($j=0; $j<mysqli_num_fields($result);$j++)
+$table_list .= mysqli_field_name($result,$j).",";
 $table_list=substr($table_list,0,-2);
 $table_list .= ")";
 if(isset($GLOBALS["showcolumns"]))
 $schema_insert="INSERT INTO $table $table_list VALUES (";
 else
 $schema_insert="INSERT INTO $table VALUES (";
-for($j=0; $j<mysql_num_fields($result);$j++){
+for($j=0; $j<mysqli_num_fields($result);$j++){
 if(!isset($row[$j]))
 $schema_insert .= " NULL,";
 elseif($row[$j] != "")
@@ -92,11 +92,11 @@ echo "$sql_insert;$crlf";}
 $crlf="\n";
 $strTableStructure="Table structure for table";
 $strDumpingData="Dumping data for table";
-$tables=mysql_list_tables($db);
-$num_tables=@mysql_numrows($tables);
+$tables=mysqli_list_tables($db);
+$num_tables=@mysqli_numrows($tables);
 $i=0;
 while($i < $num_tables){ 
-$table=mysql_tablename($tables,$i);
+$table=mysqli_tablename($tables,$i);
 if($tb){
 if($table== $tb){
 print $crlf;
@@ -126,6 +126,6 @@ print "#$crlf";
 print $crlf;
 get_table_content($db,$table,"my_handler");}
 $i++;}
-mysql_close();}
+mysqli_close();}
 
 ?>

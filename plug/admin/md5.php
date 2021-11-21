@@ -7,8 +7,8 @@ $ret=md5($p);
 if(is_numeric($o))$ret=substr($ret,0,$o);
 return $ret;}
 
-function md5_menu($p,$o,$rid){$ret.=input(1,'inp',$p,'').' ';
-$ret.=lj('',$rid.'_plug__2_md5_md5*j___inp',picto('reload')).' ';
+function md5_menu($p,$o,$rid){$ret.=input1('inp',$p,'').' ';
+$ret.=lj('',$rid.'_plug__2_md5_md5*j___inp',picto('ok')).' ';
 return $ret;}
 
 function plug_md5($p,$o){$rid='plg'.randid();

@@ -1,18 +1,2 @@
-<?php
-//philum_microsql_admin_config
-$r["_menus_"]=array('category','name');
-$r[1]=array('access','htaccess');
-$r[2]=array('access','create_hub privilege to blogers');
-$r[3]=array('access','first_node');
-$r[4]=array('access','sub_domain');
-$r[5]=array('access','update server');
-$r[6]=array('options','gdf_ability');
-$r[7]=array('options','google-site-verification');
-$r[8]=array('params','time_zone');
-$r[9]=array('options','error_reporting');
-$r[10]=array('params','ajax_buffer');
-$r[11]=array('params','utf8');
-$r[12]=array('params','upload');
-$r[13]=array('options','updates');
-
-?>
+<?php //philum/msql/admin_config
+$r=["_menus_"=>['category','name'],1=>['access','htaccess'],2=>['access','create_hub privilege to blogers'],3=>['access','first_node'],4=>['access','sub_domain'],5=>['access','update server'],6=>['options','gdf_ability'],7=>['options','google-site-verification'],8=>['params','time_zone'],9=>['options','error_reporting'],10=>['params','ajax_buffer'],11=>['params','utf8'],12=>['params','upload'],13=>['options','updates'],14=>['access','server mirror'],15=>['access','server img'],16=>['access','fractal']];

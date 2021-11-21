@@ -1,33 +1,12 @@
-<?php
-//philum_microsql_connectors_basic
-$r["_menus_"]=array('description');
-$r["[ ]"]=array('détection : url, image ou média (jpg,mp3,mp4,flv...)');
-$r["url"]=array('[url§text] applique une Url au texte sélectionné');
-$r["img"]=array('image');
-$r["video"]=array('vidéo');
-$r["h"]=array('balise h3 (titres)');
-$r["b"]=array('balise bold (gras)');
-$r["i"]=array('balise em (italique)');
-$r["u"]=array('balise u (souligné)');
-$r["s"]=array('css \'stabilo\'');
-$r["r"]=array('texte rouge');
-$r["k"]=array('balise strike (barré)');
-$r["l"]=array('balise small (petit)');
-$r["center"]=array('aligné au centre');
-$r["right"]=array('aligné à droite');
-$r["table"]=array('tableau (option = séparateur vertical)');
-$r["list"]=array('liste avec puces (pour chaque saut de ligne)');
-$r["q"]=array('bloc texte');
-$r["notes"]=array('notes de bas de page');
-$r["--"]=array('ligne horizontale');
-$r["nbsp"]=array('espace insécable');
-$r["select"]=array('sélectionner tout');
-$r["copy"]=array('copier');
-$r["paste"]=array('coller');
-$r["deline"]=array('réduction sauts de lignes');
-$r["delconn"]=array('supprimer connecteur');
-$r["findconn"]=array('sélectionne connecteur');
-$r["del"]=array('effacer');
-$r["nl"]=array('à la ligne');
-
-?>
+<?php //philum/microsql/connectors_basic_sav
+$r=["_menus_"=>['description'],"conn"=>['détection : url, image ou média (jpg,mp3,mp4,flv...)'],"url"=>['[url§text] applique une Url au texte sélectionné'],"art"=>['Pointe vers un article : 
+- [1234:art] renvoie un bouton vers l\'article avec son titre
+- [1234§titre:art] assoie le bouton à un titre
+- [titre:art] : trouve l\'article dans la langue courante'],"img"=>['image'],"web"=>['Affiche la description d\'une page web'],"video"=>['vidéo'],"twitter"=>['Api Twitter :
+- [123456789:twitter] renvoie un twit
+- [text§search:twitter] résultat d\'une recherche
+- [123456789§thread:twitter] fil d\'une discussion (en remontant)'],"h"=>['balise h3 (titres)'],"b"=>['balise bold (gras)'],"i"=>['balise em (italique)'],"u"=>['balise u (souligné)'],"s"=>['css \'stabilo\''],"r"=>['texte rouge'],"k"=>['balise strike (barré)'],"l"=>['balise small (petit)'],"center"=>['aligné au centre'],"right"=>['aligné à droite'],"table"=>['- colonnes : | ou virgules
+- lignes : ¬ ou saut de ligne
+- headers : §1'],"msql"=>['Renvoie les données d\'une table : 
+[hub_table_(version)-(key)|(row)§option:microsql] ;
+Options : pop, read, conn, last, count, graph, form, tmp'],"list"=>['liste avec puces (pour chaque saut de ligne)'],"q"=>['bloc de citation'],"nh"=>['note de bas de page'],"--"=>['ligne horizontale'],"nbsp"=>['espace insécable'],"quo"=>['guillemets'],"qo"=>['balise guillemets'],"select"=>['sélectionner tout'],"copy"=>['copier'],"paste"=>['coller'],"deline"=>['réduction sauts de lignes'],"delconn"=>['supprimer connecteur'],"findconn"=>['sélectionne connecteur'],"del"=>['effacer'],"nl"=>['à la ligne']];

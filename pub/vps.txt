@@ -1,0 +1,338 @@
+Install Philum on a fresh new VPS
+---------------------------------
+
+NEED TO KNOW:
+
+>update frequently your server
+apt-get update
+apt-get upgrade
+
+>reboot Apache
+/etc/init.d/apache2 restart
+
+>reboot machine
+/etc/init.d/service restart
+
+>open dir
+cd /var
+
+>list of files
+ls -l
+
+>copy
+cp /var/www/file.html /var/www/file2.html
+
+>displace
+mv /var/www/file.html /var/www/file2.html
+
+>edit file
+nano /var/www/file.html
+
+>gz
+gzip -r /home/file
+>ungz
+gzip -d /home/file
+
+>mkdir/rmdir
+mkdir aPatcher/Web
+mkdir aPatcher/Autre
+
+>set permissions
+chmod -R 777 /home/site
+
+>free space disk
+df -h
+
+>size of a folder
+du -sh /var/log
+
+>secure delete content of a running file
+echo "" > /var/log/auth.log
+echo "" > /var/log/apache2/error.log
+echo "" > /var/log/apache2/access.log
+echo "" > /var/log/apache2/other_vhosts_access.log
+
+>get file from the web
+wget -P /home/philum http://philum.fr/users/philum/maj/philum2003.tar.gz
+
+>tar
+tar -zcvf /home/nfo/_backup/database.tar.gz /var/lib/mysql/databaseName
+
+>untar
+tar -zxvf /home/philum/philum2003.tar.gz
+
+>dump
+mysqldump -u root -p{password} -h localhost --opt –default-character-set=utf8 databaseName > /home/philum/_backup/database.sql
+
+>restore (on empty database)
+mysql -u root -pv database < /home/philum/_sql/database.sql.gz
+
+----
+
+NEED TO DO
+
+>rules of security
+>change port
+nano /etc/ssh/sshd_config
+>set Port 22 to Port {any number}
+ctrl+q+y+enter
+/etc/init.d/ssh restart
+>relog in ssh with new port
+
+>change password root
+passwd root
+
+>create new user
+adduser NeewUser
+>disactivate root user (too dangerous!)
+nano /etc/ssh/sshd_config
+>set to no:
+PermitRootLogin no
+/etc/init.d/ssh restart
+>relog in ssh with new user
+>from there, retrieve root user
+su root
+
+>prevent ddos attack
+apt-get install fail2ban
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.conf.backup
+>modif your settings
+nano /etc/fail2ban/jail.conf
+/etc/init.d/fail2ban restart
+
+>firewall
+iptables -L
+
+***
+
+AND NOW
+
+>install apache
+apt-get install apache2
+
+>restart
+/etc/init.d/apache2 restart
+
+>php7.4 on debian 10
+sudo apt -y install lsb-release apt-transport-https ca-certificates wget
+sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
+sudo apt update
+sudo apt install php7.4
+sudo apt install php7.4-fpm
+sudo apt install php7.4-{common,mysql,xml,xmlrpc,curl,gd,imagick,cli,dev,imap,mbstring,opcache,soap,zip,intl,bcmath} -y
+
+>mariadb
+sudo apt-get install mariadb-server
+sudo mysql_secure_installation
+>first question passwd root:
+enter empty
+>other questions:
+Y, Y, Y, Y
+
+>set mysql password
+>enter in mysql
+mysql
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('MyNewPass');
+UPDATE mysql.user SET plugin = '' WHERE user = 'root' AND host = 'localhost';
+FLUSH PRIVILEGES;
+exit;
+
+>phpmyadmin
+apt-get install phpmyadmin (apache2,no)
+>cocher la case « apache2 » durant l’installation avec la touche espace du clavier (si vous faites « entrer » ça ne cochera pas apache et passera à l’étape suivante).
+>sinon, pour refaire :
+dpkg-reconfigure phpmyadmin
+>repair mysqld_safe --user=mysql&
+>reinstall
+/usr/bin/mysql_secure_installation
+
+-or-
+
+>webmin (affect domain to a dns)
+wget http://prdownloads.sourceforge.net/webadmin/webmin_1.620_all.deb//! more recent version
+dpkg --install webmin_1.620_all.deb
+>Webmin est maintenant accessible via :
+http://”vpsXXXXX.ovh.net”:10000
+
+>ftp
+apt-get install proftpd
+> créer compte ftp
+adduser dav
+> modif
+passwd dav
+> mot de passe ftp
+nano /etc/proftpd/proftpd.conf
+> ajouter et sauver :
+> sauf si site dans /home
+DefaultRoot /var/www dav
+> boot
+service proftpd start
+service proftpd status
+> new passwd
+passwd USERNAME
+
+>cron (automated backups)
+>-l=list -r=remove
+crontab restart
+crontab -uroot -e
+>minute hour dayofmonth month dayofweek
+>mean every day at 1 AM
+  0 1 * * * tar -zcf /home/user/_backup/database.tar.gz /var/lib/mysql/database
+
+***
+
+THE MOST IMPORTANT
+
+>We create users (adduser) in /home
+>we let each domain to access to one specific /home/domain1, /home/domain2
+>we use for that virtual servers
+>we want to set here the htaccess, and not let our old & slow .htaccss in the root
+
+>first, need to activate:
+a2enmod rewrite
+
+>virtualhosts
+cd /etc/apache2/sites-available
+nano site.com.conf
+>when it's finished, activate it
+a2ensite site.com
+>to redo that a second time, before you need:
+a2dissite site.com
+>activate changes
+service apache2 reload
+
+>virtualhosts: the content of file
+>"AllowOverride All" mean htaccess=ok
+
+>if you use htaccess (not good)
+<VirtualHost *:80>
+DocumentRoot /home/newuser
+ServerName site.com
+<Directory /home/newuser>
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+</Directory>
+ServerAlias www.site.com
+HostNameLookups on
+Options +FollowSymLinks
+</VirtualHost>
+
+>it's better to place rewrite rules directly here:
+>YES, Philum use ISO-8859-1 instead of UTF-8
+>because it's faster and smarter, and that's works perfectly
+
+<VirtualHost *:80>
+DocumentRoot /home/newuser
+ServerName site.com
+<Directory /home/newuser>
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+	
+AddDefaultCharset ISO-8859-1
+RewriteEngine on
+RewriteRule ^([0-9]+)$ /?read=$1 [L]
+RewriteRule ^read/([^/])$ /?read=$1#$1 [L]
+RewriteRule ^read/(.+)/page/([0-9]+) /?read=$1&page=$2#pages [L]
+RewriteRule ^source/(.+)/([0-9]+)$ /?source=$1&dig=$2 [L]
+RewriteRule ^source/(.+)$ /?source=$1 [L]
+RewriteRule ^search/(.+)/([0-9]+)$ /?search=$1&dig=$2 [L]
+RewriteRule ^module/([^/]+)/([^.]+)$ /?module=$2:$1 [L]
+RewriteRule ^admin/([^/]+)/(.+)$ /?admin=$1&set=$2 [L]
+RewriteRule ^msql/(.+)$ /?msql=$1 [L]
+RewriteRule ^([0-9]+)/look/(.+)$ /?read=$1&look=$2 [L]
+RewriteRule ^([0-9]+)/find/(.+)$ /?read=$1&seg=1&look=$2 [L]
+RewriteRule ^plugin/([^.]+)/([^.]+)/([^.]+)$ /?plug=$1&p=$2&o=$3 [L]
+RewriteRule ^plugin/([^.]+)/([^.]+)$ /?plug=$1&p=$2 [L]
+RewriteRule ^plugin/([^.]+)$ /?plug=$1 [L]
+RewriteRule ^plug/([^/]+)/([^/]+)/([^.]+)$ /plug.php?a=$1&p=$2&o=$3 [L]
+RewriteRule ^plug/([^/]+)/([^.]+)$ /plug.php?a=$1&p=$2 [L]
+RewriteRule ^plug/([^.]+)$ /plug.php?a=$1 [L]
+RewriteRule ^apicom/([^.]+)$ /call.php?a=apicom&p=$1 [L]
+RewriteRule ^api/(.+)$ /?api=$1 [L]
+RewriteRule ^rss/([^.]+)$ /call.php?a=rss&m=output&p=$1 [L]
+RewriteRule ^rss$ /call.php?a=rss&m=output [L]
+RewriteRule ^call/([^/]+)/([^/]+)/([^/]+)$ /call.php?a=$1&p=$2&o=$3 [L]
+RewriteRule ^call/([^/]+)/(.+)$ /call.php?a=$1&p=$2 [L]
+RewriteRule ^call/([^.]+)$ /call.php?a=$1 [L]
+RewriteRule ^app/([^/]+)/([^/]+)/([^/]+)$ /app.php?a=$1&p=$2&o=$3 [L]
+RewriteRule ^app/([^/]+)/([^/]+)$ /app.php?a=$1&p=$2 [L]
+RewriteRule ^app/([^/]+)$ /app.php?a=$1 [L]
+RewriteRule ^context/([^/]+)$ /?context=$1 [L]
+RewriteRule ^hub/([^.^/]+)$ /?hub=$1 [L]
+RewriteRule ^([^.^/]+)/(.+)/([^.^/]+)$ /?$1=$2&dig=$3 [L]
+RewriteRule ^([^.^/]+)/([^.^/]+)$ /?$1=$2 [L]
+RewriteRule ^reload/(.+) /?id=$1&refresh== [L]
+RewriteRule ^reload /?refresh== [L]
+RewriteRule ^home /?module=Home [L]
+RewriteRule ^all /?module=All [L]
+RewriteRule ^admin /?admin=console [L]
+RewriteRule ^update /?admin=update&update=program [L]
+RewriteRule ^login /?module=login [L]
+RewriteRule ^logon /?log=on [L]
+RewriteRule ^logout /?log=out [L]
+RewriteRule ^logoff /?log=off [L]
+RewriteRule ^reboot /?log=reboot [L]
+RewriteRule ^shutdown /?log=down [L]
+RewriteRule ^dev /?dev=b [L]
+RewriteRule ^([^.]+)$ /?id=$1 [L]
+	
+</Directory>
+ServerAlias www.site.com
+HostNameLookups on
+Options +FollowSymLinks
+</VirtualHost>
+
+>et hop
+service apache2 reload
+
+----
+
+>PROBLEMS
+
+>problem of writing files (0 kb), frequently have to do:
+chmod -R 777 /home/newuser
+
+>phpmyadmin not found? : 
+nano /etc/apache2/apache2.conf
+>àadd at end of file:
+include /etc/phpmyadmin/apache.conf
+service apache2 reload
+
+>#1366 - Incorrect integer value
+Msyql works in strict mode. Change that.
+/etc/mysql/my.cnf
+>set or add
+sql_mode = ""
+service mysql restart
+
+>Temporary failure in name resolution:
+nano /etc/resolv.conf
+>remplacer par:
+nameserver 8.8.8.8
+
+>rights in mysql (read olny)
+/etc/init.d/mysql stop
+chmod 755 /var/lib/mysql
+chmod 755 /var/lib/mysql/mysql
+chmod 660 /var/lib/mysql/*/*
+chown -h mysql:mysql /var/lib/mysql
+/etc/init.d/mysql start
+
+>marked as crashed and last (automatic?) repair failed
+service mysql stop
+myisamchk -r pub_live
+myisamchk -r -v -f pub_live
+service mysql start
+
+>Can't connect to local MySQL server through socket
+find / -name '*.sock'
+nano /var/run/mysqld/mysqld.sock
+ln -s <the file location> /var/run/mysqld/mysqld.sock
+rm /var/log/mysql/error.log
+ps ax | grep mysql
+chown mysql:mysql mysqld
+mysqld_safe
+service mysql start

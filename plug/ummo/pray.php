@@ -18,8 +18,9 @@ if(!$r)$r=msql_read('','ummo_pray_1','','1'); //p($r);
 if($r)foreach($r as $k=>$v)if($k!='_menus_')$ra[$v[0]][$v[1]]=$v[2]?1:0;
 $rt=array('user/day',1,2,3,4,5,6,7);//headers
 if($ra)foreach($ra as $k=>$v)$ra[$k]=pray_arr_fill($v);//fill empties
-if($ra)foreach($ra as $k=>$v)foreach($v as $ka=>$va)$rb[$k][$ka]=pray_clic($k,$ka,$va); 
-$ret=make_tables($rt,$rb,'txtblc','',1);
+if($ra)foreach($ra as $k=>$v)foreach($v as $ka=>$va)$rb[$k][$ka]=pray_clic($k,$ka,$va);
+array_unshift($rb,$rt);
+$ret=tabler($rb,1);
 return $ret;}
 
 function pray_sav($p,$o,$res=''){
@@ -28,10 +29,10 @@ list($p,$o)=ajxp($res,$p,$o); //echo $p.'-'.$o.'-'.$res;
 $r=msql_read('','ummo_pray_1','','');
 if($r)foreach($r as $k=>$v)if($v[0]==$p && $v[1]==$o)$id=$k;
 if($id)unset($r[$id]); else $r[]=array($p,$o,1);
-msql_modif('users','ummo_pray_1',$r,$dfb,'arr','');
-db_write('ummo/pray/1511',$r);
-//if(!$id)modif_vars('users','ummo_pray_1',array($p,$o,1),'push');
-//else modif_vars('users','ummo_pray_1',array($id=>array($p,$o,0)),'mdf');
+msql::modif('users','ummo_pray_1',$r,'arr',$dfb,'');
+$json=new json('ummo','pray/1511'); $json->write($r);
+//if(!$id)msql::modif('','ummo_pray_1',[$p,$o,1],'push');
+//else msql::modif('','ummo_pray_1',[$id=>[$p,$o,0]],'mdf');
 $ret=pray_build($p,$o,$r);
 return $ret;}
 
@@ -52,10 +53,10 @@ Head::add('csscode','
 .minicon.active {background:lightgreen; border:1px solid green;}
 .minicon:hover{background:white;}
 .minicon.active:hover {background:lightgreen; border:1px solid gray;}');
-$bt=autoclic('inp','uid','8',25,'');//input(1,'inp',$p,'').' ';
-$bt.=lj('',$rid.'_plug__2_pray_pray*log___inp',picto('reload')).br();
+$bt=autoclic('inp','uid','8',25,'');//input1('inp',$p,'').' ';
+$bt.=lj('',$rid.'_plug__2_pray_pray*log___inp',picto('ok')).br();
 $ret.=pray_j($p,$o);
-$bt.=msqlink('','ummo_pray_1');
+$bt.=msqbt('','ummo_pray_1');
 return $bt.divd($rid,$ret);}
 
 ?>

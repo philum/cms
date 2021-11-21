@@ -1,29 +1,37 @@
 <?php
-//philum_plugin_notepad
+//philum_app_notepad
 
-function np_j($id){return 'mem_storage(\''.$id.'_m'.$d.'_1_1\')';}
+class pad{
+static function np_j($id){return 'mem_storage(\''.$id.'_m'.$d.'_1_1\')';}
 
-function pad_write($p,$o,$res){$pad='pad'.ses('USE').date('ymd');
-$f='plug/_data/'.$pad.'.txt'; write_file($f,ajxg($res)); return lkt('popbt',root().$f,$pad);}
+static function write($p,$o,$res){$pad=ses('USE').'_pad_'.date('ymd');
+$f='_datas/'.$pad.'.htm'; $no=write_file($f,ajxg($res)); 
+if($no)echo $no; else return lkt('popbt','/'.$f,$pad);}
+
+static function menu($d,$id){$ret=hidden('','cka','m'.$d);
+$r=[1=>'old','clipboard','article','draft','notes','memo','keep','job','ideas'];
+foreach($r as $k=>$v){$c=$k==$d?'active':'';
+	$ret.=ljb($c,'mem_storage',$id.'_m'.$k.'_1_1_ckb'.$k.'_memnu',$k,'ckb'.$k).' ';}
+return span(atd('memnu').atc('nbp'),$ret);}
 
 //$ret.=ljb($c,'mem_storage',$id.'_'.$i.'_1_1_ckb',$i);
-//$ret.=lj($c,'np_plug__2_notepad_plug*notepad_'.$i,$i+1);
-function np_sav($d,$id){$ret=hidden('','cka','m'.$d);
-for($i=1;$i<=9;$i++){$c=$i==$d?'active':'';
-	$ret.=ljb(''.$c.'" id="ckb'.$i,'mem_storage',$id.'_m'.$i.'_1_1_ckb'.$i.'_memnu',$i);}
-$ret.=ljb('" id="ckc','mem_storage',$id.'_cka__1_ckc',nms(57));
-$ret.=lj('','popup_plup___pad_pad*write___'.$id.'',picto('export'));
-return divc('nb_pages',divd('memnu',$ret.hlpbt('memstorage')));}
+//$ret.=lj($c,'np_pad,home__2_'.$i,$i+1);
+static function sav($d,$id){$ret=self::menu($d,$id);
+$ret.=ljb('popsav','mem_storage',$id.'_cka__1_ckc',nms(57),'ckc').' ';
+if(auth(2))$ret.=lj('','popup_pad,write_'.$id.',',picto('export')).' ';
+$ret.=hlpbt('memstorage');
+return div('',$ret);}
 
-function plug_pad($d){
+static function home($d){
 Head::add('csscode','
 #content{width:100%;}
-.tab{font-size:large; border:0; margin:4px auto; padding:16px; min-width:440px; max-width:90%; line-height:1.2em; min-height:400px; max-height:90vh;}');
-$d=$d?$d:2; $id='np'.randid(); 
-$ret.=np_sav($d,$id);
-$ret.=divedit($id,'tab justy','',$j,$txt);
+.tab{font-size:large; margin:10px; padding:16px; max-width:100%; line-height:1.2em; border:1px dotted silver; max-height:calc(100vh - 130px); word-wrap:break-word; overflow-y:auto;}');
+$d=$d?$d:2; $id='np'.randid(); //$j='storeCaret(this);';
+$ret=self::sav($d,$id);
+$ret.=divedit($id,'tab justy','','','');
 $_SESSION['onload']='document.getElementById(\''.$id.'\').innerHTML=localStorage[\'m'.$d.'\']';
 //$_SESSION['onload']='mem_storage(\''.$id.'_m'.$d.'_1_1_ckb\');';
 return divd('np',$ret);}
+}
 
 ?>

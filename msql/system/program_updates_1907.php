@@ -1,0 +1,3 @@
+<?php //philum/microsql/program_updates_1907
+$r=[1=>['0701','publication'],2=>['0701','correctif extractimg, capable de prendre en compte les images provenant des vignettes vidéo (utilisé dans backupim au moment de déceler les images obsolètes)'],3=>['0706','- correctif validation du compileur json de l\'api, à destination des requêtes de vacuum
+- correctif prise en charge du mode nl dans la balise figure'],4=>['0709','- ajout du connecteur :artwork, permet de fabriquer une structure d\'articles, ouvrables sur place, au sein d\'un menu hiérarchique, définit comme le module submenus, par le nombre de tirets'],5=>['0723','- découverte d\'un énième type d\'apostrophe, mit en conformité. il y a des gens qui utilisent le `.']];

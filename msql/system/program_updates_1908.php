@@ -1,0 +1,2 @@
+<?php //philum/microsql/program_updates_1908
+$r=[1=>['0803','publication']];

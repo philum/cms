@@ -1,5 +1,5 @@
 <?php
-//philum_plugin_toposlides
+//philum_app_toposlides
 
 class toposlides{
 
@@ -10,7 +10,7 @@ foreach($r as $k=>$v){if($k==$b){$rb[$k]=$move; $add=1;}
 	if($k>=$a){$add=0; $v[0]=$b;}
 	if($add && $v[0]>=$b)$v[0]+=1;
 	$rb[$k+$add]=$v;}
-msql_modif('',ses('topo'),$rb,'','arr','');
+msql::modif('',ses('topo'),$rb,'arr','','');
 return $rb;}
 
 static function draw($r){
@@ -24,12 +24,12 @@ foreach($r as $k=>$v)
 return $ret;}
 
 static function slide($r,$p,$rid){
-$j=$rid.'_class___toposlides_j_'; $v=$r[$p];
-if($v[0])$bt1=lj('',$j.$v[0].'_'.$rid.'_inp',pictxt('left',$v[0])).' ';//parent
+$j=$rid.'_app___toposlides_j_'; $v=$r[$p];
+if($v[0])$bt1=lj('',$j.$v[0].'_'.$rid.'_inp',pictxt('before',$v[0])).' ';//parent
 if($v[2])$bt3=lj('',$j.$v[2].'_'.$rid.'_inp',pictxt('down',$v[2])).' ';//end
 foreach($r as $ka=>$va){
 	if($va[2]==$p)$bt2=lj('',$j.$ka.'_'.$rid.'_inp',pictxt('up',$ka)).' ';//begin
-	if($va[0]==$p)$bt4.=lj('',$j.$ka.'_'.$rid.'_inp',pictxt('right',$ka)).' ';}
+	if($va[0]==$p)$bt4.=lj('',$j.$ka.'_'.$rid.'_inp',pictxt('after',$ka)).' ';}
 $bt=divc('',$bt1.$bt2.$bt3.$bt4.$bt0);
 //$cell=div(atc('imgl').ats('width:36px'),$bt1.$bt2.$bt3.$bt4);
 $ret=nl2br(stripslashes_b($v[1]));
@@ -43,14 +43,14 @@ foreach($rb as $k=>$v){sort($v); foreach($v as $vb)$rc[$vb]=$r[$vb];} //p($rc);
 return $rc;}
 
 static function build0($p,$rid){if(!$p)$p=1;
-$r=msql_read_b('',ses('topo'),'',1);
+$r=msql::read_b('',ses('topo'),'',1);
 if($r)$r=self::order($r);
 if($r)$r=self::desc($r,$p);
 if($r)$ret=self::draw($r);
 return $ret;}
 
 static function build($p,$rid){if(!$p)$p=1;
-$r=msql_read_b('',ses('topo'),'',1);
+$r=msql::read_b('',ses('topo'),'',1);
 //if($r)$r=self::displace($r,54,8);
 if($r)$ret=self::slide($r,$p,$rid);
 $bt=self::menu($p,$o,$rid);
@@ -62,8 +62,8 @@ if(!$p)$p=ajxg($res);
 $ret=self::build($p,$o);
 return $ret;}
 
-static function menu($p,$o,$rid){$ret=inp('inp',$p?$p:1).' ';
-$ret.=lj('',$rid.'_app___toposlides_j__'.$rid.'_inp',picto('reload')).' ';
+static function menu($p,$o,$rid){$ret=input('inp',$p?$p:1).' ';
+$ret.=lj('',$rid.'_app___toposlides_j__'.$rid.'_inp',picto('ok')).' ';
 if(auth(6)){
 	$ret.=lj('','popup_plupin___msqedit_toposlides*'.$p.'_ib,val,to',picto('edit')).' ';
 	$j='popup_msqledit___users_'.ajx(ses('topo')).'_';
@@ -71,12 +71,12 @@ if(auth(6)){
 	$ret.=lj('','popup_plup___msqedit_msqdt*add_toposlides*'.$p.'_ib,val,to',picto('add')).' ';}
 return divc('',$ret);}
 
-}
-
-function plug_toposlides($p,$o){$rid=randid('tpo'); $p=$p?$p:1;
+static function home($p,$o){$rid=randid('tpo'); $p=$p?$p:1;
 $_SESSION['topo']=nod('toposlides_'.$p);
 Head::add('csscode','.book a, .book .philum, .book:hover .philum{color:white;}');
-$ret=toposlides::build($o,$rid);
+$ret=self::build($o,$rid);
 return divd($rid,delbr($ret,"\n"));}
+
+}
 
 ?>

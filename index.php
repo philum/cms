@@ -1,11 +1,17 @@
 <?php 
-//philum.net General Public License v3+
+//philum.fr General Public License v3+
+ini_set('session.cookie_lifetime',0);
+ini_set('session.use_only_cookies','on');
+ini_set('session.use_strict_mode','on');
+ini_set('display_errors','1');
+$stime=$_SERVER['REQUEST_TIME_FLOAT'];
 session_start();
-ini_set('display_errors','1'); error_reporting(6135);
 require('params/_connectx.php');
-list($daym,$dayx)=explode(' ',microtime()); $stime=$dayx+$daym;
-if($_SESSION['dev']=='dev' or $_SESSION['dev']=='lab')$g='b';
-$r=array('lib','pop','spe','art','api','tri','mod','boot','sys','index');
-for($i=0;$i<10;$i++)require('prog'.$g.'/'.$r[$i].'.php');
+$b=isset($_SESSION['dev'])?$_SESSION['dev']:'';
+if(!isset($_SESSION['prog']))$_SESSION['prog']='prog'.$b;
+error_reporting($b?E_ALL:6135);//
+$r=['lib','pop','tri','mod','art','spe','boot','sys','index'];
+for($i=0;$i<9;$i++)require_once('prog'.$b.'/'.$r[$i].'.php');
+//var_dump(debug_backtrace());
 mysqli_close($_SESSION['qr']);
 ?>

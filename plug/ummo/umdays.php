@@ -11,10 +11,10 @@ foreach($r as $k=>$v){
 		$rb[]=array($k,$date,$diff,$dsec,$dhour,$ddays);
 		$bit[$date]=$dhour;
 		$vb=$v;}}
-$f='plug/_data/umd.png';
+$f='_datas/umd.png';
 graphics($f,'800','200',$bit,'','');
 $ret=image('/'.$f);
-$ret.=make_table($rb,'popw','');
+$ret.=tabler($rb,'popw','');
 return $ret;}
 
 function plug_umdays($p,$o){$rid='plg'.randid();

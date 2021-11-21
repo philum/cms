@@ -15,8 +15,8 @@ switch($vaa){
 	case("order"):if($vab)$ord=$vab; break;}}
 $ordr='day '.($ord?$ord:"DESC");
 $sql='WHERE nod="'.$_SESSION['qb'].'" AND frm!="_system" AND re=1 '.$wh.' ORDER BY '.$ordr.' '.$whb;
-$rq=sq('id,frm,thm','qda',$sql);
-if($rq){while($data=mysql_fetch_array($rq)){$stop=false;
+$rq=sqr('id,frm,thm','qda',$sql);
+if($rq){while($data=mysqli_fetch_array($rq)){$stop=false;
 	$tags=explode(",",$data["thm"]); $id=$data["id"];
 	if($tags) foreach($tags as $vb){if($notag[trim($vb)]==true){$stop=true;}}
 	if(!$stop)$ret[$id]=$prw;}
@@ -26,35 +26,35 @@ function arts_menus($dya,$dyb){$cs='txtblc';
 $ret.=divc('txtcadr','build_pdf_book').br();
 $dya=$dya?$dya:time(); $dyb=$dyb?$dyb:0;
 $sq='WHERE nod="'.$_SESSION['qb'].'" and day<'.$dya.' and day>'.$dyb.' AND re="1"';
-$rq=sq('id,frm,thm,day','qda',$sq);
-while($data=mysql_fetch_array($rq)){
+$rq=sqr('id,frm,thm,day','qda',$sq);
+while($data=mysqli_fetch_array($rq)){
 	$dt['cat'][ajx($data['frm'],'')]+=1;
 	//$tags=explode(',',ajx($data['thm'],''));
 	//foreach($tags as $k=>$v){$dt['tag'][ltrim($v)]+=1;}//tri_tags($r)
 	if($data['day']<$mind)$mind=$data['day'];
 	if($data['day']>$maxd)$maxd=$data['day'];}
-$ret.='from '.input2('text','" id="dyb',date('d/m/Y',$mind),$cs).' ';
-$ret.='to '.input2('text','" id="dya',date('d/m/Y',$maxd),$cs).br().br();
+$ret.='from '.input1('dyb',date('d/m/Y',$mind),'',$cs).' ';
+$ret.='to '.input1('dya',date('d/m/Y',$maxd),'',$cs).br().br();
 if($dt['cat'])$cts=implode('|',array_keys_b($dt['cat']));
 //if($dt['tag'])$tgs=implode('|',array_keys_b($dt['tag']));
-$ret.='cats: '.input2('text','" id="cts','',$cs).' ';
+$ret.='cats: '.input1('cts','').' ';
 $ret.=jump_btns('cts',$cts,',').br();
-$ret.='no-cats: '.input2('text','" id="nct','',$cs).' ';
+$ret.='no-cats: '.input1('nct','').' ';
 $ret.=jump_btns('nct',$cts,',').br();
-$ret.='tags: '.input2('text','" id="tgs','',$cs).' ';
+$ret.='tags: '.input1('tgs','').' ';
 $ret.=jump_btns('tgs',$tgs,',').br();
-$ret.='no-tags: '.input2('text','" id="ntg','',$cs).' ';
+$ret.='no-tags: '.input1('ntg','').' ';
 $ret.=jump_btns('ntg',$tgs,',').br();
-$ret.='order: '.input2('text','" id="ord','',$cs).' ';
+$ret.='order: '.input1('urd','').' ';
 $ret.=jump_btns('ord','ASC|DESC','').br();
 $ret.=ljb('txtbox','SaveJ','call_plug___pdf_build*call___dya|dyb|cts|nct|tgs|ntg|ord','call');
 return $ret.br().br();}
 
 function data_arts($r){
 $wh=implode('" or id="',array_keys_b($r));//echo 
-$rq=sq('id,suj,day,frm,thm','qda','where id="'.$wh.'"');
-while($data=mysql_fetch_array($rq)){$ret[$data['id']]=array($data['suj'],date('ymd',$data['day']),$data['frm'],$data['thm']);} //p($ret);
-return make_table($ret,'','');}
+$rq=sqr('id,suj,day,frm,thm','qda','where id="'.$wh.'"');
+while($data=mysqli_fetch_array($rq)){$ret[$data['id']]=array($data['suj'],date('ymd',$data['day']),$data['frm'],$data['thm']);} //p($ret);
+return tabler($ret,'','');}
 
 function little_split($v){$unkill=explode(",",$v);
 	foreach($unkill as $su){$su=trim($su);
