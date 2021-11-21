@@ -73,5 +73,5 @@ The users can :
 
 ==================
 
-Credits DavyHoyau 2004-2018
+Credits Dav 2004-2021
 http://philum.fr
