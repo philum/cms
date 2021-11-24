@@ -152,4 +152,25 @@
 <file name="newsnet_tags_1_sav.php" server="newsnet.fr" local="132633143400000000" remote="132633143400000000" />
 <file name="newsnet_tags_2_sav.php" server="newsnet.fr" local="132633143400000000" remote="132633143400000000" />
 <file name="newsnet_tags_3_sav.php" server="newsnet.fr" local="132633143400000000" remote="132633143400000000" />
+<file name="admin_authes.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="admin_config.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="admin_menus.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="admin_modules.php" server="oumo.fr" local="132738631200000000" remote="132738631200000000" />
+<file name="admin_params.php" server="oumo.fr" local="132356988000000000" remote="132356988000000000" />
+<file name="admin_restrictions.php" server="oumo.fr" local="132804946800000000" remote="132804946800000000" />
+<file name="connectors_all.php" server="oumo.fr" local="132763662000000000" remote="132763662000000000" />
+<file name="connectors_auto.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="connectors_basic.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="connectors_clbasic.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="connectors_codeline.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="helps_api.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="helps_css.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="helps_editors.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="helps_langs.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="helps_msql.php" server="oumo.fr" local="132741154800000000" remote="132741154800000000" />
+<file name="helps_newsletter.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="helps_nominations.php" server="oumo.fr" local="132760092000000000" remote="132760092000000000" />
+<file name="helps_petition.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="helps_typos.php" server="oumo.fr" local="132292188000000000" remote="132292188000000000" />
+<file name="program_plugs.php" server="oumo.fr" local="132821479800000000" remote="132821479800000000" />
 </dwsync>

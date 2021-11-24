@@ -1,2 +1,0 @@
-<?php //philum/msql/public_defcons_tt_sav
-$r=[1=>['entry-title:class:h1'],2=>['title:class:h1'],3=>['post-title entry-title:class:h3'],4=>['post-title entry-title:class:h3'],5=>['post-title:class:h2'],6=>['post-title:class:h1'],7=>['titre:class:h1'],8=>['entry-title:class:h2'],9=>['headline:itemprop:h1'],10=>['name:itemprop:h1'],11=>['titre-article:class:h1'],12=>['divTitreArticle:class:div'],13=>['entry-title:class:h3'],14=>['p1:id:h3'],15=>['title:class:h1'],16=>['title:class:h2'],17=>['::h1'],18=>['::h2'],19=>['::h3'],20=>['::title']];

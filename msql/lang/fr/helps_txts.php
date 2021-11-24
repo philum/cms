@@ -308,7 +308,7 @@ Politique de confidentialité : les informations obtenues ne peuvent être relayée
 - inclure exclusivement 
 - exclure 
 - ne pas tenir compte (par défaut)
-du ou des mots-liés.'],"star"=>['- ra (ascension droite en heures), dc (déclinaison en degrés), et dist (distance en AL)
+du ou des mots-liés.'],"star"=>['- ra (0 à 24h), dc (-90° à 90°), et dist (AL)
 ex: ra>15,ra<21,dc>-1,dc<5,dist>13,dist<19
 
 - paramètre radius (degrés par défaut, h, m, rad, mas)
