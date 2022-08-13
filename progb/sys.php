@@ -1,82 +1,75 @@
-<?php
-//philum_system
-//income:$g;$aqb;$db
-#Boot
+<?php //system
 $cache='';
-secure_inputs();
-//echo $_SERVER['REQUEST_TIME_FLOAT'];
-//$_SESSION=[];
+gets();
 $_SESSION['stime']=$stime; $_SESSION['dayx']=substr($stime,0,10); $_SESSION['nl']='';
-if(!isset($_SESSION['qb']) or isset($_GET['qd']) or (isset($_GET['id']) && $_GET['id']!='imgc/') or isset($_GET['nbj']) or isset($_GET['hub']) or isset($_GET['refresh'])){$cache='ok'; reset_ses(); setprog();}//or !isset($_SESSION['qd']) or !isset($_SESSION['qda']) or !isset($_SESSION['mods']) or 
-if(isset($_GET['dev'])){$_SESSION['dev']='b'; setprog(); relod('/reload');}
-//master_params
-if(!isset($_SESSION['qd']) or $cache)master_params('params/_'.$db);
+if(!isset($_SESSION['qb']) or isset($_GET['hub']) or isset($_GET['refresh'])){
+	$cache='ok'; boot::reset_ses();}
+if(isset($_GET['dev'])){$_SESSION['dev']='b'; relod('/reload');}
+if(!isset($_SESSION['qd']) or $cache)boot::master_params('params/_'.$db);
 if(!isset($_SESSION['philum']))$_SESSION['philum']=checkversion();
 date_default_timezone_set(prms('timez'));
 if(isset($_SESSION['dev']))error_report();
-if(!isset($_SESSION['mn']) or $cache)define_hubs();
-if($cache)define_qb();//qb::need $mn
+if(!isset($_SESSION['mn']) or $cache)boot::define_hubs();
+if($cache)boot::define_qb();
+if(!ses('qbin') or $cache)boot::define_config();
+if($log=get('log'))boot::log_mods($log);
+if(!isset($_SESSION['USE']))boot::define_use();
+$cache=boot::deductions(get('read'),$cache);
 if($bim=get('rebuild_img'))ses('rebuild_img',$bim);
-$cache=deductions_from_read(getb('read'),$cache);//art
 $read=get('read');
-if(!ses('qbin') or $cache)define_config();//qb_in
-if(!rstr(22))block_crawls();//crawl
-//if(isset($_GET['switch_design']))$_SESSION['switch']=$_GET['switch_design'];
-if(!ses('iq'))eye_iq();//eye
-log_mods(); define_auth();//login
-#environment
-$cache=time_system($cache);//time_system
-seslng();//lang
+if(!isset($_SESSION['iqa']))boot::define_iq();
+if(!rstr(22))boot::block_crawls();
+#env
+boot::define_auth();
+$cache=boot::time_system($cache);
+boot::seslng();
 #rqt
-if(!isset($_SESSION['rqt']) or $cache)cache_arts($cache);
-if(!isset($_SESSION['line']) or $cache)define_cats_rqt();
-define_frm();//frm
+if(!isset($_SESSION['rqt']) or $cache)boot::cache_arts($cache);
+if(!isset($_SESSION['line']) or $cache)boot::define_cats_rqt();
+boot::define_frm();//frm
 #page
-$_SESSION['page']=get('page',1);//page
-if(get('plug'))$_SESSION['frm']='';//reset_frm
+get('page',1);//page
+if($plg=get('plug'))sesz('frm');//reset_frm
 //Home
-if(!$_SESSION['frm'] && !$_GET)$_GET['module']='Home';
+if(!ses('frm') && !$_GET)geta('module','Home');
 //condition
 $adm=get('admin'); $msq=get('msql');
-//if(!$adm)
-define_condition();
-m_system();//admin
+boot::define_condition();
+pop::m_system();//!!!!
 #Design
-if(!getclrs() or $cache)define_clr();
+if(!getclrs() or $cache)boot::define_clr();
 if(ses('desgn')){$wth=!$adm?' watch:'.$_SESSION['prmd']:'';
-	$_POST['popadm']['design']=btn('txtyl','design:'.ses('desgn').$wth).' ';}
+	ses::$popadm['design']=btn('txtyl','design:'.ses('desgn').$wth).' ';}
 #back_in_time
-if(abs(ses('dayx')-ses('daya'))>86400){setpost('popadm',[]);
-	$_POST['popadm']['timetravel']=lkc('txtyl','/reload',nms(82).' '.date('Y',ses('daya')));}
+if(abs(ses('dayx')-ses('daya'))>86400){ses::$popadm=[];
+	ses::$popadm['timetravel']=lkc('popdel','/reload',nms(82).' '.date('Y',ses('daya')));}
 #Eye
 if(!ses('stsys'))eye();
 #structure
 $out=[];
-if($adm){req('admin'); $out['content']=admin();}
-elseif($msq){req('msql'); $out['content']=msql_adm();}
-elseif(rstr(85))$out['content']=build_deskpage($read);
-elseif($p=get('plug'))$out['content']=plugin($p,get('p'),get('o'));
+if($adm){$out['content']=adm::home();}
+elseif($msq){$out['content']=msqa::home();}
+elseif(rstr(85))$out['content']=boot::build_deskpage($read);
+elseif($plg)$out['content']=plugin($plg,get('p'),get('o'));
 //elseif($read && rstr(72))$rout=cache_html($read);
-else $out=build_blocks();
+else $out=boot::build_blocks();
 //admin
-if(ses('dev'))$_POST['popadm']['chrono']=btn('small',round(microtime(1)-$stime,3));
-if(!rstr(98) or auth(4))$madmin=popadmin();
+if(ses('dev'))ses::$popadm['chrono']=btn('small',round(microtime(1)-$stime,3));
+//if(ses::r('tst'))ses::$popadm['chrono'].=divb(play_r(ses::r['tst']),'small');
+		//if(auth(6))echo 'padm:'.ses('iqa').'-'.ses('iq').'-'.ses('ip');
+if(!rstr(98) or auth(4))$madmin=pop::popadmin();
 //meta
 $host=host();
 $meta['favicon']='favicon.ico';
-if($adm){$meta['title']=$adm;}
-	//$meta['favicon']=uicon('screen_4to3_16','picol/16');
-elseif($msq){$meta['title']=$msq;}
-	//$meta['favicon']=uicon('database_16','picol/16');
-elseif($_SESSION['read']){$meta['title']=$_SESSION['raed'];
-	$meta['descript']=post('descript');
-	if($_SESSION['imgrel'])$meta['img']=$host.'/img/'.$_SESSION['imgrel'];}
-else{$mn=ses('mn'); $meta['title']=$mn?val($mn,ses('qb')):'';
+if($adm)$meta['title']=$adm;
+elseif($msq)$meta['title']=$msq;
+elseif(ses::$r['raed']??''){$meta['title']=ses::$r['raed']; $meta['descript']=ses::$r['title']??'';
+	$meta['img']=$host.'/img/'.ses::r('imgrel');}
+else{$mn=ses('mn'); $meta['title']=$mn[ses('qb')]??'';
 	$meta['descript']=$_SESSION['qbin']['dscrp'];}
-	//$meta['img']=host().'/imgb/ban_'.$_SESSION['qb'].'.jpg';
-$cst='?'.randid();//ses('desgn')?'?'.randid():'';//
-if(rstr(63))$_SESSION['negcss']=1;
-$meta['css']=define_design();
-verif_update();
-if(post('flow') or rstr(39))$flow=1; else $flow=0;
+$cst=ses('dev')?'?'.randid():'';
+$meta['css']=boot::define_design();
+boot::verif_update();
+if(get('flow') or rstr(39))$flow=1; else $flow=0;
+//alert(play_r(ses::r('spl')));
 ?>

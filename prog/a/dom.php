@@ -1,4 +1,4 @@
-<?php //philum/a/model
+<?php //a/model
 class dom{
 
 //domdel
@@ -8,14 +8,15 @@ return $v;}
 
 static function del($d,$o){
 $r=explode('|',$o); $dom=dom($d);
-if($dom)foreach($r as $va){
-	list($c,$at,$tg,$op)=opt($va,':',4); if(!$at)$at='class'; if(!$tg)$tg='div';//id,href,...
+if($dom)foreach($r as $va)if($va){
+	[$c,$at,$tg,$op]=opt($va,':',4); if(!$at)$at='class'; if(!$tg)$tg='div';//id,href,...
 	foreach($dom->getElementsByTagName($tg) as $k=>$v){$attr=$v->getAttribute($at);
-	if($op=='del')$v->removeAttribute($at);//:data-image-caption:img:del
-	elseif($op=='x')self::remove($v);//::noscript:x
-	elseif($op=='clean'){$dest=$dom->createElement('img');//:src:img:clean
-		$src=$v->getAttribute($at); $dest->setAttribute('src',$src); $v->parentNode->replaceChild($dest,$v);}
-	elseif(($c && strpos($attr,$c)!==false) or !$c){self::remove($v); $v->parentNode->removeChild($v);}}}
+		if($op=='del')$v->removeAttribute($at);//:data-image-caption:img:del
+		elseif($op=='x')self::remove($v);//::noscript:x
+		elseif($op=='rm' && $attr==$c)self::remove($v);//noopener:rel:a:rm
+		elseif($op=='clean'){$dest=$dom->createElement('img');//:src:img:clean
+			$src=$v->getAttribute($at); $dest->setAttribute('src',$src); $v->parentNode->replaceChild($dest,$v);}
+		elseif(($c && strpos($attr,$c)!==false) or !$c){self::remove($v); $v->parentNode->removeChild($v);}}}
 $ret=$dom->saveHTML(); //eco($ret);
 return utf8_decode_b($ret);}
 
@@ -26,17 +27,17 @@ if($dom)foreach($dom->getElementsByTagName('img') as $k=>$v){
 	//$v->removeAttribute('data-image-meta');
 	$src=$v->getAttribute('src');
 	$dest->setAttribute('src',$src);
-	$v->parentNode->replaceChild($dest,$v); 
+	$v->parentNode->replaceChild($dest,$v);
 	//$v=self::remove($v);
 	//$nn=$v->parentNode->appendChild($dest);
-	//$v->parentNode->removeChild($v); 
+	//$v->parentNode->removeChild($v);
 	//$nn->setAttribute('src',$src);
 	}
 $ret=$dom->saveHTML();
 return utf8_decode_b($ret);}
 
 //dom
-static function importnode($dom,$rec,$v,$tg){
+static function importnode($rec,$v,$tg){
 if($tg=='img' or $tg=='meta')$tag='div'; else $tag=$tg;
 $dest=$rec->appendChild($rec->createElement($tag));
 if($tg=='img')$dest->nodeValue=urlroot($v->getAttribute('src'));
@@ -45,10 +46,11 @@ elseif($v->childNodes)foreach($v->childNodes as $k=>$el)$dest->appendChild($rec-
 return $rec;}
 
 static function capture($dom,$va,$rec){//todo:iterate it
-list($c,$at,$tg,$cn)=opt($va,':',4); if(!$at)$at='class'; if(!$tg)$tg='div'; //id,a,...
-$r=$dom->getElementsByTagName($tg); $n=1;
+[$c,$at,$tg,$cn]=opt($va,':',4); if(!$at)$at='class'; if(!$tg)$tg='div'; //id,a,...
+$r=$dom->getElementsByTagName($tg); $n=0;
 foreach($r as $k=>$v){$attr=$v->getAttribute($at);//domattr($v,$at) //echo $v->nodeName.'-';
-if(($c && strpos($attr,$c)!==false) or !$c)if($n==$cn or !$cn){self::importnode($dom,$rec,$v,$tg); $n=0;} else $n++;}
+if(($c && strpos($attr,$c)!==false) or !$c){$n++;//nb of similar captures
+	if($n==$cn or !$cn)self::importnode($rec,$v,$tg);}}
 return $rec;}
 
 static function detect($d,$o){
@@ -59,7 +61,7 @@ if($ret)return utf8_decode(trim($ret));}//_b
 
 //dom2
 static function extract($dom,$va){$ret='';//all-in-one
-list($c,$at,$tg,$g)=opt($va,':',4); if(!$at)$at='class'; if(!$tg)$tg='div';//id,href,...
+[$c,$at,$tg,$g]=opt($va,':',4); if(!$at)$at='class'; if(!$tg)$tg='div';//id,href,...
 if(!$g){if($tg=='img')$g='src'; elseif($tg=='meta')$g='content';}//props
 $r=$dom->getElementsByTagName($tg); $c=str_replace('(ddot)',':',$c);
 foreach($r as $k=>$v){$attr=$v->getAttribute($at);
@@ -88,10 +90,10 @@ return [$tg,$at];}
 
 static function dom2conn($dom){$rb=[];//$dom=dom($d);
 if($dom->hasChildNodes())foreach($dom->childNodes as $k=>$v){
-	list($tg,$at)=self::dc($v);
+	[$tg,$at]=self::dc($v);
 	$rb[]=[$tg,$at,self::dom2conn($v)];}
 elseif($dom->textContent){
-	list($tg,$at)=self::dc($dom);
+	[$tg,$at]=self::dc($dom);
 	$rb[]=[$tg,$at,$dom->textContent];}//nodeValue//
 return $rb;}
 
@@ -109,7 +111,7 @@ $el=$el->firstChild; if($el!=null)$rb[$tg]=self::getr($el,$rb);
 while(isset($el->nextSibling)){$rb[$el->nextSibling->nodName]=self::getr($el->nextSibling,$rb); $el=$el->nextSibling;}
 return $rb;}*/
 
-/*static function dom2conn($dom,$rb=[]){$ret=''; //$rb=[];//$dom=dom($d); 
+/*static function dom2conn($dom,$rb=[]){$ret=''; //$rb=[];//$dom=dom($d);
 if(is_object($dom))foreach($dom->childNodes as $k=>$v){
 if($v->hasAttributes())foreach($v->attributes as $vb)$rb[$vb->nodeName]=$vb->nodeValue;
 if($v->hasChildNodes()){
@@ -138,22 +140,22 @@ $rt=self::detect_table($r[0]);
 return tabler($rt);}
 
 //call
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$p;
 $dom=dom($p); $rec=dom(''); $rec->formatOutput=true;
 self::detect($dom,$o,$rec);
 $ret=$rec->saveHTML();
 return utf8_decode($ret);}
 
 static function com($d,$fc,$o=''){
-$dom=dom($d); 
+$dom=dom($d);
 self::$fc($dom,$o);
 $ret=$dom->saveHTML();
 return utf8_decode($ret);}
 
 static function menu($p,$o,$rid){
 $bid='inp'.$rid; $cid='txt'.$rid;
-$j=$rid.'_'.self::$a.',call__2__'.$rid.'___'.$bid.'|'.$cid;
+$j=$rid.'_'.self::$a.',call_'.$bid.','.$cid.','.$rid.'__';
 $ret.=inputj($bid,$o,$j);
 $ret.=txtarea($cid,$p,40);
 $ret.=lj('',$j,picto('ok')).' ';

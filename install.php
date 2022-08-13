@@ -2,7 +2,7 @@
 // _philum_installer
 //|_| |_| | |  | | |\/|
 //|   | | | |_ |_| |  |
-//http://philum.fr 2004-2020
+//http://philum.fr 2004-2022
 session_start();
 ini_set('display_errors','1');
 error_reporting(E_ALL);
@@ -10,8 +10,9 @@ $_SESSION['phpv']=substr(phpversion(),0,3);//7.4
 $_SESSION['philum']='http://philum.fr';
 if(isset($_GET['end'])){unlink('install.php'); $_SESSION='';}
 if(isset($_GET['reset']))$_SESSION='';
-$_SESSION['enc']='iso-8859-1';//utf-8
-//$_SESSION['dev']='b';
+//$_SESSION['enc']='iso-8859-1';//with myisam
+$_SESSION['enc']='utf-8';//with innodb
+//$_SESSION['dev']='b';//devmode
 $_SESSION['first']=1;
 $_SESSION['auth']='';
 //$_SESSION=[];
@@ -50,8 +51,9 @@ foreach($r as $k=>$v){
 	if($v)$ret.=str_replace(['[k]','[v]'],[$k,$v],$d);}
 return $ret;}
 
-function test_mysql(){
-return mysqli_num_rows(mysqli_query($_SESSION['qr'],'SHOW TABLES'));}
+function test_mysql(){//25
+$n=mysqli_num_rows(mysqli_query($_SESSION['qr'],'SHOW TABLES'));
+return $n==25?1:0;}
 
 //dirs
 function read_dir($dr){ 
@@ -106,7 +108,7 @@ return $ret;}
 
 function save_database($qd){$_SESSION['qd']=$qd; $ret='';
 $f='plug/install.php'; if(!is_file($f))$ret=dl_needed_file($f);
-require($f); $ret.=plug_install($qd);
+require($f); $ret.=install::home($qd);
 return $ret;}
 
 function install_databases(){//$r=mktables();
@@ -170,10 +172,8 @@ function dl_software(){$er='';
 $f='_backup/philum.tar.gz'; mkdir_r($f);
 $d=read_file($_SESSION['philum'].'/'.$f);
 if($d)$er=write_file($f,$d);
-require('plug/tar/pclerror.lib.php');
-require('plug/tar/pcltrace.lib.php');
-require('plug/tar/pcltar.lib.php');
-if(!$er)PclTarExtract($f,'','','');
+//tar::extract($f);
+tar::untar($f);
 if(is_file($f))return 'ok: software is installed';}
 
 function dl_prog(){

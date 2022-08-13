@@ -1,6 +1,5 @@
-<?php
-//philum/a/vue
-//build html from template of connectors with vars 
+<?php //a/vue
+//build html from template of connectors with vars
 
 class vue{
 static $r=[];
@@ -38,11 +37,11 @@ else $end=$msg;
 return $deb.$mid.$end;}
 
 static function conns($da,$r){//v$p:c
-list($d,$p,$c)=self::readconn($da);
+[$d,$p,$c]=self::readconn($da);
 //echo utf8_encode('--var:'.$d.' --opt:'.$p.' --conn:'.$c).br();//
 switch($c){
 //elements
-case('br'):return br(); break; 
+case('br'):return br(); break;
 case('hr'):return hr(); break;
 case('div'):if($d)return div($p,$d); break;
 case('divc'):if($d)return divc($p,$d); break;
@@ -66,20 +65,20 @@ case('font-family'):return atb($c,$d); break;
 case('text'):return $d?$d:$p; break;
 case('url'):return lka($d,$p?$p:preplink($d)); break;
 case('lj'):return lj('',$d,$p); break;
-case('link'):return special_link($d.'ยง'.$p); break;
+case('link'):return md::special_link($d.'ง'.$p); break;
 case('anchor'):return '<a name="'.$d.'"></a>'; break;
 case('date'):return mkday(is_numeric($p)?$p:'',$d); break;
-case('title'):return suj_of_id($d); break;
-case('read'):return read_msg($p,3); break;
+case('title'):return ma::suj_of_id($d); break;
+case('read'):return ma::read_msg($p,3); break;
 case('image'):return image($d); break;
 case('thumb'):return mk::thumb_d($d,$p); break;
 case('picto'):return picto($d,$p); break;
 //high_level
-case('cut'):list($s,$e)=explode('/',$p); return embed_detect($d,$s,$e,''); break;
+case('cut'):[$s,$e]=explode('/',$p); return between($d,$s,$e); break;
 case('split'):return explode($p,$d); break;
 case('conn'):return conn::connectors($d.':'.$p,3,'','',''); break;//from pop
 //case('exec'):return self::exec_run($d,$id); break;
-case('core'):if(is_array($d))return call_user_func($p,$d,'',''); 
+case('core'):if(is_array($d))return call_user_func($p,$d,'','');
 	else{$db=explode('/',$d); return call_user_func_array($p,$db);}break;
 case('plug'):return plugin($d,$p); break;
 case('each'):foreach($d as $da)$ret.=codeline::cbasic_exec($da,'','',$o); return $ret; break;
@@ -87,15 +86,15 @@ case('var'):return $r[$d]??''; break;//here is the core//str_replace('$',"&dolla
 case('getvar'):return self::$r[$d]; break;
 case('setvar'):return self::setvar($d);break;
 case('setvars'):return self::setvars($d);break;}
-if(strpos($p,',')){list($css,$sty,$id)=expl(',',$p,3);
-	if($css)$rb['class']=$css; if($sty)$rb['style']=$sty; if($id)$rb['id']=$id; 
+if(strpos($p,',')){[$css,$sty,$id]=expl(',',$p,3);
+	if($css)$rb['class']=$css; if($sty)$rb['style']=$sty; if($id)$rb['id']=$id;
 	return bal($c,$rb,$d);}
 //if(function_exists($c))return call_user_func_array($c,opt(',',$d)); break;
 if($d && $c)return balb($c,$d);
 return $d;}
 
-static function build($tmp,$r){req('tri');
-$tmp=str_replace('ยง','$',$tmp);//patch
+static function build($tmp,$r){
+$tmp=str_replace('ง','$',$tmp);//patch
 //foreach($r as $k=>$v){$tmp=str_replace('['.$k.':var]','{'.$k.'}',$tmp);}//patch
 foreach($r as $k=>$v)if(!$v)$tmp=str_replace($v,'',$tmp);//del empty
 $tmp=repair_tags($tmp); $d=delsp($tmp); $tmp=clean_lines($tmp); $tmp=delnl($tmp);
@@ -104,10 +103,10 @@ foreach($r as $k=>$v)$d=str_replace('{'.$k.'}',$v,$d);
 return nl2br($d);}
 
 static function call($tmp,$r){$ret='';//self::$r=$r;
-$tmp=utf8_encode($tmp);//used for ยง
+$tmp=utf8_encode($tmp);//used for ง
 //$r=array_chunk($r,100); $r=$r[7];//pr($r);
 foreach($r as $k=>$v)$ret.=self::build($tmp,$v);
 return $ret;}
-	
+
 }
 ?>

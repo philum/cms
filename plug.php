@@ -1,12 +1,14 @@
 <?php 
 //philum_plugin
 session_start();
-ini_set('display_errors',1);
-error_reporting(6135);
-$b=isset($_SESSION['dev'])?'b':'';
-if(!function_exists('p')){require('prog'.$b.'/lib.php'); require('prog'.$b.'/tri.php');}
+$b=$_SESSION['dev']??$_SESSION['dev']='';
+ini_set('display_errors',1); error_reporting(E_ALL);
+require('prog'.$b.'/lib.php');
+require('prog'.$b.'/core.php');
+require('prog'.$b.'/str.php');
 connect();
-if(!isset($_SESSION['dayx'])){req('boot'); reboot();}
+gets();
+if(!isset($_SESSION['dayx']))boot::reboot();
 if(!isset($_SESSION['picto']))$_SESSION['picto']=msql_read('system','edition_pictos','',1);
 
 function load_plug($a,$p,$o){$_SESSION['nl']=1;
@@ -28,15 +30,17 @@ if(auth(6)){$ret.=popbub('plug','plugin',picto('phi2'),'d',1);
 if($ret)return mkbub($ret,'inline','','this.style.zIndex=popz+1;').divc('admnu','');}
 
 #--render
-if(rstr(22)){req('boot'); block_crawls();}//crawl
+if(rstr(22))boot::block_crawls();//crawl
 $_SESSION['jscode']=$_SESSION['onload']='';
-$_SESSION['prog']=$_SESSION['prog']?$_SESSION['prog']:'prog/';
 $a=get('a');$p=get('p'); $o=get('o');
 if(substr($a,-1)=='/')$a=substr($a,0,-1); if(substr($p,-1)=='/')$p=substr($p,0,-1);
 Head::add('tag',['title',$a?$a:'plugin']);
 Head::add('meta',['http-equiv','Content-Type','text/html; charset='.$_SESSION['enc']]);
-Head::add('rel',['shortcut icon','favicon.ico']);
+Head::add('rel',['shortcut icon','/favicon.ico']);
 //Head::add('code','<base'.atb('href',$host).' />');
+Head::add('meta',['name','viewport','user-scalable=yes, initial-scale=1, minimum-scale=1, maximum-scale=1, width=device-width','yes']);
+Head::add('meta',['name','apple-mobile-web-app-capable','yes']);
+Head::add('meta',['name','mobile-web-app-capable','yes']);
 Head::add('meta',['name','generator','philum_'.$_SESSION['philum']]);
 Head::add('csslink','/css/_global.css');
 Head::add('csslink','/css/_pictos.css');
@@ -51,7 +55,7 @@ else $nod=$_SESSION['qb'].'_design_'.$_SESSION['prmd'];
 Head::add('csslink','/css/'.$nod.'.css');
 Head::add('jslink','/progb/ajx.js');
 Head::add('jslink','/progb/utils.js');
-Head::add('jscode','cutat="'.$_SESSION['jbuffer'].'"; flow="0"; enc="'.$_SESSION['enc'].'";');
+Head::add('jscode','flow="0"; enc="'.$_SESSION['enc'].'";');
 Head::add('jscode',$_SESSION['jscode']);
 if($a)$content=load_plug($a,$p,$o);
 $ret=Head::generate();

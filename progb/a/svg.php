@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_svg
+<?php //plugin_svg
 //http://www.w3schools.com/svg/svg_feoffset.asp
 
 class svg{static $ret=[],$w=600,$h=440;
@@ -40,12 +39,12 @@ static function save($d,$t){
 $f='_datas/svg/'.$t.'.svg'; mkdir_r($f);
 $ret='<?xml version="1.0" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-'.$d;//'.css_code('body{font-family:Arial;}').'
+'.$d;//'.csscode('body{font-family:Arial;}').'
 write_file($f,$ret);
 return $f;}
 
 static function spe(){
-$path_type=['M'=>'moveto','L'=>'lineto','H'=>'horizontal lineto','V'=>'vertical lineto','C'=>'curveto','S'=>'smooth curveto','Q'=>'quadratic Bézier curve','T'=>'smooth quadratic Bézier curveto','A'=>'elliptical Arc','Z'=>'closepath'];
+$path_type=['M'=>'moveto','L'=>'lineto','H'=>'horizontal lineto','V'=>'vertical lineto','C'=>'curveto','S'=>'smooth curveto','Q'=>'quadratic B§zier curve','T'=>'smooth quadratic B§zier curveto','A'=>'elliptical Arc','Z'=>'closepath'];
 $filters=['feBlend','feColorMatrix','feComponentTransfer','feComposite','feConvolveMatrix','feDiffuseLighting','feDisplacementMap','feFlood','feGaussianBlur','feImage','feMerge','feMorphology','feOffset','feSpecularLighting','feTile','feTurbulence','feDistantLight','fePointLight','feSpotLight'];}
 
 static function ex(){
@@ -57,7 +56,7 @@ $d1='
 [100,100,40,80:ellipse]
 [200/10-250/190-160/210:polygon]
 [20/20-40/20-60/60-20/40-20/20:polyline]
-[popup_plup___svg§[20,20§hello:text]:lj]
+[popup_svg,home§[20,20§hello:text]:lj]
 [rand,red,2:attr][M150 0 L75 200 L225 200 Z:path]
 [purple,,,,,,rotate(330-40/20):attr][10,20§hello:text]
 [blue:attr][280,140,http://philum.fr§[80,20,,1§hello:text]:a]
@@ -94,7 +93,10 @@ return ['attr'=>['fill','stroke','stroke-width','size','fill-opacity','stroke-da
 'a'=>['x','y','xlink:href','onclick','target'],
 'js'=>['onclick','onmouseover'],
 'lj'=>['onclick','onmouseover'],
-'tog'=>['txt'],'bub'=>['txt'],'bubj'=>['j'],'bubj2'=>['txt','j'],
+'tog'=>['txt'],
+'bub'=>['txt'],
+'bubj'=>['j'],
+'bubj2'=>['txt','j'],
 'filter'=>['id','x','y'],//,'filter','value'
 'feOffset'=>['in','result','dx','dy'],
 'feColorMatrix'=>['in','result','type','values'],
@@ -113,24 +115,25 @@ static function prop($d){return str_replace(['/','-','_'],[',',' ','-'],$d);}
 
 //svgconn
 static function conn($d){$ra=self::motor();
-list($p,$b)=split_one(':',$d,1); list($p,$v)=opt($p,'§'); $rb=explode(',',$p);
+[$p,$b]=split_one(':',$d,1); [$p,$v]=expl('§',$p); $rb=explode(',',$p);
 if(isset($ra[$b]))$pr=array_combine_a($ra[$b],$rb); else $pr=[];
-if($b=='attr'){ses('attr',$pr);$pr='';} 
+if($b=='attr'){ses('attr',$pr);$pr=[];}
 elseif(ses('attr')){$pr=array_merge_b($pr,ses('attr'));$_SESSION['attr']='';}//
-//if($b=='attrb'){foreach($rb as $vb){list($atb,$va)=explode('=',$vb); $pr[$atb]=$va;}ses('attr',$pr);$pr='';}
+//if($b=='attrb'){foreach($rb as $vb){[$atb,$va]=explode('=',$vb); $pr[$atb]=$va;}ses('attr',$pr);$pr='';}
 if(isset($pr['points']))$pr['points']=self::prop($pr['points']);
 if(isset($pr['d']))$pr['d']=self::prop($pr['d']);
 if(isset($pr['transform']))$pr['transform']=self::prop($pr['transform']);
 if(isset($pr['fill']))$pr['fill']=self::clr($pr['fill']);
 if(isset($pr['stroke']))$pr['stroke']=self::clr($pr['stroke']);
-if(isset($pr['onclick']) && $b=='lj'){$pr['onclick']=sj($pr['onclick']); $b='a';}
+if(isset($pr['onclick']) && $b=='lj'){$pr['onclick']=sj(str_replace(';',',',$pr['onclick'])); $b='a';}
 if(isset($pr['onclick']) && $b=='js'){$pr['onclick']=$pr['onclick']; $b='a';}
 if(isset($pr['onmouseover']) && $b=='lj'){$pr['onmouseover']=sj($pr['onmouseover']); $b='a';}
 if(isset($pr['onmouseover']) && $b=='js'){$pr['onmouseover']=$pr['onmouseover']; $b='a';}
 if($b=='tog')return togbt($pr['txt'],$v);
 if($b=='bub')return bubjs($pr['txt'],$v);
-if($b=='bubj')return bubj($pr['j'],$v);
-if($b=='bubj2')return bubj2($pr['txt'],$pr['j'],$v);
+//if($b=='bubj')pr($pr);
+if($b=='bubj')return bubj(str_replace(';',',',$pr['j']),$v);
+if($b=='bubj2')return bubj2($pr['txt'],str_replace(';',',',$pr['j']),$v);
 if(!empty($pr['fillurl'])){$pr['fill']='url(#'.$pr['fillurl'].')';$pr['fillurl']='';}
 if(!empty($pr['filter']))$pr['filter']='url(#'.$pr['filter'].')';
 if($b=='feColorMatrix')$pr['values']=self::prop($pr['values']);
@@ -143,22 +146,17 @@ static function com($d){
 $d=deln($d); $d=str_replace("&nbsp;",' ',$d);//eco($d,1);
 return codeline::parse($d,'','svg');}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$p;
 $ret=self::com($p); //eco($p);
-if(!$o)$o='600/440'; list($w,$h)=expl('/',$o);
+if(!$o)$o='600/440'; [$w,$h]=expl('/',$o);
 $pr=['version'=>'1.1','width'=>$w,'height'=>$h];
 return bal('svg',$pr,$ret);}
 
-//svg::home($p,$o)
 static function home($p,$o){$rid='plg'.randid(); $ret='';
 if(!$p){$p=self::ex();
 $ret=textarea('inp',$p,74,10).' ';
-$ret.=lj('',$rid.'_svg,call____'.$o.'___inp',picto('ok')).' ';}
+$ret.=lj('',$rid.'_svg,call_inp___'.$o,picto('ok')).' ';}
 return $ret.divd($rid,self::call($p,$o));}
 }
-
-function plug_svg($p,$o){
-return svg::home($p,$o);}
-
 ?>

@@ -1,10 +1,5 @@
-<?php //philum/a/codeline
+<?php //a/codeline
 class codeline{
-
-static function getconn($d){$p=''; $c=''; $xt=strtolower(strrchr($d,'.'));
-$s=strrpos($d,':'); if($s!==false){$p=substr($d,0,$s); $c=substr($d,$s);}
-//$s=strrpos($d,'§'); if($s!==false){$p=substr($d,$s+1); $d=substr($d,0,$s);}
-return [$p,$c,$xt];}
 
 static function parse($msg,$op,$g){
 $st='['; $nd=']'; $deb=''; $mid=''; $end='';
@@ -21,24 +16,25 @@ if($in!==false){
 			$mid=substr($msg,$in+1,$out);
 			$mid=self::parse($mid,$op,$g);}
 		else $mid=substr($msg,$in+1,$out);
-		if($g=='codeline')$mid=self::tmpconn($mid,$op);
-		elseif($g=='sconn')$mid=self::sconn($mid,0,$op);
-		elseif($g=='sconn2')$mid=self::sconn($mid,1,$op);
+		if($g=='template')$mid=self::template($mid,$op);
+		elseif($g=='sconn')$mid=self::sconn($mid,$op);
+		elseif($g=='sconn2')$mid=self::sconn2($mid,$op);
 		elseif($g=='sconn3')$mid=self::sconn3($mid);
-		elseif($g=='savimg')$mid=self::corr_img($mid,$op);
-		elseif($g=='corrfast')$mid=self::corr_fast($mid,$op);
-		elseif($g=='corrfastb')$mid=self::corr_fast_b($mid,$op);
-		elseif($g=='stripconn')$mid=self::strip_conn($mid,$op);
-		elseif($g=='striptw')$mid=self::strip_tw($mid,$op);
-		elseif($g=='correct')$mid=self::correctors($mid,$op);
+		elseif($g=='savimg')$mid=self::savimg($mid,$op);
+		elseif($g=='corrfast')$mid=self::corrfast($mid,$op);
+		elseif($g=='corrfastb')$mid=self::corrfastb($mid,$op);
+		elseif($g=='stripconn')$mid=self::stripconn($mid,$op);
+		elseif($g=='striptw')$mid=self::striptw($mid,$op);
+		elseif($g=='correct')$mid=self::correct($mid,$op);
 		elseif($g=='clpreview')$mid=clpreview($mid);
-		elseif($g=='delconn')$mid=self::del_conn($mid);
+		elseif($g=='delconn')$mid=self::delconn($mid);
 		elseif($g=='extractimg')$mid=self::extractimg($mid,$op);
 		elseif($g=='conn2xhtml')$mid=xhtml::conn2xhtml($mid,$op);
 		elseif($g=='extract')$mid=self::conn_extract($mid,$op);
 		elseif($g=='num2nb')$mid=self::num2nb($mid,$op);
 		elseif($g=='math')$mid=self::math($mid,$op);
 		elseif($g=='svg')$mid=svg::conn($mid);
+		elseif($g=='md')$mid=self::md($mid);
 		$end=substr($msg,$in+1+$out+1);
 		$end=self::parse($end,$op,$g);}
 	else $end=substr($msg,$in+1);}
@@ -56,7 +52,7 @@ foreach($r as $k=>$v){$va='_'.strtoupper($k); $ra[$k]=$va;
 	else $r[$k]=self::read($v);}
 $d=repair_tags($d); $d=delsp($d); $d=clean_lines($d); $d=delnl($d);
 //$d=preg_replace('/(\n){1,}/',"\n",$d);
-$d=self::parse($d,'','codeline');//build
+$d=self::parse($d,'','template');//build
 return str_replace($ra,$r,$d);
 $d=embed_p($d);
 return $d;}
@@ -71,21 +67,23 @@ $ret=embed_p($ret);
 $ret=nl2br($ret);
 return $ret;}
 
-static function correctors($da,$op){
+static function correct($da,$op){
 $xp=strrpos($da,':'); $c=substr($da,$xp); $d=substr($da,0,$xp);
 if($op=='stripconn'){if(strpos($da,'§')!=false)return $d;}
-if(substr($op,0,8)=='replconn'){list($op,$a,$b)=opt($op,'-',3);
+if(substr($op,0,8)=='replconn'){[$op,$a,$b]=opt($op,'-',3);
 	if(strpos($da,':'.$a)!==false)return '['.str_replace(':'.$a,':'.$b,$da).']';}
-if($op=='stripimg'){list($lin,$txt)=split_one('§',$da);
-	if(!is_image($lin))return '['.$da.']';}
-if($op=='striplink'){list($lin,$txt)=split_one('§',$da); 
+if($op=='png2jpg'){[$d,$txt]=split_one('§',$da); $id=get('read');
+	if(xtb($d)=='.png' && $id)return img::png2jpg($d,$id);}
+if($op=='stripimg'){[$lin,$txt]=split_one('§',$da);
+	if(!is_img($lin))return '['.$da.']';}
+if($op=='striplink'){[$lin,$txt]=split_one('§',$da);
 	if(is_numeric($lin))$lin=host().urlread($lin);
 	elseif(strpos($da,'§')!=false or substr($lin,0,4)=='http')return ($txt?$txt:$lin);
-	elseif($c==':pub')return suj_of_id($d).' ('.host().urlread($d).') ';
+	elseif($c==':pub')return ma::suj_of_id($d).' ('.host().urlread($d).') ';
 	elseif($c==':figure')return $txt;}
 if($c==$op){
 	if($c==':table'){
-		//if(post('clean_tab'))return del_n($d); else{}//del_n
+		//if(get('clean_tab'))return del_n($d); else{}//del_n
 		$d=str_replace(array('¬','|'),array("\n","\t"),$d);
 		if(strpos($d,' ')!==false && strpos($d,'.jpg')===false && trim($d))
 			return '['.$d.':q]';
@@ -100,7 +98,7 @@ else return '['.$da.']';}
 
 //conndefs
 static function sconn_html($d,$p,$c){switch($c){
-case(':br'):return br(); break; 
+case(':br'):return br(); break;
 case(':hr'):return hr(); break;
 case(':p'):return '<p>'.$d.'</p>';break;
 case(':u'):return '<u>'.$d.'</u>';break;
@@ -127,90 +125,97 @@ case(':fact'):return '<fact>'.$d.'</fact>';break;
 case(':qu'):return '<q>'.$d.'</q>';break;}}
 
 static function sconn_links($d,$xt,$b){
-if(is_image($d) && strpos($d,'§')===false)return conn::place_image($d,3,$b);
-list($p,$o)=cprm($d);
-if(is_image($p)){//image§text
-	if(is_image($o))return lk(goodroot($p),image(goodroot($o)));
+if(is_img($d) && strpos($d,'§')===false)return conn::place_image($d,3,$b);
+[$p,$o]=cprm($d);
+if(is_img($p)){//image§text
+	if(is_img($o))return lk(goodroot($p),image(goodroot($o)));
 	return lka(goodroot($p),goodroot($o));}
-elseif(is_image($o)){//link§image
+elseif(is_img($o)){//link§image
 	return lka(goodroot($p),image(goodroot($o)));}
 elseif(substr($p,0,1)=='/')return lka($p,$o);
-elseif(substr($p,0,1)=='@')return lj('txtx','popup_app__3_twit_call_'.ajx($p).'_ban',$p);
+elseif(substr($p,0,1)=='@')return lj('txtx','popup_twit,call__3_'.ajx($p).'_ban',$p);
 elseif(strpos($p,'@'))return $p;
-elseif($xt=='pdf')return pdfdoc($d,0,640);//lka($p,$o);
-elseif($xt=='mp3'){$j=ajx(goodroot($d,'')); return lj('','popup_popmp3___'.$j,pictxt('music',strend($d,'/')));}
-elseif(strpos($p,':iframe'))return lj('','popup_popconn___['.ajx($p).']_'.ajx($o),pictxt('window',$o));
-elseif(strpos($p,':pdf'))return lj('','popup_popconn___['.ajx($p).']_'.ajx($o),pictxt('window',$o));
-elseif(substr($p,0,4)=='http')return rstr(111)?webview($d,$b):lka($p,$o);
-//elseif(strpos($p,':')){return lj('','popup_popconn___['.ajx($p).']_'.ajx($o),pictxt('cube',$o));}//use :bt
-elseif(strpos($p,'twitter.com')!==false && strpos($p,'status/')!==false)return poptwit($d,$b,'',$o);
-elseif(strpos($p,'wikipedia.org')!==false)return wiki($d,0);
-elseif(is_numeric($p))return jread('',$p,$o);}
+elseif($xt=='pdf')return mk::pdfdoc($d,0,640);//lka($p,$o);
+elseif($xt=='mp3'){$j=ajx(goodroot($d,'')); return lj('','popup_usg,audio___'.$j,pictxt('music',strend($d,'/')));}
+elseif(strpos($p,':iframe'))return lj('','popup_conn,parser___['.ajx($p).']_3_test',pictxt('window',$o));
+elseif(strpos($p,':pdf'))return lj('','popup_conn,parser___['.ajx($p).']_3_test',pictxt('window',$o));
+elseif(substr($p,0,4)=='http')return rstr(111)?mk::webview($d,$b):lka($p,$o);
+//elseif(strpos($p,':')){return lj('','popup_conn,parser___['.ajx($p).']_3_test',pictxt('cube',$o));}//use :bt
+elseif(strpos($p,'twitter.com')!==false && strpos($p,'status/')!==false)return pop::poptwit($d,$b,'',$o);
+elseif(strpos($p,'wikipedia.org')!==false)return mk::wiki($d,0);
+elseif(is_numeric($p))return ma::jread('',$p,$o);}
 
 static function sconn_app($d,$c,$xt,$o,$b){switch($c){
-case(':pub'):return pubart($d);break;
-case(':art'):return pubart($d);break;
-case(':to'):return tracks_to($d); break;
+case(':pub'):return pop::pubart($d);break;
+case(':art'):return pop::pubart($d);break;
+case(':to'):return art::tracks_to($d); break;
 case(':web'):return web::call($d,0,$b);break;
-case(':video'):return video::any($d,$b,3,''); break;
+case(':video'):
+	if($b=='epub')return video::titlk($d,'');
+	return video::any($d,$b,3,''); break;
+case(':videourl'):return video::titlk($d,'');break;
 case(':mini'):return mk::mini_b($d,$b);break;
-//case(':room'):return lj('','popup_plupin__3_chatxml_'.$d,pictxt('chat',$d)); break;//old
-case(':twitter'):return twitart($d,$b,'',$o); break;
-case(':twapi'):return twitapi($d);break;
+//case(':room'):return lj('','popup_chatxml,home___'.$d,pictxt('chat',$d)); break;//old
+case(':twitter'):return pop::twitart($d,$b,'',$o); break;
+case(':twapi'):return pop::twitapi($d);break;
 case(':twusr'):return twit::play_usrs($d);break;
-case(':bt'):return btapp($d,''); break;
-//case(':poptwit'):return poptwit($d,$b,'',$o); break;
+case(':bt'):return pop::btapp($d,''); break;
+case(':connbt'):return pop::connbt($d,''); break;
+//case(':poptwit'):return pop::poptwit($d,$b,'',$o); break;
 case(':msql'):return mk::msqcall($d,'','');break;
 case(':popimg'):return mk::mini_d($d); break;
 case(':quote'):return quote($d,$c); break;
 case(':lang'):return mk::translate($d,3);break;
-case(':toggle'):return toggle_div($d,0,'');break;
-case(':callquote'):return callquote($d,$b,''); break;
-case(':app'):list($p,$o,$fc)=decompact_conn($d); return appin($fc,'call',$p,$o); break;
+case(':toggle'):return pop::toggle_div($d,0,'');break;
+case(':callquote'):return mk::callquote($d,$b,''); break;
+case(':app'):[$p,$o,$fc]=decompact_conn($d); return appin($fc,'call',$p,$o); break;
+case(':tag'):[$p,$o]=cprm($d); if(!$o)$o=sql('cat','qdt','v',['tag'=>$p]);
+	return lj('txtx','popup_api__3_'.$o.':'.ajx($p),pictxt('tag',$p)); break;
 case(':umrec'):return umrec::callint($d,''); break;
-case(':caviar'):return caviar($d); break;
-case(':underline'):return mk_underline($d,3); break;
-//case(':ascii'):list($p,$o)=cprm($d); return ascii($p,$o); break;
-case(':stabilo'):return stabilo($d);break;
-case(':oomo'):list($p,$o)=cprm($d); return oomo($p,$o); break;
+case(':caviar'):return mk::caviar($d); break;
+case(':underline'):return mk::underline($d,3); break;
+case(':stabilo'):return mk::stabilo($d);break;
+case(':ascii'):[$p,$o]=cprm($d); return ascii($p,$o); break;
+case(':oomo'):[$p,$o]=cprm($d); return oomo($p,$o); break;
 case(':picto'):return picto($d); break;}
-$xxf=substr($c,1);
-if(method_exists($xxf,'call'))return $xxf::call($d,'');
-if(reqp($xxf)){list($p,$o)=cprm($d); $fc='plug_'.$xxf; if(function_exists($fc))$ret=$fc($p,$o);
-	if($ret)return delbr($ret,"\n");}}
+$a=substr($c,1);
+if(method_exists($a,'call') && isset($a::$conn)){[$p,$o]=cprm($d); return $a::call($p,$o);}
+//if(reqp($a)){[$p,$o]=cprm($d); $fc='plug_'.$a;
+//	if(function_exists($fc))$ret=$fc($p,$o); if($ret)return delbr($ret,"\n");}
+}
 
 //wygsyg
-static function sconn($da,$a='',$b=''){if(!$da)return;
-list($d,$c,$xt)=self::getconn($da);
-list($p,$o)=cprm($d);
-$ret=self::sconn_html($p,$o,$c); if($ret)return $ret; 
+static function sconn($da,$b,$a=''){if(!$da)return;
+[$d,$c,$xt]=getconn($da);
+[$p,$o]=cprm($d);
+$ret=self::sconn_html($p,$o,$c); if($ret)return $ret;
 if($a==1){$ret=self::sconn_app($d,$c,$xt,$o,$b); if($ret)return $ret;}
 switch($c){
 case(':c'):return '<txtclr>'.$p.'</txtclr>';break;
 case(':stabilo'):return '<stabilo>'.$p.'</stabilo>';break;
-case(':color'):return pub_clr($d);break;
-case(':red'):return pub_clr($p.'§#bd0000');break;
-case(':blue'):return pub_clr($p.'§#333399');break;
-case(':parma'):return pub_clr($p.'§#993399');break;
-case(':green'):return pub_clr($p.'§#339933');break;
-case(':bkgclr'):return pub_bkgclr($d);break;
+case(':color'):return mk::pub_clr($d);break;
+case(':red'):return mk::pub_clr($p.'§#bd0000');break;
+case(':blue'):return mk::pub_clr($p.'§#333399');break;
+case(':parma'):return mk::pub_clr($p.'§#993399');break;
+case(':green'):return mk::pub_clr($p.'§#339933');break;
+case(':bkgclr'):return mk::pub_bkgclr($d);break;
 case(':video'):return video::titlk($p,'');break;
 case(':videourl'):return video::titlk($p,'');break;
-case(':figure'):return figure($d,'','1');break;
-case(':list'):return make_li($p,'ul');break;
-case(':numlist'):return make_li($p,'ol');break;
-case(':table'):return mk_table($d);break;
-case(':pre'):return balb('pre',entities($p));break;
+case(':figure'):return pop::figure($d,'','1');break;
+case(':list'):return mk::make_li($p,'ul');break;
+case(':numlist'):return mk::make_li($p,'ol');break;
+case(':table'):return mk::table($d);break;
+case(':pre'):return balb('pre',htmlentities_a($p));break;
 case(':code'):return balb('code',delbr($d));break;
 case(':web'):return lka($p);break;
-case(':twitter'):if($b=='epub')return twitxt($p,''); else return lka($p,'twitter.com');break;
+case(':twitter'):if($b=='epub')return pop::twitxt($p,''); else return lka($p,'twitter.com');break;
 case(':div'):if($b=='epub')return strto($p,'§');break;
 case(':mini'):if($b=='epub')$da=$p;break;
 case(':download'):return lka($p);break;
 case(':pdf'):return lka($p);break;
 case(':no'):return;break;}
-//if(is_image($p))return image(goodroot($p,1));
-if(is_image($da) && strpos($da,'§')===false){$im=goodroot($da,'');
+//if(is_img($p))return image(goodroot($p,1));
+if(is_img($da) && strpos($da,'§')===false){$im=goodroot($da,'');
 	if($b=='epub'){$fb='_datas/epub/OEBPS/images/';
 		if(file_exists($im) && !file_exists($fb.$da))copy($im,$fb.$da); return image('../images/'.$da);}
 	else return conn::place_image($da,3,1);}//image($im);
@@ -218,22 +223,25 @@ $d=self::sconn_links($da,$xt,$b); if($d)return $d;
 if($da=='--')return hr();
 return '['.$da.']';}
 
+static function sconn2($d,$b){
+return self::sconn($d,$b,1);}
+
 static function sconn3($da){
 $xp=strrpos($da,':'); $c=substr($da,$xp); $d=substr($da,0,$xp);
 if($c==':video')return video::lk($d);
 return $da;}
 
 //correctors
-static function corr_img($da,$id){
-list($p,$o)=prepdlink($da); $_SESSION['read']=$id;
-if(is_image($p) && substr($p,0,4)=='http')
+static function savimg($da,$id){
+[$p,$o]=prepdlink($da); $_SESSION['read']=$id;
+if(is_img($p) && substr($p,0,4)=='http')
 	return '['.conn::get_image($p,$id).(strpos($da,'§')?'§'.$o:'').']';
-elseif(is_image($o)==true && substr($o,0,4)=='http')
+elseif(is_img($o)==true && substr($o,0,4)=='http')
 	return '['.(strpos($da,'§')?$p.'§':'').conn::get_image($o,$id).']';
 else return '['.$da.']';}
 
-static function corr_fast($da,$op){
-list($d,$c)=split_one(':',$da,1);
+static function corrfast($da,$op){
+[$d,$c]=split_one(':',$da,1);
 $r=explode(' ',$op); $n=count($r);
 for($i=0;$i<$n;$i++)if($c==$r[$i]){
 	$hk=strrpos($d,']'); $pa=strrpos($d,'§');
@@ -243,63 +251,63 @@ for($i=0;$i<$n;$i++)if($c==$r[$i]){
 	else return $d;}
 return '['.$da.']';}
 
-static function corr_fast_b($da,$op){
-list($d,$o,$c)=decompact_conn($da);
+static function corrfastb($da,$op){
+[$d,$o,$c]=decompact_conn($da);
 $r=explode(' ',$op); $n=count($r);
 for($i=0;$i<$n;$i++)if($c==$r[$i])return strend($d,'§');
 return '['.$da.']';}
 
-static function strip_conn($da,$op){$no='';
-list($d,$c)=split_one(':',$da,1);
+static function stripconn($da,$op){$no='';
+[$d,$c]=split_one(':',$da,1);
 $r=explode(' ',$op); $n=count($r);
 for($i=0;$i<$n;$i++)if($c==$r[$i])$no=1;
 if(!$no)return '['.$da.']';}
 
-static function strip_tw($d,$op){
+static function striptw($d,$op){
 if(strpos($d,'//t.co')!==false)return;
 if(strpos($d,'/status/')!==false)return;
 if(strpos($d,':twitter'))return;
 if(substr($d,0,1)=='@'){if(substr($d,-2)==':b' or substr($d,-2)==':u')return '['.$d.']'; else return;}
-if(strpos($d,'twitter.com/hashtag'))return '#'.embed_detect($d,'twitter.com/hashtag/','?');
+if(strpos($d,'twitter.com/hashtag'))return '#'.between($d,'twitter.com/hashtag/','?');
 if(strpos($d,'https://twitter.com')!==false)return;
 return '['.$d.']';}
 
-static function del_conn($da){
+static function delconn($da){
 if(strpos($da,'§')!==false && strpos($da,':')===false){
-	list($p,$o)=explode('§',$da); $ret='';
-	if(!is_image($o) && !is_http($o))$ret=$o;
-	elseif(!is_image($p) && !is_http($p))$ret=$p;
+	[$p,$o]=explode('§',$da); $ret='';
+	if(!is_img($o) && !is_http($o))$ret=$o;
+	elseif(!is_img($p) && !is_http($p))$ret=$p;
 	return $ret;}
-elseif(strpos($da,'§')!==false){list($p,$o)=explode('§',$da); $ret='';
-	if(!is_image($o))$ret=$o; return $ret;} //if(!is_image($p))$ret.=' ('.$p.')';
-elseif(!is_image($da) && strpos($da,':')===false)return $da;
-list($d,$c)=split_one(':',$da,1); 
-if(!is_image($d)){if($d!='http')return $d; elseif($d!='http')return $c?$d:$da;}
+elseif(strpos($da,'§')!==false){[$p,$o]=explode('§',$da); $ret='';
+	if(!is_img($o))$ret=$o; return $ret;} //if(!is_img($p))$ret.=' ('.$p.')';
+elseif(!is_img($da) && strpos($da,':')===false)return $da;
+[$d,$c]=split_one(':',$da,1);
+if(!is_img($d)){if($d!='http')return $d; elseif($d!='http')return $c?$d:$da;}
 elseif($d=='http')return $da.' ';}
 
 static function extractimg($d,$id){
-list($p,$o,$c)=decompact_conn($d);
-if(is_image($p))return '/'.$p;
-elseif(is_image($o))return '/'.$o;
+[$p,$o,$c]=decompact_conn($d);
+if(is_img($p))return '/'.$p;
+elseif(is_img($o))return '/'.$o;
 elseif($c=='video'){$qb=ses('qb');
 	//$qb=sql('name','qda','v','id='.$id);
 	$imv=$qb.'_'.$id.'_'.$p.'.jpg';
 	if(is_file('img/'.$imv))return $imv;}
-elseif(is_image($d))return '/'.$d;}
+elseif(is_img($d))return '/'.$d;}
 
 static function conn_extract($d,$conn){
-list($p,$o,$c)=decompact_conn($d);
+[$p,$o,$c]=decompact_conn($d);
 if($c==$conn)return $p;}
 
 static function num2nb($d,$conn){
-list($p,$c)=split_right(':',$d,1); static $i; $ret='';
-if($c=='numlist'){$s=strpos($p,'|')?'|':"\n\n"; $r=explode($s,$p);
-foreach($r as $k=>$v)if($v){$i++; $ret.='(['.$i.':nb]) '.trim($v).n();}}
-else $ret='['.$d.']'; return $ret;}
+[$p,$c]=split_right(':',$d,1); static $i; $rt=[];
+if($c=='numlist'){$s="\n\n"; $r=explode($s,$p);
+foreach($r as $k=>$v)if($v){$i++; $rt[]='(['.$i.':nb]) '.trim($v);}}
+else $rt[]='['.$d.']'; return implode(n(),$rt);}
 
 //math
 static function math($d,$b){
-list($p,$o,$c)=decompact_conn($d);
+[$p,$o,$c]=decompact_conn($d);
 switch($c){
 case('frac'):return tag('mfrac','',tag('mi','',$p).tag('mi','',$o)); break;
 case('sup'):return tag('msup','',tag('mi','',$p).tag('mn','',$o)); break;
@@ -316,10 +324,32 @@ case('matrix'):$rt=''; $r=explode("\n",$p);
 default:if(method_exists('maths',$c))return maths::$c($p,$o);break;}
 return '['.$p.']';}
 
+static function md($da){$ret='';
+[$d,$c]=getconn($da); //if($c=='h')echo $c.':'.$p.' - ';//[$p,$o,$c]=decompact_conn(
+switch($c){
+case(':h'):$ret='# '.$d;break;
+case(':h1'):$ret='# '.$d;break;
+case(':h2'):$ret='## '.$d;break;
+case(':h3'):$ret='### '.$d;break;
+case(':h4'):$ret='#### '.$d;break;
+case(':h5'):$ret='##### '.$d;break;
+case(':b'):$ret='**'.$d.'**';break;
+case(':i'):$ret='_'.$d.'_';break;
+case(':q'):$ret='> '.$d;break;
+case(':list'):$ret=str_replace("\n",'- ',$d);break;
+case(':numlist'):$r=explode("\n",$d); foreach($r as $k=>$v)$ret.=$k.'. '.$v.n(); break;
+case(':php'):$r=explode("\n",$d); foreach($r as $k=>$v)$ret.="\t".$v.n(); break;
+case(':code'):$ret='`'.$d.'`'; break;
+case('--'):$ret='`---'; break;}
+if(is_img($d)){$ret='![]('.gcim($d).')';}
+[$p,$o]=cprm($d);
+if(substr($p,0,4)=='http' or substr($p,0,2)=='//')$ret=($o?'['.$o.']':'').'('.$p.')';
+return $ret?$ret:$da;}
+
 //templates
-static function tmpconn($da,$o,$b=''){//d§p:c
-list($d,$c,$xt)=self::getconn($da); //if(!$da)return;
-list($p,$o)=cprm($d);
+static function template($da,$o,$b=''){//d§p:c
+[$d,$c,$xt]=getconn($da); //if(!$da)return;
+[$p,$o]=cprm($d);
 $ret=self::sconn_html($p,$o,$c); if($ret)return $ret;
 switch($c){
 //elements
@@ -345,18 +375,19 @@ case(':txt'):return $p?$p:$o; break;
 case(':url'):return lka($p,$o?$o:preplink($p)); break;
 case(':jurl'): return lj('',$p,$o); break;
 //case(':ajx'):return lj('',$o,$p); break;
-case(':link'):return special_link($p.'§'.$o); break;
+case(':link'):return md::special_link($p.'§'.$o); break;
 case(':anchor'):return lkn($p); break;
 case(':date'):return mkday(is_numeric($o)?$o:'',$p); break;
-case(':title'):return suj_of_id($p); break;
-case(':read'):return read_msg($o,3); break;
+case(':title'):return ma::suj_of_id($p); break;
+case(':read'):return ma::read_msg($o,3); break;
 case(':image'):return image($p); break;
 case(':thumb'):return mk::thumb_d($p,$o,''); break;
 case(':picto'):return picto($p,$o); break;
 //high_level
-case(':cut'):list($s,$e)=explode('/',$o); return embed_detect($p,$s,$e,''); break;
+case(':cut'):[$s,$e]=explode('/',$o); return between($p,$s,$e); break;
 case(':split'):return explode($o,$p); break;
 case(':conn'):return conn::connectors($p.':'.$o,3,'','',''); break;
+case(':msql'):return mk::msqcall($p,'',''); break;
 //case(':exec'):return self::exec_run($p,$o); break;
 case(':core'):if(is_array($p))return call_user_func($o,$p,'',''); else{$pb=opt($p,'/',4);
 	return call_user_func($o,$pb[0],$pb[1],$pb[2],$pb[3]);}break;
@@ -377,15 +408,15 @@ if(is_file($f))require($f); return $ret;}
 
 //§txtit:css§h2:html
 static function cbasic_exec($d,$p,$r,$o){
-list($av,$ap,$c)=decompact_conn_b($d);//v§p:c
+[$av,$ap,$c]=decompact_conn_b($d);//v§p:c
 if(strpos($av,':')!==false)$av=self::cbasic_exec($av,$p,$r,$o);//iteration
 if($o==2)$av=$av?$av:$p;//param on left (no §) //strpos($ap,'_PARAM')===false
 if(!is_array($av))$av=self::cbasic_vars($av,$p,$r);
 if($ap)$ap=self::cbasic_vars($ap,$p,$r);
 if($o==1)echo $av.'$'.$ap.':'.$c.br();
-return self::tmpconn($av,$ap,$c);}
+return self::template($av,$ap,$c);}
 
-static function cbasic_if($d,$p,$r,$o){list($va,$vb)=explode('=',$d);
+static function cbasic_if($d,$p,$r,$o){[$va,$vb]=explode('=',$d);
 //if(strpos('+-*/',$vb)!==false)$vb=cbasic_mth($vb);
 if(strpos($vb,':')!==false)$vb=self::cbasic_exec($vb,$p,$r,'');
 else $p=self::cbasic_vars($vb,$p,$r);
@@ -400,14 +431,14 @@ return $ret;}
 static function cbasic($code,$p){//eco($code);
 if(is_array($code))return;
 if(strpos($code,'[')!==false){if($p)$code=str_replace('_PARAM',$p,$code);
-	return conn::parser($code,'','test');}
+	return self::parse($code,'','template');}
 $code=str_replace('--',"\n",$code);
 $r=explode("\n",$code); $n=count($r); $rb=[];//self::parse($p,'',''codeline);
 for($i=0;$i<$n;$i++){$sp=$r[$i]??''; $op=substr($sp,0,1); $ret='';//trim
 	if($sp && strpos('+-/?!.;=',$op)!==false)$sp=substr($sp,1);
 	if($op=='/' or !$op)$reb='';
-	elseif($op=='?')list($p,$rb)=self::cbasic_if($sp,$p,$rb,1);
-	elseif($op=='!')list($p,$rb)=self::cbasic_if($sp,$p,$rb,0);
+	elseif($op=='?')[$p,$rb]=self::cbasic_if($sp,$p,$rb,1);
+	elseif($op=='!')[$p,$rb]=self::cbasic_if($sp,$p,$rb,0);
 	elseif($op=='.'){$ret=self::cbasic_exec($sp,$p,$ret,0); $ra[$i-1]='';}
 	elseif($op=='+')$rb=self::cbasic_exec($sp,$p,$rb,0);
 	elseif($op=='=')$p=self::cbasic_exec($sp,$p,$rb,0);
@@ -419,10 +450,16 @@ $ra[$i]=$ret;}
 return implode('',$ra);}
 
 static function mod_basic($p,$o){
-$b=sesmk('uconns',$p,0); if(!$b)$b=sesmk('pconns',$p,0); if(!$b && $p)$b=$p;
+$b=sesmk2('codeline','uconns',$p,0); if(!$b)$b=sesmk2('codeline','pconns',$p,0);
+if(!$b && $p)return self::parse('['.$p.']','','template');
 $r=['insert','update','delete','qr','write_file','file_put_contents'];
 foreach($r as $v)if(strpos($p,'§'.$v)!==false)return;
+//if($b && !is_array($b))return self::parse($b,'','template');
 if($b && !is_array($b))return self::cbasic($b,$o);}
+
+#conn_functions
+static function uconns($p){return msql::val('',nod('connectors'),$p);}
+static function pconns($p){return msql::val('','public_connectors',$p);}
 
 }
 ?>

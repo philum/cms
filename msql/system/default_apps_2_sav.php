@@ -1,0 +1,50 @@
+<?php
+//philum_microsql_default_apps_2
+$r["_menus_"]=array('button','type','process','param','option','condition','root','icon','hide','private');
+$r[1]=array('close','ajax','desktop','','','desk','','close','','');
+$r[2]=array('Desktop','ajax','page','deskload','','desk menu','','desktop','','');
+$r[3]=array('Root','ajax','desktop','desk___desk','','boot menu','','folder2','','');
+$r[4]=array('Root Folder','ajax','popup','desktop___desk','','boot menu','','folder2','1','1');
+$r[5]=array('Site','ajax','popup','site___desktop_ok__autosize','','menu','desk','window','','1');
+$r[6]=array('Home','ajax','page','deskoff___module_Home','','desk menu','desk','home','','');
+$r[7]=array('Articles virtuels','mod','desktop_varts','cache','','desk','Articles','virtual','','');
+$r[8]=array('Articles','mod','desktop_arts','cat=public|pub~nbdays=30','','desk','Articles','virtual','','');
+$r[9]=array('recents','mod','recents','public','/icons/','desk','Articles','virtual','','');
+$r[10]=array('article','art','auto','418','','desk','','articles','1','');
+$r[11]=array('Fichiers','mod','desktop_files','local|virtual','//dev|img','desk','','folder2','','');
+$r[12]=array('New art','ajax','popup','addArt____1','','desk','','add','1','1');
+$r[13]=array('Finder','finder','','','shared/local//flap///mini_1 ','menu desk','desk','network','','');
+$r[14]=array('recherche','ajax','popup','search__3','','desk','','search','','');
+$r[15]=array('transductor','admin','editor','','','menu desk','edit','editxt','','1');
+$r[16]=array('notepad','plug','notepad','','','menu desk','edit','editor','','');
+$r[17]=array('sText','plug','stext','','','menu desk','edit','editor','','');
+$r[18]=array('sticky','plup','sticky','','','menu desk','edit','sticky','','');
+$r[19]=array('mail','plug','mail','','','menu desk','com','mail','','');
+$r[20]=array('chat','plug','chatxml','public','','menu desk','com','chat','','');
+$r[21]=array('Favs','plug','favs','','','desk','','like','1','');
+$r[22]=array('notepad','plug','notepad','','','menu desk','edit','editor','','');
+$r[23]=array('Apps','ajax','popup','call___adminx_submod*pop','','menu','sys','builders','1','1');
+$r[24]=array('system','admin','console','system','','menu desk','sys','builders','1','1');
+$r[25]=array('Msql','plug','iframe','/msql/index.php_740','','menu desk','sys','msql','1','1');
+$r[26]=array('Pictos','admin','pictos','','','menu desk','sys','icons','1','1');
+$r[27]=array('updates-table','ajax','popup','msql___system_program_updates*1405','','menu desk','sys','server','','1');
+$r[28]=array('update-notes','msql','system','program','updates*1405','menu desk','sys','msql','','');
+$r[29]=array('connectors','ajax','popup','msql___system_connectors_all','','menu desk','sys','msql','1','');
+$r[30]=array('nominations','ajax','popup','msql___lang_helps_nominations','','menu desk','sys','msql','1','1');
+$r[31]=array('helps','ajax','popup','msql___lang_helps_txts','','menu desk','sys','msql','1','');
+$r[32]=array('ixquick','link','','https://startpage.com/fra/','','desk','com','search','1','');
+$r[33]=array('ixquick','plug','ixquick','','','desk','com','search','','');
+$r[34]=array('web','plug','ifram','','740','menu desk','com','shared','','');
+$r[35]=array('links','mod','msql_links','links','','menu','com','url','','');
+$r[36]=array('rss','mod','rss','','','menu','com','url','','');
+$r[37]=array('pixlr','ajax','popup','iframe___http://pixlr.com/editor_740/680','','menu desk','com','img','','');
+$r[38]=array('plugin','plug','plug','','','desk menu','plug','peak','','');
+$r[39]=array('codeview','plug','codeview','','','desk menu','dev','view','','');
+$r[40]=array('new','plug','','','','desk','plug','','1','');
+$r[41]=array('msqadd','plug','msqadd','msqadd_1','','menu','plug','right','','1');
+$r[42]=array('exec','plug','exec','','','menu','dev','edit','','1');
+$r[43]=array('code','plug','code','','','menu','dev','edit','','1');
+$r[44]=array('codev','plug','codev','','','menu','dev','edit','','1');
+$r[45]=array('dev','plug','dev','','','menu','dev','edit','','1');
+
+?>

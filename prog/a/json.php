@@ -1,4 +1,4 @@
-<?php //philum/a/json
+<?php //a/json
 class json{
 var $dr,$nod,$f,$r;
 

@@ -6,12 +6,10 @@ ini_set('session.use_strict_mode','on');
 ini_set('display_errors','1');
 $stime=$_SERVER['REQUEST_TIME_FLOAT'];
 session_start();
+$b=$_SESSION['dev']??$_SESSION['dev']='';
 require('params/_connectx.php');
-$b=isset($_SESSION['dev'])?$_SESSION['dev']:'';
-if(!isset($_SESSION['prog']))$_SESSION['prog']='prog'.$b;
-error_reporting($b?E_ALL:6135);//
-$r=['lib','pop','tri','mod','art','spe','boot','sys','index'];
-for($i=0;$i<9;$i++)require_once('prog'.$b.'/'.$r[$i].'.php');
-//var_dump(debug_backtrace());
+error_reporting($b?E_ALL:6135);
+$r=['lib','core','str','sys','index'];
+for($i=0;$i<5;$i++)require('prog'.$b.'/'.$r[$i].'.php');
 mysqli_close($_SESSION['qr']);
 ?>
