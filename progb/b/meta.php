@@ -95,7 +95,7 @@ $nm=sql_b('select screen_name from pub_umtwits where twid='.$p,'v');
 if(!$nm){$q=twit::read($p); $r=twit::datas($q); $nm=$r['screen_name'];}
 return $nm;}
 
-static function titedt($id,$prw){$css='poph';
+static function titedt($id,$prw){$css='poph'; $ret='';
 $ra=sql('ib,day,name,nod,mail,suj,frm,img,thm,re,lg','qda','r','id="'.$id.'"');
 [$ib,$day,$name,$hub,$src,$suj,$frm,$img,$url,$re,$lg]=$ra; if(!$lg)$lg=ses('lng');
 if(rstr(38))$ret.=btn('txtsmall2','#'.$id).' ';
@@ -559,9 +559,9 @@ return divd($rid,$ret);}
 
 static function recatagmsq($idtag,$cat1,$cat2,$d){$lg=prmb(25);
 $rt=self::catag(); foreach($rt as $k=>$v)$rn[$v]=$k+1; $n1=$rn[$cat1]; $n2=$rn[$cat2];
-$rb=msql::modif('',nod('tags_'.$n2.lg),[$d],'row','',$idtag);
-$rb=msql::modif('',nod('tags_'.$n1.lg),'','del','',$idtag);
-return $d.': passed form '.$cat1.' to '.$cat2.' => '.msqbt('',nod('tags_'.$n2.lg));}
+$rb=msql::modif('',nod('tags_'.$n2.'lg'),[$d],'row','',$idtag);
+$rb=msql::modif('',nod('tags_'.$n1.'lg'),'','del','',$idtag);
+return $d.': passed form '.$cat1.' to '.$cat2.' => '.msqbt('',nod('tags_'.$n2.'lg'));}
 
 //transcat
 static function transtag($idtag,$cat='',$prm=[]){$res=$prm[0]??'';

@@ -58,7 +58,7 @@ return btn('txtsmall2',nmx([91,36])).' '.$link.$thread.$prev;}}
 
 //philum::articles
 static function share_video($msg){
-$r=explode(':video',$msg); $n=count($r);
+$r=explode(':video',$msg); $n=count($r); $ret='';
 if($n){for($i=0;$i<$n-1;$i++){$s=strrpos($r[$i],'[');
 	if($s!==false){$d=substr($r[$i],$s+1); $p=video::providers($d); $u=video::url($d,$p); $ret.=$u.' ';}}}
 return $ret;}
@@ -291,7 +291,7 @@ if($r && $o!='frnb')$ret.=self::usrnfo($r);
 return $ret;}
 
 static function usrs2($q,$p,$o){static $i=0; //pr($q);//using list
-foreach($q['users'] as $k=>$v)$r[]=[$v['id'],utf8_decode_b($v['screen_name']),utf8_decode_b($v['name']),utf8_decode_b($vb['location']),utf8_decode_b($vb['description']),$v['profile_image_url']];
+foreach($q['users'] as $k=>$v)$r[]=[$v['id'],utf8_decode_b($v['screen_name']),utf8_decode_b($v['name']),utf8_decode_b($v['location']),utf8_decode_b($v['description']),$v['profile_image_url']];
 if($o=='flw')$ret=self::datasav($p,$r,'followers');
 if($o=='frn')$ret=self::datasav($p,$r,'friends');
 if($r)$ret=self::usrnfo($r);
@@ -466,7 +466,7 @@ $ra=['name','screen_name','user_id','date','text','media','mentions','reply_id',
 $r=sql(implode(',',$ra),'qdtw','w','twid="'.$k.'"',0);
 [$nm,$date,$rplid,$favs,$favd,$rtw,$rtwd,$flw,$friends,$txt,$med,$mnt,$quoid,$lg]=vals($r,['screen_name','date','reply_id','favs','favorited','retweets','retweeted','followers','friends','text','media','mentions','quote_id','lang']);
 $url=self::lk($nm); $ret='@'.$nm;
-$ret.=lkt('small',$url.'/status/'.$id,pictxt('chain',date('d/m/Y H:i:s',$date))).'';
+$ret.=lkt('small',$url.'/status/'.$k,pictxt('chain',date('d/m/Y H:i:s',$date))).'';
 $ret.=divc('',$txt);
 return $ret;}
 
@@ -609,11 +609,10 @@ if(isset($q['errors']))return $q['errors'][0]['message'];}
 
 //erase
 static function erasor($id,$med,$quoid){
-sqldel('qdtw',$id,'twid',1); $rb=explode(' ',$med);
-if($rb)foreach($rb as $v)if($v){$v=trim($v);
+sqldel('qdtw',$id,'twid',1); $rb=explode(' ',$med); $txt='';
+if($rb)foreach($rb as $v)if($v){$v=trim($v); $xt=xt(trim($v));
 	if(is_numeric($v) && $v!=$id)$txt.=self::cache($v,$id,0);
-	elseif(is_img($v) or strpos($v,'format=jpg')){
-		$xt=xt(trim($v)); if(!$xt)$xt='.jpg';
+	elseif(is_img($v) or strpos($v,'format=jpg')){if(!$xt)$xt='.jpg';
 		$f=ses('qb').'_tw_'.substr(md5($v),0,6).$xt; unlink('img/'.$f);}
 	elseif(strpos($v,'.mp4'))unlink('video/'.strprm($v,4).$xt);}
 if($quoid)self::erasefromtwid($quoid);}

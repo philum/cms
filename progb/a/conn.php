@@ -238,7 +238,7 @@ case(':quote2'):return mk::quote2($d,$id);break;
 case(':callquote'):return mk::callquote($d,'',$id);break;//unused
 case(':articles'):return pop::arts_mod($d,$id);break;
 case(':search'):return lj('popw','popup_search,home___'.ajx($d),pictxt('search',$d));break;
-case(':formail'):return mk::form($d,'mailform'.$id.'_tracks,formail');break;
+case(':formail'):return mk::form($d,'mailform'.$id.'_tracks,formail','');break;
 case(':chat'):return chat::home($d?$d:$id,5);break;
 case(':chatxml'):return chatxml::home($d?$d:$id);break;
 case(':room'):return lj('','popup_chatxml,home___'.$d,pictxt('chat',$d));break;

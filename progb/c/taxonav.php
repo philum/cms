@@ -22,14 +22,14 @@ $a--;
 return divc($css,ul($ret));}//9658//9660
 
 static function make_menus_rbub($arr,$here,$open,$o){static $i; $i++; static $a; $a++;
-if(is_array($arr))foreach($arr as $k=>$v){$o++; $re='';
+if(is_array($arr))foreach($arr as $k=>$v){$o++; $re=''; $ret='';
 	if(is_array($v)){$nb=btn('small','('.count($v).')');
-	$re=balc('li',$csa,'&#9500;&#150;'.self::good_gb($k,$i,'&#9658;').' '.$nb);
+	$re=balc('li','','&#9500;&#150;'.self::good_gb($k,$i,'&#9658;').' '.$nb);
 	$re.=self::make_menus_rb($v,'',0,0);}
 	elseif($open)$re.=lj('','popup_popart__3_'.$k.'_3',ma::suj_of_id($k));
 if($re)$ret.=divd('tn'.$k,$re);}
 $a--;
-return divc($css,$ret);}//9658//9660
+return divc('',$ret);}//9658//9660
 
 static function tri_hierarchic($r,$h){$ret='';
 foreach($r as $k=>$v){if($k==$h)$ret=$v;

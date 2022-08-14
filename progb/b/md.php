@@ -29,7 +29,8 @@ if(!$p)$p='home hubs plan'; $r=explode(' ',$p); $n=count($r);
 for($i=0;$i<$n;$i++)$ret.=self::special_link($r[$i],'').' ';
 return $ret;}
 
-static function art_viewer($r){$rid=randid('artv'); $id=key($r); $ret=art::playb($id,2);
+static function art_viewer($r){$rid=randid('artv');
+$id=key($r); $ret=art::playb($id,2); $i=0; $m='';
 if(count($r)>1)foreach($r as $k=>$v){$i++; $m.=lj('',$rid.'_art,playb___'.$k.'_2',$i);}
 return divc('nbp',$m).divd($rid,$ret);}
 
@@ -92,7 +93,7 @@ else{
 if(!$o)return btn('nbp right',$ret);
 return $ret;}
 
-static function login_btn($va,$o){$t=$p!=1?$p:""; 
+static function login_btn($p,$o){$t=$p!=1?$p:""; 
 $ret=login::form(ses('USE'),ses('iq'),$t);
 if($o)$ret=divc("imgr",$ret);
 return $ret;}
@@ -119,7 +120,7 @@ else{$tit=ma::suj_of_id($k);
 	else return [urlread($k),$k];}}//numeric name
 
 static function bubble_menus($t,$inl=''){//mods/submenus
-if(!$t)return; $nbo=0; $n="\n"; $r=explode("\n",$t.$n);
+if(!$t)return; $nbo=0; $n="\n"; $r=explode("\n",$t.$n); $ret='';
 foreach($r as $n=>$k){
 	$nb=substr_count(substr($k,0,9),'-'); $tit=substr($k,$nb); $tit=trim($tit);
 	if($tit){[$lk,$d]=self::submn_t($tit); $cat[$nb]=$tit; $ct='';
@@ -136,14 +137,6 @@ $r=self::collect_hierarchie_c('reverse',$o);
 if($r){$ret=self::build_titl($r,$p,63);
 $ret.=divc('taxonomy',md::menus_r($r));}
 return $ret;}
-
-static function rub_taxo($p,$t){$id=ses('read');
-if($p==1)$p=ses('frm'); elseif($p=='art')$p=ma::ib_of_id($id);
-if($p)$taxcat=supertriad_dig($p);//permanent
-if($p>1){$t=lk(urlread($p),ma::suj_of_id($p)).br();
-	$hie=self::collect_hierarchie_c(0,''); $taxcat=self::find_in_subarray($hie,$p);}
-$t=self::build_titl($taxcat,$t,1);
-if(is_array($taxcat))return $t.divc('taxonomy',md::menus_r($taxcat));}
 
 static function taxo_arts($p){
 if($p==1)$v=ses('frm'); if(!$p)$p=ma::ib_of_id(ses('read'));
@@ -277,7 +270,7 @@ return $bt.divd($t.$id,$ret);}
 static function quality_stats($id,$t,$o){//dev
 return $id.'-'.$t.'-'.$o.br();}
 
-static function short_arts($p=4000){$dayb=$dyb?calc_date($dyb):$_SESSION['dayb'];
+static function short_arts($p=4000){$dayb=$p?calc_date($p):ses('dayb');
 return sql('id','qda','k','nod="'.ses('qb').'" AND re>="1" AND day>'.$dayb.' AND host<'.$p.' ORDER BY '.prmb(9));}
 
 static function trkarts($p,$t,$d,$o,$rch=''){//see also api cmd:tracks
@@ -356,7 +349,7 @@ if(!$ret && $src)$ret=sql('id','qda','k','mail like "%'.$src.'%" limit '.$o);
 if($ret){unset($ret[$id]);
 return [$ret,lk(htac('source').strto($src,'.'),$src)];}}}
 
-static function siteclics($src){
+static function siteclics($src){$n=0;
 $id=ses('read'); if($id)$src=$_SESSION['rqt'][$id][9];
 $r=sql('lu','qda','rv','mail like "%'.$src.'%"');
 foreach($r as $k=>$v)$n+=$v;
@@ -379,7 +372,7 @@ $ra['cmd']='panel'; $ra['template']=$tp?$tp:val($ra,'template','cover');//panart
 if($p)return api::build($r,$ra);}
 
 static function collect_board($prm){
-$frm=$_SESSION['frm']; $dad=($_SESSION["daya"]-86400);
+$frm=$_SESSION['frm']; $dad=($_SESSION["daya"]-86400); $ret=''; $re=[];
 $thr=ma::tri_rqt('4','lu'); $two=ma::tri_rqt('3','lu'); $one=ma::tri_rqt('2','lu');
 if($two){if($one)$one+=$two; else $one=$two;}
 if($one){foreach($one as $id=>$nb){
@@ -387,12 +380,12 @@ if($one){foreach($one as $id=>$nb){
 		if($_SESSION['rqt'][$id][0]>=$dad){$v=mod::pub_art($id); if($v)$re[$id]=$v;}}}
 if($re){krsort($re); $ret.=self::build_titl($re,'24h',1);
 $ret.=pop::columns($re,$prm,'board','').br();}}
-if($two){$re=""; foreach($two as $id=>$nb){
+if($two){$re=[]; foreach($two as $id=>$nb){
 	if($_SESSION['rqt'][$id][1]==$frm or $frm=='Home'){
 		if($_SESSION['rqt'][$id][0]<$dad){$v=mod::pub_art($id); if($v)$re[$id]=$v;}}}
 if($re){krsort($re); $ret.=self::build_titl($re,nbof($_SESSION['nbj'],3),1);
 	$ret.=pop::columns($re,$prm,'board','pubart').br();}}
-if($thr){$re=""; foreach($thr as $id=>$nb){
+if($thr){$re=[]; foreach($thr as $id=>$nb){
 	if($_SESSION['rqt'][$id][1]==$frm or $frm=='Home'){
 		$v=mod::pub_art($id); if($v)$re[$id]=$v;}}
 	if($re){krsort($re); $ret.=self::build_titl($re,'***',1);
@@ -419,7 +412,7 @@ if(is_array($v)){
 return $ret;}
 
 static function suj_hierarchic($cs1,$cs2){
-$rb=self::collect_hierarchie($rev); $ret='';
+$rb=self::collect_hierarchie(''); $ret='';
 if($rb)foreach($rb as $k=>$v){
 $csb=$_SESSION['frm']==$k?$cs1:$cs2;
 $ret.=llk($csb,htac('cat').$k,$k);
@@ -491,7 +484,7 @@ if(is_array($r))foreach($r as $k=>$v)if($v>0)$rb[$v]=radd($rb,$v);
 if(is_array($rb))arsort($rb);
 return $rb;}
 
-static function supermenu($r){static $i; $i++;
+static function supermenu($r){static $i; $i++; $ret='';
 if(is_array($r))foreach($r as $k=>$v){$ret.=nchar($i,"-");
 	if(is_array($v))$ret.=$k.n().md::supermenu($v); else $ret.=$k.n();} $i--;
 return $ret;}

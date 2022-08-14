@@ -16,7 +16,7 @@ meta::affectlgr($id);}
 
 static function build($id,$p){$lang='fr';
 $r=sql('ib,name,mail,day,nod,frm,suj,re,lu,img,thm,host,lg','qda','a','id='.$p);
-$lgref=$r['lg']; if(!$lg)$lg=ses('lng'); $lgset=$lang.'-'.$r['lg'];//to,from
+$lgref=$r['lg']; $lg=ses('lng'); $lgset=$lang.'-'.$r['lg'];//to,from
 $r['suj']=yandex::call('suj'.$p,$lgset,2); //p($r);
 //[$a,$b]=split_right(' ',$r['suj']); $r['suj']='['.$a.'] '.$b; $r['frm'].='-EN';
 $r['lg']=$lang;

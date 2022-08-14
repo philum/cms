@@ -75,7 +75,7 @@ case('plan'):$ret=self::arts_plan($m,$p,$o); break;
 case('Hubs'):$ret=self::arts_plan($m,$p,$o); break;
 case('gallery'):$ret=self::arts_plan($m,$p,$o); break;
 case('tracks'):$ret=md::trkarts($p,$t,$d,$o); break;//api::tracks($t)
-case('trkrch'):$ret=trkrch($p); break;
+case('trkrch'):$ret=md::trkrch($p); break;
 case('MenusJ'):$ret=self::ajxlink($p,'mjx',$o,$d); break;
 case('api'):$ret=api::call(str_replace(';',',',$p),$o); break;
 case('api_mod'):$api=api::defaults_rq(explode_k(str_replace(';',',',$p),',',':')); break;//:,
@@ -84,8 +84,7 @@ case('articles'):$load=api::mod_arts_row($p); $obj=1; break;
 //case('articles'):$api=api::mod_rq($p.'&t=x'); break;//&=
 case('tab_mods'):$ret=self::tab_mods($p); break;
 case('last'):$ret=art::playb('last',3); break;
-case('cover'):$ret=md::cover($p,$o,$tp); break;//:,
-case('player'):$ret=flash_prep('',$p); break;
+case('cover'):$ret=md::cover($p,$o,$tp); break;
 case('friend_art'):$ret=md::friend_art($o); break;
 case('friend_rub'):$ret=md::friend_rub($o); break;
 case('related_arts'):$load=md::related_art($p); break;
@@ -114,12 +113,12 @@ case('deja_vu'):$load=ses('mem'); break;
 case('context'):$ret=md::call_context($p); break;
 case('rss_input'):if($p)$ret=rss::call(ajx($p,1)); break;
 case('disk'):$_SESSION['dlmod']=$p; if($p && $p!='/')$pb='/'.$p;
-	$ret=divd('dsnavds',finder::ds_nav('dl','users/'.ses('qb').$pb)); break;//!
+	$ret=divd('dsnavds',finder::home('dl','users/'.ses('qb').$pb)); break;//!
 case('finder'):$ra=['|','-']; $p=str_replace($ra,'/',$p); $o=str_replace($ra,'/',$o);
 	$ret=finder::home($p,$o,$d); break;
 case('channel'):$ret=plugin('channel',$p,$t,$d,$o); $t=''; break;
 case('hour'):timelang();//%A%d%B%G%T
-	if($p)$dat=strftime($p?$p:'%y%m%d:%H%M',$_SESSION['dayx']); else $dat=mkday('',1);
+	if($p)$dat=date($p?$p:'ymd:Hm',$_SESSION['dayx']); else $dat=mkday('',1);
 	if(!$d)$ret=btn($o,$dat); else $ret=divc($o,$dat); break;
 case('cart'):$ret=lkc('txtcadr','/?plug=cart',$p!=1?$p:'Cart');
 	$ret=divd('cart',self::m_pubart($_SESSION['cart'],'scroll',7)); break; 
@@ -181,7 +180,7 @@ case('hierarchics'):$in=md::suj_hierarchic('active',''); $ret=balc('ul',$cs,$in)
 //cacheable
 case('hubs'):$mn=$_SESSION['mn']; if(count($mn)>=2){$t=$p!=1?$p:$t;
 	if($t)$t=lkc('',htac('module').'hubs',$t);
-	$in=md::nodes_b($mn,$o); $ret=balc('ul',$cs,$in);} break;
+	$in=md::m_nodes_b($mn,$o); $ret=balc('ul',$cs,$in);} break;
 case('cats'):$lin=md::cat_mod($p,$o,$d); break;
 case('catj'):$ret=md::cat_mod_j($p,$o,$d); break;
 case('tags'):
@@ -428,7 +427,7 @@ return lj($c,apps::read($r),$o?$o:$t);}
 //0:button/1:type/2:proces/3:param/4:option/5:condition/6:root/7:icon/8:hide/9:private 
 static function build_apps($p,$d){//newer than special_links
 if(strpos($p,','))$r=explode(',',$p); else $r=explode(' ',$p);
-$ra=msql::read_b('system','default_apps_'.($d?$d:menu),'',1); if($ra)$keys=msql::cat($ra,0);
+$ra=msql::read_b('system','default_apps_'.($d?$d:'menu'),'',1); if($ra)$keys=msql::cat($ra,0);
 foreach($r as $v){[$m,$o]=split_one('§',trim($v),0); $m=str_replace('+',' ',$m);
 [$bt,$app,$func,$p,$o,$c,$root,$icon,$hid,$ath]=explode('/',$m);
 if($ra[$m])$ret[]=$ra[$m]; elseif($keys[$m])$ret[]=$ra[$keys[$m]];
@@ -453,7 +452,7 @@ return $ret;}
 static function rssj_m($p,$o){return self::mdtitle('Rss').divd('rssj',rssin::home('rssurl'.($p?'_'.$p:''),$o));}
 
 static function msql_links($p,$o,$l,$d,$t){
-$defs=msql_read('',nod($p),'',1);
+$defs=msql_read('',nod($p),'',1); $ret='';
 if($defs)foreach($defs as $k=>$v){
 	if($o=='mail'){$v[0]=$va=$k;}
 	elseif($v[1]=='_' or !$v[1])$va=preplink($v[0]); else $va=$v[1];
@@ -596,11 +595,11 @@ else $load=ma::tri_rqb('','nod','frm');
 if($load)$rb=self::home_plan($load,$n);
 if($rb)return self::build_titl($load,$t,61).$rb;}
 
-static function see_hubs(){
-if($ra=$_SESSION['mn']){foreach($ra as $k=>$v){
+static function see_hubs(){$rt=[];
+if($ra=$_SESSION['mn'])foreach($ra as $k=>$v){
 $r=msql_read('users',$k.'_cache','');
-if($r)foreach($r as $ka=>$va){$ret[$k][$ka]+=1;}}}
-return $ret;}
+if($r)foreach($r as $ka=>$va)$rt[$k][$ka]+=1;}
+return $rt;}
 
 static function make_ban($p,$o,$t){
 $t=divc('bantxt',conn::parser($t));
@@ -608,7 +607,7 @@ $im=$p?goodroot($p):'imgb/ban_'.ses('qb').'.jpg'; $h=is_numeric($o)?$o:'120';
 return div(ats('background-image:url('.$im.'); height:'.$h.'px;').atc('banim'),$t);}
 
 static function footer(){
-$_SESSION['cur_div']='footer';
+$_SESSION['cur_div']='footer'; $ret='';
 $r=self::val_to_mod('credits,chrono,log-out');
 foreach($r as $k=>$v){$ret.=self::mkmods($v);}
 return $ret;}

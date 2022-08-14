@@ -60,7 +60,7 @@ return implode(',',$rb);}
 static function detect($p,$o,$prm=[]){return prmb(25);//
 if(self::$motor=='yandex')$var='detect';
 elseif(self::$motor=='deepl')$var='detected_source_language';
-if($txt){$r=self::api('',$var,$prm[0]); return $r['lang']??'';}
+if($p){$r=self::api('',$var,$prm[0]); return $r['lang']??'';}
 else return ses('lang');}
 
 #translate
@@ -216,9 +216,9 @@ $r[1]=self::call('art'.$id,$setlg);
 return $r;}
 
 static function play($ref,$lg){
-[$to,$from]=explode('-',$setlg);
+[$to,$from]=explode('-',$ref);
 $ret=sql('txt','ynd','v','ref="'.$ref.'" and lang="'.$to.'"');
-if(!$ret)$ret=self::redo($ret,$setlg);
+if(!$ret)$ret=self::redo($ret,$ref);
 return $ret;}
 
 #conn
@@ -317,7 +317,7 @@ mysql::install('yandex',['ref'=>'var11','txt'=>'text','lang'=>'var2'],0);}
 static function home($p,$o){$rid=randid('yandex');
 if($p=='install')self::install();
 $ret=self::face($p,$o);
-$bt.=msqbt('',nod('yandex_1'));
+$bt=msqbt('',nod('yandex_1'));
 return $bt.divd($rid,$ret);}
 }
 ?>

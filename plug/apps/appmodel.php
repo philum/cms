@@ -10,20 +10,20 @@ static function build($p,$o){
 $ret=$p.'-'.$o;
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 if(strpos($o,';'))list($o,$ord)=opt($o,';',2);
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_'.self::$a.',call__3_'.$p.'_'.$o.'___'.$inpid;
+$j=$rid.'_'.self::$a.',call_'.$inpid.'_3_'.$p.'_'.$o;
 $ret=inputj($inpid,$p,$j);
 //$ret=textarea('inp',$p,40,4,atc('console'));
 $ret.=lj('',$j,picto('ok')).' ';
 //$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_'.self::$a.'*1_'.$cols,picto('edit')).' ';
+//$ret.=lj('','popup_msqedit,call___'.self::$a.'*1_'.$cols,picto('edit')).' ';
 //$ret.=msqbt('',nod(self::$a.'_1'));
 return $ret;}
 

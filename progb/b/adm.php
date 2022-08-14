@@ -15,7 +15,7 @@ return $nb.' connectors'.br().$ret;}//
 
 #hubprm
 static function hubprm_sav($p,$o,$prm=[]){
-$res=prm[0]??''; if($res==' ')$res='';
+$res=$prm[0]??''; if($res==' ')$res='';
 if($p=='descript')$col='dscrp';
 elseif($p=='google')$col='clr';
 elseif($p=='menus')$col='menus';
@@ -160,8 +160,8 @@ if($slct){//save
 	if($slct=='book' && !rstr(67))$ret.=pictxt('alert','rstr(67)');
 	if($local && $type=='templates'){
 		if($slct=='articles')$msg=tmp::art();
-		elseif($slct=='meta')$msg=tmp::meta();
-		elseif($slct=='rssin')$msg=tmp::rss();
+		//elseif($slct=='meta')$msg=tmp::meta();
+		//elseif($slct=='rssin')$msg=tmp::rss();
 		elseif($slct=='pubart')$msg=tmp::pubart();
 		elseif($slct=='tracks')$msg=tmp::tracks();
 		elseif($slct=='titles')$msg=tmp::titles();
@@ -250,7 +250,7 @@ static function csslang(){return msql::col('lang','helps_css',0,1);}
 static function editcss(){return styl::edit_css();}
 
 #admin_static functions
-static function inject_fonts(){$dr='fonts/';
+static function inject_fonts(){$dr='fonts/'; $ret='';
 $ra=msql::read('server','edition_typos',''); $vra=array_keys_r($ra,0);
 $rb=msql::read('system','edition_typos',''); $vrb=array_keys_r($rb,0);
 $rc=explore($dr,'files',1); $vrf[]=1;
@@ -303,7 +303,7 @@ elseif($_SESSION['auth']>6)$ml=ses('qb'); else $ml=ses('USE');
 $r=ma::read_idy($ml,'DESC');
 return art::output_trk($r);}
 
-static function ifradmin($adm,$va){$st=get('admin','=');
+static function ifradmin($adm){$st=get('admin','=');
 return iframe('index.php?admin='.($adm?$adm:$st).'§680/500');}
 
 static function console($d){return console::home($d);}
@@ -363,7 +363,7 @@ case('rename'):update('qdu','hub',$res,'name',$qb); $_SESSION['mn'][$qb]=$res; b
 //case('reinit'):makenew(ses('qb'),1); break;
 case('publish'):$opn=sql('active','qdu','v','name="'.$o.'"');
 	update('qdu','active',$opn==1?0:1,'name',$o);
-	msqa::define_hubs(); break;}
+	boot::define_hubs(); break;}
 return self::adm_hubs();}
 
 static function edithub($p,$o){$qb=ses('qb');
@@ -808,7 +808,7 @@ case('tags'):$ret=meta::admin_tags(get('set')); break;
 case('finder'):$ret=finder::home($qb,'disk'); break;
 case('backup'):$ret=self::backup('',''); break;
 case('software'):$ret=software::home('=',''); break;
-case('update_notes'):$ret=adm_update_notes('',1); break;
+//case('update_notes'):$ret=adm_update_notes('',1); break;
 case('pictography'):$ret=pictography::home('',''); break;
 //case('plug'):$ret=adm_edit_plug(); break;
 case('api'):$ret=apicom::home('',1); break;
@@ -837,7 +837,7 @@ elseif($d=='conn_help')$ret=self::conn_help();
 elseif($d=='tags')$ret=meta::admin_tags('');
 elseif($d=='description')$ret=self::hubprm('descript');
 elseif($d=='software' && auth(7))$ret=software::home('','');
-elseif($d=='admin')$ret=self::ifradmin();//!
+elseif($d=='admin')$ret=self::ifradmin($va);//!
 elseif($d=='plugin')$ret=plugin('index',$opt);
 elseif(method_exists('adm',$d))$ret=self::$d($va,$opt);
 elseif(method_exists($d,'home'))$ret=$d::home($va,$opt);

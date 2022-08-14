@@ -182,12 +182,12 @@ static function displace($r,$id,$to){if($id==$to)return $r; $rk=$r[$id]; unset($
 foreach($r as $k=>$v){if($k==$to)$rb[$id]=$rk; $rb[$k]=$v;} return $rb;}
 static function walk($r,$n,$fn,$p){foreach($r as $k=>$v){$r[$k][$n]=$fn($k,$v[$n],$v,$p);} return $r;}
 static function walk_k($r,$fn){foreach($r as $k=>$v){$kb=$fn($k,$v); $rb[$kb]=$v;} return $rb;}
-static function nb($r){foreach($r as $k=>$v){$i++; $rb[$i]=[$v];} return $rb;}//prep
+static function nb($r){$i=0; foreach($r as $k=>$v){$i++; $rb[$i]=[$v];} return $rb;}//prep
 static function prevnext($r,$d){$keys=array_keys($r);
 foreach($keys as $k=>$v)if($v==$d)return [$keys[$k-1],$keys[$k+1]];}
 static function copy($da,$na,$db,$nb){
 $r=self::read($da,$na); self::save($db,$nb,$r); return $r;}
-static function num($dr,$nod,$d){$r=self::read($dr,$nod);//n
+static function num($dr,$nod,$d){$r=self::read($dr,$nod); $i=0;
 foreach($r as $k=>$v){$i++; if($k==$d)return $i;}}
 static function push($dr,$nod,$r){if(!is_array($r))$r=[$r];
 return self::modif($dr,$nod,$r,'push');}

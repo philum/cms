@@ -2,7 +2,7 @@
 //philum_exec
 
 class exec{
-static function form_insert($r){
+static function form_insert($r){$ret='';
 if($r)foreach($r as $k=>$v){
 	if($v=="<-")$vb='\n';else $vb=$v;
 	$ret.=ljb("txtx","insert",$vb,$v).' ';}
@@ -62,7 +62,7 @@ else{$bt=lj('',$j,picto('ok')).' ';
 	$bt.=msqbt('system','program_core').' ';
 	//$bt.=lj('txtx',"exec","x").' ';
 	$bt.=lj('popsav',$j,'exec').br();}
-$ret=js_code(self::js());
+$ret=jscode(self::js());
 $sj=sjt($j); //$onk=atjr('autocomp','codarea');
 $ret.=textarea('codarea',$p?$p:'$ret=\'hello\';',44,32,atc('console').atk($sj).atkp($sj));
 return $bt.div(atc('grid-pad').ats('min-width:640px'),divc('col1',$ret).div(atd($rid).atc('col2'),''));}

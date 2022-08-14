@@ -4,7 +4,7 @@ class msqa{
 static function gpage($p=''){return $p?'&page='.get('page',$p):'';}
 
 //msql_menu
-static function menu($r,$type,$slct,$url){$r=explode(' ',$r);
+static function menu($r,$type,$slct,$url){$r=explode(' ',$r); $ret='';
 foreach($r as $k=>$v){if($v)$ret.=lkc($v==$slct?'txtnoir':'txtx',$url.$v,$v).br();}
 return $ret;}
 

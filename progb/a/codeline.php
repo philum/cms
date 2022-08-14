@@ -164,7 +164,7 @@ case(':connbt'):return pop::connbt($d,''); break;
 //case(':poptwit'):return pop::poptwit($d,$b,'',$o); break;
 case(':msql'):return mk::msqcall($d,'','');break;
 case(':popimg'):return mk::mini_d($d); break;
-case(':quote'):return quote($d,$c); break;
+case(':quote'):return mk::quote2($d,$c); break;
 case(':lang'):return mk::translate($d,3);break;
 case(':toggle'):return pop::toggle_div($d,0,'');break;
 case(':callquote'):return mk::callquote($d,$b,''); break;

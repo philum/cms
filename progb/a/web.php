@@ -68,7 +68,7 @@ return $r;}
 
 static function kit($f,$id){
 $http='http://newsnet.ovh'; if(host()==$http)return;
-if(substr($u,0,7)=='youtube')$u=strend($f,'=');
+if(substr($f,0,7)=='youtube')$u=strend($f,'=');
 $u='http://newsnet.ovh/call/yt,build/'.str_replace('/','|',$u);
 //$u=$http.'/call/yt,build/'.$f.'/'.$id;
 $u='http://logic.ovh/api/web/p1:'.segment($f,'=','&');

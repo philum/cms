@@ -51,8 +51,8 @@ if($ret)$_SESSION['mn']=$ret; $_SESSION['mnd']=$rtb;}
 //use need to be declared after $rstr, declared in config(), whose declare $mn, needed to hubs() 
 static function define_closed_hub(){$use=ses('USE');
 if($use && !isset($_SESSION['mn'][$use])){
-	$v=sql('hub','qdu','v',['name'=>$hub]);
-	if($v)$_SESSION['mn'][$hub]=$v;}}
+	$v=sql('hub','qdu','v',['name'=>$use]);
+	if($v)$_SESSION['mn'][$use]=$v;}}
 
 static function define_subdomain(){
 $r=explode('.',$_SERVER['HTTP_HOST']);

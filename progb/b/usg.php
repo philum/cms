@@ -30,12 +30,12 @@ static function yesno($g1,$g2){return offon($g1,$g2);}
 static function fbcall($u){
 $d=curl_get_contents($u); $d=utf8_decode_b($d);
 $ret=conv::html_detect($d,'<div class="_5pcr userContentWrapper"');
-if(!$ret)$ret=html_detect($d,'<p class="_1q3v">');
+if(!$ret)$ret=conv::html_detect($d,'<p class="_1q3v">');
 $ret.=div('',lkt('txtx',$u,pictxt('link',domain($u))));
 return divc('panel justy',$ret);}
 
 static function call($g1,$g2,$prm){
-return $ret=$g1($g2,$g3,$g4);}
+return $ret=$g1($g2,'',$prm);}
 
 #photo
 static function photosbt($im,$sz,$id,$j){$ret=''; $n=1;
@@ -79,7 +79,7 @@ return div(ats($s),image($img,'100%','auto'));}
 static function playvideo($iv,$cr_div,$n){
 $r=$_SESSION['iv'.$iv]; $_SESSION['cur_div']=$cr_div;
 $jx='iv'.$iv.'_usg,playvideo___'.$iv.'_'.$cr_div.'_';
-$ret.=divc('nbp right',self::nb_pages_j($r,$jx,$n));
+$ret=divc('nbp right',self::nb_pages_j($r,$jx,$n));
 $ret.=balb('h3',lk(htac('read').$r[$n][0],ma::suj_of_id($r[$n][0])));
 $ret.=video::any(strfrom($r[$n][1],'§'),$r[$n][0],3);
 return $ret.br();}
@@ -104,7 +104,7 @@ while($rq=qrw($req))if(in_array($rq[0],$ra)){
 return $ret;}
 
 //pages
-static function nb_pages_j($r,$jx,$n){$nb=1; $na=count($r);
+static function nb_pages_j($r,$jx,$n){$nb=1; $na=count($r); $ret='';
 if($n>=$nb && $n)$ret.=lj('',$jx.(0),1);//first
 $nab=round($n/2); if($n-$nb>$nab)$ret.=lj('',$jx.($nab-1),$nab);
 if($r[$n-1])$ret.=lj('',$jx.($n-1),picto('kleft'));

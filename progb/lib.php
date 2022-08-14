@@ -312,7 +312,7 @@ function sqldel($bs,$id,$cl='',$o=''){if(!$cl)$cl='id';
 qr('delete from '.$_SESSION[$bs].' where '.$cl.'="'.$id.'" limit 1'); if($o=='ee')reflush($bs,1);}
 function reflush($bs,$o=''){qr('alter table '.$_SESSION[$bs].' order by id');
 if($o){$n=ma::lastid($bs); if($n)resetdb($bs,$n+1);}}
-function resetdb($bs,$n=1){qr('alter table '.ses($b).' auto_increment='.$n);}
+function resetdb($b,$n=1){qr('alter table '.ses($b).' auto_increment='.$n);}
 function tuples($b,$c){return qrw(qr('select count(*) as tuples, '.$c.' from '.$_SESSION[$b].' group by '.$c.' having count(*)>1 order by tuples desc'));}
 function doublons($b,$c){$b=$_SESSION[$b];
 return qrw(qr('SELECT COUNT(*) AS nbr_doublon, '.$c.' FROM '.$b.' GROUP BY '.$c.' HAVING COUNT(*)>1'));}
@@ -428,7 +428,7 @@ if(is_array($r)){foreach($r as $k=>$v){$io++;
 	else $ret[$k]=$fc($d,$k,$v,$i.'.'.$io);}}
 return $ret;}
 function func($d,$k,$f,$n){//dir,key,file,topology
-if($v)return $d.'/'.$f; else return $d;}
+if($f)return $d.'/'.$f; else return $d;}
 //actions
 function walk_dir($dr,$fc){
 $r=explore($dr); return explode_dir($r,$dr,$fc?$fc:'func');}
@@ -437,7 +437,7 @@ foreach($r as $k=>$v){$a=$fc($dr,$k,$v); if($a)$rb[]=$a;} return $rb;}
 
 #files
 function get_file($f){return curl_get_contents($f);}
-function read_file($f){if($f)$fp=fopen($f,'r') or die('er'); $ret='';//fgets
+function read_file($f){$fp=false; if($f)$fp=fopen($f,'r') or die('er'); $ret='';//fgets
 if($fp){while(!feof($fp))$ret.=fread($fp,8192); fclose($fp);} return $ret;}
 function write_file($f,$t){$h=fopen($f,'w') or die('er'); $w=false;
 if($h){$w=fwrite($h,$t); fclose($h); if(!ses('localsrv'))opcache_invalidate($f);}
@@ -480,15 +480,15 @@ $context=stream_context_create($r);
 if(is_url($f))return file_get_contents($f,false,$context);}
 
 function curl_get_contents($f,$post=''){
-$ch=curl_init(); curl_setopt($ch,CURLOPT_URL,$f); $er='';
-curl_setopt($ch,CURLOPT_HTTPHEADER,[]);
-if($post){curl_setopt($ch,CURLOPT_POST,TRUE); curl_setopt($d,CURLOPT_POSTFIELDS,$post);}
-curl_setopt($ch,CURLOPT_USERAGENT,$_SERVER['HTTP_USER_AGENT']);//open modialisation.ca
-curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
-curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,0); curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,0);
-curl_setopt($ch,CURLOPT_REFERER,host()); curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,2);
-$ret=curl_exec($ch); if($ret===false)$er=curl_errno($ch);
-curl_close($ch); if(!$er)return $ret;}
+$c=curl_init(); curl_setopt($c,CURLOPT_URL,$f); $er='';
+curl_setopt($c,CURLOPT_HTTPHEADER,[]);
+if($post){curl_setopt($c,CURLOPT_POST,TRUE); curl_setopt($c,CURLOPT_POSTFIELDS,$post);}
+curl_setopt($c,CURLOPT_USERAGENT,$_SERVER['HTTP_USER_AGENT']);//open modialisation.ca
+curl_setopt($c,CURLOPT_RETURNTRANSFER,1); curl_setopt($c,CURLOPT_FOLLOWLOCATION,1);
+curl_setopt($c,CURLOPT_SSL_VERIFYPEER,0); curl_setopt($c,CURLOPT_SSL_VERIFYHOST,0);
+curl_setopt($c,CURLOPT_REFERER,host()); curl_setopt($c,CURLOPT_CONNECTTIMEOUT,2);
+$ret=curl_exec($c); if($ret===false)$er=curl_errno($c);
+curl_close($c); if(!$er)return $ret;}
 
 #dom
 function dom($d){
@@ -515,7 +515,7 @@ function fwidth($f){if(is_file($f))return getimagesize($f);}
 function frdate($d){$r=['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre']; return $r[$d];}
 function localdate($d){$r=explode('/',date('d/m/Y',$d)); $r[1]=frdate(intval($r[1]));
 return implode(' ',$r);}
-function ts2time($d){$nd=date('z',$t); $nh=date('H',$t)*60*60; $nm=date('i',$t)*60; $ns=date('s',$t);
+function ts2time($t){$nd=date('z',$t); $nh=date('H',$t)*60*60; $nm=date('i',$t)*60; $ns=date('s',$t);
 return $nd*84600+$nh+$nm+$ns;}
 
 //gz
@@ -525,7 +525,7 @@ function gz_write2($f,$d){file_put_contents($f.'.gz',gzencode($d,9));}
 function gz_read($f,$o=0){$d=gzopen($f,'rb',$o); $ret='';
 if($d)while(!gzeof($d))$ret.=gzread($d,1024); gzclose($d); return $ret;}
 function ungz_read($d){return implode('',gzfile($d));}
-function ungz_read2($d){return gzinflate(substr($data,10,-8));}
+function ungz_read2($d){return gzinflate(substr($d,10,-8));}
 function ungz_write($d,$f){$t=ungz_read($d); write_file($f,$t);}
 function gz2im($f){$d=gz_read($f); $d=str_replace('x-gzip','x-image',$d); file_put_contents($f,$d);}//
 function is_zip($f){if(strpos(mime_content_type($f),'application/x-gzip')!==false)return 1;}
@@ -803,7 +803,7 @@ function rss_date($d){return date(mkdts(),strtotime($d));}
 function dayref($cbl){[$d,$m,$y]=explode('-',$cbl); return mktime(0,0,0,$m,$d,$y);}//23,59,59
 function time_ago($dt){$dy=time()-$dt; if($dy<86400){$fuseau=3;
 $h=intval(date('H',$dy))-$fuseau; $i=intval(date('i',$dy)); $s=intval(date('s',$dy));
-$nbh=$h>1?$h.' h ':''; $nbi=$i>0?$i.' min ':''; return $nbh.$nbi.$nbs;} else return date(mkdts(),$dt);}
+$nbh=$h>1?$h.' h ':''; $nbi=$i>0?$i.' min ':''; return $nbh.$nbi;} else return date(mkdts(),$dt);}
 function clean_nb($d,$o=0){return number_format($d,$o,',',' ');}
 
 function elapsed_time($d1,$d2=''){$rt=[]; if(!$d2)$d2=time();
@@ -914,7 +914,7 @@ return $ret;}
 function hsl2rgb($h,$s,$l){
 $h/=360; $s/=100; $l/=100; $r=$l;$g=$l;$b=$l;
 $v=($l<=0.5)?($l*(1.0+$s)):($l+$s-$l*$s);
-if($v>0){$m; $sv; $sextant; $fract; $vsf; $mid1; $mid2;
+if($v>0){$m=''; $sv=''; $sextant=''; $fract=''; $vsf=''; $mid1=''; $mid2='';
 	$m=$l+$l-$v; $sv=($v-$m)/$v; $h*=6.0;
 	$sextant=floor($h); $fract=$h-$sextant; $vsf=$v*$sv*$fract;
 	$mid1=$m+$vsf; $mid2=$v-$vsf;
@@ -966,7 +966,7 @@ $rb[]="'".$k."'=>".(is_array($v)?"['".implode("','",$v)."']":"'".$v."'");}
 if($rb)return '<?php $r=['.implode(',',$rb).'];';}
 function chrono($d=''){static $s; $ret=microtime(true)-($s?$s:$_SERVER['REQUEST_TIME_FLOAT']); $s=microtime(true);
 if($d)return btn('small',$d.':'.round($ret,5));}
-function window($d){return div(atb('contenteditable','true').atc($c).ats('overflow:auto; height:300px;'),$d);}
+function window($d){return div(atb('contenteditable','true').ats('overflow:auto; height:300px;'),$d);}
 function eco($d,$o=''){if(is_array($d))$d='<pre>'.print_r($d,true).'</pre>';
 $ret=textarea('',htmlentities_b($d),44,12); if($o)return $ret; elseif(auth(6))echo $ret.br();}
 function verbose($r){echo implode(br(),$r).hr();}

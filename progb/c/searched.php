@@ -115,7 +115,7 @@ sqldel('qdsr',$p);
 $ret=btn('txtyl',nms(43).' '.plurial($n,19));
 return $ret.self::read($p,$o);}
 
-static function read($p,$o){//connect();
+static function read($p,$o){$ret='';//connect();
 $r=sqb('id,word','qdsr','kv','order by id desc'); //sort($r);
 if($r)foreach($r as $k=>$v){
 	//$bt=lj('','srchd_searched,call__3_'.$v,$v).' ';//search__3_

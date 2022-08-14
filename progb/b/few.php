@@ -23,10 +23,10 @@ return divd('exp'.$id,$ret);}
 
 //import
 static function hubimport($node,$id,$use,$frm,$qb,$suj){$tim=$_SESSION['dayx'];
-$r=sql('name,auth','qdb','kv','hub="'.$node.'"');
+$r=sql('name,auth','qdb','kv',['hub'=>$node]);
 if($r)foreach($r as $k=>$v)$ath=$k==$use?$v:'';
 $rw=sql('*','qda','a',$id); $re=$ath>4?1:0; unset($rw['id']);
-$rw['ib']=$suj!='ok'?$suj:''; $rw['nod']=!$node?$qb:$node; $day=$rw['day']; $rw['frm']=frm;
+$rw['ib']=$suj!='ok'?$suj:''; $rw['nod']=!$node?$qb:$node; $day=$rw['day']; $rw['frm']='frm';
 $rw['day']=time();
 $nid=db::sav('qda',$rw);
 $ret='['.$id.'§'.mkday($day).':art]'.n().n().'['.$id.':read]';
@@ -81,7 +81,7 @@ if($n)return true;}
 
 static function nb_arts($daya,$dayb){return sql('COUNT(id)','qda','v','nod="'.ses('qb').'" AND re>0 AND day<'.$daya.' AND day>'.$dayb.'');}
 
-static function calendar($date){
+static function calendar($date){$ret='';
 $gd=getdate($date); $dcible=date('d',$_SESSION['daya']); $dyam=$gd['mon'];
 $ret.='<table style="font:smaller Arial; text-align:center;">';
 $ret.='<tr><td>L</td><td>M</td><td>M</td><td>J</td><td>V</td><td>S</td><td>D</td></tr><tr>';
@@ -98,7 +98,7 @@ $ret.='</tr></table>';
 return $ret;}
 
 static function archives($cyear){
-$first=ma::oldestart();
+$first=ma::oldestart(); $ret='';
 //$last=ma::lastart();
 if(!$first)$first=0; 
 $first_year=date('y',$first); 

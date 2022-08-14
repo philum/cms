@@ -25,7 +25,7 @@ if(!$uid)$uid=sql('id','qda','v','name="'.$user.'"'); if($uid)return true;}
 
 static function usdhub($g1){static $n=0; $n++;
 if(login::usedhubname($g1))return self::usdhub($g1.$n);
-return $g1.($ex?$ex:'');}
+return $g1;}
 
 static function log_result($Use,$uid,$qb,$rl,$ck){
 $_SESSION['USE']=$Use; $_SESSION['uid']=$uid; $_SESSION['qb']=$qb;
@@ -105,10 +105,10 @@ $txt.="\n\n".prep_host(ses('qb'));
 mails::send_mail('html',$mail,$subj,nl2br($txt),$from,prep_host($user));}
 
 static function alert_user($user){
-[$qmail,$pss]=sql('mail,pass','qdu','r','name="'.$user.'"');
-$subj="$qb - tentative de login";
+[$qmail,$psw]=sql('mail,pass','qdu','r','name="'.$user.'"');
+$subj=$user.' - tentative de login';
 $txt='rappel de vos identifiants:
-login: '.$user.', passw: '.$pss.'
+login: '.$user.', passw: '.$psw.'
 --
 '.host();
 $adminmail=$_SESSION['qbin']['adminmail'];

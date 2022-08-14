@@ -544,8 +544,7 @@ $r['opts']=art::metart($id); $trk=art::output_trk($otp,$id);
 $out['id']=$id; $out['suj']=$r['suj'];
 $out['css']=$r['re']==0?'hide':'';
 $out=art::titles($id,$r,'',$otp,1,'',ses::$n,$out);
-return bal('section',atd($id),art::template($out,$tp)).$trk."\n";
-return $ret;}
+return bal('section',atd($id),art::template($out,$tp)).$trk."\n";}
 
 static function look($id,$rch,$nb){
 ses::$r['look']=$rch;

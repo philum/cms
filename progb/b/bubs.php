@@ -99,10 +99,11 @@ if($r)foreach($r as $k=>$v)if($k)//id
 	$ret[]=[$k,'bub','seekart',$d.'-'.$k,'','','','tag'];
 	//$ret[]=[$k,'ajax','popup_api___'.$d.':'.$k,'','','','','tag'];
 return $ret;}
-static function seek(){$r=explode(' ','tag '.prmb(18));
-	foreach($r as $k=>$v)$ret=seek_merge($v,$ret);
-	//if($v)$ret[]=[$v,'bub','seektag',ajx($v),'','','','folder2'];
-return $ret;}
+static function seek(){
+$r=explode(' ','tag '.prmb(18)); $rt=[];
+foreach($r as $k=>$v)$rt=self::seek_merge($v,$rt);
+//if($v)$rt[]=[$v,'bub','seektag',ajx($v),'','','','folder2'];
+return $rt;}
 
 //mods
 static function adm_mods($d){//mod::build_modules($va,$cr);
@@ -224,12 +225,12 @@ if($d=='cache'){$_SESSION['rqt']=[]; return li(boot::cache_arts(1));}}
 //taxo
 static function bubtaxo_root($r,$ib){
 foreach($r as $k=>$v)
-	if($k==$ib)$dir=bubtaxo_root($r,$v[10]);
+	if($k==$ib)$dir=self::bubtaxo_root($r,$v[10]);
 if($ib)return $dir.'/'.$ib;}
 
 static function taxo($dir,$ret){$r=$_SESSION['rqt'];
 if(is_array($r))foreach($r as $k=>$v)if($v[10]){
-	$root=$dir.bubtaxo_root($r,$v[10]); //echo $k.':'.$root.' ';
+	$root=$dir.self::bubtaxo_root($r,$v[10]); //echo $k.':'.$root.' ';
 	$ret[]=[$v[2],'art','',$k,'','',$root,'article','',''];}
 return $ret;}
 	

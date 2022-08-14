@@ -47,7 +47,7 @@ return ['tit'=>$v[1],'del'=>$del,'edt'=>$edt,'txt'=>$txt,'id'=>$id];}
 static function one($p,$id){
 $r=sql('id,day,msg,name','qdi','','id="'.$id.'"');
 $rb[]=read($r,$p); $tmp=self::tmp();
-return $bt.vue::call($tmp,$rb);}
+return vue::call($tmp,$rb);}
 
 static function build($p,$o=1){$rid='mia'.normalize($p);
 $ret=''; $edt=''; $del=''; $rb=[]; if(!$o)$o=1;
@@ -69,7 +69,7 @@ $ret=self::build($p,$o);
 return $bt.$ret;}
 
 static function menu(){
-return $r;}
+return;}
 
 static function nav($p,$o,$rid){
 if(!$p)$p=self::$default; //$rid='mia'.normalize($p);

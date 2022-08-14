@@ -26,7 +26,7 @@ case('video'):$ret=self::video($va); break;
 case('popvideo'):$ret=self::video($va); break;
 case('replace'):$ret=self::replace($va); break;
 case("delconn"):$ret=delconn($va); break;
-case('book'):$ret=book($p); $t='mk_book'; break;
+case('book'):$ret=mc::book($p); $t='mk_book'; break;
 case('paste'):$ret=self::paste(); $t=nms(86); $s=600; break;
 case('microform'):$ret=self::forms($p); $t='user_form'; break;
 case('microsql'):$ret=self::msql(); $t='select_microbase'; break;
@@ -68,7 +68,7 @@ static function importart(){//to do
 	return self::assistant('urlsrc','SaveI','','','');}
 
 static function msql(){//insert
-$r=explore('msql/users','files',1);
+$r=explore('msql/users','files',1); $ret='';
 if($r)foreach($r as $k=>$v){$v=substr($v,0,-4); [$nd,$bs,$sv,$svv]=explode('_',$v);
 	if($nd==ses('qb') && $sv!='sav' && $svv!='sav')$rb[$v]=$bs.($sv?'_'.$sv:'');}
 asort($rb); if($r)foreach($rb as $k=>$v){if($v)
@@ -117,7 +117,8 @@ $ret.=ljb('popbt','jumpMenu_addtext','cnv_cna_cnb_=_,','add').br();
 $ret.=self::assistant('cnv','insert_conn',$d,'','');
 return $ret;}
 
-static function color($cnn){$klr=msql_read('system','edition_colors','',1);
+static function color($cnn){
+$klr=msql_read('system','edition_colors','',1); $ret='';
 $sty='padding:0 5px; background-color:#'; foreach($klr as $k=>$v){
 	$ret.=ljj($k,'jumpvalue',['cnp',$k],bts($sty.$v,'.')).' ';}
 return $ret.br().br().self::assistant('cnv','insert_conn',$cnn,'','');}
@@ -207,7 +208,7 @@ return mkjson([$d,$edt,$bt,$bt]);}
 
 static function wygedt($id,$g2,$prm=[]){$p1=$prm[0]??'';
 $d=codeline::parse($p1,'','sconn');
-$ret=lj('','txtarea_mc,wygok_edt'.$id.'_23_'.$id,picto('save2')).' '; $rid=$g2?$g2:'edt'.$g1;
+$ret=lj('','txtarea_mc,wygok_edt'.$id.'_23_'.$id,picto('save2')).' '; $rid=$g2?$g2:'edt'.$id;
 if(rstr(13))$d=embed_p($d); if(!$d)$d="\n";
 return divedit($rid,'editarea justy','max-width:720px','',nl2br($d));}
 
@@ -254,7 +255,7 @@ return txarea1($rt);}
 
 //str
 static function add_lines($d){return clean_br(str_replace(['. ',".\n"],".\n\n",$d));}
-static function clean_pdf($s){$d=cleanmail($d); $d=clean_br($d); $d=self::add_lines($d); return $d;}
+static function clean_pdf($d){$d=cleanmail($d); $d=clean_br($d); $d=self::add_lines($d); return $d;}
 
 static function add_comments($d){$r=explode("\n",$d); $ret='';
 foreach($r as $k=>$v){$pos=strpos($v,'.jpg]');
@@ -287,7 +288,7 @@ $d=clean_br($d);//clean_prespace//repair_badn//
 return $d;}
 
 static function del_qmark($v){//$v=html_entity_decode_b($v);
-$r=explode("\n",$v); $n=count($r);
+$r=explode("\n",$v); $n=count($r); $ret='';
 for($i=0;$i<$n;$i++){
 	if(substr($r[$i],0,1)=='?')$r[$i]='- '.ltrim(substr($r[$i],1));
 	$ret.=ltrim($r[$i])."\n";}

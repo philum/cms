@@ -3,49 +3,6 @@
 
 class svg{static $ret=[],$w=600,$h=440;
 function __construct($w='',$h=''){if($w)self::$w=$w; if($h)self::$h=$h;}
-static function text($sz,$x,$y,$t,$clr){
-self::$ret[]='['.$clr.':attr]['.$x.','.$y.','.$sz.'§'.$t.':text]';}
-static function rect($x,$y,$w,$h,$clr,$clr2='',$wb='',$o='',$id='',$op=''){if(!$clr)$clr='none';
-self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.$x.','.$y.','.$w.','.$h.','.$o.','.$id.':rect]';}
-static function line($x,$y,$x2,$y2,$clr,$wb='',$o='',$ob=''){
-self::$ret[]='[none,'.$clr.','.$wb.',,,'.$ob.':attr]['.$x.','.$y.','.$x2.','.$y2.','.$o.':line]';}
-static function ellipse($x,$y,$w,$h,$clr,$clr2='',$wb='',$o='',$op=''){if(!$clr)$clr='none';
-self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.$x.','.$y.','.$w.','.$h.','.$o.':ellipse]';}
-static function circle($x,$y,$w,$clr,$clr2='',$wb='',$o='',$op=''){if(!$clr)$clr='none';
-self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.$x.','.$y.','.$w.','.$o.':circle]';}
-static function poly($r,$clr,$clr2='',$wb='',$op=''){if(!$clr)$clr='none';
-self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.implode('-',$r).':polygon]';}
-static function polyline($r,$clr,$clr2='',$wb='',$op=''){if(!$clr)$clr='none';
-self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.implode('-',$r).':polyline]';}
-static function path($p,$clr,$clr2='',$wb='',$op=''){if(!$clr)$clr='none';
-self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.$p.':path]';}
-static function lk($x,$y,$lk,$clr,$bt='',$onc=''){if(!$clr)$clr='black';
-self::$ret[]='['.$clr.':attr]['.$j.'§['.$x.','.$y.','.$lk.','.$onc.',1§'.$bt.':text]:a]';}
-static function lj($x,$y,$sz,$clr,$j,$bt){if(!$clr)$clr='black'; if(!$sz)$sz=12;
-self::$ret[]='['.$clr.':attr]['.$j.'§['.$x.','.$y.','.$sz.'§'.$bt.':text]:lj]';}
-static function tog($x,$y,$sz,$clr,$ti='',$bt=''){if(!$clr)$clr='black'; if(!$sz)$sz=12;
-self::$ret[]='['.$clr.':attr][['.$x.','.$y.','.$sz.'§'.$bt.':text]§'.$ti.':tog]';}
-static function bub($x,$y,$sz,$clr,$tx,$bt){if(!$clr)$clr='black'; if(!$sz)$sz=12;
-self::$ret[]='['.$clr.':attr]['.$tx.'§['.$x.','.$y.','.$sz.'§'.$bt.':text]:bub]';}
-static function bubj($x,$y,$sz,$clr,$j,$bt){if(!$clr)$clr='black'; if(!$sz)$sz=12;
-self::$ret[]='['.$clr.':attr]['.$j.'§['.$x.','.$y.','.$sz.'§'.$bt.':text]:bubj]';}
-static function bubj2($x,$y,$sz,$clr,$j,$tx,$bt){if(!$clr)$clr='black'; if(!$sz)$sz=12;
-self::$ret[]='['.$clr.':attr]['.$tx.','.$j.'§['.$x.','.$y.','.$sz.'§'.$bt.':text]:bubj2]';}
-static function img($im,$w='',$h=''){self::$ret[]='['.$im.','.$w.','.$h.':image]';}
-static function draw(){$ret=implode('',self::$ret); self::$ret=''; $ret=self::com($ret);
-return bal('svg',['version'=>'1.1','xmlns'=>'http://www.w3.org/2000/svg','xmlns:xlink'=>'http://www.w3.org/1999/xlink','x'=>'0px','y'=>'0px','width'=>self::$w,'height'=>self::$h],$ret);}//,'viewBox'=>'1400 0 1400 700'
-
-static function save($d,$t){
-$f='_datas/svg/'.$t.'.svg'; mkdir_r($f);
-$ret='<?xml version="1.0" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-'.$d;//'.csscode('body{font-family:Arial;}').'
-write_file($f,$ret);
-return $f;}
-
-static function spe(){
-$path_type=['M'=>'moveto','L'=>'lineto','H'=>'horizontal lineto','V'=>'vertical lineto','C'=>'curveto','S'=>'smooth curveto','Q'=>'quadratic B§zier curve','T'=>'smooth quadratic B§zier curveto','A'=>'elliptical Arc','Z'=>'closepath'];
-$filters=['feBlend','feColorMatrix','feComponentTransfer','feComposite','feConvolveMatrix','feDiffuseLighting','feDisplacementMap','feFlood','feGaussianBlur','feImage','feMerge','feMorphology','feOffset','feSpecularLighting','feTile','feTurbulence','feDistantLight','fePointLight','feSpotLight'];}
 
 static function ex(){
 $d1='
@@ -78,8 +35,52 @@ $d2='
 ';
 return $d2;}
 
-static function motor(){
-return ['attr'=>['fill','stroke','stroke-width','size','fill-opacity','stroke-dasharray','transform','fillurl','stroke-linecap'],////transform:rotate(30,20,40)//dash:5,5//line-cap:butt,square,round//
+static function text($sz,$x,$y,$t,$clr){
+self::$ret[]='['.$clr.':attr]['.$x.','.$y.','.$sz.'§'.$t.':text]';}
+static function rect($x,$y,$w,$h,$clr,$clr2='',$wb='',$o='',$id='',$op=''){if(!$clr)$clr='none';
+self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.$x.','.$y.','.$w.','.$h.','.$o.','.$id.':rect]';}
+static function line($x,$y,$x2,$y2,$clr,$wb='',$o='',$ob=''){
+self::$ret[]='[none,'.$clr.','.$wb.',,,'.$ob.':attr]['.$x.','.$y.','.$x2.','.$y2.','.$o.':line]';}
+static function ellipse($x,$y,$w,$h,$clr,$clr2='',$wb='',$o='',$op=''){if(!$clr)$clr='none';
+self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.$x.','.$y.','.$w.','.$h.','.$o.':ellipse]';}
+static function circle($x,$y,$w,$clr,$clr2='',$wb='',$o='',$op=''){if(!$clr)$clr='none';
+self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.$x.','.$y.','.$w.','.$o.':circle]';}
+static function poly($r,$clr,$clr2='',$wb='',$op=''){if(!$clr)$clr='none';
+self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.implode('-',$r).':polygon]';}
+static function polyline($r,$clr,$clr2='',$wb='',$op=''){if(!$clr)$clr='none';
+self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.implode('-',$r).':polyline]';}
+static function path($p,$clr,$clr2='',$wb='',$op=''){if(!$clr)$clr='none';
+self::$ret[]='['.$clr.','.$clr2.','.$wb.',,'.$op.':attr]['.$p.':path]';}
+static function lk($x,$y,$lk,$clr,$bt='',$onc=''){if(!$clr)$clr='black';
+self::$ret[]='['.$clr.':attr]['.$x.','.$y.''.$lk.','.$onc.',1§'.$bt.':a]';}
+static function lj($x,$y,$sz,$clr,$j,$bt){if(!$clr)$clr='black'; if(!$sz)$sz=12;
+self::$ret[]='['.$clr.':attr]['.$j.'§['.$x.','.$y.','.$sz.'§'.$bt.':text]:lj]';}
+static function tog($x,$y,$sz,$clr,$ti='',$bt=''){if(!$clr)$clr='black'; if(!$sz)$sz=12;
+self::$ret[]='['.$clr.':attr][['.$x.','.$y.','.$sz.'§'.$bt.':text]§'.$ti.':tog]';}
+static function bub($x,$y,$sz,$clr,$tx,$bt){if(!$clr)$clr='black'; if(!$sz)$sz=12;
+self::$ret[]='['.$clr.':attr]['.$tx.'§['.$x.','.$y.','.$sz.'§'.$bt.':text]:bub]';}
+static function bubj($x,$y,$sz,$clr,$j,$bt){if(!$clr)$clr='black'; if(!$sz)$sz=12;
+self::$ret[]='['.$clr.':attr]['.$j.'§['.$x.','.$y.','.$sz.'§'.$bt.':text]:bubj]';}
+static function bubj2($x,$y,$sz,$clr,$j,$tx,$bt){if(!$clr)$clr='black'; if(!$sz)$sz=12;
+self::$ret[]='['.$clr.':attr]['.$tx.','.$j.'§['.$x.','.$y.','.$sz.'§'.$bt.':text]:bubj2]';}
+static function img($im,$w='',$h=''){self::$ret[]='['.$im.','.$w.','.$h.':image]';}
+static function draw(){$ret=implode('',self::$ret); self::$ret=''; $ret=self::com($ret);
+return bal('svg',['version'=>'1.1','xmlns'=>'http://www.w3.org/2000/svg','xmlns:xlink'=>'http://www.w3.org/1999/xlink','x'=>'0px','y'=>'0px','width'=>self::$w,'height'=>self::$h],$ret);}//,'viewBox'=>'1400 0 1400 700'
+
+static function save($d,$t){
+$f='_datas/svg/'.$t.'.svg'; mkdir_r($f);
+$ret='<?xml version="1.0" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+'.$d;//'.csscode('body{font-family:Arial;}').'
+write_file($f,$ret);
+return $f;}
+
+static function spe(){
+$path_type=['M'=>'moveto','L'=>'lineto','H'=>'horizontal lineto','V'=>'vertical lineto','C'=>'curveto','S'=>'smooth curveto','Q'=>'quadratic B§zier curve','T'=>'smooth quadratic B§zier curveto','A'=>'elliptical Arc','Z'=>'closepath'];
+$filters=['feBlend','feColorMatrix','feComponentTransfer','feComposite','feConvolveMatrix','feDiffuseLighting','feDisplacementMap','feFlood','feGaussianBlur','feImage','feMerge','feMorphology','feOffset','feSpecularLighting','feTile','feTurbulence','feDistantLight','fePointLight','feSpotLight'];}
+
+static function motor(){return [
+'attr'=>['fill','stroke','stroke-width','size','fill-opacity','stroke-dasharray','transform','fillurl','stroke-linecap'],////transform:rotate(30,20,40)//dash:5,5//line-cap:butt,square,round//
 'circle'=>['cx','cy','r','filter'],
 'rect'=>['x','y','width','height','filter','id','class'],
 'ellipse'=>['cx','cy','rx','ry','filter','id','style'],

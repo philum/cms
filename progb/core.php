@@ -37,15 +37,15 @@ function editarea($rid,$d='',$w=80,$h=16,$js='',$o=''){
 return connbt($rid,$o).div('',textarea($rid,$d,$w,$h,atc('console').$js));}
 
 #sql
-function sqledt($p,$id,$x,$res=''){$rid=randid(); $ret='';
+/*function sqledt($p,$id,$x,$prm=[]){$rid=randid(); $ret='';
 $ra=sqlcols($p); if($ra){$rk=array_columns($ra,0); $kv=implode('|',$rk);}
 if($x=='x')sqldel($p,$id);
-if($res)sqlup($p,array_combine($cl,ajxr($res)),'id',$id);
+if($res)sqlup($p,array_combine($rk,$prm),'id',$id);
 $r=sql('*',$p,'a',$id); //p($r);
-if($cols)foreach($cols as $k=>$v)$ret.=divc('',goodarea($k,$r[$k],44));
+if($r)foreach($r as $k=>$v)$ret.=divc('',goodarea($k,$r[$k],44));
 $ret.=lj('popsav',$p.'_sqledt__x_'.$p.'_'.$id.'___'.$kv,picto('save'));
 $ret.=lj('popdel',$p.'_sqledt__x_'.$p.'_'.$id.'_x__',picto('del'));
-return divd($p,$ret);}
+return divd($p,$ret);}*/
 
 #msql
 function msql_read($dr,$nod,$in='',$u=''){$f=msql::url($dr,$nod); $m='_menus_'; $r=[];
@@ -101,9 +101,9 @@ return mkbub($ret,'','1','popz+=1; this.style.zIndex=popz;');}
 
 //$ret=select_jb('inp','backup|progb|plug',$p,1,'');
 function select_jb($id,$pr,$v='',$o='',$oj=''){$rid=randid();//pr='a|b|c'
-$j=ajx(addslashes($pr)).'_'.$id.'_'.$rid.'_'.($oj); $t=$t?$t:picto('kdown');
+$j=ajx(addslashes($pr)).'_'.$id.'_'.$rid.'_'.($oj); $t=picto('kdown');
 if($o==1)$h=input1($id,$v,7); else $h=hidden($id,$id,$v);
-return bubslct($j,$t).$h.$tb;}
+return bubslct($j,$t).$h.$t;}
 
 #select_j //existing_list
 //$f=function; $o=1:bt,$o=2:choice,$o=3:bt+choice//ty=2:outside input
@@ -252,7 +252,7 @@ if(!$o or $o==$p)$o=domain($p); return [$p,$o];}
 function flags(){$r=msql::read('system','edition_flags_8','',1);
 foreach($r as $k=>$v)$ret[$v[2]]=$v[1]; return $ret;}
 function flag($d){$r=sesmk('flags','',0); return $r[$d]??$d;}
-function svg($d,$w='',$h=''){return '<img src="'.$f.'.svg" width="'.$w.'" height="'.($h?$h:$w).'" />';}
+function svg($f,$w='',$h=''){return '<img src="'.$f.'.svg" width="'.$w.'" height="'.($h?$h:$w).'" />';}
 function picto($d,$s=''){if(is_numeric($s))$s='font-size:'.$s.'px;';
 return span(atc('philum ic-'.$d).ats($s),'');}
 function pictxt($p,$t='',$s=''){return picto($p,$s).($t?'&#8201;'.$t:'');}

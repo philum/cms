@@ -10,8 +10,9 @@ $s=strrpos($d,'$'); if($s!==false){$p=substr($d,$s+1); $d=substr($d,0,$s);}}
 $r=[$d,$p,$c]; return $r;}
 
 static function setvar($d){$n=strpos($d,'=');
-if($n!==false){$a=substr($d,0,$n); $b=substr($d,$n+1); self::$r[$k]=$d;}}
-static function setvars($d){$r=explode(',',$d); foreach($r as $v)setvar($v);}
+if($n!==false && $d){$a=substr($d,0,$n); $b=substr($d,$n+1); self::$r[]=$d;}}
+
+static function setvars($d){$r=explode(',',$d); foreach($r as $v)self::setvar($v);}
 
 //read
 static function parser($msg,$r){
@@ -37,7 +38,7 @@ else $end=$msg;
 return $deb.$mid.$end;}
 
 static function conns($da,$r){//v$p:c
-[$d,$p,$c]=self::readconn($da);
+[$d,$p,$c]=self::readconn($da); $ret='';
 //echo utf8_encode('--var:'.$d.' --opt:'.$p.' --conn:'.$c).br();//
 switch($c){
 //elements
@@ -71,7 +72,7 @@ case('date'):return mkday(is_numeric($p)?$p:'',$d); break;
 case('title'):return ma::suj_of_id($d); break;
 case('read'):return ma::read_msg($p,3); break;
 case('image'):return image($d); break;
-case('thumb'):return mk::thumb_d($d,$p); break;
+case('thumb'):return mk::thumb_d($d,$p,''); break;
 case('picto'):return picto($d,$p); break;
 //high_level
 case('cut'):[$s,$e]=explode('/',$p); return between($d,$s,$e); break;
@@ -81,7 +82,7 @@ case('conn'):return conn::connectors($d.':'.$p,3,'','',''); break;//from pop
 case('core'):if(is_array($d))return call_user_func($p,$d,'','');
 	else{$db=explode('/',$d); return call_user_func_array($p,$db);}break;
 case('plug'):return plugin($d,$p); break;
-case('each'):foreach($d as $da)$ret.=codeline::cbasic_exec($da,'','',$o); return $ret; break;
+case('each'):foreach($d as $v)$ret.=codeline::cbasic_exec($v,'','',''); return $ret; break;
 case('var'):return $r[$d]??''; break;//here is the core//str_replace('$',"&dollar;",$r[$d]??'')
 case('getvar'):return self::$r[$d]; break;
 case('setvar'):return self::setvar($d);break;

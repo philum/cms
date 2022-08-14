@@ -1,9 +1,6 @@
 <?php //a/mk for conns few usited
 class mk{
 
-static function xx($id,$va,$opt,$optb,$res=''){
-return $ret;}
-
 static function pub_css($d){[$d,$o]=cprm($d); return btn($o,$d);}
 static function pub_div($d){[$d,$o]=cprm($d); return divc($o,$d);}
 static function pub_font($d){[$d,$o]=cprm($d); return bts('font-family:'.$o,$d);}
@@ -63,7 +60,7 @@ foreach($r as $v){if(substr($v,0,1)=='-')$v=substr($v,1);
 	if(strpos($v,'<li'))$ret.=$v; elseif(trim($v))$ret.=li(trim($v));}
 if($ret)return balb($ul,$ret);}
 
-static function footlist($d,$id){$i=1;
+static function footlist($d,$id){$i=1; $ret='';
 if(strpos($d,'|'))$r=explode('|',$d); else $r=explode("\n",$d);
 foreach($r as $k=>$v)if(trim($v)){$v=trim($v); if(substr($v,0,1)=='-')$v=substr($v,1);
 	$ret.='['.lka(urlread($id).'#nh'.$i.'" name="nb'.$i,$i).'] '.$v.br(); $i++;}
@@ -314,7 +311,7 @@ foreach($r as $k=>$v){
 	else{if($v==0)$r[$k]=$ima; elseif($v==1)$r[$k]=$imb;}}
 return tabler($r,1);}}
 
-static function msqgraph($d){static $n; $n++; $pw=prma('content');
+static function msqgraph($d){static $n; $n++; $i=0; $pw=prma('content');
 [$da,$rep]=split_one('§',$d,1); [$nd,$bs,$va,$op]=explode('_',$da);
 if($bs){$nd=$nd?$nd:ses('qb');}else{$nd=ses('qb'); $bs=$d;}
 $r=msql::goodtable($da); $menu=$r['_menus_']; unset($r['_menus_']);
@@ -410,7 +407,7 @@ return [$r,$src];}
 //:sliderj//old
 static function sliderj($d,$id,$nl){if($nl)return;
 [$f,$o]=split_one('§',$d,1);
-return sliderJ::home($f,$id,$o);}
+return sliderJ::home($f,$id,$o);}//
 
 static function sliderslct($da,$id,$d){$w=''; $h=''; $pw='';//to revise
 [$id,$idn]=explode('-',$id); $dcb=ajx($da,''); $mp='impos'.$idn;
@@ -450,10 +447,10 @@ return lj('','popup_mod,mkmodr__3_'.ajx($d),picto('get'));}
 
 //:form
 //$d='date=date,choix1/choix2=list,entr§e1,entr§e2,message=text,image=upload,mail=mail,ok=button';
-static function form($d,$tg,$ja){
-$prod=explode(',',$d);$n=count($prod);
+static function form($d,$tg,$p=''){
+$prod=explode(',',$d); $n=count($prod); $ret=''; $ia=0;
 for($i=0;$i<$n;$i++){[$val,$type]=explode('=',$prod[$i]); $vb=normalize($val);
-if($type=='check'){$chk='chk'.$ia++; $hn[]=$chk;} elseif($type!='button')$hn[]=$vb;
+if($type=='check'){$chk='chk'.($ia++); $hn[]=$chk;} elseif($type!='button')$hn[]=$vb;
 switch($type){
 	case('text'):$ret.=textarea($vb,'',44,8);break;
 	case('check'):$ret.=checkbox($chk,'no','',''); break;
@@ -467,7 +464,7 @@ switch($type){
 	default:$ret.=autoclic($val.'" id="'.$vb,'',20,255,'');break;}
 if($type!='button' && $type!='date' && $type!='hidden' && $type!='uniqid')
 	$ret.=' '.label($vb,$val,'txtsmall2').br();}
-$ret.=lj('popsav',$tg.'_'.implode(',',$hn).'__'.ja,$btn?$btn:picto('ok'));
+$ret.=lj('popsav',$tg.'_'.implode(',',$hn).'__'.$p,$btn?$btn:picto('ok'));
 return divd($tg,$ret);}
 
 #quotes

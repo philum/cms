@@ -1,7 +1,33 @@
 <?php
 
+#2208
+//a/tracks
+
+/*static function send_track($id,$nread,$local,$name,$msg,$tim,$mail,$re){
+$nmsg=lka($here.'#trk'.$nread,$local?helps('trackmail'):nms(84)).br().br();
+$nmsg.=ucfirst(nms(68)).': '.$name.', '.mkday($tim).br().br().conn::read($msg,'','');
+$admail=$_SESSION['qbin']['adminmail'];//to_admin
+$suj=$local?ma::suj_of_id($id):nms(84);
+if($name!=$_SESSION['USE'])mails::send_mail('html',$admail,$suj,$nmsg,$mail,urlread($id));
+if($local)$rmails=sql('mail','qdi','k','frm="'.$id.'" AND re>="1"');//deploy
+$kem=sql('name','qda','v','id="'.$id.'"');//send_to_author
+if($kem!=$name){$kmail=sql('mail','qdu','v','name="'.$kem.'"');
+	if($admail!=$kmail)$rmails[$kmail]=1;} //sendtrk
+if($rmails && $re==1)mails::batch(array_keys_b($rmails),'html',$suj,$nmsg,$mail,$id);}*/*
+
+///b/mod
+//case('player'):$ret=flash_prep('',$p); break;
+
+/*static function rub_taxo($p,$t){$id=ses('read');
+if($p==1)$p=ses('frm'); elseif($p=='art')$p=ma::ib_of_id($id);
+if($p)$taxcat=supertriad_dig($p);//permanent
+if($p>1){$t=lk(urlread($p),ma::suj_of_id($p)).br();
+	$hie=self::collect_hierarchie_c(0,''); $taxcat=self::find_in_subarray($hie,$p);}
+$t=self::build_titl($taxcat,$t,1);
+if(is_array($taxcat))return $t.divc('taxonomy',md::menus_r($taxcat));}*/
+
 #2207
-//md///prevnext_art
+//b/md///prevnext_art
 	//$ret=lj($k1?'':'hide',$j.$k1.'__'.$k1,$ta).''.lj($k2?'':'hide',$j.$k2.'__'.$k2,$tb);
 
 //boot//master_params

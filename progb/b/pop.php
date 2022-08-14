@@ -109,7 +109,7 @@ elseif(is_numeric($v))return ma::jread('',$v,ma::suj_of_id($v));}
 static function arts_mod($v,$id){
 [$p,$t,$d,$o,$ch,$hd,$tp]=explode('/',$v);
 $load=api::mod_arts_row($p); unset($load[$id]);
-$ret=mod::mod_load($load,'',$t,$d,$o,1,$prw,$tp,$id);
+$ret=mod::mod_load($load,'',$t,$d,$o,1,3,$tp,$id);
 return $ret;}
 
 #toggles
@@ -142,7 +142,8 @@ if($o)$v=balb('blockquote',$v); if($nl)return balb('h4',$t).$v;
 return togbt($v,pictxt('lys',$t));}
 
 static function toggle_conn($d,$nl){[$id,$t]=cprm($d); $rid=rid('jop');
-if(is_numeric($id)){$j='_art,playc_'.$id.'_3'; $t=$t?$t:ma::suj_of_id($id);} else $j='_conn,read_'.$p.'['.$id.']';
+if(is_numeric($id)){$j='_art,playc_'.$id.'_3'; $t=$t?$t:ma::suj_of_id($id);}
+else $j='_conn,read_'.$d.'['.$id.']';
 return toggle('',$rid.$j,$t?$t:nms(25)).' '.btd($rid,'');}
 
 static function btart($d){[$id,$t]=split_one('§',$d);//conn
@@ -154,7 +155,7 @@ return lj('popbt',$j,pictxt('articles',$t?$t:preplink($d)));}
 static function pictoconn($t){
 [$t,$ico]=opt($t,':'); if($ico=='picto')$t=picto($t); return $t;}
 static function poplk($d,$id){[$lk,$t]=split_right('§',$d,1); 
-return ljp(att($tb),$id.'_mod,ajxlnk___'.ajx($lk),self::pictoconn($t));}
+return ljp(att($t),$id.'_mod,ajxlnk___'.ajx($lk),self::pictoconn($t));}
 static function toglk($d){[$lk,$t]=split_right('§',$d,1);
 return togbub('mod,ajxlnk',ajx($lk),self::pictoconn($t));}
 static function ajlk($d){[$p,$o]=cprm($d);

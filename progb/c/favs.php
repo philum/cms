@@ -4,7 +4,7 @@ class favs{
 static function icons($r){
 return apps::ico($r,'icones').divc('clear','');}
 
-static function cols($r){
+static function cols($r){$ret='';
 if($r)foreach($r as $id=>$v)$ret.=self::art($id);
 return div(atc('cols').ats('width:640px;'),$ret);}
 
@@ -111,9 +111,9 @@ if($r)foreach($r as $tag=>$v)foreach($v as $id)$rtg[$id][$tag]=1;
 if($r)foreach($r as $tag=>$v)$ret[$tag]=br().self::icons(array_flip($v));
 return make_tabs($ret);}
 
-static function mktag($r){if(!$r)return; //p($r);
-foreach($r as $k=>$v)$rt.=$k;//lj('','popup_api___'.ses('iq').';'.ajx($k),$k).' ';
-if($rt)return btn('nbp',picto('bookmark',16).' '.$rt);}
+static function mktag($r){if(!$r)return; $ret='';
+foreach($r as $k=>$v)$ret.=$k;//lj('','popup_api___'.ses('iq').';'.ajx($k),$k).' ';
+if($ret)return btn('nbp',picto('bookmark',16).' '.$ret);}
 
 //read
 static function art($id,$rtg=''){
@@ -121,7 +121,7 @@ $im=minimg(sql('img','qda','v','id='.$id),'h');
 $day=sql('day','qda','v','id='.$id); $dat=mkday($day).' ';
 if($rtg)$tag=self::mktag($rtg).' ';
 $suj=balb('h4',ma::suj_of_id($id).' ');
-if($id)return divc('txtcadr',$im.$dat.$tag.$del.lj('','popup_popart__3_'.$id.'_3',$suj));}
+if($id)return divc('txtcadr',$im.$dat.$tag.lj('','popup_popart__3_'.$id.'_3',$suj));}
 
 //menus
 static function log(){

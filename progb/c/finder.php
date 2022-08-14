@@ -290,7 +290,7 @@ return $ret;}
 
 //modes
 static function flist($r,$p,$rb){
-$o=self::mkprm($rb,'alone',5);
+$o=self::mkprm($rb,'alone',5); $ret='';
 foreach($r as $k=>$v){
 	[$url,$img,$j,$xt,$dist,$prop,$f,$typ,$id]=vals($v,['url','img','j','xt','dist','prop','f','typ','id']); 
 	$ico=$img?$img:pop::mimes($typ,'',18);
@@ -301,7 +301,7 @@ foreach($r as $k=>$v){
 return $ret;}
 
 static function panel($r,$p,$rb){
-$o=self::mkprm($rb,'',4);
+$o=self::mkprm($rb,'',4); $ret='';
 foreach($r as $k=>$v){$div=divd($v['id'],'');
 	$ico=$v['img']?$v['img']:pop::mimes($v['typ'],'',18);
 	if($v['r'])$lk=lj('','fndr_finder,home___'.$v['j'].$o,$v['f']);
@@ -318,12 +318,13 @@ foreach($r as $k=>$v){$dst=$v['dist']??'';
 	$ret.=lj('icones',$lk,$thumb.br().$v['f']);}
 return divc('',$ret);}
 
-static function recursive($r,$p,$rb){$o=self::mkprm($rb,'alone',5);
+static function recursive($r,$p,$rb){
+$o=self::mkprm($rb,'alone',5); $ret='';
 foreach($r as $k=>$v){$id=normalize($p.$k);
 	$lk=toggle('',$id.'_finder,home_'.ajx($p.'/'.$k).'_'.$o,$k);
-	if(is_array($v))$rte=recursive($v,$p.'/'.$k,$rb); else $rte='';
+	if(is_array($v))$rte=self::recursive($v,$p.'/'.$k,$rb); else $rte='';
 		$div=div(atc('fisub').atd($id),$rte);
-	$ret.=divc('fipop',$img.' &#9658; '.$lk.' '.$size.$div);}
+	$ret.=divc('fipop',' &#9658; '.$lk.' '.$div);}
 return $ret;}
 
 static function conn($r,$p,$rb){
@@ -445,8 +446,8 @@ elseif($rb[4]!='conn' && $rb[5]!='alone')$fi['act']=self::plnk('',$o);
 if($r){$rb[5]=='';//read
 	$rr=self::data($r,$p,$rb);
 	if($rb[3]=='icons')$fi['win']=self::icons($rr,$p,$rb);
-	elseif($rb[3]=='panel')$fi['win']=panel($rr,$p,$rb);
-	elseif($rb[4]=='recursive'){$fi['win']=recursive($r,$p,self::mkprm($rb,'',4,1));}
+	elseif($rb[3]=='panel')$fi['win']=self::panel($rr,$p,$rb);
+	elseif($rb[4]=='recursive'){$fi['win']=self::recursive($r,$p,self::mkprm($rb,'',4,1));}
 	elseif($rb[3]=='icon' or $rb[3]=='disk')$fi['win']=self::conn($rr,$p,$rb);
 	elseif($rb[3]=='list')$fi['win']=self::flist($rr,$p,$rb);
 	else $fi['win']=self::flap($r,$p,$rb);}//if($rb[3]=='flap')

@@ -224,7 +224,7 @@ static function array_append_css($a,$b){
 return $a;}
 
 //inject
-static function app_des_free($da,$db){
+static function app_des_free($da,$db){$ret='';
 $a=explode(';',str_replace(['; ',";\n","\n"],[';',';',''],$da)); 
 $b=explode(';',str_replace(['; ',";\n","\n"],[';',';',''],$db)); 
 if($b)foreach($b as $k=>$v){if($a)$in=in_array($v,$a); 
@@ -408,7 +408,7 @@ static function save_css_j_del($r,$n){//vrf n
 foreach($r as $k=>$v)if($k!=$n)$ret[]=$v;//$k
 return $ret;}
 
-static function save_css_newfrom($r,$n){
+static function save_css_newfrom($r,$n){$i=0;
 foreach($r as $k=>$v){$i++;
 	if($k==$n){$ret[$i]=$v; $i++; $ret[$i]=$v;}
 	else $ret[$i]=$v;}
@@ -474,7 +474,7 @@ if($c=='cat' && $fb && $fb!='-'){$r['category']=$fb;
 	if(!$_SESSION['fntcat'][$fb])$_SESSION['fntcat'][$fb]=1;}
 if($k && $_SESSION['auth']>5)msql::modif('server','edition_typos',$r,$k);
 foreach($r as $ka=>$v){$rb[]=$v;}
-return self::preview_ff_p($k,$rb,$pn,$p);}
+return self::preview_ff_p($k,$rb,'',$p);}
 
 static function ffeditcall($k,$c,$prm){
 return self::ffeditprw($k,$c,'',$prm);}
@@ -713,7 +713,7 @@ return $defs;}
 static function save_img_b($spe){
 $fich=$_FILES['fichier']['name'];
 $fich=normalize($fich);
-if(!$fich){$exp_out.="empty";}
+if(!$fich)return "empty";
 if(stristr(".jpg.png.gif",substr($fich,-4))!==false)
 return '../imgb/css_'.$_SESSION['qb'].'_'.$fich;}
 
@@ -763,7 +763,7 @@ foreach($re as $k=>$v){$ter='';//groupe par attributs cummuns
 $rte[$ter][]=$k;}
 foreach($rte as $k=>$v){$ter='';//$rte
 	foreach($v as $ka=>$va)$ter.=$va.', ';
-$ret.=substr($ter,0,-2).'{'.$k.'}'."\n";}
+$ret=substr($ter,0,-2).'{'.$k.'}'."\n";}
 $ret=str_replace([' ,','  ','a a'],[',',' ','a'],$ret);//clean
 write_file($fcss,$ret);}
 

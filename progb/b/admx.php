@@ -158,7 +158,7 @@ $ret.=divd('sbm',self::cmlin($p,$id));
 return $ret;}
 
 //app_menu
-static function aplin($p,$id,$prm=[]){$p=$prm[0]??$p;
+static function aplin($p,$id,$prm=[]){$p=$prm[0]??$p; $ret='';
 $p=str_replace('\n','',$p); $r=explode(',',$p); $n=count($r);
 for($i=0;$i<$n;$i++){$ra=decompact_mod($r[$i]);
 	$v=ajx(trim($r[$i])); $bt=$ra[2]?$ra[2]:$ra[1]; //$bt=ajx($bt,1);
@@ -167,12 +167,12 @@ for($i=0;$i<$n;$i++){$ra=decompact_mod($r[$i]);
 $ret.=hidden($id,$p);
 return $ret;}
 
-static function appmenu($p,$id){$n=substr_count($p,',')+2;
-return textarea($id,$p,40,10);
-$ret.=lj('','sbm'.'_submds____'.$id.'_aplin__'.$id,picto('reload')).' ';
+static function appmenu($p,$id){return textarea($id,$p,40,10);}
+/*$n=substr_count($p,',')+2; 
+$ret=lj('','sbm'.'_submds____'.$id.'_aplin__'.$id,picto('reload')).' ';
 $ret.=lj('','popup_submds___param:module?button_'.$n.'_cmvld_'.$id,picto('add')).' ';
 $ret.=lj('','popup_submds_'.$id.'___'.$id.'_cmprm',picto('edit'));
-$ret.=divd('sbm',self::aplin($p,$id));}
+$ret.=divd('sbm',self::aplin($p,$id));*/
 
 //submods
 static function submds($d,$id,$o,$ob,$prm){$r=[];//comline hangar
@@ -200,7 +200,7 @@ if($o=='sbmedt')return self::sbmedt($d,$id,$ob);
 if($o=='sbmove')$r=self::sbmove($d);//?
 if($o=='sbmfrom')$r=self::sbmfrom($d);
 if($o=='sbmpct')return self::sbmpct($d);
-if($o=='deft')self::$deft();
+if($o=='deft')self::deft();
 return self::desktop($id,$ob,'',$r);}
 
 static function deft(){
@@ -340,7 +340,7 @@ if($d){$ret.=hidden('amca',$d).input('amcb',$r[$d]);
 $ret.=lj('popbt',$a.'_admx,artmod*edit*t_'.$a.',amca,amcb','add',4);
 $ret.=' '.hlpbt('call_arts');}
 return $ret;}
-static function artmod_edit($d,$id=''){$ret.=btn('txtcadr','edit_art_mod');
+static function artmod_edit($d,$id=''){$ret=btn('txtcadr','edit_art_mod');
 $ret.=divd('amc',self::artmodEditJ('edm','','')); $ret.=input('edm','');
 $ret.=lj('popbt','amed_adminx,mod*edit*j_articles_1_edm','edit_mod');
 $ret.=divd('amed',''); $ret.=mc::assistant('mp','insert_jc','articles\',\'mp','','');
@@ -402,7 +402,7 @@ elseif($mod=='folders_varts'){
 	$rc['edit']=lj('poph','popup_meta,virtualfolder___'.$rvs['mp'],nms(73));}
 elseif($mod=='articles' or $mod=='api_arts')
 	$rc['edit']=divd('amc',self::artmodEditJ($rvs['mp'],'',''));
-elseif($mod=='design' && prmb(5))$rc['edit']=picto(alert).helps('prmb5');
+elseif($mod=='design' && prmb(5))$rc['edit']=picto('alert').helps('prmb5');
 //param
 if($mod=='tab_mods' or $mod=='MenusJ' or $mod=='art_mod')$rc['param']=self::comline($param,$rvs['mp']);
 elseif($mod=='app_menu')$rc['param']=self::appmenu($param,$rvs['mp']);
@@ -525,7 +525,7 @@ return $r;}
 
 static function rstrsav($d){
 if($d)$_SESSION['rstr'][$d]=rstr($d)?'1':'0';
-if(auth(6))backup_rstr('save');
+if(auth(6))admx::backup_rstr('save');
 return 'rstr'.$d.': '.offon(rstr($d));}
 
 static function backup_rstr($b){$r=self::getrstr($b);
@@ -568,14 +568,14 @@ return [$defb,$defc,$defd];}
 
 //menuh
 static function menus_h($k){$j='popup_admx,configmod__pop_'.$k.'_';
-$ret.=lj('popbt',$j.'collect','collect_structure').' ';
+$ret=lj('popbt',$j.'collect','collect_structure').' ';
 $ret.=lj('popbt',$j.'collect|1','reverse').' - ';
 $ret.=lj('popbt',$j.'nocat','no_cat').' ';
 $ret.=lj('popbt',$j.'nocat|1','reverse').' - ';
 $ret.=lj('popbt',$j.'append','append').' ';
 $ret.=lj('popbt',$j.'append|1','reverse').' ';
 return $ret;}
-static function menu_h_g($d){$p=explode('|',$d);
+static function menu_h_g($d){$p=explode('|',$d); $ret='';
 	if($p[0]=='append')$r=md::collect_hierarchie_b($p[1]);
 	elseif($p[0]=='nocat')$r=md::collect_hierarchie_c($p[1],'');
 	elseif($p[0]=='collect')$r=md::collect_hierarchie($p[1]);
@@ -604,8 +604,8 @@ case('mkdefaults_rstr'):admx::backup_rstr('mkdflts'); break;
 //backup_console
 case('slct_mods'):boot::select_mods($o); break;
 case('newfrom_mods'):adm::newmodfrom($o); boot::select_mods($o); break;
-case('adopt_mods'):foreach($_SESSION['prmb'] as $k=>$v)$vaue.=$v.'#';
-	update('qdu','config',$vaue,'name',ses('qb')); break;
+case('adopt_mods'):$d=''; foreach($_SESSION['prmb'] as $k=>$v)$d.=$v.'#';
+	update('qdu','config',$d,'name',ses('qb')); break;
 case('backup_mods'):copy('msql/users/'.$nod.'.php',$f); break;
 case('mk_default'):msql::copy('users',$nod,'system','default_mods');
 msql::copy('users',$nod,'users','public_mods_1'); alert('system/default_mods;public_mods_1'); break;

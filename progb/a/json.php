@@ -24,7 +24,7 @@ static function bk($dr,$nod){$r=self::read($dr,$nod); self::write($dr,$nod.'.bak
 static function rn($dr,$nod){$r=self::read($dr,$nod.'.bak'); self::write($dr,$nod,$r); return $r;}
 static function del($dr,$nod){$f=self::url($dr,$nod); unlink($f);}
 
-function see(){$r=$this->read(); return tabler($r);}
+function see($dr,$nod){$r=self::read($dr,$nod); return tabler($r);}
 function bt($dr,$nod){return lj('','popup_json,see__2_'.ajx($dr).'_'.ajx($nod),picto('see'));}
 function adder($dr,$nod){$rid=randid('inp'); return input($rid,'').lj('',$rid.'_db,add__2_'.ajx($dr).'_'.ajx($nod).'___'.$rid,picto('add'));}
 }

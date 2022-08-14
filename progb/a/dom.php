@@ -131,7 +131,7 @@ static function detect_table($dom){$rt=[];
 $r=$dom->getElementsByTagName('tr');
 foreach($r as $k=>$v){$rt[$k]=[];
 	$rb=$v->getElementsByTagName('th'); if(!$rb['length'])$rb=$v->getElementsByTagName('td');
-	if($rb)foreach($rb as $kb=>$el)$rt[$k][$kb]=self::com(self::getxt($el));}
+	if($rb)foreach($rb as $kb=>$el)$rt[$k][$kb]=self::getxt($el);}
 return $rt;}
 
 static function select_table($dom){
@@ -155,9 +155,9 @@ return utf8_decode($ret);}
 
 static function menu($p,$o,$rid){
 $bid='inp'.$rid; $cid='txt'.$rid;
-$j=$rid.'_'.self::$a.',call_'.$bid.','.$cid.','.$rid.'__';
-$ret.=inputj($bid,$o,$j);
-$ret.=txtarea($cid,$p,40);
+$j=$rid.'_dom,call_'.$bid.','.$cid.','.$rid.'__';
+$ret=inputj($bid,$o,$j);
+$ret.=textarea($cid,$p,40);
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}
 

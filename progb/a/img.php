@@ -80,7 +80,7 @@ static function del($id,$im){
 $ex=sql('id','qdg','v','ib="'.$id.'" and im="'.$im.'"');
 if($ex)sqldel('qdg',$ex);
 conn::replaceinmsg($id,'['.$im.']','');
-conn::replaceinimg($id,'/'.$a,'');
+conn::replaceinimg($id,'/'.$im,'');
 unlink('img'.$im); unlink('imgc'.$im);}
 
 #thumbs

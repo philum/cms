@@ -1,22 +1,10 @@
 <?php //b/tracs
 class tracks{//unused//}
 
-/*static function send_track($id,$nread,$local,$name,$msg,$tim,$mail,$re){
-$nmsg=lka($here.'#trk'.$nread,$local?helps('trackmail'):nms(84)).br().br();
-$nmsg.=ucfirst(nms(68)).': '.$name.', '.mkday($tim).br().br().conn::read($msg,'','');
-$admail=$_SESSION['qbin']['adminmail'];//to_admin
-$suj=$local?ma::suj_of_id($id):nms(84);
-if($name!=$_SESSION['USE'])mails::send_mail('html',$admail,$suj,$nmsg,$mail,urlread($id));
-if($local)$rmails=sql('mail','qdi','k','frm="'.$id.'" AND re>="1"');//deploy
-$kem=sql('name','qda','v','id="'.$id.'"');//send_to_author
-if($kem!=$name){$kmail=sql('mail','qdu','v','name="'.$kem.'"');
-	if($admail!=$kmail)$rmails[$kmail]=1;} //sendtrk
-if($rmails && $re==1)mails::batch(array_keys_b($rmails),'html',$suj,$nmsg,$mail,$id);}*/
-
 //form
 static function formail($d,$prm){
-$ra=explode(',',ajx($d,1)); $na=count($r)-1;
-$rb=($prm); $nb=count($rb)-1;
+$ra=explode(',',ajx($d,1)); $na=count($ra)-1;
+$rb=($prm); $nb=count($rb)-1; $ret='';
 for($i=0;$i<$nb;$i++){[$label,$type]=explode('=',$ra[$i]);
 	$ret.=$label.' : '.$rb[$i].br();}
 $from=$_SESSION['qbin']['adminmail'];
@@ -125,8 +113,8 @@ if(rstr(2) && !auth(4))$ret.=btn('small',helps('tracks_moderation'));
 if($_SESSION['USE']){$ret.=hidden($rx[0],$use).hidden($rx[1],'');
 	$ret.=hidden('trkscr','').hidden('trkscrvrf','');}//?$use:nms(38)//'sb',//'sc',//!
 else{$pr['onkeyup']=atj('log_goodname','trkname');
-	$ret.=input1('trkname'.$gn,$use,'8','','name','50',$pr);
-	$ret.=input1('trkmail'.$gn,$ml,'14','email','name','50',$pr);
+	$ret.=input1('trkname',$use,'8','','name','50',$pr);
+	$ret.=input1('trkmail',$ml,'14','email','name','50',$pr);
 	if(!$user && $id!=$_SESSION['qb'])$ret.=hlpbt('track_follow').' ';
 	$ret.=self::secure_tracks().br();}
 $ret.=hidden($rx[2],$ib);//'ib',//!

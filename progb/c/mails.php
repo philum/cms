@@ -10,7 +10,7 @@ $suj=sql('suj','qda','v','id="'.$id.'"');
 $msg=divc('panel justy',$txt);
 $msg.=lkc('',$http.$htacc,balb('h2',$suj));
 $msg.=divc('panel justy',ma::read_msg($id,'nlb'));
-send_mail('html',$to,$suj,$msg,$from?$from:hostname(),$htacc);
+self::send_mail('html',$to,$suj,$msg,$from?$from:hostname(),$htacc);
 return btn('popbt',nms(34).' '.nms(79).' '.nms(36).': '.$to);}
 else return btn('popdel','error:'.$to);}
 
@@ -54,7 +54,7 @@ if(isset($r))self::batch($r,'html',$suj,$msg,$sender,$id);}
 static function datas($o=''){
 $r=msql_read('',nod('mails'),'',1); $rt=[];
 if($r)foreach($r as $k=>$v){if($v[2])$rt[$v[0]]=$v[1].'<'.$v[0].'>';}
-return $o?implode(",\n",$rt):$ret;}
+return $o?implode(",\n",$rt):$rt;}
 
 static function prep_mail_html($suj,$v,$url){
 $http=$_SERVER['HTTP_HOST']; $qb=ses('qb'); $ban=balb('h3',lk(prep_host($qb),$http));

@@ -50,7 +50,7 @@ return $ret;}
 //$r=msql::read_b('',nod('wiki_1'));//p($r);
 
 static function build0($p,$o){
-$f=utf8_encode_b($f);
+$f=utf8_encode_b($p);
 if($f)$dom=fdom($f,1); $ret='';
 if($dom)foreach($dom->getElementsByTagName('div') as $k=>$div)
 	if($div->getAttribute('id')=='mw-content-text'){

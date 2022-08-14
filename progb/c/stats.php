@@ -4,7 +4,7 @@ class stats{
 static function sql($d,$n,$b=''){$ret='';
 $dt='date_format(time,"%m%d") as day'; $tm='to_days(now())-to_days(time)<='.$n.'';
 switch($d){
-case('nbv')://if($b)$gr=', group_concat(id) as ids';
+case('nbv'):$gr=''; //if($b)$gr=', group_concat(id) as ids';
 $ret='select '.$dt.',count(id) as nbv'.$gr.'
 from '.ses('qdv').' where qb="'.ses('qbd').'" and '.$tm.' group by day'; break;
 case('nbu'): $ret='select '.$dt.',count(distinct(iq)) as nbu
@@ -49,17 +49,17 @@ static function draw_canvas($d,$w,$h){
 return bal('canvas',atd('myCanvas').atb('width',$w).atb('height',$h).atc(''),'error').balb('script','var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d"); ctx.font="12px Arial"; '.$d);}
 
-static function canvas_mk($r,$w,$h,$t=''){$t=yes;
+static function canvas_mk($r,$w,$h,$t=''){$t='yes';
 $clr=$_SESSION['clrs'][$_SESSION['prmd']];
 $xr=max($r); $bars=count($r); $x1=0;
-if($bars<$w/2)$esp=2; $ecart=$w/$bars; if($ecart<10)$t=off;
+if($bars<$w/2)$esp=2; $ecart=$w/$bars; if($ecart<10)$t='off';
 $ret='ctx.clearRect(0,0,1000,'.$h.'); '."\n";
 foreach($r as $k=>$v){$x2=$x1+$ecart; $ah=round($v/$xr*($h-12));
 	//$ret.=$x1.'-'.$h-$ah.'-'.$x2-$esp.'-'.$h.'|';
 	//$rb[]=[$x1,$h-$ah-12,$ecart,$ah,$k,$v,$h,$t];
 	$ret.='ctx.fillStyle="#'.$clr[7].'"; ';
 	$ret.='ctx.fillRect('.($x1).','.($h-$ah-12).','.($ecart).','.($ah).');'."\n";
-	if($t==yes){
+	if($t=='yes'){
 		$ret.='ctx.fillStyle="#'.$clr[7].'"; ctx.font="12px Arial"; ';
 		if(strpos($k,'='))$k=segment($k,'=','&');
 		$ret.='ctx.fillText("'.($k).'",'.($x1).','.($h-2).'); ';

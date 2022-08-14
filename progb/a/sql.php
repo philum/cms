@@ -1,16 +1,16 @@
 <?php
 class sql{
-static private $psw:
+static private $psw;
 static private $qr;
 
 function __construct(){
-	if(!self::qr)self::qr=ses('qr');}
+	if(!self::$qr)self::$qr=ses('qr');}
 
 //static function dqb(){return ses('qr');}
 
 //'localhost','root','1H03qpv9V','nfo'
-private function cn(){
-[$host,$name,$psw,$db]=$prmc;
+private function cn($pr){
+[$host,$name,$psw,$db]=$pr;
 $qr=mysqli_connect($host,$name,$psw,$db);
 $qr->query('SET NAMES latin1');
 return $qr;}

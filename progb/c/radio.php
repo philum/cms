@@ -4,14 +4,15 @@ class radio{
 static $a=__CLASS__;
 static $default='';
 
-static function r($r){foreach($r as $k=>$v){
+static function r($r){$ret='';
+foreach($r as $k=>$v){
 if(is_array($v)){$rt=self::r($v); if($rt)$ret.=balc('ul','pubart',$rt);}
 elseif($v)$ret.=llj('popbt','popup_radio,edit__x__'.ajx($v).'',$v);}
 return $ret;}
 
 static function funcradio($d,$k,$v,$n){//dir,url,file,tnb
-if(substr($v,-3)=='mp3' or !$v){$ret=str_replace('users/','',$d); 
-$ret=divd('rd'.$n,$lk);} return $ret;}
+if(substr($v,-3)=='mp3' or !$v){$ret=str_replace('users/','',$d); $ret=divd('rd'.$n,$ret);}
+return $ret;}
 
 static function select(){
 $r=walk_dir('users/'.$_SESSION['qb'],'funcmp3');
@@ -31,8 +32,8 @@ return ljb("popbt","insert",'['.$nod.':radio]',"insert").' ';}
 static function song($d,$p){
 return msql::val('radio',$d,$p,1);}
 
-static function play($g1,$g2,$g3){return audio(self::song($g1,$g2),$g3);}
-static function play($g1,$g2,$g3){return audio(self::song($g1,$g2),$g3);}
+static function play($g1,$g2,$g3){
+return audio(self::song($g1,$g2),$g3);}
 
 static function call($d,$p,$id){$ret='';
 if(strpos($d,'/'))$nod=nod('radio'.$id); else $nod=$d;
@@ -44,7 +45,7 @@ if(auth(4))$add=lj('','popup_radio,edit___'.$nod.'_'.ajx($dr).'__'.$id,picto('ed
 return divb(audio($r[1][1],$rid),'nbp',$rid).$add.$ret;}
 
 static function edit($nod,$dr,$md,$id=''){
-$id=$id?$id:$_SESSION['read']; $ret=''; $edit=''; $datas=[];
+$id=$id?$id:$_SESSION['read']; $ret=''; $edit=''; $datas=[]; $ky='';
 $nd='radio'.$id; if(!$nod)$nod=$_SESSION['qb'].'_'.$nd;
 $nodb=str_replace('_','*',$nod);
 if($dr)$ret.=self::build($dr,$nod);

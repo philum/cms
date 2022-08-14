@@ -45,7 +45,7 @@ $rw=[$ib,$name,$u,$pdt,$qb,$frm,$suj,$re,0,$img,$thm,$sz,$lg];
 $nid=sqlsav('qda',$rw); if($nid)sqlsavi('qdm',[$nid,$msg]);
 if($nid)vacses($u,'b','x');
 $msg=codeline::parse($msg,$nid,'savimg');
-$img1=sql('img','qda','v',$id); $img=pop::art_img($img1);
+$img1=sql('img','qda','v',$nid); $img=pop::art_img($img1);
 //day,frm,suj,img,nod,thm,lu,name,host,mail,ib,re,lg
 $_SESSION['rqt'][$nid]=[$pdt,stripslashes($frm),stripslashes($suj),$img,$qb,'','','',$sz,$u,$ib,$re,''];
 $_SESSION['daya']=$_SESSION['dayx'];
@@ -330,8 +330,8 @@ $ret=ljb('','insert_b',['['.$f.']',$id],image('/'.$im,'72','72',att($f)));
 //if(auth(6))$ret.=lj('popdel','pim'.$id.',img'.$id.'_sav,placeimdel__json_'.$id.'_'.ajx($f),'x');
 return $ret;}
 
-static function art_gallery($id){
-if(!$d)$d=sql('img','qda','v','id='.$id); $r=explode('/',$d);
+static function art_gallery($id){$ret='';
+$d=sql('img','qda','v',$id); $r=explode('/',$d);
 if($r)foreach($r as $v)if($v)$ret.=mk::popim($v,img::make_thumb($v,$id),$id);
 return $ret;}
 
