@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_snifr
+<?php //snifr
 
 function snifr_header($rid){
 Head::add('jscode','
@@ -15,7 +14,7 @@ $ret=twit::call($p,$o);
 return $ret;}
 
 function snifr_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=snifr_build($p,$o);
 return $ret;}
 

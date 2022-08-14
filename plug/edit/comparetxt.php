@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_comparetxt
+<?php //comparetxt
 
 function comptxt_j($p,$o,$res=''){
 $r=ajxr($res);

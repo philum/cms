@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_operations
+<?php //operations
 
 //plugin_func('operations','operations_build',$p,$o);
 function operations_build($p,$o){//$ret=$p.'-'.$o;
@@ -28,7 +27,7 @@ echo $suj.br();
 return $ret;}
 
 function operations_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);//$resultant des champs
+[$p,$o]=ajxp($res,$p,$o);//$resultant des champs
 $ret=operations_build($p,$o);
 return $ret;}
 
@@ -47,7 +46,7 @@ if($op==4)qr('delete from '.$_SESSION['qdd'].' where val="lang"'); reflush('qdd'
 
 //
 function import_content($id){
-$d=sql('msg','qdm','v','id='.$id); $idb=embed_detect($d,'[',':read]');
+$d=sql('msg','qdm','v','id='.$id); $idb=between($d,'[',':read]');
 if(is_numeric($idb)){
 $hub=sql('nod','qda','v','id='.$idb);
 $ret=sql('msg','qdm','v','id='.$idb);
@@ -57,7 +56,7 @@ return $ret;}
 
 function reimport(){
 //$r=sql('id','qdm','rv','msg like "%::import%"',1); p($r);
-//foreach($r as $k=>$v)import_get($v);
+//foreach($r as $k=>$v)few::importation($v);
 }
 
 function toyandex($p){$qb=ses('qb'); ses('ynd','pub_yandex');
@@ -73,7 +72,7 @@ foreach($rc as $k=>$v){
 		if(!$ex)insert('ynd',mysqlra(['art'.$v,$hash,$vb,$lg],1));}}
 }
 
-function lang_es(){reqp('yandex'); $lg=ses('lang');
+function lang_es(){$lg=ses('lang');
 $nod='admin_restrictions';
 //require('msql/lang/fr/helps_nominations.php');
 $r=msql::read_b('lang/fr',$nod,'',''); //pr($r);
@@ -113,7 +112,7 @@ if($rd)foreach($rd as $k=>$v){$art=''; $trk='';
 	}}}
 }
 
-function maint_ynd2(){req('pop,art,spe');
+function maint_ynd2(){
 $r=sql('id,txt','ynd','','');//id=3636
 foreach($r as $k=>$v){$d=$v[1]; $hash1=md5($d);
 	//$d=codeline::parse($d,':q','');
@@ -131,7 +130,7 @@ foreach($r as $k=>$v){$d=$v[1]; $hash1=md5($d);
 }
 return $ret;}
 
-function maint_ynd3(){reqp('umrec'); req('pop,art,spe');
+function maint_ynd3(){
 $r=sql_b('SELECT id,md5,txt FROM pub_yandex GROUP BY md5 HAVING COUNT(md5) >1 order by id desc',''); //pr($r);
 $ret=tabler($r);
 //foreach($r as $k=>$v){sqldel('ynd',$v[0]);}
@@ -152,7 +151,7 @@ return $ret;}
 function test_xml($f){
 $f='http://www.tlaxcala-int.org/rss_lg.asp?lg_rss=fr';
 $d=get_file($f);
-echo $enc=embed_detect(strtolower($d),'encoding="','"');
+echo $enc=between(strtolower($d),'encoding="','"');
 if(strtolower($enc)=='utf-8')$d=utf8_decode_b($d);
 //echo substr_count($d,'<').'-'.substr_count($d,'>');
 eco($d,1);
@@ -180,9 +179,9 @@ $r=sql_b('SELECT p1.id,word FROM pub_search p1 left outer join pub_search_art p2
 on p1.id=p2.ib where p2.ib is null',''); //pr($r);
 foreach($r as $k=>$v)sqldel('qdsr',$v[0]);}
 
-function test_vue(){req('pop,art,spe');
+function test_vue(){
 //$r=sql('msg','qdm','v','id=164064'); //pr($r);
-$ret=art_read_d(164064,3);
+$ret=art::playd(164064,3);
 return $ret;}
 
 function create_mbrs(){

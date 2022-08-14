@@ -1,5 +1,4 @@
-<?php
-//philum_app_starsky
+<?php //starsky
 
 class starsky{
 static $default='dist<500';
@@ -17,7 +16,7 @@ foreach($r as $k=>$v){$rb=hexrgb_r($v); $ret[]=imagecolorallocate($im,$rb[0],$rb
 return $ret;}
 
 static function legend($r,$im,$klr,$font){$w=self::$w; $h=$w/2; $sz=16; $x=40; $i=0;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$silver,$gray,$orange)=$klr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$silver,$gray,$orange]=$klr;
 //$r=['amical'=>$green,'neutre'=>$yellow,'inamical'=>$orange,'danger'=>$red,'indéfini'=>$white];
 $r=['amical'=>$green,'neutre'=>$yellow,'inamical'=>$orange,'danger'=>$red,'indéfini'=>$white];
 foreach($r as $k=>$v){$i++; $y=$sz+$i*$sz+16;
@@ -25,9 +24,9 @@ foreach($r as $k=>$v){$i++; $y=$sz+$i*$sz+16;
 	imagestring($im,$font,$x+24,$y,$k,$white);}}
 
 static function sttclr($stt,$klr){
-list($amical,$inamical,$neutre,$galaxy,$hostile)=$klr;
+[$amical,$inamical,$neutre,$galaxy,$hostile]=$klr;
 if($stt=='amical')$clr=$green;
-elseif($stt=='inamical')$clr=$orange;//imgclr($im,'ff9900')
+elseif($stt=='inamical')$clr=$orange;//img::imgclr($im,'ff9900')
 elseif($stt=='danger')$clr=$red;
 elseif($stt=='neutre')$clr=$yellow;
 elseif($stt=='galaxy')$clr=$blue;
@@ -36,7 +35,7 @@ return $clr;}
 
 //https://fr.wikipedia.org/wiki/Type_spectral
 /**/static function spclr($spc,$mg,$klr){
-list($co,$cb,$ca,$cf,$cg,$ck,$cm,$cw)=$klr;
+[$co,$cb,$ca,$cf,$cg,$ck,$cm,$cw]=$klr;
 if($spc=='O')$clr=$co; elseif($spc=='B')$clr=$cb; elseif($spc=='A')$clr=$ca; elseif($spc=='F')$clr=$cf; elseif($spc=='G')$clr=$cg; elseif($spc=='K')$clr=$ck; elseif($spc=='M')$clr=$cm; else $clr=$white;
 return $clr;}
 
@@ -48,10 +47,10 @@ return $sz;}*/
 
 static function dots($r,$im,$klr,$font){
 $w=self::$w; $h=$w/2; $mw=$w/24; $mh=$h/12; $sz=6; $n=count($r);
-//list($white,$black,$red,$green,$blue,$yellow,$cyan,$silver,$gray)=$klr;
+//[$white,$black,$red,$green,$blue,$yellow,$cyan,$silver,$gray]=$klr;
 //$klr=self::clr($im);
 $klr=self::clr2($im);//pr($klr);
-list($co,$cb,$ca,$cf,$cg,$ck,$cm,$cw)=$klr;
+[$co,$cb,$ca,$cf,$cg,$ck,$cm,$cw]=$klr;
 $rz=['O'=>10,'B'=>7,'A'=>5,'F'=>4,'G'=>3,'K'=>2,'M'=>1];
 if($r)foreach($r as $k=>$v){
 	$x=$v['x']; $y=$v['y']; $st=$v['star']??''; $pl=$v['planet']??''; $stt=$v['status']??''; $ds=$v['dist']; $mg=$v['mag'];
@@ -73,13 +72,13 @@ if($spc=='O')$clr=$co; elseif($spc=='B')$clr=$cb; elseif($spc=='A')$clr=$ca; els
 	}}
 
 static function poly($im,$r,$klr){$rb=[];
-list($red,$green,$blue)=hexrgb_r($klr);
+[$red,$green,$blue]=hexrgb_r($klr);
 $clr=imagecolorallocate($im,$red,$green,$blue);
-foreach($r as $k=>$v){list($w,$h)=explode('/',$v); $rb[]=$w; $rb[]=$h;} //pr($rb);
-imagepolygon($im,$rb,2,$clr);}//imagefilledpolygon($im,$r,2,$clr);
+foreach($r as $k=>$v){[$w,$h]=explode('/',$v); $rb[]=$w; $rb[]=$h;} //pr($rb);
+imagepolygon($im,$rb,$clr);}//imagefilledpolygon($im,$r,2,$clr);
 
 static function zones($im,$klr){
-list($r0,$r1,$r2,$r3)=starmap4::zpt(); $r0b=$r0; $r3b=$r3; $cx=12;
+[$r0,$r1,$r2,$r3]=starmap4::zpt(); $r0b=$r0; $r3b=$r3; $cx=12;
 foreach($r0 as $k=>$v)$r0[$k]=starmap4::correct($v,$cx); self::poly($im,$r0,'025100');//p($r0);
 foreach($r0b as $k=>$v)$r0b[$k]=starmap4::correct($v,-12); self::poly($im,$r0b,'025100');//p($r0b);
 foreach($r1 as $k=>$v)$r1[$k]=starmap4::correct($v,$cx); self::poly($im,$r1,'a62a00');//p($r1);
@@ -88,7 +87,7 @@ foreach($r3 as $k=>$v)$r3[$k]=starmap4::correct($v,$cx); self::poly($im,$r3,'4f5
 foreach($r3b as $k=>$v)$r3b[$k]=starmap4::correct($v,-12); self::poly($im,$r3b,'4f5900');}
 
 static function map($r,$im,$klr,$font){$w=self::$w; $h=$w/2; $mw=$w/24; $mh=$h/12;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$silver,$gray)=$klr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$silver,$gray]=$klr;
 for($i=0;$i<24;$i++){$x=$mw*(24-$i);
 	imageline($im,$x,0,$x,$h,$i==12?$white:$gray); $t=12+$i; if($t>=24)$t-=24;
 	imagestring($im,$font,$x,0,$t,$gray);}
@@ -96,10 +95,10 @@ for($i=0;$i<12;$i++){$y=$mh*$i;
 	imageline($im,0,$y,$w,$y,$i==6?$white:$gray); $t=90-$i*15;
 	imagestring($im,$font,0,$y,$t,$gray);}}
 
-static function draw($out,$r){req('spe');
+static function draw($out,$r){
 $w=self::$w; $h=$w/2; $im=imagecreate($w,$h);
-$klr=imgclr_pack($im);//spe
-list($white,$black,$red,$green,$blue,$yellow,$cyan)=$klr;
+$klr=img::clrpack($im);//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan]=$klr;
 $font=imageloadfont('gdf/Fixedsys.gdf');
 ImageFilledRectangle($im,0,0,$w,$h,$black);
 //self::map($r,$im,$klr,$font);
@@ -143,13 +142,13 @@ self::draw($f,$rb);
 $ret=image('/'.$f.'?'.randid());
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
-$j=$rid.'_app__2_starsky_call___inp';
+$j=$rid.'_starsky,call_inp_2';
 $ret=inputj('inp',$p?$p:self::$default,$j).' ';
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}
@@ -161,7 +160,5 @@ if(!$p)$p=self::$default;
 $ret=self::build($p,$o);
 $bt.=msqbt('',nod('exo_4'));
 return $bt.divd($rid,$ret);}
-
 }
-
 ?>

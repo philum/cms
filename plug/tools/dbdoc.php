@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_dbdoc
+<?php //dbdoc
 
 function dbdoc_build($p,$o){
 $f='users/dav/WaletHumm.html';
@@ -14,8 +13,8 @@ $ret=$d;
 return $ret;}
 
 function dbdoc_j($p,$o,$res=''){
-req('pop,art');
-list($p,$o)=ajxp($res,$p,$o);
+
+[$p,$o]=ajxp($res,$p,$o);
 $ret=dbdoc_build($p,$o);
 return $ret;}
 

@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_ip
+<?php //ip
 
 //gethostbyaddr($_SERVER['REMOTE_ADDR'])
 function plug_ip(){//pr($_SERVER); 

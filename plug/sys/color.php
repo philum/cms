@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_color
+<?php //color
 function color_j($p,$o,$res=''){
 $r=msql_read('system','edition_colors','','1');
 foreach($r as $k=>$v){$ret.=divs('background-color:#'.$v,$k);}

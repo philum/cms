@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_crypt
+<?php //crypt
 //https://code.i-harness.com/fr/q/a691bc
 
 class crypt{
@@ -40,8 +39,8 @@ return openssl_encrypt($d,'AES-256-CBC',$k,0,$iv);}
 static function decrypt($d,$iv){$k=self::encryption_key(); $iv=base64_decode($iv);
 return openssl_decrypt($d,'AES-256-CBC',$k,0,$iv);}
 
-static function call($p,$o,$res=''){$ret='';
-list($d,$iv)=ajxr($res,2);//init vector
+static function call($p,$o,$prm=[]){$ret='';
+[$d,$iv]=arr($prm);//init vector
 if($p==1)$ret=self::encrypt_build($d,$iv);
 elseif($p==2)$ret=self::decrypt_build($d,$iv);
 elseif($p==3)$ret=self::mkkey(32);
@@ -53,20 +52,20 @@ return $ret;}
 static function menu($p,$o,$rid){
 $ret=input('iv',$o,'public key').br();
 $ret.=textarea('txt',$p,'');
-$ret.=lj('popbt',$rid.'_crypt,call__2_1_'.$rid.'_txt|iv','encrypt').' ';
-$ret.=lj('popbt',$rid.'_crypt,call__2_2_'.$rid.'_txt|iv','decrypt').' ';
-$ret.=lj('popbt',$rid.'_crypt,call__2_3_'.$rid.'_txt|iv','private key').' ';
-$ret.=lj('popbt',$rid.'_crypt,call__2_4_'.$rid.'_txt|iv','public key').' ';
-$ret.=lj('popbt',$rid.'_crypt,call__2_5_'.$rid.'_txt|iv','encrypt').' ';
-$ret.=lj('popbt',$rid.'_crypt,call__2_6_'.$rid.'_txt|iv','decrypt').' ';
-//$ret.=lj('','popup_plupin___msqedit_crypt*1_id,val',picto('edit'));
+$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_1_'.$rid.'_','encrypt').' ';
+$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_2_'.$rid.'_','decrypt').' ';
+$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_3_'.$rid.'_','private key').' ';
+$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_4_'.$rid.'_','public key').' ';
+$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_5_'.$rid.'_','encrypt').' ';
+$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_6_'.$rid.'_','decrypt').' ';
+//$ret.=lj('','popup_msqedit,call__crypt*1_id,val',picto('edit'));
 return $ret;}
-}
 
-static function plug_crypt($p,$o){$rid=randid('plg');
-$bt=crypt::menu($p,$o,$rid);
-$ret=crypt::call($p,$o);
+static function home($p,$o){$rid=randid('plg');
+$bt=self::menu($p,$o,$rid);
+$ret=self::call($p,$o);
 //$bt.=msqbt('',nod('crypt'));
 return $bt.divd($rid,$ret);}
+}
 
 ?>

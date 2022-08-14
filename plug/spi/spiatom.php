@@ -1,19 +1,19 @@
 <?php
-//philum_plugin_spisvg
+class spiatom{
 
-function spiatom_js($j,$n=1,$o){return 'var n='.$n.';
+static $clr=['ccc','Nonmetals'=>'5FA92E','Nobles Gasses'=>'00D0F9','Alkali Metals'=>'FF0008','Alkali Earth Metals'=>'FF00FF','Metalloids'=>'1672B1','Halogens'=>'F6E617','Metals'=>'999999','Transactinides'=>'FF9900','Lanthanides'=>'666698','Actinides'=>'9D6568','undefined'=>'ffffff'];
+
+static function js($j,$n=1,$o){return 'var n='.$n.';
 addEvent(document,"DOMMouseScroll",function(){wheelcount(event,"'.$j.'","'.$o.'")});';}
 
-function spt_css(){$ret='';
+static function css(){$ret='';
 for($i=1;$i<118;$i++)$ret.='#id'.$i.':hover{background:rgba(255,255,255,0.4);}'."\n";
 return $ret;}
 
-function spt_clr(){return ['ccc','Nonmetals'=>'5FA92E','Nobles Gasses'=>'00D0F9','Alkali Metals'=>'FF0008','Alkali Earth Metals'=>'FF00FF','Metalloids'=>'1672B1','Halogens'=>'F6E617','Metals'=>'999999','Transactinides'=>'FF9900','Lanthanides'=>'666698','Actinides'=>'9D6568','undefined'=>'ffffff'];}
-
-function spt_findclr($d){$r=spt_clr();
+static function findclr($d){$r=self::$clr;
 return $r[$d]?$r[$d]:'ffffff';}
 
-function spt_pos($ring,$sub,$pos,$i,$v,$mode){
+static function pos($ring,$sub,$pos,$i,$v,$mode){
 $zerox=1; $zeroy=4; $u=10;//unit
 //position on rings
 $rx[1]=[1=>-1,0];
@@ -42,23 +42,23 @@ $x=($rx[$sub][$pos]+$zerox)*$u+$addx;
 $y=($ry[$sub][$pos]+$zeroy)*$u+$addy;
 //t, vertical-horizontal
 if($rg[$sub][$pos]){$w=$u;$h=$u*2;
-$t1='[spt_plug__2_spiatom_spiatom*j_'.$i.'§['.($x+10).','.($y+22).'§'.$i.':text]:lj]';
-$t2='[popup_plup___spitable_spi*infos_'.$i.'§['.($x+10).','.($y+$h-16).'§'.$v.':text]:lj]';}
+$t1='[spt_spiatom,call___'.$i.'§['.($x+10).','.($y+22).'§'.$i.':text]:lj]';
+$t2='[popup_spitable;infos___'.$i.'§['.($x+10).','.($y+$h-16).'§'.$v.':text]:lj]';}
 else{$w=$u*2;$h=$u;
-$t1='[spt_plug__2_spiatom_spiatom*j_'.$i.'§['.($x+10).','.($y+22).'§'.$i.':text]:lj]';
-$t2='[popup_plup___spitable_spi*infos_'.$i.'§['.($x+$w/2+6).','.($y+24).'§'.$v.':text]:lj]';}
-//$ret='[popup_plup___svg§[20,20§'.$t2.':text]:lj]';
+$t1='[spt_spiatom;call___'.$i.'§['.($x+10).','.($y+22).'§'.$i.':text]:lj]';
+$t2='[popup_spitable;infos___'.$i.'§['.($x+$w/2+6).','.($y+24).'§'.$v.':text]:lj]';}
+//$ret='[popup_svg;call§[20,20§'.$t2.':text]:lj]';
 $ret='';//$t1.$t2;
 //echo $x.'-'.$y.'-'.$w.'-'.$h.br();
 return [$x,$y,$w,$h,$ret];}
 
-function spt_findpos2($i){
-$r=array(2,6,10,14); $n=$i-118;
+static function findpos2($i){
+$r=[2,6,10,14]; $n=$i-118;
 foreach($r as $k=>$v)if($n-$v<0){$ring=8; $sub=$k; $pos=$n-$v;}
 return [$ring,$sub,$pos];}
 
-function spt_findpos($level,$i){
-if($i>118)return spt_findpos2($i);
+static function findpos($level,$i){
+if($i>118)return self::findpos2($i);
 $ring=substr($level,0,1); $sub=0;
 $subring=substr($level,1,1);
 if($subring=='s')$sub=1;
@@ -68,89 +68,90 @@ elseif($subring=='f')$sub=4;
 $pos=substr($level,2);
 return [$ring,$sub,$pos];}
 
-function spt_act($r,$ring){static $rx;
-list($name,$sym,$fam,$layer,$level)=$r;
+static function act($r,$ring){static $rx;
+[$name,$sym,$fam,$layer,$level]=$r;
 $ra=explode('-','-'.$layer);
 $max=val($ra,$ring); $rx[$ring][]=1;//count elemenrs in rings
 return count($rx[$ring])<=$max?0:1;}
 
-function spt_atom($r,$i,$mode,$p){if(!isset($r[$i]))return;
-list($name,$sym,$fam,$layer,$level)=arr($r[$i],5); //echo $name.'-'.$sym.'-'.$fam.'-'.$level.br();
-list($ring,$subring,$pos)=spt_findpos($level,$i); //echo $ring.'-'.$subring.'-'.$pos.br();
-list($x,$y,$w,$h,$t)=spt_pos($ring,$subring,$pos,$i,$sym,$mode);
-//$clr=spt_findclr($fam);
+static function atom($r,$i,$mode,$p){if(!isset($r[$i]))return;
+[$name,$sym,$fam,$layer,$level]=arr($r[$i],5); //echo $name.'-'.$sym.'-'.$fam.'-'.$level.br();
+[$ring,$subring,$pos]=self::findpos($level,$i); //echo $ring.'-'.$subring.'-'.$pos.br();
+[$x,$y,$w,$h,$t]=self::pos($ring,$subring,$pos,$i,$sym,$mode);
+//$clr=self::findclr($fam);
 $clr=msql::val('','public_atomic_3',$i,4);
 //$hide=$i<=$p?0:1;
-$hide=spt_act(val($r,$p),$ring);//anomalies
+$hide=self::act(val($r,$p),$ring);//anomalies
 $bdr=$p==$i?'red':($hide?'gray':'black'); $sz=$p==$i?'2':'1'; $alpha=$hide?'0.1':'1';
 $atr='[#'.$clr.','.$bdr.','.$sz.',,'.$alpha.':attr]';
 $rect='['.$x.','.$y.','.$w.','.$h.',,id'.$i.':rect]';
 return $atr.$rect;}//.$t
 
 //build
-function spisearch($r,$p){
+static function spisearch($r,$p){
 foreach($r as $k=>$v)if($v[0]==$p or $v[1]==$p)return $k;}
 
-function spiatom_build($r,$p,$o=1){$u=10;//unit
+static function build($r,$p,$o=1){$u=10;//unit
 if($o){$mode='linear'; $w=48*$u; $h=10*$u;}//mode linear
 else{$mode=0; $w=25*$u; $h=18*$u;}//w/h
 //connectivity
 $ra=[1=>2,2=>6,3=>10,4=>14,5=>18];
-$rb=spt_findpos($r[$p][4],$p);//free emplacaments
-list($ring,$sub,$pos)=$rb; $lmax=$ra[$sub]; $free=$lmax-$pos;//free electrons
+$rb=self::findpos($r[$p][4],$p);//free emplacaments
+[$ring,$sub,$pos]=$rb; $lmax=$ra[$sub]; $free=$lmax-$pos;//free electrons
 $max=118;
 //$max=$p+$free+$ra[$sub+1];//highlight last subring
 //$limit=$p&&$p<=$max?$p:$max;
-for($i=1;$i<=$max;$i++)$rb[]=spt_atom($r,$i,$mode,$p);
+for($i=1;$i<=$max;$i++)$rb[]=self::atom($r,$i,$mode,$p);
 $h+=24;
 $ret='[white,gray:attr][0,0,'.$w.','.$h.':rect]';
 $t=$p.' - '.$r[$p][0].' ('.$r[$p][1].') : '.$pos.' electron(s) - '.$free.' free socket(s)';
-$ret.='[black,gray:attr][popup_plup___spitable_spi*infos_'.$i.'§[10,'.($h-14).'§'.$t.':text]:lj]';
+$ret.='[black,gray:attr][popup_spitable;infos___'.$i.'§[10,'.($h-14).'§'.$t.':text]:lj]';
 $ret.=implode("\n",$rb);
 if($ret)$ret=svg::home($ret,$w.'/'.$h);
 return $ret;}//$bt.
 
-function spiatom_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o); if($p>118)$p=118;
-$bt=spt_nav($p,$o,'spt'); //spi_frees();
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o); if($p>118)$p=118;
+$bt=self::nav($p,$o,'spt'); //self::frees();
 $r=msql::read('','public_atomic','',1);
-if(!is_numeric($p))$p=spisearch($r,$p);
-return $bt.spiatom_build($r,$p,$o);}
+if(!is_numeric($p))$p=self::spisearch($r,$p);
+return $bt.self::build($r,$p,$o);}
 
 //build public_atomic_3
-function spi_frees(){
-$ra=[1=>2,2=>6,3=>10,4=>14,5=>18]; req('pop');//
+static function frees(){
+$ra=[1=>2,2=>6,3=>10,4=>14,5=>18]; //
 $r=msql::read('','public_atomic','',1);
-for($i=1;$i<=118;$i++){$rb=spt_findpos($r[$i][4],$i);//free emplacaments
-	list($ring,$sub,$pos)=$rb; $lmax=$ra[$sub]; $free=$lmax-$pos;
+for($i=1;$i<=118;$i++){$rb=self::findpos($r[$i][4],$i);//free emplacaments
+	[$ring,$sub,$pos]=$rb; $lmax=$ra[$sub]; $free=$lmax-$pos;
 	//$deg=floor(($pos/$lmax)*360);
 	$quad=$sub*90; $deg=floor(($pos/$lmax)*90)+$quad-90;
 	$satur=round(100/$sub); $lum=floor(($pos/$lmax)*50); $lum=50;
 	$clr=hsl2rgb($deg-1,$satur,$lum);
-	//$clr=spt_findclr($r[$i][2]);
+	//$clr=self::findclr($r[$i][2]);
 	//echo bts('background-color:#'.$clr,$i.':'.$lum).' ';
 	$rc[$i]=[$r[$i][1],$pos,$free,round($pos/$lmax,2),$clr];}//free electrons
 msql::save('','public_atomic_3',$rc,['sym','pos','free','deg','clr']);}
 
-function spt_menu($p,$o,$rid){
-$j=$rid.'_plug__2_spiatom_spiatom*j__'.$o.'_inp';
+static function menu($p,$o,$rid){
+$j=$rid.'_spiatom,call_inp___'.$o;
 $ret=inputj('inp',$p,$j);
 //$ret.=bar($rid,$p,$step=1,$min=1,$max=117,$js='spiatom','360px');
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}
 
-function spt_nav($p,$o,$rid){
-$ret=spt_menu($p,$o,$rid);
-if($p>0)$ret.=lj('',$rid.'_plug__2_spiatom_spiatom*j_'.($p-1).'_'.$o,picto('previous')).' ';
-if($p<118)$ret.=lj('',$rid.'_plug__2_spiatom_spiatom*j_'.($p+1).'_'.$o,picto('next')).' ';
+static function nav($p,$o,$rid){
+$ret=self::menu($p,$o,$rid);
+if($p>0)$ret.=lj('',$rid.'_spiatom,call___'.($p-1).'_'.$o,picto('previous')).' ';
+if($p<118)$ret.=lj('',$rid.'_spiatom,call___'.($p+1).'_'.$o,picto('next')).' ';
 $ret.=hlpbt('spitable');
 $ret.=msqbt('','public_atomic');
-$ret.=lk('/plug/spt',picto('filelist'));
+$ret.=lk('/app/spt',picto('filelist'));
 return $ret;}
 
-function plug_spiatom($p,$o){$rid='spt'; $p=$p?$p:118; $o=1;//linear
-Head::add('csscode',spt_css());
-Head::add('jscode',spiatom_js('spt_plug__2_spiatom_spiatom*j',$p,$o));
-$ret=spiatom_j($p,$o);
+static function home($p,$o){$rid='spt'; $p=$p?$p:118; $o=1;//linear
+Head::add('csscode',self::css());
+Head::add('jscode',self::js('spt_spiatom,call',$p,$o));
+$ret=self::call($p,$o);
 return divd($rid,$ret);}
+}
 ?>

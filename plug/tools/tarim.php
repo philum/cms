@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_tarim (tar img)
+<?php //tarim (tar img)
  
 function tarim_build($p,$o){
 $ret=$p.'-'.$o;

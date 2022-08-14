@@ -1,5 +1,4 @@
-<?php
-//philum_app_slides
+<?php //slides
 
 class slides{
 
@@ -16,7 +15,7 @@ else $bt1=btn('grey',picto('before'));
 if(isset($r[$p+1]))$bt2=lj('',$j.($p+1).'_'.$rid.'_inp',pictxt('after',($p+1))).' ';
 else $bt2=btn('grey',picto('after'));
 $bt=divc('',$bt1.$bt2);
-$ret=nl2br(stripslashes_b(val($v,0)));
+$ret=nl2br(stripslashes_b($v[0]??''));
 $cell=div(ats('margin:auto;'),$ret);
 $ret=$bt.div(atc('book').ats('display:flex; min-height:300px; width:94%;'),$cell);
 return $ret;}
@@ -27,18 +26,17 @@ $ret=self::slide($r,$p,$rid);
 $bt=self::menu($p,'',$rid);
 return $bt.$ret;}
 
-static function call($p,$o,$res=''){
-//list($p,$o)=ajxp($res,$p?$p:1,$o);
-if(!$p)$p=ajxg($res);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){$ret=input('inp',$p?$p:1).' '; $nod=ses('nodslid');
-$ret.=lj('',$rid.'_app___slides_call__'.$rid.'_inp',picto('ok')).' ';
+$ret.=lj('',$rid.'_slides,call_inp___'.$rid,picto('ok')).' ';
 if(auth(6)){
-	$ret.=lj('','popup_plupin___msqedit_'.ajx($nod).'_val',picto('edit')).' ';
+	$ret.=lj('','popup_msqedit,'.ajx($nod).'___val',picto('edit')).' ';
 	$ret.=lj('','popup_msqledit___users/'.ajx(nod($nod)).'_'.$p.'_0',picto('editxt')).' ';
-	$ret.=lj('','popup_plup___msqedit_msqdt*add_'.ajx($nod).'_val',picto('add')).' ';}
+	$ret.=lj('','popup_msqedit,msqdt*add___'.ajx($nod).'_val',picto('add')).' ';}
 $ret.=msqbt('',$nod);
 return divc('',$ret);}
 
@@ -47,7 +45,5 @@ $_SESSION['nodslid']='slides_'.$p;
 Head::add('csscode','.book a, .book:hover .philum{color:white;}');
 $ret=self::build($o,$rid);
 return divd($rid,delbr($ret,"\n"));}
-
 }
-
 ?>

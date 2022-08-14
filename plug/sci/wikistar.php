@@ -1,7 +1,7 @@
-<?php
-//philum_app
+<?php //app
 
 class wikistar{
+static $conn=1;
 static $a=__CLASS__;
 static $default='wolf424';
 
@@ -12,7 +12,7 @@ if(strpos($p,'=')===false && strpos($p,'&')===false)$pg='sim-id?Ident='; else $p
 return 'https://fr.wikipedia.org/wiki/'.$pg.''.($p);}
 
 static function build($u){//hip32578
-$d=get_file($u); $dom=dom($d); req('tri');
+$d=get_file($u); $dom=dom($d); 
 $r=$dom->getElementsByTagName('table'); $n=count($r);
 $rt=self::detect_table($r[3]);
 $rt=self::cleanup($rt);
@@ -70,7 +70,7 @@ if($r)foreach($r as $k=>$v){$rt[$k]=[];
 return $rt;}
 
 static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $u=self::url($p);
 $bt=lkt('',$u,picto('url').domain($u)).' ';
 //for($i=0;$i<$n;$i++)$bt.=lj(active($i,$o),'smbd_simbad,call___'.ajx($p).'_'.$i,$i);
@@ -87,7 +87,7 @@ return [$r['ICRS AD'],$r['ICRS DC'],$r['Distance (LY)']];}
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_'.self::$a.',call__3_'.$p.'_'.$o.'___'.$inpid;
+$j=$rid.'_wikistar,call__3_'.$p.'_'.$o.'___'.$inpid;
 $ret=inputj($inpid,$p,$j);
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}

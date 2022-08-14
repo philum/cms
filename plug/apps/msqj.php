@@ -1,21 +1,16 @@
-<?php
-//philum_app
-
+<?php //app
 class msqj{
 
 static function build($p,$o){
-list($dr,$nd)=split_right('|',$p);
+$p=str_replace('|','/',$p);
+[$dr,$nd]=msqa::murlvars($p);
 return msql::json($dr,$nd);}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$p;
 return self::build($p,$o);}
 
 static function home($p,$o){
-return $ret=self::build($p,$o);}
+return self::call($p,$o);}
 }
-
-function plug_msqj($p,$o){
-return msqj::home($p,$o);}
-
 ?>

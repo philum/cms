@@ -1,5 +1,4 @@
-<?php
-//philum_app_starmap4
+<?php //starmap4
 
 class starvue{
 static $default='88601,dist<30';
@@ -8,7 +7,7 @@ static $clr=['#ffffff','#000000','#ff0000','#00ff00','#0000ff','#ffff00','#00fff
 static $dims=[];
 
 static function legend($r){$w=self::$w; $h=$w; $sz=16; $x=40; $y=0; $i=0;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 $r=['amical'=>$green,'neutre'=>$yellow,'inamical'=>$orange,'danger'=>$red,'indéfini'=>$white];
 $i++; $y=$sz+$i*$sz;
 svg::text(10,$x,$y+12,'Stars',$white);
@@ -26,7 +25,7 @@ if($n>50)$sz=6; if($n>200)$sz=4; if($n>500)$sz=2;
 //$rc=starlib::proportion(array_keys_r($r,'dist'),0.2,1,500,1);
 $rz=starlib::proportion(array_keys_r($r,'dist'),1,4,500,1);
 //$rz=['O'=>12,'B'=>10,'A'=>9,'F'=>8,'G'=>7,'K'=>6,'M'=>5,'L'=>4,'T'=>3,'Y'=>'2',''=>5];
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 if($r)foreach($r as $k=>$v){
 	$x=$v['x']; $y=$v['y']; $st=$v['star']??''; $pl=$v['planet']??''; $stt=$v['status']??''; $ds=$v['dist']??'';
 	$nm=$st?$st:($v['hd']?'HD'.$v['hd']:''); $spc=substr($v['spect'],0,1);
@@ -38,18 +37,18 @@ if($r)foreach($r as $k=>$v){
 	//svg::circle($x,$y,$sz,$clr,'none',2);
 	$circ='['.$clr.','.$bdr.',1,,'.round($opac,2).':attr]['.$x.','.$y.','.round($sz,2).':circle]';
 	$tx='Hip'.$v['hip'].' ('.round($ds,2).' LY)';
-	//svg::$ret[]='['.$clr.',none,1:attr][strv_app__2_starvue_call_'.$v['hip'].'§'.$t.':lj]';
-	svg::$ret[]='['.$tx.',app___star_info_'.$v['hip'].'_hip§'.$circ.':bubj2]';
+	//svg::$ret[]='['.$clr.',none,1:attr][strv_starvue;call__2_'.$v['hip'].'§'.$t.':lj]';
+	svg::$ret[]='['.$tx.',star;info___'.$v['hip'].'_hip§'.$circ.':bubj2]';
 	$l=strlen($nm)*6; $xb=$x-26; $yb=$y+20;
 	if($xb+$l>$w){$xb=$x-$l;}
-	if($n<50)svg::lj($xb,$yb,$xs,$white,'popup_app___star_info_'.$v['hip'].'_hip',$nm);
+	if($n<50)svg::lj($xb,$yb,$xs,$white,'popup_star;info___'.$v['hip'].'_hip',$nm);
 	//$bt='['.$x.','.$y.','.$sz.':circle]';
 	//svg::tog($x,$y,$xs,$clr,$nm,'hhgj');
 }}
 
 static function map($r){$w=self::$w; $h=$w;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
-list($ray,$wd,$hd,$ra0,$ra1,$dc0,$dc1,$wm,$hm,$right,$left,$top,$bottom,$wr,$hr)=self::$dims;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
+[$ray,$wd,$hd,$ra0,$ra1,$dc0,$dc1,$wm,$hm,$right,$left,$top,$bottom,$wr,$hr]=self::$dims;
 $cx=30; $cy=10;//increments
 $diffx=abs($right-round($right));//corrections
 $diffy=abs($bottom-round($bottom));
@@ -63,9 +62,9 @@ for($i=0;$i<=$hd;$i++)if($hr*$i%$cy==0){
 	svg::line(0,$y,$w,$y,$t==0?$white:$gray);
 	svg::text(10,0,$y+4,$t,$yellow);}}
 
-static function draw($r,$sq,$p){req('spe');
+static function draw($r,$sq,$p){
 $w=self::$w; $h=$w; $im=new svg($w,$h);
-list($white,$black)=self::$clr;
+[$white,$black]=self::$clr;
 svg::rect(0,0,$w,$h,$black);
 self::map($r,$sq);
 self::dots($r,$p);
@@ -74,7 +73,7 @@ return svg::draw();}
 
 //local projection
 static function positions($r){$w=self::$w; $h=$w;
-list($ray,$wd,$hd,$ra0,$ra1,$dc0,$dc1,$wm,$hm,$right,$left,$top,$bottom,$wr,$hr)=self::$dims;
+[$ray,$wd,$hd,$ra0,$ra1,$dc0,$dc1,$wm,$hm,$right,$left,$top,$bottom,$wr,$hr]=self::$dims;
 if($r)foreach($r as $k=>$v){
 $x=($left-$v['ra'])*60*$wr;
 $y=$h-(abs($bottom-$v['dc'])*$hr);
@@ -82,7 +81,7 @@ $r[$k]['x']=$x; $r[$k]['y']=$y;} //pr($r);
 return $r;}
 
 static function prep($r,$ra){new maths(20); $w=self::$w; $h=$w;
-list($ray,$wd,$hd,$ra0,$ra1,$dc0,$dc1,$wm,$hm,$right,$left,$top,$bottom,$wr,$hr)=self::$dims;
+[$ray,$wd,$hd,$ra0,$ra1,$dc0,$dc1,$wm,$hm,$right,$left,$top,$bottom,$wr,$hr]=self::$dims;
 $rc=array_flip(array_keys_r($ra,8)); //pr($rc);
 $cols=['hd','hip','rarad','decrad','dist','spect','mag','lum','ra','dc'];//
 if($r)foreach($r as $k=>$v){
@@ -106,7 +105,7 @@ $wr=$w/$wd; $hr=$h/$hd;//ratios for 1 min/deg
 $wm=$ra1-($ra1-$ra0)/2; $hm=$dc1-($dc1-$dc0)/2;//middles in deg
 $right=($wm-$d)/15; $left=($wm+$d)/15; $top=($dc1); $bottom=($dc0);//limits in hours/deg
 $r=[$d,$wd,$hd,$ra0,$ra1,$dc0,$dc1,$wm,$hm,$right,$left,$top,$bottom,$wr,$hr]; //pr($r);
-//list($ray,$wd,$hd,$ra0,$ra1,$dc0,$dc1,$wm,$hm,$right,$left,$top,$bottom,$wr,$hr)=self::$dims;
+//[$ray,$wd,$hd,$ra0,$ra1,$dc0,$dc1,$wm,$hm,$right,$left,$top,$bottom,$wr,$hr]=self::$dims;
 self::$dims=$r;}
 
 static function build($p,$o){$ra=[];
@@ -123,14 +122,14 @@ $rb=self::positions($rb);
 $ret=self::draw($rb,$sq,$p);
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 if(!$p)$p=self::$default;
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
-$j=$rid.'_app__2_starvue_call___inp';
+$j=$rid.'_starvue,call_inp_2';
 $ret=inputj('inp',$p?$p:self::$default,$j).' ';
 $ret.=lj('',$j,picto('ok')).' ';
 $ret.=lk('/app/starmap4',picto('url'));
@@ -143,7 +142,5 @@ if(!$p)$p=self::$default;
 $ret=self::build($p,$o);
 $bt.=msqbt('',nod('exo_4'));
 return $bt.divd($rid,$ret);}
-
 }
-
 ?>

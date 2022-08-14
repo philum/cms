@@ -10,8 +10,8 @@ static $clr3=['#2a635c','#a62a00','#530002','#4a5305'];
 static $rz=['O'=>12,'B'=>10,'A'=>9,'F'=>8,'G'=>7,'K'=>6,'M'=>5,'L'=>4,'T'=>3,'Y'=>'2',''=>5];
 
 static function sttclr($stt,$o=''){
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
-//list($c1,$c2,$c3,$c4)=self::$clr3;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
+//[$c1,$c2,$c3,$c4]=self::$clr3;
 if($stt=='amical')$clr=$green;
 elseif($stt=='inamical')$clr=$orange;
 elseif($stt=='danger')$clr=$red;
@@ -28,13 +28,13 @@ foreach($r as $k=>$v)if(is_numeric($v)){if($min===false or $v<$min)$min=$v; if($
 return [$min,$max];}
 
 static function scale($r,$a,$o=''){$rb=[]; $m='';
-list($min,$max)=self::minmax($r); if($o)$max=$o; if($max)$m=$a/$max;
+[$min,$max]=self::minmax($r); if($o)$max=$o; if($max)$m=$a/$max;
 if($m)foreach($r as $k=>$v)$rb[$k]=$v*$m;
 return $rb;}
 
 static function proportion($r,$a,$b,$l,$o){$c=$b-$a;
 if($l)foreach($r as $k=>$v)if($v>$l)$r[$k]=$l;
-list($min,$max)=self::minmax($r); $diff=$max-$min; if(!$diff)return; $m=$c/$diff; $rb=[]; $ca=1/$diff;
+[$min,$max]=self::minmax($r); $diff=$max-$min; if(!$diff)return; $m=$c/$diff; $rb=[]; $ca=1/$diff;
 foreach($r as $k=>$v){if(!is_numeric($v))$n=0.5; else $n=($v-$min)*$ca;//*$m
 	if($o)$n=1-$n; $n=$n*$c+$a; $rb[$k]=$n;}
 return $rb;}
@@ -58,7 +58,7 @@ $r[3]=['3.4/0','2.8/0','2.8/-19','1.8/-19','1.8/-40','23.5/-40','23.5/-55','22.2
 return $r;}
 
 static function months(){$w=self::$w; $h=$w/2; $eq=77.19;//day of equinox
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 $mw=$w/12; $ratio=round($w/360,2);//projection
 $rt=['Jan','Fev','Mars','Avr','Mai','Juin','Juil','Aout','Sept','Oct','Nov','Dec']; $rx=[];
 foreach($rt as $k=>$v){$a=180+$eq-(30*$k); if($a<0)$a+=360; $b=$a*$ratio; $rx[]=$a;
@@ -113,7 +113,7 @@ if($r)foreach($r as $k=>$v){
 $x=$wi+$w-(($v['ra']*$wr)); if($x>$w)$x-=$w;//north
 //$x=$wi+($v['ra']*$wr); if($x>$w)$x-=$w;//south
 $y=$h+(-1*(($v['dc']+90)*$hr));
-$r[$k]['x']=$x; $r[$k]['y']=$y;}
+$r[$k]['x']=round($x); $r[$k]['y']=round($y);}
 return $r;}
 
 static function prep($r,$ra,$p1){new maths(20); $rb=[]; $rt=[]; //pr($r);
@@ -127,7 +127,7 @@ foreach($ra as $k=>$v){//known
 	$dcd=maths::dec2deg($v[3]); $dcg=deg2rad($dcd);
 	$rb[$k]=[$v[1],$v[8],$rag,$dcg,$v[4],'','','',$rah,$dcd];}} //pr($rb);
 	//$r[]=['','0',4.7705666221178,-0.47449684597553,26100,'',0,0,273.33,-27.1867];//Galactic center/Sagitarius A
-	//$r[]=['','999999',3.2799099968103,0.15751596499249,14.31,'G2V',0,0,12.5283,9.025];//Yooma 187.925Â°=12.52j
+	//$r[]=['','999999',3.2799099968103,0.15751596499249,14.31,'G2V',0,0,12.5283,9.025];//Yooma 187.925°=12.52j
 //if($p1=='knownstars' or $p1=='allstars')$r=$rb;
 if($r)foreach($r as $k=>$v){$kb=$rc[$v[1]]??randid();//hipparcos
 	$rt[$kb]=array_combine($cols,$v);
@@ -188,11 +188,11 @@ return $r;}
 static function info($p){$ret=''; $p1=$p['com']; $p2=$p['opt']??''; 
 $rh=['hd','hip','ra','dec','dist (Ly)','spect','mag','lum','radeg','dcdeg'];
 $r=self::play($p); if($r)$ret=tabler($r,1);
-if($p2){$ra=db::read('db/public/stars/1'); $k=in_array_n($p1,$ra,8);
+if($p2){$ra=msql::read('','public_stars_1');
+	$k=in_array_r($p1,$ra,8);
 	if($ra[$k]??'')$ret.=tabler(array_combine($ra['_'],$ra[$k]),1,1);}
 if(!$ret)$ret=help('no element','txt');
 return $ret;}
 
 }
-
 ?>

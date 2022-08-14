@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_oldhubs
+<?php //oldhubs
 
 function oldhubs_build($p,$o){
 //$r=msql_read('',nod('umnum'),$p);
@@ -19,15 +18,15 @@ $r=sql('id','qda','rv','mail="" and frm in("D","C","E","H","NR","GR","ES");');//
 //$f=rawurlencode($f);
 //$f=htmlentities($f);
 //$d=file_get_context($f);//
-//if($d)art_import($d,$id);
+//if($d)sav::websav($d,$id);
 
 //hooks
 if($r)foreach($r as $k=>$v){
 	$d=sql('msg','qdm','v','id='.$v);
 	$ra=explode("\n",$d);
 	$last=array_pop($ra);
-	if(substr($last,1,4)=='http')$lk=delhook($last); else $lk='';
-	echo popart($v).'-'.$lk.br();
+	if(substr($last,1,4)=='http')$lk=conv::delhook($last); else $lk='';
+	echo ma::popart($v).'-'.$lk.br();
 	//if($lk)update('qda','mail',$lk,'id',$v);
 
 	//$rb=sqb('id,val','qdd','kv','where ib='.$k.' and val="related"'); pr($rb);
@@ -86,7 +85,7 @@ foreach($rb as $k=>$v){
 return tabler($r);}
 
 function oldhubs_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=oldhubs_build($p,$o);
 return $ret;}
 
@@ -98,11 +97,9 @@ $ret=select_j('inp','pfunc','','oldhubs/oldhubs_r','','2');
 //$ret.=togbub('plug','oldhubs_oldhubs*r',btn('popbt','select...'));
 $ret.=input('inp',$p).' ';
 $ret.=lj('',$rid.'_plug__2_oldhubs_oldhubs*j___inp',picto('ok')).' ';
-//$ret.=lj('','popup_plupin___msqedit_oldhubs*1_id,val',picto('edit')).' ';
 return $ret;}
 
 function plug_oldhubs($p,$o){$rid=randid('plg');
-req('meta,art,pop,spe');
 ses('qdaa','pub_art_a');
 $bt=oldhubs_menu($p,$o,$rid);
 $ret=oldhubs_build($p,$o);

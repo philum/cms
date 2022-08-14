@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_spidatas
+<?php //spidatas
 
 //http://www.elementschimiques.fr/?fr/elements/z/17
 function spidatas_spi(){
@@ -575,37 +574,37 @@ function spidatas_spi_r(){
 $d=spidatas_spi();
 $r=explode("\n",$d);
 foreach($r as $v){
-$n=embed_detect($v,'data-z="','"');
+$n=between($v,'data-z="','"');
 $v=str_replace('<span id="fougere_elements_config_'.($n+1).'">','',$v);
 $v=str_replace('</span>','',$v);
-$rb[$n]['element']=embed_detect($v,'data-s="','"');
-$rb[$n]['name']=embed_detect($v,'data-n="','"');
-$rb[$n]['mass']=embed_detect($v,'data-w="','"');
-$rb[$n]['f']=embed_detect($v,'data-f="','"');
-$rb[$n]['v']=embed_detect($v,'data-v="','"');
-$orb=embed_detect($v,'data-i="','"');
+$rb[$n]['element']=between($v,'data-s="','"');
+$rb[$n]['name']=between($v,'data-n="','"');
+$rb[$n]['mass']=between($v,'data-w="','"');
+$rb[$n]['f']=between($v,'data-f="','"');
+$rb[$n]['v']=between($v,'data-v="','"');
+$orb=between($v,'data-i="','"');
 //$rb[$n]['a']=substr($orb,0,4);
 if(strpos($orb,']')!==false)$orb=trim(substr($orb,strpos($orb,']')+1));
 //if(strpos($orb,' ')!==false)$orb=trim(substr($orb,0,strpos($orb,' ')));
 $rb[$n]['level']=trim($orb);
 //$rb[$n]['level']=$orb;
-$rb[$n]['g']=embed_detect($v,'data-g="','"');
-$rb[$n]['c']=embed_detect($v,'data-c="','"');
+$rb[$n]['g']=between($v,'data-g="','"');
+$rb[$n]['c']=between($v,'data-c="','"');
 }
 return $rb;}
 
 function spidatas_spi_rb(){
 $d=spidatas_spi_b();
-$r=explode("<td ",$d);
+$r=explode('<td ',$d);
 foreach($r as $v){
-$n=embed_detect($v,'an="','"');
-$rb[$n]['fam']=embed_detect($v,'class="','"');
-$rb[$n]['elem']=embed_detect($v,'<acronym>','</acronym>');
+$n=between($v,'an="','"');
+$rb[$n]['fam']=between($v,'class="','"');
+$rb[$n]['elem']=between($v,'<acronym>','</acronym>');
 $v=str_replace(' class="Long"','',$v);
-$rb[$n]['name']=embed_detect($v,'<em>','</em>');
-$mass=embed_detect($v,'<i>','</i>');
+$rb[$n]['name']=between($v,'<em>','</em>');
+$mass=between($v,'<i>','</i>');
 $rb[$n]['mass']=str_replace(array('(',')'),'',$mass);
-$orb=embed_detect($v,'<small>','</small>');
+$orb=between($v,'<small>','</small>');
 $rb[$n]['orb']=str_replace(array('<br />'."\n",'<br>'),'-',$orb);
 }
 return $rb;}

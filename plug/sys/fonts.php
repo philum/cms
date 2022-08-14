@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_download 
+<?php //download 
 session_start();
 require("../progb/lib.php");
 require("../progb/spe.php");

@@ -1,5 +1,4 @@
-<?php
-//philum_app_starsky2
+<?php //starsky2
 
 class starsky2{
 static $default='dist<100';
@@ -8,8 +7,8 @@ static $clr=['#ffffff','#000000','#ff0000','#00ff00','#0000ff','#ffff00','#00fff
 static $clr2=['O'=>'#93B6FF','B'=>'#A7C3FF','A'=>'#D5E0FF','F'=>'#F9F5FF','G'=>'#FFECDF','K'=>'#FFD6AC','M'=>'#FFAA58','L'=>'FF7300','T'=>'FF3500','Y'=>'999999'];
 
 static function legend($r){$w=self::$w; $h=$w/2; $sz=16; $x=40; $y=0; $i=0;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
-$r=['amical'=>$green,'neutre'=>$yellow,'inamical'=>$orange,'danger'=>$red,'indÃ©fini'=>$white];
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
+$r=['amical'=>$green,'neutre'=>$yellow,'inamical'=>$orange,'danger'=>$red,'indéfini'=>$white];
 $i++; $y=$sz+$i*$sz;
 svg::text(10,$x,$y+12,'Stars',$white);
 svg::text(10,$w-100,$y+12,mkday('','d/m/Y'),$white);
@@ -25,9 +24,9 @@ foreach($r as $k=>$v){$i++; $y=$sz+$i*$sz;
 	svg::text(12,$x+$sz+8,$y+12,$k,$white);}}
 
 static function sttclr($stt){
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 if($stt=='amical')$clr=$green;
-elseif($stt=='inamical')$clr=$orange;//imgclr($im,'ff9900')
+elseif($stt=='inamical')$clr=$orange;//img::imgclr($im,'ff9900')
 elseif($stt=='danger')$clr=$red;
 elseif($stt=='neutre')$clr=$yellow;
 elseif($stt=='galaxy')$clr=$blue;
@@ -37,7 +36,7 @@ return $clr;}
 
 static function dots($r,$o){$n=count($r); //$klr=self::$clr;
 $w=self::$w; $h=$w/2; $mw=$w/24; $mh=$h/12; $sz=10; $xs=$o?16:12; $decaly=$o?20:16;//pr($r);
-//list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=$klr;
+//[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=$klr;
 $rz=['O'=>10,'B'=>7,'A'=>5,'F'=>4,'G'=>3,'K'=>2,'M'=>1,'L'=>0.8,'T'=>0.5,'Y'=>'0.2']; $klr=self::$clr2;
 if($r)foreach($r as $k=>$v){
 	$x=$v['x']; $y=$v['y']; $st=$v['star']??''; 
@@ -53,12 +52,12 @@ if($r)foreach($r as $k=>$v){
 	//if($nm=='6 G. Piscium' or $nm=='38 Piscium' or $nm=='Iota Piscium' or $nm=='Gliese 250'){$xb=$x+8; $yb=$y+6;}
 	//if($v['hd']=='217877'){$xb=$x+8; $yb=$y+5;}//OOYAAUYIEE WEE
 	//if($v['hd']=='114710'){$xb=$x-60;}//Berenice
-	//if($n<100)svg::lj($xb,$yb,$xs,$white,'popup_app___star_info_'.$v['hip'].'_hip',$nm);
+	//if($n<100)svg::lj($xb,$yb,$xs,$white,'popup_star;info___'.$v['hip'].'_hip',$nm);
 }}
 
 static function correct($v,$cx){
 $w=self::$w; $h=$w/2; $mw=$w/24; $mh=$h/180; $cy=90;
-list($x,$y)=explode('/',$v);
+[$x,$y]=explode('/',$v);
 if($x>=20 && $x<=24)$x-=24;//next time, use iu
 $x+=$cx; $y+=$cy;
 $x=0-$x+24; if($x<0)$x=0; if($x>24)$x=24;
@@ -77,7 +76,7 @@ $r[3]=['3.4/0','2.8/0','2.8/-19','1.8/-19','1.8/-40','23.5/-40','23.5/-55','22.2
 return $r;}
 
 static function zones(){
-list($r0,$r1,$r2,$r3)=self::zpt(); $r0b=$r0; $r3b=$r3; $cx=12;
+[$r0,$r1,$r2,$r3]=self::zpt(); $r0b=$r0; $r3b=$r3; $cx=12;
 foreach($r0 as $k=>$v)$r0[$k]=self::correct($v,$cx); svg::poly($r0,'#025100');//p($r0);
 foreach($r0b as $k=>$v)$r0b[$k]=self::correct($v,-12); svg::poly($r0b,'#025100');//p($r0b);
 foreach($r1 as $k=>$v)$r1[$k]=self::correct($v,$cx); svg::poly($r1,'#a62a00');//p($r1);
@@ -86,7 +85,7 @@ foreach($r3 as $k=>$v)$r3[$k]=self::correct($v,$cx); svg::poly($r3,'#4f5900');
 foreach($r3b as $k=>$v)$r3b[$k]=self::correct($v,-12); svg::poly($r3b,'#4f5900');}
 
 static function months(){$w=self::$w; $h=$w/2; $xp=77.19;//day of equinox
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 $mw=$w/12; $ratio=round($w/360,2);//projection
 $rt=['Jan','Fev','Mars','Avr','Mai','Juin','Juil','Aout','Sept','Oct','Nov','Dec']; $rx=[];
 foreach($rt as $k=>$v){$a=180+$xp-(30*$k); if($a<0)$a+=360; $b=$a*$ratio; $rx[]=$a;
@@ -94,7 +93,7 @@ svg::line($b,0,$b,$h,$gray,'','','8');
 svg::text(10,$b+4,$h-1,$v,$silver);}}
 
 static function map($r){$w=self::$w; $h=$w/2; $mw=$w/24; $mh=$h/12;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 for($i=0;$i<=24;$i++){$x=$mw*(24-$i);
 	svg::line($x,0,$x,$h,$i==12?$white:$gray); $t=12+$i; if($t>=24)$t-=24;
 	svg::text(10,$x-12,10,$t,$yellow);}
@@ -105,7 +104,7 @@ self::months();}
 
 static function draw($r,$o=''){
 $w=self::$w; $h=$w/2; $im=new svg($w,$h);
-list($white,$black)=self::$clr;
+[$white,$black]=self::$clr;
 svg::rect(0,0,$w,$h,$black);
 //self::zones();
 //self::map($r);
@@ -124,7 +123,7 @@ $dcd=maths::dec2deg($v[3]); $dcg=deg2rad($dcd);
 $spc=$v[8]=='999999'?'G2V':''; //if($v[8]=='999999')echo $v[2].'-'.$rad;
 if($v[2] && $v[8]!=='')$r[]=[$v[1],$v[8],$rag,$dcg,$v[4],$spc,'','',$rah,$dcd];}} //pr($r);
 //$r[]=['','999998',4.7705666221178,-0.47449684597553,26100,'',0,0,273.33,-27.1867];//Galactic center/Sagitarius A
-//$r[]=['','999999',3.2799099968103,0.15751596499249,14.31,'G2V',0,0,12.5283,9.025];//Yooma 187.925Â°=12.52j
+//$r[]=['','999999',3.2799099968103,0.15751596499249,14.31,'G2V',0,0,12.5283,9.025];//Yooma 187.925°=12.52j
 //pr($r);
 $cols=['hd','hip','rarad','decrad','dist','spect','mag','lum','ra','dc'];//
 if($r)foreach($r as $k=>$v){
@@ -153,16 +152,16 @@ $rb=self::prep($r,$ra,$p); //pr($rb);
 $ret=self::draw($rb,$o);
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 if(!$p)$p=self::$default;
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
-$j=$rid.'_app__2_starsky2_call__';
-$ret=inputj('inp',$p?$p:self::$default,$j.'_inp').' ';
-$ret.=lj('',$j.'_inp',picto('ok')).' ';
+$j=$rid.'_starsky2,call_inp_2_';
+$ret=inputj('inp',$p?$p:self::$default,$j).' ';
+$ret.=lj('',$j,picto('ok')).' ';
 $ret.=lk('/app/starsky2',picto('url'));
 return $ret;}
 
@@ -173,7 +172,5 @@ if(!$p)$p=self::$default;
 $ret=self::build($p,$o);
 $bt.=msqbt('',nod('exo_5'));
 return $bt.divd($rid,$ret);}
-
 }
-
 ?>

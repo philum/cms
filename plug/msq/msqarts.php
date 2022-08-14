@@ -1,11 +1,10 @@
-<?php
-//philum_plugin_msqarts
+<?php //msqarts
 
 //twitter date
 //07:01 - 13 juin 2015
 function clean_day_tw($d){//echo $d.br();
-$dr=array('jan'=>'01','fev'=>'02','mars'=>'03','avr.'=>'04','mai'=>'05','juin'=>'06','juil'=>'07','août'=>'08','sept'=>'09','oct'=>'10','nov'=>'11','déc'=>'12','Dec'=>'12');
-list($h,$y)=split_right('-',$d); 
+$dr=['jan'=>'01','fev'=>'02','mars'=>'03','avr.'=>'04','mai'=>'05','juin'=>'06','juil'=>'07','août'=>'08','sept'=>'09','oct'=>'10','nov'=>'11','déc'=>'12','Dec'=>'12'];
+[$h,$y]=split_right('-',$d); 
 $hr=explode(':',trim($h)); //echo $h.br();
 $yr=explode(' ',trim($y)); 
 $yr[0]=strlen($yr[0])==1?'0'.$yr[0]:$yr[0];
@@ -29,7 +28,7 @@ function clean_msg($d){
 $d=str_replace(array('[',']'),'',$d);
 $d=str_replace("\n",' :n: ',$d);
 $r=explode(' ',$d);
-//$rm=array('jan.','fév.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.');
+//$rm=['jan.','fév.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 foreach($r as $k=>$v){
 	//$v=str_replace($rm,'',$v);
 	if(strpos($v,':b'))$v=strto($v,':');
@@ -38,16 +37,16 @@ foreach($r as $k=>$v){
 	if(strpos($v,'/status/')!==false)$lnk=$v; 
 	elseif(substr($v,0,1)!='@')$ret.=$v.' ';}
 $ret=str_replace(':n:',"\n",$ret);
-return array($ret,$lnk);}
+return [$ret,$lnk];}
 
 function sqart_treat($r){
 $ret=[];
 if($r)foreach($r as $k=>$v){
-	list($msg,$lnk)=clean_msg($v[2]);
+	[$msg,$lnk]=clean_msg($v[2]);
 	$tim=clean_day_tw($v[1]);//format twitter
 	$day=mkday($tim,'ymdhi');
 	//$day=clean_day($v[1]);//format oaxii
-	$ret[]=array($v[0],$day,$msg,$lnk);}
+	$ret[]=[$v[0],$day,$msg,$lnk];}
 return $ret;}
 
 function req_arts($wh){if($wh)$wh='where '.$wh;
@@ -59,19 +58,19 @@ if($rq)while($r=mysqli_fetch_row($rq))$ret[]=$r;
 if($rq)mysqli_free_result($rq);
 return $ret;}
 
-function msqarts_build($p,$o){//req('art');
+function msqarts_build($p,$o){//
 $r=req_arts('frm="'.$p.'"');return $r;}
 function msqt_name($p){return ses('qb').'_arts_'.normalize($p);}
 
 function msqarts_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);if(!$p)return 'no';
+[$p,$o]=ajxp($res,$p,$o);if(!$p)return 'no';
 $r=msqarts_build($p,$o); //p($r);
 $r=sqart_treat($r); //pr($r);
 $nod=msqt_name($p);
 if(auth(6))$r=msql::modif('',$nod,$r,'arr');
 return msqbt('users',$nod).' '.btn('txtsmall2',$nod);}
 
-//function msqarts_r(){return array('aa'=>'a','bb'=>'b');}
+//function msqarts_r(){return ['aa'=>'a','bb'=>'b'];}
 //$ret=select_j('inp','pfunc','','msqarts/msqarts_r','','2');
 //$ret.=togbub('plug','msqarts_msqarts*r',btn('popbt','select...'));
 

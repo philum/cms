@@ -1,7 +1,6 @@
-<?php
-//philum_plugin_cards
+<?php //cards
 
-function plug_cards(){req('pop');
+function plug_cards(){
 $data=sql('msg','qdm','v','id="'.$_GET['cards'].'"');
 $data=str_replace('[cards:plug]','',$data);
 $obj=conn::read($data,3,$_SESSION['read']); $obj=nl2br($obj); 

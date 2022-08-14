@@ -1,5 +1,4 @@
-<?php
-//https://github.com/tfairane/TwitterAPI
+<?php //https://github.com/tfairane/TwitterAPI
 class Twitter{
 public $_DST;
 private $_method;

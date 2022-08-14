@@ -1,7 +1,6 @@
-<?php
-//philum_app_star
-
+<?php //star
 class star{
+static $conn=1;
 static $default='81693,99461,88601';
 
 static function req($sq){$ret='';
@@ -41,8 +40,8 @@ if($o=='hd')$n=1; else $n=8;//hip
 if($p=='Oomo'){$p='Yooma'; $n=0;}
 if($p=='Galactic center'){$p='Agitarius A'; $n=0;}
 $ret=self::call($p,2);
-$r=msql::find_r('','ummo_exo_5',$p,$n,1); if($r)$ret.=tabler($r);
-$r=msql::find_r('','ummo_aliens_5',$r['HD'],0,1); if($r)$ret.=tag('blockquote','',nl2br($r['infos']));
+$r=msql::find('','ummo_exo_5',$p,$n,1); if($r)$ret.=tabler($r);
+$r=msql::find('','ummo_aliens_5',$r['HD'],0,1); if($r)$ret.=tag('blockquote','',nl2br($r['infos']));
 $ret.=lj('txtx','popup_starvue,call___'.$pb,pictxt('target','vue')).' ';
 $ret.=lj('txtx','popup_simbad,call___'.$pb,pictxt('stars','Simbad'));
 //$ret.=self::simbad('hd'.$pb);
@@ -57,9 +56,9 @@ static function sq($p){
 $p=str_replace(["\n","\t","&#nbsp;",' '],'',strtolower($p));
 $pr=explode(',',$p); $sq=[]; $verb=0; $n='';
 if($pr)foreach($pr as $k=>$v){$t=''; $n='';
-	if(strpos($v,'<')){list($t,$n)=explode('<',$v); $s=-1;}
-	elseif(strpos($v,'>')){list($t,$n)=explode('>',$v); $s=1;}
-	elseif(strpos($v,'=')){list($t,$n)=explode('=',$v); $s=0; if($t=='verbose')$n='';}
+	if(strpos($v,'<')){[$t,$n]=explode('<',$v); $s=-1;}
+	elseif(strpos($v,'>')){[$t,$n]=explode('>',$v); $s=1;}
+	elseif(strpos($v,'=')){[$t,$n]=explode('=',$v); $s=0; if($t=='verbose')$n='';}
 	elseif(substr($v,0,2)=='hd'){$t='hd'; $n=substr($v,2);}
 	elseif(substr($v,0,3)=='hip'){$t='hip'; $n=substr($v,3);}
 	elseif(is_numeric($v)){$t='hip'; $n=$v;}
@@ -90,7 +89,7 @@ if(isset($sq['radius'])){$ra=''; $dc=''; $n=$sq['radius'];
 	if(!isset($sq['ra'][0])){$w='';
 		if(isset($sq['hip'][0])){$w='hip="'.qres($sq['hip'][0]).'"'; unset($sq['hip']);}
 		if(isset($sq['hd'][0])){$w='hd="'.qres($sq['hd'][0]).'"'; unset($sq['hd']);}
-		if($w)list($ra,$dc)=sql_b('select ra,dc from hipparcos where '.$w,'w',0); if($ra)$ra*=15;}
+		if($w)[$ra,$dc]=sql_b('select ra,dc from hipparcos where '.$w,'w',0); if($ra)$ra*=15;}
 	else{$ra=substr($sq['ra'][0],1); $dc=$sq['dc'][0]??0; if($dc)$dc=substr($dc,1);}
 	if($ra){$sq['ra'][0]='>'.($ra-$n); $sq['ra'][1]='<'.($ra+$n);}
 	if($dc){$sq['dc'][0]='>'.($dc-$n); $sq['dc'][1]='<'.($dc+$n);}
@@ -126,9 +125,9 @@ if($r)foreach($r as $k=>$v){//if(round($v[4])<99999)
 		$r[$k][8]=round($v[8],4);}}//p($r);
 return $r;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
-if(strpos($p,'§')!==false){list($p,$t)=cprm($p);//obsolete
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
+if(strpos($p,'§')!==false){[$p,$t]=cprm($p);//obsolete
 	return lj('txtx','popup_star,call___'.ajx($p).'_'.$o,pictxt('stars',$t==1?$p:$t)).'';}
 $sq=self::sq($p); if(!$sq)return 'no star found in Hipparcos catalog';
 $r=self::build($sq,$o);
@@ -147,11 +146,9 @@ if($r){
 else return btn('popdel',nms(11).' '.nms(16)).$bt;}
 
 static function menu($p,$o,$rid){
-$j=$rid.'_star,call__2__'.$o.'___inp'.$rid;
+$j=$rid.'_star,call_inp'.$rid.'_2__'.$o;
 $ret=inputj('inp'.$rid,$p?$p:self::$default,$j,atz(61)).' ';
 $ret.=lj('',$j,picto('ok')).' ';
-//$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_star*1_'.$cols,picto('edit')).' ';
 $ret.=hlpbt('star');
 return $ret;}
 
@@ -162,10 +159,5 @@ $bt=self::menu($p,$o,$rid);
 if($p)$ret=self::call($p,$o);
 //$bt.=msqbt('',nod('star_1'));
 return $bt.divd($rid,$ret);}
-
 }
-
-function plug_star($p,$o){
-return star::home($p,$o);}
-
 ?>

@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_philumsize
+<?php //philumsize
 
 function plug_philumsize($p='',$o=''){
 $dr=($p?$p:'progb'); $nm=date('ym'); $ret=[];

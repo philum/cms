@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_maths
+<?php //maths
 
 class maths{
 static $bcs=20;
@@ -26,23 +25,24 @@ static function degres($radian){return rad2deg($radian);}
 static function arcsin($a){return self::degres(asin($a));}
 static function arccos($a){return self::degres(acos($a));}
 static function arctan($a){return self::degres(atan($a));}
-static function sin_rect($co,$hy){return $co/$hy;}//sinus = coté opposé / hypoténuse
-static function cos_rect($ca,$hy){return $ca/$hy;}//cosinus = coté adjacent / hypoténuse
-static function tan_rect($co,$ca){return $co/$ca;}//tangente = coté opposé / coté adjacent
+static function sin_rect($co,$hy){return $co/$hy;}//sinus = côté opposé / hypoténuse
+static function cos_rect($ca,$hy){return $ca/$hy;}//cosinus = côté adjacent / hypoténuse
+static function tan_rect($co,$ca){return $co/$ca;}//tangente = côté opposé / côté adjacent
 static function cotan_rect($co,$ca){return $ca/$co;}//cotangente = inverse de tangente
 static function ratan2($x,$y){return rad2deg(atan2($x,$y))+(($x<0)?180:0);}//compass
 
 //astro
 static function nm2thz($d){return self::lightspeed()/($d*pow(10,3));}//usable reciprocally
 static function cm2hz($d){return self::soundspeed()/($d*pow(10,-2));}//w=c/f
+static function parsec(){return 648000/M_PI;}
 static function soundspeed(){return 345;}//m/s
 static function lightspeed(){return 299792458;}//m/s
 static function al2km($d){return bcmul($d,9460730472580,8);}
 static function km2al($d){return bcdiv($d,9460730472580,8);}
 static function pc2km($d){return bcmul($d,30856780000000,8);}
 static function km2pc($d){return bcdiv($d,30856780000000,8);}
-static function pc2al($d){return bcmul($d,3.261564,8);}
-static function al2pc($d){return bcdiv($d,3.261564,8);}
+static function pc2al($d){return bcmul($d,3.261563777,8);}
+static function al2pc($d){return bcdiv($d,3.261563777,8);}
 static function sunsz($d,$o=1){return bcmul($d,1392000,2);}//sun size
 static function mas2deg($d){return bcmul($d,0.00027777777777778,8);}
 static function al2time($d){return bcmul($d,0.00027777777777778,8);}
@@ -85,6 +85,28 @@ static function dec2rad($d){return deg2rad(self::dec2deg($d));}
 static function rad2ra($d){return self::ra2deg(rad2deg($d));}
 static function rad2dec($d){return self::dec2deg(rad2deg($d));}
 
+//bases
+static function dec2base($dec,$b,$d=false){
+if($b<2 or $b>256)die('Invalid Base: '.$b); bcscale(0); $v=''; if(!$d)$d=self::digits($b);
+while($dec>$b-1){$rest=bcmod($dec,$b); $dec=bcdiv($dec,$b); $v=$d[$rest].$v;}
+$v=$d[intval($dec)].$v;
+return (string)$v;}
+
+static function base2dec($v,$b,$d=false){
+if($b<2 or $b>256)die('Invalid base: '.$b); bcscale(0);
+if(!$d)$d=self::digits($b);
+if($b<37)$v=strtolower($v);
+$size=strlen($v); $dec='0';
+for($loop=0;$loop<$size;$loop++){
+$element=strpos($d,$v[$loop]); $power=bcpow($b,$size-$loop-1);
+$dec=bcadd($dec,bcmul($element,$power));}
+return (string) $dec;}
+
+static function digits($b){$d='';
+if($b>64)for($loop=0;$loop<256;$loop++)$d.=chr($loop);
+else $d='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
+return (string)substr($d,0,$b);}
+
 //constants
 static function pi2(){return bcdiv(4,bcsqrt(phi()));}
 static function phi($n=10){$d=1; for($i=0;$i<10*$n;$i++)$d=bcadd(1,bcdiv(1,$d)); return $d;}//1e-40
@@ -97,7 +119,7 @@ return $ret;}
 static function helice($l,$n,$d,$h){return sqrt(self::powr($l)+self::powr($n)+self::powr($d)+self::powr($h));}
 static function centrifuge($d,$t){return 4*pow(pi(),2)*$d/pow($t,2);}
 
-//renvoie angle en degrès
+//renvoie angle en degrés
 static function missing_angle($r){//adj/opp/hyp 
 if(!$r[0])return self::arcsin(self::sin_rect($r[1],$r[2]));
 if(!$r[1])return self::arccos(self::cos_rect($r[0],$r[2]));
@@ -194,7 +216,7 @@ return self::xyz($ad,$dc,$ds,1);}
 static function stars_distance($r1,$r2){
 $rx1=self::star_xyz($r1); //pr($rx1);
 $rx2=self::star_xyz($r2); //pr($rx2);
-list($x1,$y1,$z1)=$rx1;
+[$x1,$y1,$z1]=$rx1;
 //$ra=self::xyz2angles($x1,$y1,$z1,12); pr($ra);
 return self::distance3d($rx1,$rx2);}
 

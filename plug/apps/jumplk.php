@@ -1,5 +1,4 @@
-<?php
-//philum_app_jumplk
+<?php //jumplk
 
 class jumplk{
 static $a=__CLASS__;
@@ -7,7 +6,7 @@ static $default='';
 
 //<link rel="canonical" 
 static function dom_extract($dom,$va){
-list($a,$b,$tg,$g)=opt($va,':',4);//get g where b=a in tag tg
+[$a,$b,$tg,$g]=opt($va,':',4);//get g where b=a in tag tg
 $a=str_replace('(ddot)',':',$a); $ret='';
 if($dom)$r=$dom->getElementsByTagName($tg); //pr($r);
 if($r->length==0)return 'no result';
@@ -26,13 +25,13 @@ $pb=domain($ret); if($pb!=$u && ($pb=='buff.ly' or $pb=='sco.lt'))$ret=self::bui
 return $ret?$ret:$p;}
 
 static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_app__3_'.self::$a.'_call___'.$inpid;
+$j=$rid.'_app__3_jumplk_call___'.$inpid;
 $ret=inputj($inpid,$p,$j);
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}

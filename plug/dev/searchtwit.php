@@ -1,16 +1,15 @@
-<?php
-//philum_plugin_searchtwit
+<?php //searchtwit
 
 function searchtwit_build($p,$o){
 $r=sql('ib','umt','kv','text like "%'.$p.'%"');
 return $r;}
 
 function searchtwit_j($p,$o,$res=''){
-req('spe,art,pop');
-list($p,$o)=ajxp($res,$p,$o);
+
+[$p,$o]=ajxp($res,$p,$o);
 $_GET['search']=$p;
 $r=searchtwit_build($p,$o);
-if($r)$ret=output_arts($r,'','art');
+if($r)$ret=ma::output_arts($r,'','art');
 else $ret='nothing';
 return $ret;}
 

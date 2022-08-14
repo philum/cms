@@ -1,10 +1,9 @@
-<?php
-//philum_plugin_pdf 
+<?php //pdf
 
 function make_list_arts($v){
 $der=explode("~",$v);
 foreach($der as $va){
-list($vaa,$vab)=explode("=",$va);
+[$vaa,$vab]=explode("=",$va);
 switch($vaa){
 	case("dya"):if($vab)$wh.='AND day < "'.($vab).'" '; break;
 	case("dyb"):if($vab)$wh.='AND day > "'.($vab).'" '; break;
@@ -61,11 +60,11 @@ function little_split($v){$unkill=explode(",",$v);
 	if($su && $su!=" ")$ret[$su]+=$v;}
 return $ret;}
 
-function tri_tags($r){if(is_array($r)){foreach($r as $k=>$v){$rb=tri_tag($k);
+function tri_tags($r){if(is_array($r)){foreach($r as $k=>$v){$rb=trimr($k);
 foreach($rb as $ka=>$va)if($va)$ret[$va]+=$v;}} return $ret;}
 
 function build_call(){//echo $_GET['nom'];
-$r=array('dya','dyb','cat','nocat','tag','notag','order');
+$r=['dya','dyb','cat','nocat','tag','notag','order'];
 $cll=explode("~",$_SESSION['call']);
 $get=explode("_",$_GET['nom']);
 foreach($r as $k=>$v){if($k){

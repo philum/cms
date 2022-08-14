@@ -1,25 +1,24 @@
-<?php
-//philum_plugin_indent
+<?php //indent
 
 //
 /*function newvar($v,$s,$e){static $nv;
-$var=embed_detect($v,$s,$e);
+$var=between($v,$s,$e);
 if($var){$nv++; $nvar='v'.$nv;
 	$rvn[]=$var; $rnv[]=$nvar;}
-return array($var,$nvar);}
+return [$var,$nvar];}
 
 function clean_namefunc($d){
 $r=explode("\n",$d);
 foreach($r as $k=>$v){
-	list($func,$nfunc)=newvar($v,'function ','(');
+	[$func,$nfunc]=newvar($v,'function ','(');
 	//$v=str_replace($func,$nfunc,$v);
 	$rf[$func.'(']=$nfunc.'(';
-	list($var,$nvar)=newvar($v,'$','.');
+	[$var,$nvar]=newvar($v,'$','.');
 	//$v=str_replace($var,$nvar,$v);
 	$rv['$'.$var]='$'.$nvar;
-	list($var,$nvar)=newvar($v,'$',',');
+	[$var,$nvar]=newvar($v,'$',',');
 	$rv['$'.$var]='$'.$nvar;
-	list($var,$nvar)=newvar($v,'$','=');
+	[$var,$nvar]=newvar($v,'$','=');
 	$rv['$'.$var]='$'.$nvar;
 $ret.=$v."\n";}
 $ret=str_replace(array_keys($rf),$rf,$ret);
@@ -34,7 +33,7 @@ return $rb;}
 
 function list_vars($d){$r=explode("$",$d); $rb=[];
 $ra=array(';','.',',','=','[',']',')','+','-','!','?','<','>','|','&','"',"'");
-$no=array('_GET','_POST',' _SESSION','_SERVER');//,'_GLOBAL'
+$no=['_GET','_POST',' _SESSION','_SERVER'];//,'_GLOBAL'
 foreach($r as $k=>$v){$end=''; if(substr($v,0,1)!='_')
 	foreach($ra as $ka=>$va){$e=strpos($v,$va); if($e!==false)$end[]=strpos($v,$va);}
 	$pos=$end?min($end):'';
@@ -97,7 +96,7 @@ $ret=preg_replace("/(\n){2,}/","\n",$ret);
 return $ret;}
 
 function indent_call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=indent_build($p,$o);
 //$ret=clean_code($ret);
 //$ret=clean_namefunc($ret);

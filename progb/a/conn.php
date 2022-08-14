@@ -280,7 +280,7 @@ case(':twapi'):return pop::twitapi($d);break;
 case(':twits'):return pop::twits($d,$id);break;
 case(':twusr'):return twit::play_usrs($d);break;
 case(':pdf'):return mk::pdfreader($d,$m); break;
-case(':mp4'):return pop::getmp4($d,$id); break;
+case(':mp4'):return video($d.'.mp4'); break;
 case(':mp3'):return pop::getmp3($d,$id); break;
 case(':jpg'):return self::place_image($d,$m,$nl,$pw,$id); break;
 case(':img'):return pop::getimg($d,$id,$m,$nl,$pw); break;

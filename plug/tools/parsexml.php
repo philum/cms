@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_model
+<?php //model
 
 function parsage_normal($noeud, $contenu_a_inserer=''){
 $balise_1=array('gras'=>'<strong>',
@@ -42,7 +41,7 @@ $attributs=array('position'=>'valeur',
 'image'=>'legende',
 'citation'=>'auteur'); // Tableau des attributs
 						
-$nom=$noeud->nodeName; // On récupère le nom du nœud
+$nom=$noeud->nodeName; // On récupère le nom du noeud
 
 if(!empty($contenu_a_inserer))$contenu=$contenu_a_inserer;
 else $contenu=$noeud->nodeValue;
@@ -73,7 +72,7 @@ if($nom == 'zcode')$intermediaire=nl2br($intermediaire);
 }
 return $intermediaire;}
 
-function model_sav($p='',$o='',$res=''){list($p,$o)=ajxr($res);
+function model_sav($p='',$o='',$res=''){[$p,$o]=ajxr($res);
 return $ret;}
 
 function plug_parsexml($p='',$o=''){

@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_paypal
+<?php //paypal
 
 function paypal_build($p,$o){
 $ret='<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">

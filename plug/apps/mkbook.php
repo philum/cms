@@ -1,5 +1,4 @@
-<?php
-//philum_app_books
+<?php //books
 
 class mkbook{
 static $a=__CLASS__;
@@ -51,7 +50,7 @@ $d.='</ol></nav></body></html>';
 write_file($dr.'/toc.xhtml',$d);}
 
 static function build($r,$ti=''){//rmdir_r('_datas/200802OEBPS');
-$ret=''; req('pop,spe,art'); $dy=date('ymd'); $ti=$ti?$ti:$dy;
+$ret=''; $dy=date('ymd'); $ti=$ti?$ti:$dy;
 $dr='_datas/epub'; rmdir_r($dr); //$gz=$dr.'zip'; //gz_write2();
 mkdir_r($dr); mkdir_r($dr.'/OEBPS'); mkdir_r($dr.'/META-INF');
 $d='<?xml version="1.0" encoding="'.self::$enc.'"?>
@@ -65,7 +64,8 @@ $f=$dr.'/OEBPS/sections/section'.str_pad($i,4,0,STR_PAD_LEFT).'.xhtml';
 $rt=balb('h1',self::enc($v[2]));
 $rt.=balb('i',date('d/m/Y',(int)$v[1])).' ';
 $rt.=balb('b','#'.$v[0]).br();
-$txt=codeline::parse($v[3],'epub','sconn2');
+$txt=str_replace(':video',':videourl',$v[3]);
+$txt=codeline::parse($txt,'epub','sconn2');
 	$txt=str_replace('œ','&oelig;',$txt);
 	$txt=self::enc($txt);
 	$txt=embed_p($txt);
@@ -113,19 +113,19 @@ $sql='select '.$qda.'.id,day,suj,msg,lg from '.$qda.' inner join '.$qdm.' on '.$
 return sql_b($sql,'',0);}
 
 static function req5($p,$t){
-//req('spe,art,pop,mod');
 $ra=explode_k($p,',',':'); $r=[]; $rb=[]; $t=$ra['ti']??$t;
 $ra=api::defaults_rq($ra,'',''); //p($ra);
+$ra['preview']=3; $t=$ra['ti']??($ra['t']??''); if($t)$t=normalize($t);
 if($ra)$r=api::datas($ra); //pr($r);
-if($r)foreach($r as $k=>$v)$rb[]=[$v['id'],$v['day'],$v['suj'],$v['msg'],$v['lg']];
+if($r)foreach($r as $k=>$v)$rb[]=[$v['id'],$v['day'],$v['suj'],$v['txt']??($v['msg']??''),$v['lg']];
 return [$t,$rb];}
 
-static function call($p,$o,$res=''){
-list($p,$t)=ajxp($res,$p,$o);//,$lg,$pg
+static function call($p,$o,$prm=[]){
+[$p,$t]=prmp($prm,$p,$o);//,$lg,$pg
 if($p=='bestyear'){$r=self::req2($p,''); $t='Articles***1Y';}
 elseif($o=='favs'){$r=self::req3($p); $t=$p.'-'.date('ymd');}
 elseif($o=='art'){$r=self::req4($p); $t=$r[0][2];}
-elseif($o=='api'){list($t,$r)=self::req5($p,$t); $t=$t?$t:'Ebook';}
+elseif($o=='api'){[$t,$r]=self::req5($p,$t); $t=$t?$t:'Ebook-'.date('ymd');}
 else $r=self::req($p,'',0);//req2
 if($r)return self::build($r,hardurl($t));}
 

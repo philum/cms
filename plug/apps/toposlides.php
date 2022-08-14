@@ -1,10 +1,9 @@
-<?php
-//philum_app_toposlides
+<?php //toposlides
 
 class toposlides{
 
 static function displace($r,$a,$b){$add=0;
-$rb['_menus_']=array('ib','val','to');
+$rb['_menus_']=['ib','val','to'];
 $move=$r[$a]; unset($r[$a]);
 foreach($r as $k=>$v){if($k==$b){$rb[$k]=$move; $add=1;}
 	if($k>=$a){$add=0; $v[0]=$b;}
@@ -56,19 +55,18 @@ if($r)$ret=self::slide($r,$p,$rid);
 $bt=self::menu($p,$o,$rid);
 return $bt.$ret;}
 
-static function j($p,$o,$res=''){
-//list($p,$o)=ajxp($res,$p?$p:1,$o);
-if(!$p)$p=ajxg($res);
+static function jcal($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){$ret=input('inp',$p?$p:1).' ';
-$ret.=lj('',$rid.'_app___toposlides_j__'.$rid.'_inp',picto('ok')).' ';
+$ret.=lj('',$rid.'_toposlides,call_inp___'.$rid,picto('ok')).' ';
 if(auth(6)){
-	$ret.=lj('','popup_plupin___msqedit_toposlides*'.$p.'_ib,val,to',picto('edit')).' ';
+	$ret.=lj('','popup_msqedit,toposlides*'.$p.'___ib,val,to',picto('edit')).' ';
 	$j='popup_msqledit___users_'.ajx(ses('topo')).'_';
 	$ret.=lj('',$j.$p.'_1',picto('editxt')).' ';
-	$ret.=lj('','popup_plup___msqedit_msqdt*add_toposlides*'.$p.'_ib,val,to',picto('add')).' ';}
+	$ret.=lj('','popup_msqedit,msqdt*add___toposlides*'.$p.'_ib,val,to',picto('add')).' ';}
 return divc('',$ret);}
 
 static function home($p,$o){$rid=randid('tpo'); $p=$p?$p:1;

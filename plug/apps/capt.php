@@ -1,5 +1,4 @@
-<?php
-//philum_app_capt
+<?php //capt
 
 class capt{
 
@@ -63,7 +62,7 @@ foreach($dom->getElementsByTagName('span') as $k=>$v){
 foreach($dom->getElementsByTagName('div') as $k=>$v){
 	if($v->getAttribute('class')=='resultat'){
 		$vb=$v->getElementsByTagName('p')->item(1)->nodeValue;
-		list($x,$nm,$adr,$ard)=explode("\n",$vb);
+		[$x,$nm,$adr,$ard]=explode("\n",$vb);
 		$rc[]=trim($ard);}}
 echo $n=count($ra);
 for($i=0;$i<$n;$i++){
@@ -89,7 +88,7 @@ $n=count($rb);
 //pr($rb);
 return $rb;}
 
-static function build($p,$o){req('tri');
+static function build($p,$o){
 //$r=msql::read_b('',nod('capt_1'));//p($r);
 $f='https://www.societe.com/cgi-bin/liste?nom=&dirig=&pre=&ape='.$p.'&dep='.$o;//4637z//
 $r=self::read($f);
@@ -97,18 +96,15 @@ msql::save('',nod('capt_'.$p.'-'.$o),$r,'');
 $ret=msql::dump($r,'naf');
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
-list($naf,$dpt)=ajxr($res); //echo $naf.'-'.$dpt;
-$ret=self::build($naf,$dpt);
-return $bt.$ret;}
+static function call($p,$o,$prm){
+[$p,$o]=prmp($prm,$p,$o);
+$ret=self::build($p,$o);
+return $ret;}
 
 static function menu($p,$o,$rid){
 $ret=input('inp1','4637z').' '.input('inp2','75').' ';
 //4637z,4641z,4661z,4665z,4646z,4647z,4648z
 $ret.=lj('',$rid.'_app__3_capt_call___inp1|inp2',picto('ok')).' ';
-//$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_capt*1_'.$cols,picto('edit')).' ';
 return $ret;}
 
 //$f='https://www.societe.com/cgi-bin/liste?nom=&dirig=&pre=&ape=4637z&dep=75';
@@ -119,8 +115,4 @@ $bt.=msqbt('',nod('capt_1'));
 return $bt.divd($rid,$ret);}
 
 }
-
-function plug_capt($p,$o){
-return capt::home($p,$o);}
-
 ?>

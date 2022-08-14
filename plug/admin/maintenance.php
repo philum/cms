@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_maintenance
+<?php //maintenance
 
 function fixtags(){$ret='';
 $r=sql('idart,idtag','qdta','kk','');//kill doublons
@@ -30,7 +29,7 @@ return $ret;}
 
 function maintenance_j($p,$o,$res=''){
 if(!auth(6))return;
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=maintenance_build($p,$o);
 return $ret;}
 

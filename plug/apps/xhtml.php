@@ -1,5 +1,4 @@
-<?php
-//philum_app_xhtml
+<?php //xhtml
 
 class xhtml{
 static $a=__CLASS__;
@@ -22,10 +21,10 @@ return [$ra,$rb,$rc];}
 
 //c2x
 static function conn2xhtml($d){
-list($p,$o,$c)=decompact_conn($d); //echo $p.'-'.$o.'-'.$c;
-list($ra,$rb,$rc)=self::r();
+[$p,$o,$c]=decompact_conn($d); //echo $p.'-'.$o.'-'.$c;
+[$ra,$rb,$rc]=self::r();
 if(in_array($c,$ra) or in_array($c,$rb) or strpos($p,'<')!==false)$ret=bal($c,['o'=>$o],$p);
-elseif(in_array($c,$rc) or is_image($p) or substr($p,0,4)=='http')$ret=bal($c,['p'=>$p],$o);
+elseif(in_array($c,$rc) or is_img($p) or substr($p,0,4)=='http')$ret=bal($c,['p'=>$p],$o);
 else $ret=bal($c,['p'=>$p,'o'=>$o],'');
 return $ret;}
 
@@ -40,7 +39,7 @@ public function hasChildren(){return $this->current()->hasChildNodes();}
 public function getChildren(){return new self($this->current()->childNodes);}}
 
 static function read($dom){$ret='';//if(is_object($v)
-list($ra,$rb,$rc)=self::r(); static $i; $i++; echo $i.';';
+[$ra,$rb,$rc]=self::r(); static $i; $i++; echo $i.';';
 $racine=$dom->documentElement; $racine->nodeValue.'--';
 foreach($dom->childNodes as $v){//pr($v);
 	if($v->childNodes->length>1)$t=self::read($v);
@@ -59,12 +58,12 @@ return $ret;}
 static function xhtml2conn($d){
 //$dom=dom($d);
 $dom=new DomDocument(); $dom->loadXML($d);
-list($ra,$rb,$rc)=self::r();
+[$ra,$rb,$rc]=self::r();
 $ret=self::read($dom);
 return $ret;}
 
 static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 if($o=='c2x')$ret=div('',codeline::parse($p,$o,'conn2xhtml'));
 if($o=='x2c')$ret=self::xhtml2conn($p);
 return eco($ret,1);}
@@ -72,8 +71,8 @@ return eco($ret,1);}
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default;
 $ret=textarea('inp',$p,40,4,atc('console')).br();
-$ret.=lj('popbt',$rid.'_app__3_'.self::$a.'_call__c2x_inp',pictxt('output','conn2xhtml')).' ';
-$ret.=lj('popbt',$rid.'_app__3_'.self::$a.'_call__x2c_inp',pictxt('input','xhtml2conn')).' ';
+$ret.=lj('popbt',$rid.'_app__3_xhtml_call__c2x_inp',pictxt('output','conn2xhtml')).' ';
+$ret.=lj('popbt',$rid.'_app__3_xhtml_call__x2c_inp',pictxt('input','xhtml2conn')).' ';
 return $ret;}
 
 static function home($p,$o){

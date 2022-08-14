@@ -1,14 +1,13 @@
-<?php
-//philum_plugin_coreflush
+<?php //coreflush
 
 function recup_func($dr,$p){
 $d=read_file($dr.$p.'.php');
 $r=explode('function ',$d); $n=count($r);
 for($i=0;$i<$n;$i++){$v=$r[$i];
 	$func=substr($v,0,strpos($v,'('));
-	$var=embed_detect($v,'(',')',''); $cat='';
+	$var=between($v,'(',')'); $cat='';
 	if($func!='\'.$name.$i.\'')$ret[$func]=[$var,$cat];
-	if(strpos($v,"\n#"))$cat=embed_detect($v,'#',"\n",'');}
+	if(strpos($v,"\n#"))$cat=between($v,'#',"\n");}
 return $ret;}
 
 function detect_core(){$dr='progb/';
@@ -18,11 +17,11 @@ $rk=array_keys_r($r,0,'k'); $na=0; $nb=0;//p($r);
 foreach($rec as $k=>$v){$ka=val($rk,$k); $rc=arr(val($r,$ka),4);
 	$v=str_replace('$','',$v);
 	if(!empty($rc[2]))$rc[2]=str_replace('$','',$rc[2]);
-	if($k)$rb[]=array($k,$v[0],$rc[2],$rc[3],$v[1]);//$rc[4]?$rc[4]:
+	if($k)$rb[]=[$k,$v[0],$rc[2],$rc[3],$v[1]];//$rc[4]?$rc[4]:
 	if(!$ka)$na++;}
 foreach($rk as $k=>$v)if(!isset($rec[$k]))$nb++; //p($rb);
 $rb=msql::reorder($rb);//p($rb);//$rb=sort_table($rb,0); 
-$rh=array('function','variables','usage','return','context');
+$rh=['function','variables','usage','return','context'];
 msql::save('system','program_core',$rb,$rh);//,'input','output'
 return 'program_core: added: '.($na?$na-1:0).' deleted: '.($nb?$nb:0).br();}
 
@@ -44,13 +43,13 @@ if($rec)foreach($rec as $k=>$v)
 	if(!is_numeric($k)){$ra=batch_funcs($r,$v,$rb,$rc,$dr.$k.'/'); $rb=$ra[0]; $rc=$ra[1];}
 	else{
 	$f=$dr.$v; $vb=strto($v,'.'); $xt=xt($v); $rc=val($r,$vb);
-	$bo=detect_plugable($f,$vb); $iface=val($rc,4);//?$rc[4]:detect_interface($f,$vb); 
+	$bo=detect_plugable($f,$vb); $iface=$rc[4]??'';//?$rc[4]:detect_interface($f,$vb); 
 	$pb=substr($v,0,1)=='_'?'1':''; $na=0;
 	if(is_file($f) && $v && $vb && $xt=='.php'){if(!$rc)$na++;
-		list($rc0,$rc1,$rc2,$rc3,$rc4,$rc5)=arr($rc,6);
+		[$rc0,$rc1,$rc2,$rc3,$rc4,$rc5]=arr($rc,6);
 		$rb[$vb]=[$rc0,$rc1,$bo?$bo:'0',$rc3,$iface,$rc5,$pb];}//$vr,
-	if(is_file($f) && $v && $vb)$rd[$vb]=[val($rc,0)];}
-return array($rb,$rc);}
+	if(is_file($f) && $v && $vb)$rd[$vb]=[$rc[0]??''];}
+return[$rb,$rc];}
 
 function detect_plugs(){$dr='plug/';
 $r=msql_read('system','program_plugs','',1);//p($r);
@@ -58,7 +57,7 @@ $rec=explore($dr,'files',0); $rb=[]; $rc=[]; $rd=[]; $na=0;
 $ra=batch_funcs($r,$rec,$rb,$rc,$dr); $rb=$ra[0]; $rc=$ra[1];
 //$rb=msql::reorder($rb);//p($rb);
 if($rb)ksort($rb);
-$rh=array('usage','dir','loadable','callable','interface','state','private');//'vars',
+$rh=['usage','dir','loadable','callable','interface','state','private'];//'vars',
 msql::save('system','program_plugs',$rb,$rh);//,'input','output'
 ///?msql=lang/en/program_plugs&update==
 update_table_lang($rd,'program_plugs','fr',array('usage'));

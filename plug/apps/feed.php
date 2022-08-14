@@ -1,5 +1,4 @@
-<?php
-//philum_app_feed
+<?php //feed
 
 class feed{
 
@@ -13,7 +12,6 @@ $x=simplexml_load_string($d,'SimpleXMLElement',LIBXML_NOCDATA);
 return json_decode(json_encode($x),TRUE);}
 
 static function build($p,$o){
-list($p,$o)=ajxp($res,$p,$o);
 if(!$p)$p=147000;
 $r=sql('*','qda','ar','id>'.$p.'');
 require('plug/tiers/simple_html_dom.php');
@@ -23,22 +21,22 @@ self::array_to_xml($r,$x);
 $res=$x->asXML($f);
 return $f;}
 
-static function import($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function import($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $d=get_file($p);
 $r=self::xml_to_array($d);
 //sqlsav('qda',$r);
 return tabler($r);}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $f=self::build($p,$o);
 $res=lk($f);
 return $res;}
 
 static function menu($p,$o,$rid){$res=input('inp',$p).' ';
-$res.=lj('',$rid.'_app__3_feed_call___inp',picto('upload')).' ';
-$res.=lj('',$rid.'_app__3_feed_import___inp',picto('download')).' ';
+$res.=lj('',$rid.'_feed,call_inp',picto('upload')).' ';
+$res.=lj('',$rid.'_feed,import_inp',picto('download')).' ';
 return $res;}
 
 static function home($p,$o){$rid=randid('feed');
@@ -47,5 +45,4 @@ $res=self::build($p,$o);
 return $bt.divd($rid,$res);}
 
 }
-
 ?>

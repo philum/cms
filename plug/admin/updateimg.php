@@ -1,23 +1,22 @@
-<?php
-//philum_plugin_updateimg
+<?php //updateimg
 //uppdate index of img from articles
-
-function updateimg_build($p,$o){req('ajxf');
+class updateimg{
+static function build($p,$o){
 $r=sql('id','qda','rv','order by  id desc');
-foreach($r as $k=>$v)recenseim($v);
+foreach($r as $k=>$v)sav::recenseim($v);
 return 'ok';}
 
-function updateimg_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
-$ret=updateimg_build($p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
+$ret=self::build($p,$o);
 return $ret;}
 
-function updateimg_menu($p,$o,$rid){
-$ret.=lj('',$rid.'_plug__2_updateimg_updateimg*j___inp',picto('ok')).' ';
+static function menu($p,$o,$rid){
+$ret=lj('',$rid.'_updateimg,call_inp',picto('ok')).' ';
 return $ret;}
 
-function plug_updateimg($p,$o){$rid=randid('plg');
-$bt=updateimg_menu($p,$o,$rid);
+static function home($p,$o){$rid=randid('plg');
+$bt=self::menu($p,$o,$rid); $ret='';
 return $bt.divd($rid,$ret);}
-
+}
 ?>

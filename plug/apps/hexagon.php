@@ -1,5 +1,4 @@
-<?php
-//philum_app_hexagon
+<?php //hexagon
 
 class hexagon{
 
@@ -43,7 +42,7 @@ return $d;}
 
 static function build($p,$o){
 //$r=msql::read_b('',nod('hexagon_1'));//p($r);
-if(strpos($o,';'))list($n,$w,$h,$sz)=opt($o,';',2);
+if(strpos($o,';'))[$n,$w,$h,$sz]=opt($o,';',2);
 $w=640; $h=$w; $n=10; $sz=300;
 //$r=self::hexa($n,$w/2,$h/2,sz);
 //$r=self::repos($r,$w/2,$h/2,$sz); //pr($r);
@@ -56,17 +55,15 @@ $d.=self::ring(4,60,$w/2,$h/2,'#FF0008','black');/**/
 $ret=svg::home($d,$w.'/'.$h);
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$$p;
 $ret=self::build($p,$o);
 return $bt.$ret;}
 
 static function menu($p,$o,$rid){
-$j=$rid.'_app__3_hexagon_call___inp';
+$j=$rid.'_hexagon_call_inp';
 $ret=inputj('inp',$p,$j);
 $ret.=lj('',$j,picto('ok')).' ';
-//$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_hexagon*1_'.$cols,picto('edit')).' ';
 return $ret;}
 
 static function home($p,$o){$rid=randid('hexagon');

@@ -1,32 +1,33 @@
-<?php
-//philum_plugin_umnum
-
-function umnum_search($p,$o,$res=''){
-$d=sql('msg','qdm','v','id='.$p);
+<?php //umnum
+class umnum{
+static function search($p,$o,$res=''){
+$d=sql('msg','qdm','v','id='.$p); $rt=[]; $i=0;
 $r=str_split($d);
 foreach($r as $k=>$v){
-	if(is_numeric($vb))$ret[$i].=$vb;
+	if(is_numeric($v))$rt[$i].=$v;
 	else $i++;}
-return tabler($ret);}
+return tabler($rt);}
 
-function umnum_build($p,$o){
+static function build($p,$o){
 $r=msql::row('',nod('umnum'),$p,1);
 return tabler($r);}
 
-function umnum_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
-$ret=umnum_build($p,$o);
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$p;
+$ret=self::build($p,$o);
 return $ret;}
 
-function umnum_menu($p,$o,$rid){$ret.=input('inp',$p).' ';
-$ret.=lj('',$rid.'_plug__2_umnum_umnum*j___inp',picto('ok')).' ';
-$ret.=lj('','popup_plupin___msqedit_umnum*1_num,val,art',picto('edit')).' ';
+static function menu($p,$o,$rid){
+$j=$rid.'_umnum,call_inp';
+$ret=inputj('inp',$p,$j).' ';
+$ret.=lj('',$j,picto('ok')).' ';
+$ret.=lj('','popup_msqedit,call___umnum*1_num,val,art',picto('edit')).' ';
 return $ret;}
 
-function plug_umnum($p,$o){$rid=randid('plg');
-$bt=umnum_menu($p,$o,$rid);
-//$ret=umnum_build($p,$o);
+static function home($p,$o){$rid=randid('plg');
+$bt=self::menu($p,$o,$rid); $ret='';
+//$ret=self::build($p,$o);
 $bt.=msqbt('',nod('umnum'));
 return $bt.divd($rid,$ret);}
-
+}
 ?>

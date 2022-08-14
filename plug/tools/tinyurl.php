@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_tinyurl
+<?php //tinyurl
 
 function plug_tinyurl($u){$ch=curl_init(); $tim=5;  
 curl_setopt($ch,CURLOPT_URL,'http://tinyurl.com/api-create.php?url='.$u);  

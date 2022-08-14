@@ -1,12 +1,11 @@
-<?php
-//philum_app_starmap (svg)
+<?php //starmap (svg)
 
 class starmap{
 static $default='knownstars';//81693,99461,88601
 static $clr=['#ffffff','#000000','#ff0000','#00ff00','#0000ff','#ffff00','#00ffff','#ff9900','#cccccc','#666666'];
 
 static function legend($r,$ha,$font){$h=$ha-40; $mid=$h/2; $sz=16;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;//spe
 $r=starlib::$clr2; $i=0;
 foreach($r as $k=>$v){
 	$clr=$v; $x=$h; $y=$sz+$i*$sz; $i++;
@@ -15,10 +14,10 @@ foreach($r as $k=>$v){
 
 static function dots($r,$ha,$font){
 $h=$ha-40; $mid=$h/2; $mx=$mid; $my=$mid; $mx+=20; $my+=20; $sz=6;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 $rc=starlib::$clr2;
-foreach($r as $k=>$v){
-	list($hip,$star,$dist,$mag)=vals($v,['name','star','dist','mag']);
+if($r)foreach($r as $k=>$v){
+	[$hip,$star,$dist,$mag]=vals($v,['name','star','dist','mag']);
 	$ad=$v['ad']; $ad-=90; 
 	$dc=$v['dc']; $mxb=$dc<0?$mx+$h:$mx;
 	if($dc<0){$dc=abs($dc); $ad=180-$ad;}
@@ -29,13 +28,13 @@ foreach($r as $k=>$v){
 	//svg::circle($x,$y,$sz,$clr,$black,2);
 	$circ='['.$clr.',black,1:attr]['.$x.','.$y.','.$sz.':circle]';
 	$tx=round($dist,2).' Al';
-	svg::$ret[]='['.$tx.',app___star_info_'.$hip.'_hip§'.$circ.':bubj2]';
+	svg::$ret[]='['.$tx.',star;info___'.$hip.'_hip§'.$circ.':bubj2]';
 	//svg::$ret[]='['.$tx.'§'.$circ.':bub]';
-	svg::lj($x+6,$y+6,12,$white,'popup_app___star_call_'.$hip.'_1',$star);}}
+	svg::lj($x+6,$y+6,12,$white,'popup_star;call___'.$hip.'_1',$star);}}
 
 static function map($r,$ha,$font,$hemi=1){
 $h=$ha-40; $mid=$h/2; $mx=$hemi==2?$h+$mid:$mid; $my=$mid; $mx+=20; $my+=20;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;//spe
 svg::circle($mx,$my,$h/2,'',$white);
 for($i=1;$i<=6;$i++){$hb=round($h/6*$i,2)/2;
 	svg::circle($mx,$my,$hb,'',$gray);
@@ -49,7 +48,7 @@ for($i=0;$i<24;$i++){$a=$i*15; $a=deg2rad($a); //15=360/24:
 	svg::text($font,$x,$y,$t,$gray);}}
 
 static function draw($r,$h){$w=$h*2; $sz=$w.'/'.$h; $im=new svg($w,$h); //p($r);
-list($white,$black,$red,$green,$blue,$yellow,$cyan)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan]=self::$clr;//spe
 $font=10;//size
 svg::rect(0,0,$w,$h,$black);
 self::map($r,$h,$font);
@@ -59,8 +58,8 @@ self::legend($r,$h,$font);
 return svg::draw();}
 
 //$rh=['hd','hip','RA (h-m-s)','dec (d-m-s)','dist (al)','spect','mag'];
-static function prep($r){
-foreach($r as $k=>$v){
+static function prep($r){$rb=[];
+if($r)foreach($r as $k=>$v){
 $rb[$k]['star']=$v[0];//hd
 $rb[$k]['name']=$v[1];//hip
 $rb[$k]['spec']=$v[5];
@@ -86,7 +85,7 @@ return $rb;}
 static function build($p,$o){
 $rn=[]; $rc=[]; if(!$p)$p='knownstars';
 if($p=='knownstars'){
-$ra=msql::read('','ummo_exo_5','',1); $p=implode(',',array_keys_r($ra,8));
+$ra=msql::read('','ummo_exo_5','',1); if($ra)$p=implode(',',array_keys_r($ra,8));
 if($ra)foreach($ra as $k=>$v)if($v[8])$rn[$v[8]]=$v[6]?$v[6]:$v[0];
 if($ra)foreach($ra as $k=>$v)if($v[8])$rc[$v[8]]=$v[5];}
 $sq=star::sq($p);
@@ -96,14 +95,15 @@ $rb=self::prep($r); //pr($rb);
 $ret=self::draw($rb,600);
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $ret=self::build($p,$o);
+ses::$r['popw']='1200';
 return $ret;}
 
 static function menu($p,$o,$rid){
-$j=$rid.'_starmap,call__xr_____insm';
-$ret=inputj('insm',$p,$j).' ';
+$j=$rid.'_starmap,call_insm_xr';
+$ret=inputj('insm',$p,$j,'knownstars').' ';
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}
 
@@ -114,8 +114,4 @@ if(!$p)$p=self::$default;
 $ret=self::call($p,$o);
 return $bt.divd($rid,$ret);}
 }
-
-function plug_starmap($p,$o){
-return starmap::home($p,$o);}
-
 ?>

@@ -1,12 +1,11 @@
-<?php
-//philum_plugin_panel
+<?php //panel
 
 function panel_build($p,$o){
 $ret=$p.'-'.$o;
 return $ret;}
 
 function panel_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=panel_build($p,$o);
 return $ret;}
 

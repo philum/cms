@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_reset
+<?php //reset
 
 function plug_reset(){
 //session_destroy();

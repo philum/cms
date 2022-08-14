@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_source
+<?php //source
 
 function plug_source($d){
 $jc=$_GET['plug']?'plug/':'';

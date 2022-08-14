@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_cursive
+<?php //cursive
 
 function cursive_decrypt($a){
 $r=explode(';',$a); $ret=''; $rb=[]; $n=0;//eco($a);
@@ -10,7 +9,7 @@ foreach($rb as $v)if($v!=''){$vb=$v-$n; if($vb>=26)$vb+=6; if($vb>=58)$vb-=6;//0
 return divc('track',$ret);}
 
 function cursive_jb($p,$o,$res=''){
-list($a)=ajxr($res); 
+[$a]=ajxr($res); 
 return cursive_decrypt($a);}
 
 function cursive_build($a,$b){
@@ -19,8 +18,8 @@ if($r)foreach($r as $v){$na=ord($v); if($na-65>26)$na-=6; $ret.=chr_b($na+$n).''
 return divc('track',$ret);}
 
 function cursive_j($p,$o,$res=''){
-//list($p,$o)=ajxp($res,$p,$o);
-list($a,$b)=ajxr($res);
+//[$p,$o]=ajxp($res,$p,$o);
+[$a,$b]=ajxr($res);
 $ret=cursive_build($a,$b);
 return $ret;}
 

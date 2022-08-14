@@ -1,5 +1,4 @@
-<?php
-//philum_app_arraydiff
+<?php //arraydiff
 
 class arraydiff{
 static function diff($ra,$rb,$n){$ret['banned']=[]; $ret['added']=[]; $n=$n-1;
@@ -19,7 +18,7 @@ $ret.=tabler($r['banned']);
 return $ret;}
 
 static function call($p,$o,$res=''){
-list($p,$o,$n)=ajxr($res);
+[$p,$o,$n]=ajxr($res);
 $ret=self::build($p,$o,$n);
 return $ret;}
 

@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_msqads
+<?php //msqads
 
 function msqads_j($p,$o,$res){$r=ajxr($res);//form
 $p=$p?$p:'msqads'; $nod=nod($p.'_'.$o);
@@ -8,7 +7,7 @@ $r=msql::reverse($r);
 return tabler($r,'txtblc','txtx');}
 
 function msqads_com($p,$o){$rid='plg'.$p.$o; $r=ajxr($res);
-$ret=lj('','pop_plupin___msqads____p|o',picto('ok')).' ';
+$ret=lj('','pop_plugin___msqads____p|o',picto('ok')).' ';
 $ret.=autoclic('p',$p?$p:'param',10,244,'',1);
 $ret.=autoclic('o',$o?$o:'option',10,244,'',1);
 return $ret;}

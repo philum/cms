@@ -1,5 +1,4 @@
-<?php
-//philum_clrset
+<?php //clrset
 session_start();
 require('../'.prog().'/lib.php');
 require('../'.prog().'/styl.php');

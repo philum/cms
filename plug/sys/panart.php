@@ -1,18 +1,17 @@
-<?php
-//philum_plugin_panart
+<?php //panart
 
 function bigim($id){
 $ims=sql('img','qda','v','id='.$id); $r=explode('/',$ims); 
 if($r)foreach($r as $v)if(is_file('img/'.$v)){
-	list($w,$h)=getimagesize('img/'.$v); $rb[$w]=$v;}
+	[$w,$h]=getimagesize('img/'.$v); $rb[$w]=$v;}
 if($rb){krsort($rb); return current($rb);}}
 
 function pa_pane($id){
 $imgs=sql('img','qda','v','id='.$id);
-$im=art_img($imgs,$id); $suj=suj_of_id($id);//spe
+$im=pop::art_img($imgs,$id); $suj=ma::suj_of_id($id);//spe
 return divs('background:url(/img/'.$im.') center; background-size:cover; height:180px;',divs('position:relative; background:rgba(0,0,0,0.4); color:rgba(255,255,255,0.8); font-shadow:1px 1px 2px rgba(0,0,0,0.8); font-size:22px; top:50%;',$suj));}
 
-function panart_build($p,$o){req('spe');
+function panart_build($p,$o){
 if(strpos($p,' '))$r=array_flip(explode(' ',$p));
 elseif(is_numeric($p))$r[$p]=1;
 else $r=api::mod($p);
@@ -20,7 +19,7 @@ foreach($r as $k=>$v)$ret.=pa_pane($k);
 return $ret;}
 
 function panart_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=panart_build($p,$o);
 return $ret;}
 

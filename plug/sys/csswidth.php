@@ -1,14 +1,13 @@
-<?php
-//philum_plugin_csswidth
+<?php //csswidth
 #type array
 
-function csswidth_sav($p='',$o='',$res=''){list($p,$o)=ajxr($res);
+function csswidth_sav($p='',$o='',$res=''){[$p,$o]=ajxr($res);
 return $ret;}
 
 //ready to apply
 /*function obtain_set_width($defs,$div,$attr){
 $m_large_x=obtain_values($defs,array($div),$attr,";");
-	list($h,$d,$b,$g)=obtain_set($m_large_x); 
+	[$h,$d,$b,$g]=obtain_set($m_large_x); 
 	if(!$d && !$b && !$g)$ret=$h*2; elseif($g===false)$ret=$d*2; else $ret=$d+$g;
 return $ret;}*/
 
@@ -23,10 +22,10 @@ $l_large=str_replace('px','',$left);
 $r_large=str_replace('px','',$right);
 $t_large=str_replace('px','',$page);
 $m_large=$t_large-($l_large+$r_large+$cr);
-return array($l_large,$m_large,$r_large,$t_large);}
+return [$l_large,$m_large,$r_large,$t_large];}
 
 function form_widths($defs){
-list($l_large,$m_large,$r_large,$t_large)=obtain_widths($defs);
+[$l_large,$m_large,$r_large,$t_large]=obtain_widths($defs);
 	$t.=btn("txtnoir",'leftbar '.input2('l_large',$l_large,3)).' ';
 	$t.=btn("txtnoir",'content '.$m_large.'px').' ';
 	$t.=btn("txtnoir",'rightbar '.input2('r_large',$r_large,3)).' ';
@@ -69,8 +68,8 @@ $cr4+=obtain_css_widths($defs,array("#banner"),"margin:");
 $nod=$_SESSION['modsnod']; $cnd=$_SESSION['cond']; $cndb=$cnd[0].$cnd[1];
 $r=define_mods_cond_b('system');
 foreach($r as $k=>$v){$presence[$v[0]]=1;}
-if(!$presence['leftbar'] && $lw)$r[]=array('leftbar',$lw,'',$cndb,'','','','');
-if(!$presence['rightbar'] && $rw)$r[]=array('rightbar',$rw,'',$cndb,'','','',''); 
+if(!$presence['leftbar'] && $lw)$r[]=['leftbar',$lw,'',$cndb,'','','',''];
+if(!$presence['rightbar'] && $rw)$r[]=['rightbar',$rw,'',$cndb,'','','','']; 
 foreach($r as $k=>$v){
 	if($_SESSION['cr_mod']){
 		if($_SESSION['cr_mob'] && $cndb!=$v[3])$v[3]=$cndb;
@@ -98,13 +97,13 @@ return $tw-($lw+$rw+$cr);}
 
 function modif_values($defs,$css,$newval,$vl,$vb){
 $k=find_value($defs,$css); $val=$defs[$k][6];
-$old=embed_detect($val,$vl,$vb,"");
+$old=between($val,$vl,$vb);
 $defs[$k][6]=str_replace($vl.$old.$vb,$vl.$newval.$vb,$val);
 return $defs;}
 
 function defs_widths($defs,$lw,$tw,$rw){
-$mnu_dives=array("#leftbar","#page","#rightbar");
-$mnu_large=array($lw,$tw?$tw.'px':'auto',$rw);
+$mnu_dives=["#leftbar","#page","#rightbar"];
+$mnu_large=[$lw,$tw?$tw.'px':'auto',$rw];
 foreach($mnu_dives as $i=>$v){if($mnu_large[$i])
 	$defs=modif_values($defs,array($v),$mnu_large[$i],"width:",";");}
 $defs=modif_values($defs,array("#content"),$lw,"left:","px");

@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_phpinfo 
+<?php //phpinfo
 
 function plug_phpinfo(){return phpinfo();}
 

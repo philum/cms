@@ -1,5 +1,4 @@
-<?php
-//philum_app_dom
+<?php //dom
 
 class domxml{
 
@@ -119,13 +118,12 @@ foreach($r->childNodes as $k=>$v){
 return $ret;}
 
 //$r=msql::read_b('',nod('dom_1'));//p($r);
-static function build($p,$o){
+static function build($f,$o){
 //self::test();
-list($f,$o)=ajxp($res,$p,$o);
 //echo $f='https://fr.dompedia.org/wiki/'.$p;
 //$d=get_file($f); $d=utf8_decode_b($d);
 //$o=0;
-$dom=get_dom($f); //pr($dom);
+$dom=fdom($f); //pr($dom);
 if($dom)foreach($dom->getElementsByTagName('div') as $k=>$div)
 	if($div->getAttribute('id')=='mw-content-text'){//pr($div);
 	if($o)for($i=0;$i<3;$i++)$ret.=div('',$div->getElementsByTagName('p')->item($i)->nodeValue);
@@ -139,18 +137,16 @@ $ret=str_replace('<h2>Sommaire</h2>','',$ret);
 $ret=preg_replace('/\[.*\][,]|\[.*\]/','',$ret);
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$$p;
 if(substr($p,0,4)!='http')$p='https://fr.wikipedia.org/wiki/'.$p;
 $ret=self::build($p,$o);
-if($o)$bt=lj('','popup_app__3_dom_call_'.ajx($p),picto('view')).' ';
+if($o)$bt=lj('','popup_dom,call___'.ajx($p),picto('view')).' ';
 $bt.=lka($p,picto('chain'));
 return divc('twit small',$ret).$bt;}
 
 static function menu($p,$o,$rid){$ret=input('inp',$p).' ';
-$ret.=lj('',$rid.'_app__3_dom_call___inp',picto('ok')).' ';
-//$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_dom*1_'.$cols,picto('edit')).' ';
+$ret.=lj('',$rid.'_dom,call_inp',picto('ok')).' ';
 return $ret;}
 
 static function home($p,$o){$rid=randid('dom');

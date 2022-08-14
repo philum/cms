@@ -1,14 +1,12 @@
-<?php
-//philum_plugin_sconn
+<?php //sconn
 
 function sconn_build($p,$o){
-req('pop,art,spe,mod');
 if($o)$p='['.$p.']';
 $ret=codeline::read($p,'','test');
 return $ret;}
 
 function sconn_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=sconn_build($p,$o);
 return $ret;}
 

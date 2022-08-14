@@ -1,9 +1,9 @@
-<?php
-//philum_plugin_patches
+<?php //patches
 
+//20
 function patch_iqs(){
 ses('qdk','pub_iqs');
-reqp('install'); $ra=install_db(); $sql=$ra['iqs']; if($sql)qr($sql);
+$ra=install::db(); $sql=$ra['iqs']; if($sql)qr($sql);
 return 'ok';}
 
 function patch_qdt(){
@@ -16,14 +16,14 @@ return 'ok';}
 
 //translate members to new table mbr
 function patch_mbr(){
-reqp('install'); $ra=install_db(); $sql=$ra['mbr']; qr($sql);
+$ra=install::db(); $sql=$ra['mbr']; qr($sql);
 $r=sql('name,mbrs','qdu','kv',''); $rc=[]; pr($r);
 foreach($r as $k=>$v){$rb=explode(',',$v);
-	foreach($rb as $kb=>$vb){list($ath,$usr)=opt($vb,'::'); //p([$k,$usr,$ath]);
+	foreach($rb as $kb=>$vb){[$ath,$usr]=opt($vb,'::'); //p([$k,$usr,$ath]);
 	$ex=sql('id','qdb','v',['name'=>$usr,'hub'=>$k]);
 	if($usr && $k!='admin' && !$ex)sqlsav('qdb',[$usr,$k,$ath]);}}}
 
-//poll becom favs
+//poll becom favs//19
 function patch_poll(){
 $ok=ses('ok'); if($ok)return;
 //ib,iq,type,poll
@@ -31,15 +31,15 @@ qr('ALTER TABLE `pub_poll` ADD `type` VARCHAR(11) NOT NULL AFTER `iq`',1);
 qr(' RENAME TABLE `pub_poll` TO `pub_favs`;',1);//qdpl=>qdf
 ses('qdf','pub_favs');
 $r=sql('ib,val,msg','qdd','','val="agree" and msg!="false" and msg!="true" and msg!="1"');
-foreach($r as $k=>$v){list($ib,$val,$msg)=$v; $rb=[$ib,$msg,$val,1];
+foreach($r as $k=>$v){[$ib,$val,$msg]=$v; $rb=[$ib,$msg,$val,1];
 if($ib<10000000 && $msg)$nid=sqlsav('qdf',$rb);}
 
 $r=sql('ib,val,msg','qdd','','val="like" and msg!="false" and msg!="true" and msg!="1"');
-foreach($r as $k=>$v){list($ib,$val,$msg)=$v; $rb=[$ib,$msg,$val,1];
+foreach($r as $k=>$v){[$ib,$val,$msg]=$v; $rb=[$ib,$msg,$val,1];
 if($msg)$nid=sqlsav('qdf',$rb);}
 
 $r=sql('ib,val,msg','qdd','','val="fav" and msg!="false" and msg!="true" and msg!="1"');
-foreach($r as $k=>$v){list($ib,$val,$msg)=$v; $rb=[$ib,$msg,$val,1];
+foreach($r as $k=>$v){[$ib,$val,$msg]=$v; $rb=[$ib,$msg,$val,1];
 $nid=sqlsav('qdf',$rb);}
 
 qr('DELETE FROM `pub_data` WHERE val="agree" and msg!="false" and msg!="true" and msg!="1"');
@@ -63,7 +63,6 @@ return $ret.br();}
 
 //181225
 function patch_lastup(){
-req('meta');
 $r=explore('_datas'); //pr($r);
 foreach($r as $k=>$v){
 $rb=explode('_',$v);
@@ -194,7 +193,7 @@ function patch_userart(){
 qr('ALTER TABLE `'.ses('qdu').'` CHANGE `menus` `menus` SMALLINT(10) NULL ');
 $r=sql('name','qdu','',''); //p($r);
 foreach($r as $k=>$v){
-	list($id,$day)=sql('id,day','qda','r','suj="'.$v.'" AND frm="user" LIMIT 1');
+	[$id,$day]=sql('id,day','qda','r','suj="'.$v.'" AND frm="user" LIMIT 1');
 	if($id)echo $v.'_'.$id.'_'.$day.br();
 	if(!$id)update('qdu','hub','','name',$v);
 	update('qdu','menus',$day>0?$day:'','name',$v);
@@ -269,7 +268,7 @@ foreach($hubs as $k=>$v){call_user_func($func,$k);}}
 function patch_global_b($func){
 $hubs=explore('msql/users/','files',1);
 foreach($hubs as $k=>$v){
-	list($hb,$nd,$xt)=explode('_',$v);
+	[$hb,$nd,$xt]=explode('_',$v);
 	call_user_func($func,$hb);
 	echo $hb.': ok'.br();}}*/
 //patch_globalc('patch_mods');
@@ -282,7 +281,7 @@ if($rb[1]==$nd && is_numeric($rb[2]) && $rb[3]!='sav')$ret[]=$rb[0].'_'.$rb[1].'
 return $ret;}
 
 function patch_correct_option($nod){ 
-$dfb=array("block","module","param","title","condition","command","option","cache","hide","template","nobr");
+$dfb=["block","module","param","title","condition","command","option","cache","hide","template","nobr"];
 $r=read_vars('msql/users/',$nod,'');
 if(count($r['_menus_'])<11){echo $nod.' '.count($r['_menus_']); unset($r['_menus_']);
 //backup_old

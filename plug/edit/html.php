@@ -1,26 +1,22 @@
-<?php
-//philum_plugin_html
+<?php //html
+class htlm{
+static function build($p,$o){
+return $p;}
 
-//plugin_func('html','html_build',$p,$o);
-function html_build($p,$o){
-$ret=$p;
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$p;
+$ret=self::build($p,$o);
 return $ret;}
 
-function html_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);//$resultant des champs
-$ret=html_build($p,$o);
-return $ret;}
-
-function html_menu($p,$o,$rid){
-$j=$rid.'_plug__2_html_html*j___inp'; $sj='SaveJ(\''.$j.'\')';
+static function menu($p,$o,$rid){
+$j=$rid.'_html,call_inp'; $sj='SaveJ(\''.$j.'\')';
 $ret=divc('" onkeyup="'.$sj.'" onclick="'.$sj,textarea('inp',$p,60,10,atc('console'))).' ';
 //$ret.=lj('',$j,picto('ok'));
 return $ret;}
 
-//plugin('html',$p,$o)
-function plug_html($p,$o){$rid='plg'.randid();
-$ret=html_menu($p,$o,$rid);
+static function home($p,$o){$rid='plg'.randid();
+$ret=self::menu($p,$o,$rid);
 return $ret.divd($rid,html_j($p,$o));}
 //$ret.=msqbt('',ses('qb').'_html').' ';
-
+}
 ?>

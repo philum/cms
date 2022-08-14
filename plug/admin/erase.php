@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_erase
+<?php //erase
 
 function funcb($j,$k,$v,$n){echo $j.'/'.$v.'_'.$k.br();}
 //need refresh for each depth
@@ -11,9 +10,7 @@ if($v)unlink($j.'/'.$v); else rmdir($j.'/'.$k);
 echo "$j/$k/$v".br();}
 
 function plug_erase($del,$dir){
-//$del='';
-//$dir='';
-if($_SESSION['auth']<6)return 'no';
+if(!auth(6))return 'no';
 echo $del.'-'.$dir.'-';
 	if($del)unlink($del);
 	elseif($dir && strpos($dir,'/')!=false)rmdir_r($dir);

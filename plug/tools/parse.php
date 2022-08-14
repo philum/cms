@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_parse
+<?php //parse
 
 //ope
 function array_dig_a($ret,$d){
@@ -60,7 +59,7 @@ $aa_balise=strtolower($aa_balise); $bb_balise=strtolower($bb_balise);
 $ret[$ia]['balise']=$aa_balise;
 $attrb=mk_attrb($aa_inner,' ','=');
 if($attrb)$ret[$ia]['props']=$attrb;
-//itÃ©ration
+//itération
 if(strpos($balise,'<')!==false)$balise=interpret_xml($balise);
 if($balise)$ret[$ia]['content']=$balise;
 //sequence
@@ -89,7 +88,7 @@ foreach($items as $k=>$v){
 				$rb[$i][@$vb['balise']]=$d;}}}
 return $rb;}
 
-function plug_parse($f){req('tri');
+function plug_parse($f){
 //$f='http://w41k.com/';
 if($f)$d=get_file($f);
 if($d)$r=interpret_xml($d);

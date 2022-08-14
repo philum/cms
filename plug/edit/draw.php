@@ -1,7 +1,6 @@
-<?php
-//philum_plugin_draw
-
-function draw_js(){return '
+<?php //draw
+class draw{
+static function js(){return '
 $(document).ready(function(){
 	var color="#000"; 
 	var painting=false; 
@@ -54,28 +53,28 @@ $(document).ready(function(){
 		var canvas_tmp=document.getElementById("canvas");
 		window.location=canvas_tmp.toDataURL("image/png");
 		//insert("["+canvas_tmp.toDataURL()+":img]"); Close("popup");
-		//SaveJ("popup_plup___draw_draw*save_"+canvas_tmp.toDataURL());
+		//SaveJ("popup_draw,save___"+canvas_tmp.toDataURL());
 		//alert(canvas_tmp.toDataURL());
 		});});
 ';}
 
-function draw_save($d){$f='img/draw_temp.png'; //$d.='=';
-//echo textarea('',$d,20,10);//(substr($d,22));
-write_file($f,base64_decode(substr($d,22)));
-return image($f);}
-
-function draw_css(){return '#canvas{border:1px solid #999; margin:0; display:block; background:#fff; cursor:crosshair;}
+static function css(){return '#canvas{border:1px solid #999; margin:0; display:block; background:#fff; cursor:crosshair;}
 #couleurs{list-style:none; margin:0; padding:0;}
 #couleurs li{display:inline-block; border-radius:50%;}
 #couleurs a{display:inline-block; width:10px; height:10px; margin-right:10px; text-indent:-4000px; overflow:hidden;}
 #couleurs a.actif{width:20px; height:20px;}';}
 
-function plug_draw($w,$h){if(!$w)$w=400;//cw();
+static function save($d){$f='img/draw_temp.png'; //$d.='=';
+//echo textarea('',$d,20,10);//(substr($d,22));
+write_file($f,base64_decode(substr($d,22)));
+return image($f);}
+
+static function home($w,$h){if(!$w)$w=400;//cw();
 Head::add('jslink','/js/jquery.js');
-Head::add('jscode',draw_js());
-Head::add('csscode',draw_css());
+Head::add('jscode',self::js());
+Head::add('csscode',self::css());
 $ret=balc('canvas','" id="canvas" width="'.$w.'px" height="'.$h.'px','');
-$r=array('black','white','blue','green','yellow','orange','brown','red','indigo','violet','pink','cyan'); $n=count($r);
+$r=['black','white','blue','green','yellow','orange','brown','red','indigo','violet','pink','cyan']; $n=count($r);
 for($i=0;$i<$n;$i++){
 	$c='" style="background: none repeat scroll 0% 0% '.$r[$i].';" data-couleur="'.$r[$i];
 	$cl.=balc('li','',lka($c,$r[$i]));}
@@ -87,5 +86,5 @@ $inp.=input0('reset','reset','reset');
 $inp.=input0('button','save','save');
 $ret.='<form id="largeurs_pinceau">'.$inp.'</form>';
 return $ret;}
-
+}
 ?>

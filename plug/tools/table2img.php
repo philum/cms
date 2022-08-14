@@ -1,8 +1,7 @@
-<?php
-//philum_table2img
+<?php //table2img
 
 function plug_table2img($d,$p){
-list($dr,$nod)=split_right('/',$p,'');
+[$dr,$nod]=split_right('/',$p,'');
 $r=msql_read($dr,$nod,'',1);
 if($r)foreach($r as $k=>$v){
 	$rb[$k]=array(image($d.$v,'',''),$v);

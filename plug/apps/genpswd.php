@@ -1,5 +1,4 @@
-<?php
-//philum_app_genpswd
+<?php //genpswd
 
 class genpswd{
 
@@ -11,7 +10,7 @@ for($i=0;$i<$p;$i++)$ret.=$r[rand(0,$n)];
 return $ret;}
 
 static function call($p,$o,$res=''){
-list($p,$o)=ajxr($res);
+[$p,$o]=ajxr($res);
 $ret=self::build($p,$o);
 return $ret;}
 

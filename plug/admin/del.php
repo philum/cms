@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_del
+<?php //del
 
 function delj($p,$o,$res){$f=ajxg($res);
 if(!auth(7))return 'no';

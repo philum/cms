@@ -1,5 +1,4 @@
-<?php
-//philum_app_starmap5
+<?php //starmap5
 
 class starmap5{
 static $default='knownstars';
@@ -10,7 +9,7 @@ static $clr2=['O'=>'#4277e4','B'=>'#6894f1','A'=>'#859fea','F'=>'#c09df3','G'=>'
 static $clr3=['#2a635c','#a62a00','#530002','#4a5305'];
 
 static function legend($r,$p,$o){$w=self::$w; $h=$w/2; $sz=16; $x=40;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 $r=['amical'=>$green,'neutre'=>$yellow,'inamical'=>$orange,'danger'=>$red,'inconnu'=>$white];
 $i=0; $y=$sz+$i*$sz; svg::text(10,$x,$y+12,'Stars',$white);
 foreach($r as $k=>$v){$i++; $y=$sz+$i*$sz;
@@ -23,7 +22,7 @@ foreach($r as $k=>$v){$i++; $y=$sz+$i*$sz;
 	svg::rect($x,$y,$sz,$sz,$v,$black);
 	svg::text(12,$x+$sz+8,$y+12,$k,$white);}
 $i++; $y=$sz+$i*$sz; svg::text(10,$x,$y+12,mkday('','d/m/Y'),$white);
-$j='strmp5_app__2_starmap5_call_'.$p;
+$j='strmp5_starmap5;call___'.$p;
 $i=1; $x=320; $y=$sz+$i*$sz; $clr=$o<2?$green:$white; svg::lj($x,$y,12,$clr,$j.'_','radius/dist');
 $i++; $y=$sz+$i*$sz; $clr=$o==2?$green:$white; svg::lj($x,$y,12,$clr,$j.'_2','radius');
 $i++; $y=$sz+$i*$sz; $clr=$o==3?$green:$white; svg::lj($x,$y,12,$clr,$j.'_3','dist');
@@ -31,7 +30,7 @@ $i++; $y=$sz+$i*$sz; $clr=$o==4?$green:$white; svg::lj($x,$y,12,$clr,$j.'_4','sp
 $i++; $y=$sz+$i*$sz; $clr=$o==5?$green:$white; svg::lj($x,$y,12,$clr,$j.'_5','mag');}
 
 /*static function sttclr($stt){
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 if($stt=='amical')$clr=$green;
 elseif($stt=='inamical')$clr=$orange;
 elseif($stt=='danger')$clr=$red;
@@ -47,7 +46,7 @@ return [$min,$max];}
 
 static function proportion($r,$a,$b,$l,$o){$c=$b-$a;
 if($l)foreach($r as $k=>$v)if($v>$l)$r[$k]=$l;
-list($min,$max)=self::minmax($r); $diff=$max-$min; $m=$c/$diff; $rb=[]; $ca=1/$diff;
+[$min,$max]=self::minmax($r); $diff=$max-$min; $m=$c/$diff; $rb=[]; $ca=1/$diff;
 foreach($r as $k=>$v){if(!is_numeric($v))$n=0.5; else $n=($v-$min)*$ca;//*$m
 	if($o)$n=1-$n; $n=$n*$c+$a; $rb[$k]=$n;}
 return $rb;}
@@ -61,7 +60,7 @@ return $rb;}*/
 
 static function dots($r,$o){$n=count($r); //pr($r,1);
 $w=self::$w; $h=$w/2; $mw=$w/24; $mh=$h/12; $sz=10; $xs=$o==1?16:12; $decaly=$o==1?20:16; //pr($r);
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr; $klr=self::$clr2;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr; $klr=self::$clr2;
 if($o==2)$rz=starlib::proportion(array_keys_r($r,'radius'),2,12,50,0);
 elseif($o==3)$rz=starlib::proportion(array_keys_r($r,'dist'),2,12,100,1);
 elseif($o==5)$rz=starlib::proportion(array_keys_r($r,'mag'),2,12,10,1);
@@ -76,16 +75,16 @@ if($r)foreach($r as $k=>$v){
 	$circ='['.$clr.',white,1:attr]['.$x.','.$y.','.round($sz,2).':circle]';
 	$tx='HD '.$v['hd'].' - '.round($ds,2).' LY';
 	if($n<100)svg::$ret[]='['.$tx.'§'.$circ.':bub]';
-	else svg::$ret[]='[app___star_info_'.$v['hip'].'_hip§'.$circ.':bubj]';
+	else svg::$ret[]='[star;info___'.$v['hip'].'_hip§'.$circ.':bubj]';
 	$xb=$x-20; $yb=$y+$decaly;
 	if($nm=='6 G. Piscium' or $nm=='38 Piscium' or $nm=='Iota Piscium' or $nm=='Gliese 250'){$xb=$x+8; $yb=$y+6;}
 	if($v['hd']=='114710'){$xb=$x-60;}//Berenice
-	//if($n<100)svg::bubj($xb,$yb,$xs,$white,'app___star_info_'.$v['hip'].'_hip',$nm);
-	if($n<100)svg::lj($xb,$yb,$xs,$white,'popup_app___star_info_'.$v['hip'].'_hip',$nm);}}
+	//if($n<100)svg::bubj($xb,$yb,$xs,$white,'star;info___'.$v['hip'].'_hip',$nm);
+	if($n<100)svg::lj($xb,$yb,$xs,$white,'popup_star;info___'.$v['hip'].'_hip',$nm);}}
 
 static function correct($v,$cx){
 $w=self::$w; $h=$w/2; $mw=$w/24; $mh=$h/180; $cy=90;
-list($x,$y)=explode('/',$v);
+[$x,$y]=explode('/',$v);
 if($x>=20 && $x<=24)$x-=24;//next time, use iu
 $x+=$cx; $y+=$cy;
 $x=0-$x+24; if($x<0)$x=0; if($x>24)$x=24;
@@ -103,8 +102,8 @@ $r[2]=['3.4/30','2.7/30','1.8/25','1.5/25','1.5/28','1.5/33','0.8/33','0.8/24','
 $r[3]=['3.4/0','2.8/0','2.8/-19','1.8/-19','1.8/-40','23.5/-40','23.5/-55','22.2/-55','22.2/-50','21.8/-50','21.8/-45','20.5/-45','20.5/-60','21.8/-60','21.8/-75','20/-75','20/-90','19.99/-90','19.99/-75','18.5/-75','18.5/-68','17.4/-68','17/-60','15.5/-60','15.5/-55','14.8/-55','14.8/-65','11.5/-65','11.5/-75','6.3/-75','6.36/-63','6/-63','6/-61','5.5/-61','5/-57','4.5/-55','4.5/-50','4.2/-50','4.2/-37','4.65/-37','4.65/-30','4.8/-30','4.8/-27','5/-27','5/-10','5.2/-10','5.2/-5','4.8/-5','4.8/0','3.4/0'];
 return $r;}*/
 
-static function zones(){list($c1,$c2,$c3,$c4)=self::$clr3;
-list($r0,$r1,$r2,$r3)=starlib::zpt(); $r0b=$r0; $r3b=$r3; $cx=12; $op=0.8; $bdr='#ffff00'; $bdr='';
+static function zones(){[$c1,$c2,$c3,$c4]=self::$clr3;
+[$r0,$r1,$r2,$r3]=starlib::zpt(); $r0b=$r0; $r3b=$r3; $cx=12; $op=0.8; $bdr='#ffff00'; $bdr='';
 foreach($r0 as $k=>$v)$r0[$k]=self::correct($v,$cx); svg::poly($r0,$c1,$bdr,'',$op);//p($r0);
 foreach($r0b as $k=>$v)$r0b[$k]=self::correct($v,-12); svg::poly($r0b,$c1,$bdr,'',$op);//p($r0b);
 foreach($r1 as $k=>$v)$r1[$k]=self::correct($v,$cx); svg::poly($r1,$c2,$bdr,'',$op);//p($r1);
@@ -113,7 +112,7 @@ foreach($r3 as $k=>$v)$r3[$k]=self::correct($v,$cx); svg::poly($r3,$c4,$bdr,'',$
 foreach($r3b as $k=>$v)$r3b[$k]=self::correct($v,-12); svg::poly($r3b,$c4,$bdr,'',$op);}
 
 /*static function months(){$w=self::$w; $h=$w/2; $eq=77.19;//day of equinox
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 $mw=$w/12; $ratio=round($w/360,2);//projection
 $rt=['Jan','Fev','Mars','Avr','Mai','Juin','Juil','Aout','Sept','Oct','Nov','Dec']; $rx=[];
 foreach($rt as $k=>$v){$a=180+$eq-(30*$k); if($a<0)$a+=360; $b=$a*$ratio; $rx[]=$a;
@@ -163,7 +162,7 @@ $p='M 0/'.$hm.' C'.($h).'/_400 '.($h).'/'.($wm*3).' '.$w.'/'.$hm.'';
 return svg::path($p,'none','green',1);}*/
 
 static function map($r){$w=self::$w; $h=$w/2; $mw=$w/24; $mh=$h/12;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;
 for($i=0;$i<=24;$i++){$x=$mw*(24-$i);
 	svg::line($x,0,$x,$h,$i==12?$white:$gray); $t=12+$i; if($t>=24)$t-=24;
 	svg::text(10,$x-12,10,$t,$yellow);}
@@ -177,7 +176,7 @@ starlib::sun();}
 
 static function draw($r,$p,$o){
 $w=self::$w; $h=$w/2; $im=new svg($w,$h);
-list($white,$black)=self::$clr;
+[$white,$black]=self::$clr;
 svg::rect(0,0,$w,$h,$black);
 //svg::img('/users/ummo/graph/starsky40k.jpg',$w,$h);
 self::zones();
@@ -228,20 +227,20 @@ $ret=self::draw($rb,$p,$o);
 svg::save($ret,'starmap5');
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 if(!$p)$p=self::$default;
 $ret=self::build($p,$o);
+ses::$r['popw']='1400';
 return $ret;}
-
+//[$p,$o]=prmp($prm,$p,$o);
 static function menu($p,$o,$rid){
-$j=$rid.'_app__2_starmap5_call__';
-$ret=inputj('inp',$p?$p:self::$default,$j.'_inp').hlpbt('starmap');
-$ret.=lj('',$j.'_inp',picto('ok')).' ';
+$ret=inputj('inp',$p?$p:self::$default,$rid.'_starmap5,call_inp_2').hlpbt('starmap');
+$ret.=lj('',$rid.'_starmap5,call_inp_2',picto('ok')).' ';
 //$ret.=checkbox('big','1','big',0);
-$ret.=lj('txtx',$j.'1_inp','big').' ';
-$ret.=lj('txtx',$rid.'_app__2_starmap5_call_knownstars','known').' ';
-$ret.=lj('txtx',$rid.'_app__2_starmap5_call_allstars','all').' ';
+$ret.=lj('txtx',$rid.'_starmap5,call_inp___1','big').' ';
+$ret.=lj('txtx',$rid.'_starmap5,call___knownstars','known').' ';
+$ret.=lj('txtx',$rid.'_starmap5,call___allstars','all').' ';
 $ret.=lk('/app/starmap4',picto('url'));
 return $ret;}
 
@@ -254,5 +253,4 @@ $bt.=msqbt('',nod('exo_5'));
 return $bt.divd($rid,$ret);}
 
 }
-
 ?>

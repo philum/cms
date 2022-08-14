@@ -1,5 +1,4 @@
-<?php
-//philum_app_reduceim
+<?php //reduceim
 
 class reduceim{
 static $a=__CLASS__;
@@ -23,18 +22,18 @@ foreach($rb as $k=>$v){
 	$ret.=$v[0].'-'.$v[1].br();}
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $ret=self::build($p,$o);
 return $ret;}
 
-static function menu($p,$o,$rid){req('spe');
+static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_'.self::$a.',call__3_';
+$j=$rid.'_reduceim,call__3_';
 //$ret=inputj($inpid,$p,$j);
-$n=ceil(lastid('qda')/self::$nb); $ret='';
+$n=ceil(ma::lastid('qda')/self::$nb); $ret='';
 for($i=0;$i<$n;$i++)$ret.=lj('txtx',$j.''.$i,$i).' ';
-//if(auth(6))$ret.=lj('txtred',$rid.'_'.self::$a.',del__3_150000','x').' ';
+//if(auth(6))$ret.=lj('txtred',$rid.'_reduceim,del__3_150000','x').' ';
 return $ret;}
 
 static function home($p,$o){
@@ -42,10 +41,5 @@ $rid=randid(self::$a); $ret='';
 $bt=self::menu($p,$o,$rid);
 if($p)$ret=self::build($p,$o);
 return $bt.divd($rid,$ret);}
-
 }
-
-function plug_reduceim($p,$o){
-return reduceim::home($p,$o);}
-
 ?>

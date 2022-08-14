@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_msqmerge
+<?php //msqmerge
 //conjoint à msqarts, qui fabrique des tables par catégories
 
 function msqm_msg($d){
@@ -22,7 +21,7 @@ $msg=nl2br($msg);
 $ret[$v[0]]=array($d,lka($v[0],$dy),$msg,lka($v[3],picto('tw')));}
 return $ret;}
 
-function msqmerge_build($p,$o){req('pop,spe');
+function msqmerge_build($p,$o){
 $r=explode(',',$p); $ra=array();
 if($r && $p)foreach($r as $k=>$v){//echo $v;
 $r=msql_read('',$v);//pr($r);
@@ -31,7 +30,7 @@ ksort($ra);
 return tabler($ra);}
 
 function msqmerge_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=msqmerge_build($p,$o);
 return $ret;}
 

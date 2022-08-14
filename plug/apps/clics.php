@@ -1,5 +1,4 @@
-<?php
-//philum_app_clics
+<?php //clics
 
 class clics{
 
@@ -8,14 +7,14 @@ static function consolid_stats(){
 $r=sql('substring(page,6)','qdv2','k','page LIKE "read=%" limit 0,10000'); //pr($r);
 if($r)foreach($r as $k=>$v){if(is_numeric($k))$id=$k;
 	else{$pos=strpos($k,'&'); if($pos!==false)$id=substr($k,0,$pos);}
-$ret[$id]=array($id,$v);}
+$ret[$id]=[$id,$v];}
 ksort($ret);
 //$d=self::mysqlrb($ret,0); insert('qdcl',$d);//
 return $ret;}
 
 static function clic_stats($p){ses('qdcl',qd('clics'));
 $r=sql('id,nb','qdcl','kv',''); //pr($r);
-if(!$r){$db=plugin_func('install','install_db',ses('qd'));
+if(!$r){$db=install::db(ses('qd'));
 	qr($db['clics']);
 	$r=self::consolid_stats();}
 pr($r);
@@ -42,15 +41,15 @@ if($nb)$av=$bigtot/$nb;
 $ret.=divc('popw',$bigtot.' clics / '.$nb.' articles; Average:'.$av);
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $ret=self::build($p,$o);
 return $bt.$ret;}
 
 static function menu($p,$o,$rid){$ret=input('inp',$p).' ';
-$ret.=lj('',$rid.'_app__3_clics_call___inp',picto('ok')).' ';
+$ret.=lj('',$rid.'_clics,call_inp_3',picto('ok')).' ';
 //$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_clics*1_'.$cols,picto('edit'));
+//$ret.=lj('','popup_msqedit,call___clics*1_'.$cols,picto('edit'));
 return $ret;}
 
 static function home($p,$o){$rid=randid('clics');
@@ -58,10 +57,5 @@ $bt=self::menu($p,$o,$rid);
 $ret=self::build($p,$o);
 //$bt.=msqbt('',nod('clics_1'));
 return $bt.divd($rid,$ret);}
-
 }
-
-function plug_clics($p,$o){
-return clics::home($p,$o);}
-
 ?>

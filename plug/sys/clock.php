@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_clock
+<?php //clock
 
 function uclock_needle_css($id,$sz,$clr,$w,$h){return '
 	#'.$id.'{
@@ -142,7 +141,7 @@ clock_head();
 	$ret.=bal('div',array('id'=>'needleSecFrame'),$needleSec);
 	$ret.=bal('div',array('id'=>'clockCenter'),'');
 	$ret.=bal('div',array('id'=>'digit'),'');
-	$ret.=js_code('clock();');
+	$ret.=jscode('clock();');
 	$ret=bal('div',array('id'=>'clockFrame'),$ret);
 return $ret;}
 

@@ -1,12 +1,11 @@
-<?php
-//philum_plugin_svgjs
+<?php //svgjs
 
 //plugin_func('svgjs','svgjs_build',$p,$o);
-function svgjs_build($p,$o){//$ret=js_code('cree_rectangle(event)');
+function svgjs_build($p,$o){//$ret=jscode('cree_rectangle(event)');
 return bal('svg',atb('xmlns','http://www.w3.org/2000/svg').atb('xmlns:xlink','http://www.w3.org/2000/svg').atb('onload','cree_rectangle(evt)'),$ret);}
 
 function svgjs_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);//$resultant des champs
+[$p,$o]=ajxp($res,$p,$o);//$resultant des champs
 $ret=svgjs_build($p,$o);
 return $ret;}
 

@@ -1,5 +1,4 @@
-<?php
-//philum_app_cmpqcode
+<?php //cmpqcode
 
 class cmpqcode{
 
@@ -20,7 +19,7 @@ $d=self::noesp($d);
 write_file($f,$d);}
 
 static function build($p,$o){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=prmp($prm,$p,$o);
 $f='plug/editor.php';
 //$f='progb/lib.php';
 //self::recompile($f);
@@ -28,7 +27,7 @@ $ret=$p.'-'.$o;
 return $ret;}
 
 static function menu($p,$o,$rid){$ret=input('inp',$p).' ';
-$ret.=lj('',$rid.'_app__2_cmpqcode_build___inp',picto('ok')).' ';
+$ret.=lj('',$rid.'_cmpqcode,build_inp',picto('ok')).' ';
 return $ret;}
 
 static function home($p,$o){$rid=randid('cmpqcode');
@@ -36,7 +35,5 @@ $bt=self::menu($p,$o,$rid);
 $ret=self::build($p,$o);
 //$bt.=msqbt('',nod('cmpqcode_1'));
 return $bt.divd($rid,$ret);}
-
 }
-
 ?>

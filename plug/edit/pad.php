@@ -1,6 +1,4 @@
-<?php
-//philum_app_notepad
-
+<?php //notepad
 class pad{
 static function np_j($id){return 'mem_storage(\''.$id.'_m'.$d.'_1_1\')';}
 
@@ -8,7 +6,7 @@ static function write($p,$o,$res){$pad=ses('USE').'_pad_'.date('ymd');
 $f='_datas/'.$pad.'.htm'; $no=write_file($f,ajxg($res)); 
 if($no)echo $no; else return lkt('popbt','/'.$f,$pad);}
 
-static function menu($d,$id){$ret=hidden('','cka','m'.$d);
+static function menu($d,$id){$ret=hidden('cka','m'.$d);
 $r=[1=>'old','clipboard','article','draft','notes','memo','keep','job','ideas'];
 foreach($r as $k=>$v){$c=$k==$d?'active':'';
 	$ret.=ljb($c,'mem_storage',$id.'_m'.$k.'_1_1_ckb'.$k.'_memnu',$k,'ckb'.$k).' ';}

@@ -1,5 +1,4 @@
-<?php
-//philum_app_wiktionary
+<?php //wiktionary
 
 class wiktionary{
 
@@ -50,7 +49,7 @@ foreach($r->childNodes as $k=>$v){
 		}}
 return $ret;}
 
-static function build($p,$o){req('tri');
+static function build($p,$o){
 $d=curl_get_contents($p);
 $ret=html_detect($d,'<ol>');
 $ret=utf82ascii($ret);
@@ -59,7 +58,7 @@ $ret=nl2br($ret);
 return $ret;}
 
 static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 if(substr($p,0,4)!='http')$p='https://fr.wiktionary.org/wiki/'.$p;
 $ret=self::build($p,$o); $bt='';
 if($o)$bt=lj('','popup_app__3_wiktionary_call_'.ajx($p),picto('view')).' ';

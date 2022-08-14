@@ -5,7 +5,7 @@ ini_set('display_errors',1);
 if(!function_exists('p'))require('progb/lib.php');//
 $_SESSION['uproot']='../users/'.ses('qb').'/downloads';//destination folder
 
-function fsize_b($d){$u=array('B','KB','MB');
+function fsize_b($d){$u=['B','KB','MB'];
 	return @round($d/pow(1024,($i=floor(log($d,1024)))),1).' '.$u[$i];}
 
 if(isset($_FILES['myfile'])){

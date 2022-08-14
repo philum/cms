@@ -1,5 +1,4 @@
-<?php
-//philum_app
+<?php //app
 
 class appmodel{
 static $a=__CLASS__;
@@ -12,25 +11,23 @@ return $ret;}
 
 static function call($p,$o,$prm=[]){
 [$p,$o]=prmp($prm,$p,$o);
-if(strpos($o,';'))list($o,$ord)=opt($o,';',2);
+//[$p]=arr($prm);
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_'.self::$a.',call_'.$inpid.'_3_'.$p.'_'.$o;
+$j=$rid.'_appmodel,call_'.$inpid.'_3_'.$p.'_'.$o;
 $ret=inputj($inpid,$p,$j);
 //$ret=textarea('inp',$p,40,4,atc('console'));
 $ret.=lj('',$j,picto('ok')).' ';
-//$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_msqedit,call___'.self::$a.'*1_'.$cols,picto('edit')).' ';
 //$ret.=msqbt('',nod(self::$a.'_1'));
 return $ret;}
 
 static function install($b){
 //ses($b,qd($b));//name of table
 //1=drop table on change $r !
-$r=['tit'=>'var','txt'=>'text','day'=>'sint'];
+$r=['tit'=>'var','txt'=>'text','day'=>'int'];
 mysql::install($b,$r,0);}
 
 static function home($p,$o){

@@ -1,7 +1,6 @@
-<?php
-//philum_plugin_imgtxtb
-
-function gdf_nblines($t,$maxl){$n=0; 
+<?php //imgtxtb
+class imgtxt{
+static function gdf_nblines($t,$maxl){$n=0; 
 $t=str_replace("\n"," \n",$t); $r=explode(' ',$t);
 foreach($r as $k=>$v){$len=strlen($v); $nb+=$len+1; $pos=strpos($v,"\n");
 	if($nb>$maxl){$v; $pos=strlen($v); $ret[$n].=substr($v,0,$pos); $n++;
@@ -14,21 +13,21 @@ foreach($r as $k=>$v){$len=strlen($v); $nb+=$len+1; $pos=strpos($v,"\n");
 	else $ret[$n].=trim($v).' ';}
 return $ret;}
 
-/*function imt_mk($p,$n){ 
+/*function mk($p,$n){ 
 $l=50; $s=strlen($p); $n=ceil($s/$l); $sz=$s<$l?($s/5)*40:400;
 for($i=0;$i<$n;$i++){$v=substr($p,$i*$l,$l); $pos=strpos($v,"\n");
 	if($pos!==false){$r[]=substr($v,0,$pos); $r[]=substr($p,$pos+1);}
 	else $r[]=$v;}
 return $r;}*/
 
-function imgtxt_mk($t,$fx,$fy,$lac,$hac,$fnt,$clr,$dest){
+static function build($t,$fx,$fy,$lac,$hac,$fnt,$clr,$dest){
 $t=str_replace("&nbsp;",' ',$t);
 $nb_chars=strlen($t); $width=400;//cw();
 if($lac && $width)$maxl=floor($width/$lac); else $maxl=400;
 $la=$nb_chars*$lac; 
 $la=$la>$width-8?$width-8:$la;
-if($nb_chars>$maxl or strpos($t,"\n")!==false)$r=gdf_nblines($t,$maxl);
-//$r=imt_mk($t); 
+if($nb_chars>$maxl or strpos($t,"\n")!==false)$r=self::gdf_nblines($t,$maxl);
+//$r=else::mk($t); 
 $ha=!empty($r)?$hac*count($r):($hac?$hac:20); $clr=$clr?$clr:'000000';
 $rh=hexdec(substr($clr,0,2));$gh=hexdec(substr($clr,2,2));$bh=hexdec(substr($clr,4,2));
 $image=imagecreate($la,$ha);
@@ -41,7 +40,7 @@ else imagestring($image,$font,$fx?$fx:0,$fy?$fy:0,$t,$color);
 imagecolortransparent($image,$blanc);
 imagepng($image,$dest);}
 
-function plug_imgtxt($t,$fnt,$cod=''){
+static function home($t,$fnt,$cod=''){
 $t=str_replace('/','|',$t);//nodirs
 $t=$t?$t:'error'; $fnt=$fnt?$fnt:'Fixedsys';
 $font='gdf/'.$fnt.'.gdf'; mkdir_r('imgb/cod');
@@ -52,9 +51,9 @@ else $f='imgb/cod/'.ses('read').'_imgtxt.png';
 $r=msql::row('system','edition_fontes',$fnt);
 if(!is_array($r[3]) && is_file($font)){
 	if(!file_exists($f) or $cod or get('rebuild_img'))
-	if($r)imgtxt_mk($t,$r[0],$r[1],$r[2],$r[3],$font,$clr,$f);
-list($w,$h)=getimagesize($f);
+	if($r)self::build($t,$r[0],$r[1],$r[2],$r[3],$font,$clr,$f);
+[$w,$h]=getimagesize($f);
 return image('/'.$f.'?'.randid(),$w,$h);}
 else return $t;}
-
+}
 ?>

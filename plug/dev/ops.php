@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_ops
+<?php //ops
 
 function ops_build($p,$o){
 //$r=msql_read('',nod('umnum'),$p);
@@ -16,7 +15,7 @@ if($r)foreach($r as $k=>$v){
 return tabler($ret);}
 
 function ops_j($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=ops_build($p,$o);
 return $ret;}
 
@@ -28,11 +27,9 @@ $ret=select_j('inp','pfunc','','ops/ops_r','','2');
 //$ret.=togbub('plug','ops_ops*r',btn('popbt','select...'));
 $ret.=input('inp',$p).' ';
 $ret.=lj('',$rid.'_plug__2_ops_ops*j___inp',picto('ok')).' ';
-//$ret.=lj('','popup_plupin___msqedit_ops*1_id,val',picto('edit')).' ';
 return $ret;}
 
 function plug_ops($p,$o){$rid=randid('plg');
-req('meta,art,pop,spe');
 ses('qdaa','pub_art_a');
 $bt=ops_menu($p,$o,$rid);
 $ret=ops_build($p,$o);

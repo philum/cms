@@ -1,10 +1,9 @@
-<?php
-//philum_app_geo
+<?php //geo
 
 class geo{
 
 static function profil_js($gps){
-list($lat,$lon)=explode('/',$gps);
+[$lat,$lon]=explode('/',$gps);
 return "
 function geo(){
 if(navigator.geolocation)
@@ -35,7 +34,7 @@ $sql="SELECT ville,$formule AS dist FROM villes WHERE $formule<='$peri' ORDER by
 $r=sql_b($sql,'',1); p($r);
 return $r;}*/
 
-static function profil_townfromgps($gps){list($lat,$lon)=explode('/',$gps); $mg=6;
+static function profil_townfromgps($gps){[$lat,$lon]=explode('/',$gps); $mg=6;
 return sql_b('select ville from villes where lat_deg<"'.($lat+$mg).'" and lat_deg<"'.($lat-$mg).'" and lon_deg<"'.($lon+$mg).'" and lon_deg>"'.($lon-$mg).'"','v'); //p($r);
 }
 
@@ -55,16 +54,14 @@ $gpsru=explode('/',$gpsu); $gpsrv=explode('/',$gpsv);
 //$r=algo_gps_distance($gpsru[0],$gpsru[1],100); 
 if($gpsv && $gpsu)return get_distance_m($gpsru[1],$gpsru[0],$gpsrv[1],$gpsrv[0]);}
 
-static function build($p,$o){
-list($p,$o)=ajxp($res,$p,$o);
+static function build($p,$o,$prm=[]){
+$p=$prm[0]??$$p;
 //$r=msql::read_b('',nod('geo_1'));//p($r);
 $ret=$p.'-'.$o;
 return $ret;}
 
 static function menu($p,$o,$rid){$ret=input('inp',$p).' ';
-$ret.=lj('',$rid.'_app__2_geo_build___inp',picto('ok')).' ';
-//$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_geo*1_'.$cols,picto('edit'));
+$ret.=lj('',$rid.'_geo,build_inp',picto('ok')).' ';
 return $ret;}
 
 static function home($p,$o){$rid=randid('geo');

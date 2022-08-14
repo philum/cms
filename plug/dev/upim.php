@@ -1,5 +1,4 @@
-<?php
-//philum_tests
+<?php //tests
 session_start();
 ini_set('display_errors',1);
 error_reporting(-1);//E_NOTICE/E_ALL/E_STRICT
@@ -24,7 +23,7 @@ Head::add('csscode','
 upim_h();
 echo Head::get();
 
-function fsize_b($d){$u=array('B','KB','MB');
+function fsize_b($d){$u=['B','KB','MB'];
 	return @round($d/pow(1024,($i=floor(log($d,1024)))),1).' '.$u[$i];}
 
 function upload_j(){
@@ -61,7 +60,7 @@ return '
 </div>
 <script src="../js/upload.js"></script>
 ';
-//js_code(up_js());
+//jscode(up_js());
 }
 
 if(!@$_GET['plug'])echo upload_j();

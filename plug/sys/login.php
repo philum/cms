@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_login 
+<?php //login
 
 function loged_j($usr,$rg,$t,$tl){
 if($t)$ta=btn('txtsmall',$t); echo $_SESSION['USE'];
@@ -8,7 +7,7 @@ $nam=nameofauthes($_SESSION['prmb'][11]);
 return '<form id="login" name="form2" method="post" action="/?log=on" onKeyPress="checkEnter(event,\'login\')">'.$ta.autoclic('user',$nam,$tl,'100','txtx').' '.autoclic('password','pass','pass',$tl,'50','txtx').' '.submitj('txtx" title="log:in / nouvel utilisateur',"login","ok").' </form>';}
 else return lkc('txtx',"/?log=out","log_out").br();}
 
-function plug_login($p){req('pop');
+function plug_login($p){
 return login::form($_SESSION['USE'],$_SESSION['iq'],$p);
 //return loged_j($_SESSION['USE'],$_SESSION['iq'],$t,10);
 //$w='.'.$_SERVER['HTTP_HOST'];

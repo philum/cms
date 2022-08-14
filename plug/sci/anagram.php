@@ -1,5 +1,4 @@
-<?php
-//philum_app
+<?php //app
 
 class anagram{
 static $a=__CLASS__;
@@ -26,16 +25,16 @@ if($rb)for($i=0;$i<$n;$i++){$ra2=self::rmr($ra,$i,1); $rb=[];
 return $ret;}
 
 static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+[$p,$o]=ajxp($res,$p,$o);
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_'.self::$a.',call__3_'.$p.'_'.$o.'___'.$inpid.'|dicolng';
+$j=$rid.'_anagram,call__3_'.$p.'_'.$o.'___'.$inpid.'|dicolng';
 $ret=inputj($inpid,$p,$j);
 $ret.=checkbox('dicolng','en','fr');
-//$ret.=radiobtn(['en','fr'],'','dicolng');
+//$ret.=radio('dicolng',['en','fr'],'');
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}
 

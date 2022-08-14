@@ -1,5 +1,4 @@
-<?php
-//philum_app_star3d
+<?php //star3d
 
 class star3d{
 //var datas=[["Milky Way",4.4637,-0.5061,26100,10,-221258.63,126445.65,-64240.84,white,"0","","Milky Way"],["Oomo",3.15,0.16,14.6,10,-1.21,24.49,-145.99,green,"0","","Oomo"]
@@ -19,7 +18,7 @@ array_unshift($r,['Milky Way',4.4637,-0.5061,26100,10,0,0,0]);
 $ret='//'.count($r).' stars'.n();
 
 foreach($r as $k=>$v){
-list($nm,$ad,$dc,$ds,$x,$y,$z,$sp,$hd)=arr($v,9); $hip=$nm; 
+[$nm,$ad,$dc,$ds,$x,$y,$z,$sp,$hd]=arr($v,9); $hip=$nm; 
  
 $dscale=10;
 $scale=100000000000;
@@ -54,7 +53,7 @@ $z=cos($ad)*cos($dc)*$ds;*/
 //used
 //$ds=log($ds)**2;
 $x=0-sin($ad)*cos($dc)*$ds; $y=sin($dc)*$ds; $z=cos($ad)*$ds;
-//list($x,$y,$z)=maths::xyz($ad,$dc,$ds,1,1);
+//[$x,$y,$z]=maths::xyz($ad,$dc,$ds,1,1);
 //echo $nm.' sz='.$sz.' ds='.$ds.' x='.$x.n();
 //$x=0-$x;
 
@@ -127,8 +126,9 @@ if(count($rb)==4)$ret.='addbt("'.$nm.'",datas);';
 $ret.='screenshot("photo");';
 return $ret;}
 
-static function js($p,$res=''){req('tri');
-$vars=self::build($p?$p:ajxg($res)); //eco($vars);
+static function js($p,$o='',$prm=[]){
+$p=$prm[0]??$p;
+$vars=self::build($p); //eco($vars);
 $bab=file_get_contents('js/bab.js');
 $bab.=file_get_contents('js/bab_star.js');
 $rid=('scn');//randid
@@ -149,8 +149,8 @@ window.addEventListener("DOMContentLoaded",function(){
 static function play($p){$rid=('scn');//randid
 return bal('canvas',['id'=>$rid,'class'=>'canvas'],'');}
 
-static function call($p,$o,$res=''){req('tri');
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$p;
 //$sq=star::sq($p);
 //$r=star::build($p);
 //$rb=array_column($r,1); $d=implode(',',$rb);
@@ -160,13 +160,13 @@ $ret=self::play($p);
 return $ret;}
 
 static function menu($p,$o,$rid){
-$j=$rid.'_star3d,call__xr_____insd_appjs';
-$ret=inputj('insd','81693,99461,88601',$j).' ';
+$j=$rid.'_star3d,call_insd_jsxr';
+$ret=inputj('insd','81693,99461,88601',$j).'';
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}
 
 static function home($p,$o){
-$rid=randid('s3d'); $ret='';
+$rid=randid('s3d'); $ret=''; $bt='';
 Head::add('csscode','html,body{overflow:hidden; width:100%; height:100%; padding:0; margin:0;}
 #'.$rid.'{width:100%; height:100%; touch-action:none;}
 .canvas{width:100%; height:100%; touch-action: none;}');
@@ -177,14 +177,10 @@ Head::add('jslink','https://preview.babylonjs.com/gui/babylon.gui.min.js');
 //Head::add('jslink','https://preview.babylonjs.com/cannon.js');
 //Head::add('jslink','https://preview.babylonjs.com/oimo.js');//physics
 //Head::add('jslink','/js/bab.js');
-$bt=lkt('txtx','/app/star3d/'.$p,picto('chain'));
-//$bt=self::menu($p,$o,$rid);
+if(!$p)$bt=self::menu($p,$o,$rid);
+$bt.=lkt('txtx','/app/star3d/'.$p,picto('chain'));
 if($p)$ret=self::call($p,$o);
 Head::add('jscode',self::js($p));
-return divd($rid,$ret).$bt;}
+return $bt.divd($rid,$ret);}
 }
-
-function plug_starmap($p,$o){
-return star3d::home($p,$o);}
-
 ?>

@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_reboot
+<?php //reboot
 
 function plug_reboot(){
 echo system('service apache2 restart');

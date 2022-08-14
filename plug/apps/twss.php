@@ -1,5 +1,4 @@
-<?php
-//philum_app_twss
+<?php //twss
 
 class twss{
 static $a=__CLASS__;
@@ -9,8 +8,8 @@ static function build($p,$o){
 $ret=twit::call($p,'stream');
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $ret=self::build($p,$o);
 return $ret;}
 
@@ -35,10 +34,5 @@ $rid=randid(self::$a); $ret='';
 $bt=self::menu($p,$o,$rid);
 if($p)$ret=self::build($p,$o);
 return $bt.divd($rid,$ret);}
-
 }
-
-function plug_twss($p,$o){
-return twss::home($p,$o);}
-
 ?>

@@ -1,11 +1,9 @@
-<?php
-//philum_app_um3d
-
+<?php //um3d
 class um3d{
 static $clr=['#ffffff','#000000','#ff0000','#00ff00','#0000ff','#ffff00','#00ffff','#ff9900','#cccccc','#666666'];
 
 function legend($r,$ha,$font){$h=$ha-40; $mid=$h/2; $sz=16;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;//spe
 $r=['amical','neutre','pas amical','hostiles'];
 foreach($r as $k=>$v){
 	if($v=='amical')$clr=$green;
@@ -25,15 +23,15 @@ foreach($r as $k=>$v){
 	[dist] => 35*/
 
 function projection($v,$h,$max){$mid=$h/2;
-$x+=$z/2-$mid; $y+=$z/2;  
+$x=$v/2-$mid; $y=$v/2;  
 return [$x,$y];}
 
 function dots($r,$h,$font,$side){
 $mid=$h/2; $mx=$mid; $my=$mid; $sz=16; if($side==2)$mx+=$h;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;//spe
 foreach($r as $k=>$v)$rz[]=$v['dist']; $max=max($rz); $ratio=$mid/$max;
 foreach($r as $k=>$v){
-	//list($x,$y)=self::projection($v,$h,$max);
+	//[$x,$y]=self::projection($v,$h,$max);
 	$ad=$v['ad']; $dc=$v['dc']; $ds=$v['dist']*$ratio; if($side==2)$ad-=90;
 	$a=deg2rad($ad); $x=$mx+round(sin($a)*$ds,4); $z=$my+round(cos($a)*$ds,4);
 	$y=$my+round(sin(deg2rad($dc))*$ds,4);
@@ -52,7 +50,7 @@ foreach($r as $k=>$v){
 
 function map($r,$h,$side){
 $mid=$h/2; $mx=$mid; $my=$mid; if($side==2)$mx+=$h;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;//spe
 svg::line($mx,0,$mx,$h,$green);
 svg::line(0,$my,$h,$my,$red);
 svg::line(0,$h,$h,0,$blue);
@@ -67,7 +65,7 @@ for($i=1;$i<=40;$i++){$u=$unit*$i;
 
 function map2($r,$h,$side){
 $mid=$h/2; $mx=$mid+$h; $my=$mid; $zero=$h;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;//spe
 svg::line($mx,0,$mx,$h,$green);
 svg::line($zero,$my,$zero+$h,$my,$blue);
 svg::line($zero,$h,$zero+$h,0,$red);
@@ -81,7 +79,7 @@ for($i=1;$i<=40;$i++){$u=$unit*$i;
 	svg::line($x,$y,$x2,$y2,$gray);}}
 
 function draw($r,$h){$w=$h*2; $im=new svg($w,$h); //p($r);
-list($white,$black,$red,$green,$blue,$yellow,$cyan)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan]=self::$clr;//spe
 $font=10;//size
 svg::rect(0,0,$w,$h,$black);
 self::map($r,$h,$font);
@@ -117,15 +115,13 @@ $rb=self::datas($r,$p); //pr($rb);
 $ret=self::draw($rb,$p);
 return $ret;}
 
-function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+function call($p,$o,$prm=[]){
+$p=$prm[0]??$$p;
 $ret=self::build($p,$o);
 return $bt.$ret;}
 
 function menu($p,$o,$rid){$ret=input('inp',$p).' ';
-$ret.=lj('',$rid.'_app__2_um3d_call___inp',picto('ok')).' ';
-//$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_um3d*1_'.$cols,picto('edit')).' ';
+$ret.=lj('',$rid.'_um3d,call_inp',picto('ok')).' ';
 return $ret;}
 
 }

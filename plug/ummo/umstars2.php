@@ -1,11 +1,9 @@
-<?php
-//philum_app_umstars2 (svg)
-
+<?php //umstars2 (svg)
 class umstars2{
 static $clr=['#ffffff','#000000','#ff0000','#00ff00','#0000ff','#ffff00','#00ffff','#ff9900','#cccccc','#666666'];
 
 static function legend($r,$ha,$font){$h=$ha-40; $mid=$h/2; $sz=16;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;//spe
 $r=['amical','neutre','inamical','hostile'];
 foreach($r as $k=>$v){
 	if($v=='amical')$clr=$green;
@@ -27,7 +25,7 @@ foreach($r as $k=>$v){
 
 static function dots($r,$ha,$font){
 $h=$ha-40; $mid=$h/2; $mx=$mid; $my=$mid; $mx+=20; $my+=20; $sz=16; //pr($r);
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;//spe
 foreach($r as $k=>$v){
 	$ad=$v['ad']; $ad-=90; 
 	$dc=$v['dc']; $mxb=$dc<0?$mx+$h:$mx;
@@ -46,9 +44,9 @@ foreach($r as $k=>$v){
 	//svg::circle($x,$y,$sz*2,$clr);
 	svg::circle($x,$y,$sz,$clr,$black,2);
 	//svg::tog($x,$y,$sz,$black,$v['star'],$v['dist'].' '.$v['planet']);
-	list($hip,$name,$planet,$dist,$source)=vals($v,['hip','name','planet','dist','source']);
+	[$hip,$name,$planet,$dist,$source]=vals($v,['hip','name','planet','dist','source']);
 	//$tx=ajx($hip.' - HD'.$star.' - '.$planet.n().$dist.' AL - '.$source);
-	//svg::lj($x,$y+16,12,$white,'popup_text___'.$tx,$v['hip']);
+	//svg::lj($x,$y+16,12,$white,'popup_usg,txt___'.$tx,$v['hip']);
 	svg::lj($x,$y+16,12,$white,'popup_app___star_call_'.$hip.'_1',$name);
 	if($dist)svg::text($font,$x-10,$y+28,round($dist,2).' Al',$yellow);
 	//svg::text($font,$x-20,$y+16,$v['hip'].' - '.$v['star'],$white);
@@ -58,7 +56,7 @@ foreach($r as $k=>$v){
 
 static function map($r,$ha,$font,$hemi=1){
 $h=$ha-40; $mid=$h/2; $mx=$hemi==2?$h+$mid:$mid; $my=$mid; $mx+=20; $my+=20;
-list($white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan,$orange,$silver,$gray]=self::$clr;//spe
 svg::circle($mx,$my,$h,'',$white);
 for($i=1;$i<=6;$i++){$hb=round($h/6*$i,2);
 	svg::circle($mx,$my,$hb,'',$gray);
@@ -72,7 +70,7 @@ for($i=0;$i<24;$i++){$a=$i*15; $a=deg2rad($a); //15=360/24:
 	svg::text($font,$x,$y,$t,$gray);}}
 
 static function draw($r,$h){$w=$h*2; $sz=$w.'/'.$h; $im=new svg($w,$h); //p($r);
-list($white,$black,$red,$green,$blue,$yellow,$cyan)=self::$clr;//spe
+[$white,$black,$red,$green,$blue,$yellow,$cyan]=self::$clr;//spe
 $font=10;//size
 svg::rect(0,0,$w,$h,$black);
 self::map($r,$h,$font);
@@ -112,15 +110,13 @@ $rb=self::datas($r); //pr($rb);
 $ret=self::draw($rb,$p?$p:900);
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $ret=self::build($p,$o);
-return $bt.$ret;}
+return $ret;}
 
 static function menu($p,$o,$rid){$ret=input('inp',$p).' ';
-$ret.=lj('',$rid.'_app__2_umstars2_call___inp',picto('ok')).' ';
-//$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_umstars2*1_'.$cols,picto('edit')).' ';
+$ret.=lj('',$rid.'_umstars2,call_inp',picto('ok')).' ';
 return $ret;}
 
 }

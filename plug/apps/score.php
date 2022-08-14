@@ -1,5 +1,4 @@
-<?php
-//philum_app_score
+<?php //score
 
 class score{
 static $a=__CLASS__;
@@ -97,9 +96,8 @@ foreach($rd as $k=>$v)$rb[]=[$k,$v];
 $bt.=csvfile($f,$rb,'csv','',1);
 
 //arts
-ses('score',$rd); //getb('score','1');
-req('art,pop,spe');
-$ret=output_arts($rd,'score','art');
+ses('score',$rd);//get('score','1');
+$ret=ma::output_arts($rd,'score','art');
 return $bt.divc('content',$ret);}
 
 static function call($p,$o,$res=''){

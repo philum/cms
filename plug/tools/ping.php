@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_ping
+<?php //ping
 
 function ping_j($p,$o,$res=''){
 $ret=chrono('ok');

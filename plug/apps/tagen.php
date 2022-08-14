@@ -1,5 +1,4 @@
-<?php
-//philum_app_tagen
+<?php //tagen
 
 class tagen{
 static $a=__CLASS__;
@@ -11,20 +10,17 @@ static function build($p,$o){
 $ret=$p.'-'.$o;
 return $ret;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
-if(strpos($o,';'))list($o,$ord)=opt($o,';',2);
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$p;
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_app__3_'.self::$a.'_call___'.$inpid;
+$j=$rid.'_tagen,call_'.$inpid.'_3';
 //$ret=inputj($inpid,$p,$j);
 $ret=textarea('inp',$p,40,4,atc('console'));
 $ret.=lj('',$j,picto('ok')).' ';
-//$cols='ib,val,to';//create table, name cols
-//$ret.=lj('','popup_plupin___msqedit_'.self::$a.'*1_'.$cols,picto('edit')).' ';
 //$ret.=msqbt('',nod(self::$a.'_1'));
 return $ret;}
 

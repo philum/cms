@@ -1,7 +1,7 @@
-<?php
-//philum_app
+<?php //app
 
 class simbad{
+static $conn=1;
 static $a=__CLASS__;
 static $default='wolf424';
 
@@ -19,7 +19,7 @@ elseif(substr($va,0,4)=='Gaia')$rb['Gaia']=substr($va,5);
 return $rb;}
 
 static function cleanup($r){//pr($r);
-$p=explode('--',$r[0][0]);
+$ra=$r[0][0]??[]; if(!$ra)return $ra; $p=expl('--',$ra);
 $rb[$p[0]]=$p[1];
 foreach($r as $k=>$v){
 if(isset($v[1]))$v[1]=deln($v[1],' ');
@@ -70,7 +70,7 @@ if($r)foreach($r as $k=>$v){$rt[$k]=[];
 return $rt;}
 
 static function build($u){//hip32578
-$d=get_file($u); $dom=dom($d); req('tri');
+$d=get_file($u); $dom=dom($d); 
 $r=$dom->getElementsByTagName('table'); $n=count($r);
 $rt=self::detect_table($r[3]);
 $rt=self::cleanup($rt);
@@ -79,9 +79,8 @@ $rd=self::find_names($rd);
 if($rd)$rt+=$rd;
 return $rt;}
 
-static function call($p,$o,$res=''){
-list($p,$o)=ajxp($res,$p,$o);
-$u=self::url($p);
+static function call($p,$o,$prm=[]){
+$p=$prm[0]??$p; $u=self::url($p);
 $bt=lkt('',$u,picto('url').domain($u)).' ';
 //for($i=0;$i<$n;$i++)$bt.=lj(active($i,$o),'smbd_simbad,call___'.ajx($p).'_'.$i,$i);
 $r=self::build($u);
@@ -103,7 +102,7 @@ return [$r['ICRS AD'],$r['ICRS DC'],$r['Distance (LY)'],$r['Spectral type'],$r['
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_'.self::$a.',call__3_'.$p.'_'.$o.'___'.$inpid;
+$j=$rid.'_simbad,call_'.$inpid.'_3_'.$p.'_'.$o;
 $ret=inputj($inpid,$p,$j);
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}

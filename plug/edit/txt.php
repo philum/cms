@@ -1,15 +1,14 @@
-<?php
-//philum_app_txt
+<?php //txt
 
 class txt{
 
-static function log(){return $_SESSION['auth']>6?$_SESSION['qb']:$_SESSION['USE'];}
+static function log(){return ses('auth')>6?ses('qb'):ses('USE');}
 
 static function del($d){$nd=self::log();
 if($d)unlink('msql/users/'.$nd.'_txt_'.$d.'.php');
 return btn('txtyl','deleted');}
 
-static function paste($d){$ret=hidden('','cka','m'.$d);
+static function paste($d){$ret=hidden('cka','m'.$d);
 $ret.=ljb('','mem_storage','txtarea_m1___cka0',picto('save2'),'cka1',att(nms(57))).' ';
 $ret.=ljb('','mem_storage','txtarea_m1_1__ckb0',picto('refresh'),'ckb1',att(nms(95))).' ';
 //$ret.=hlpbt('memstorage');
@@ -22,10 +21,10 @@ if($r)foreach($r as $k=>$i){$txt=msql::val('',$nd.'_txt_'.$i,1);
 return divc('list',$ret);}
 
 //html
-static function area($p,$o,$res){
-if($p=='conn2html')$d=self::act('conn2html','',$res); else $d=ajxg($res);
-$ret=lj('popbt','txtarea_txt,act__23_html2conn____txtareb',picto('before'));
-$ret.=lj('popbt','txtarea_txt,act__23_code____txtareb',picto('code'));
+static function area($p,$o,$prm){[$d]=$prm;
+if($p=='conn2html')$d=self::act('conn2html','',$prm);
+$ret=lj('popbt','txtarea_txt,act_txtareb_23_html2conn',picto('before'));
+$ret.=lj('popbt','txtarea_txt,act_txtareb_23_code',picto('code'));
 $ret.=diveditbt('').' ';
 $ret.=div(atb('contenteditable','true').atd('txtareb').atc('panel').ats('min-height:400px; border:1px dotted silver; margin:2px 0; padding:4px;'),$d);
 return $ret;}
@@ -35,12 +34,11 @@ foreach($r as $k=>$v)if(substr($v,0,4)=='    ')$ret.=balb('blockquote',trim($v))
 return $ret;}
 
 //actions
-static function act($p,$o,$res){
-req('pop,spe'); $ret='';
-if($p=='replace')$r=ajxr($res); else $d=ajxg($res);
+static function act($p,$o,$prm){
+[$d,$d1,$d2]=arr($prm,3); $ret='';
 switch($p){
-case('src'):$_GET['urlsrc']=$d; if($d)list($t,$ret,$reb)=conv::vacuum($d,'',1); break;
-//case('brut'):list($t,$b,$ret)=conv::vacuum($d,''); break;
+case('src'):ses::$urlsrc=$d; if($d)[$t,$ret,$reb]=conv::vacuum($d,'',1); break;
+//case('brut'):[$t,$b,$ret]=conv::vacuum($d,''); break;
 case('brut'):$ret=get_file($d); break;
 case('conn2html'):$d=self::mkquotes($d); $ret=conn::read($d,0,''); break;
 case('html2conn'):$ret=conv::call($d); break;
@@ -50,11 +48,10 @@ case('cleanbr'):$ret=clean_br($d); break;
 case('deln'):$ret=del_n($d); break;
 case('striplink'):$ret=codeline::parse($d,'striplink','correct'); break;
 case('cleanpunct'):$ret=clean_punct($d); break;
-case('addlines'):$ret=add_lines($d); break;
-case('buildarray'):$ret=plugin_func('table2array','table2array_build',$d); break;
-case('txt2array'):$ret=plugin_func('buildtable','buildtable_j',$d); break;
-case('dump2array'):$ret=plugin_func('buildtable','buildtable_jb',$d); break;
-case('replace'):list($ret,$d1,$d2)=$r; $ret=str_replace($d1,$d2,$ret); break;
+case('addlines'):$ret=mc::add_lines($d); break;
+case('txt2array'):$ret=buildtable::call($d); break;
+case('dump2array'):$ret=buildtable::jb($d); break;
+case('replace'):$ret=str_replace($d1,$d2,$d); break;
 case('exec'):$ret=exec::run($d); break;
 case('entities'):$ret=html_entity_decode($d); break;
 case('utf8'):$ret=utf8_decode($d); break;
@@ -63,72 +60,50 @@ case('lower'):$ret=lowercase($d); break;}
 return $ret;}
 
 static function btact($p,$o){$ret='';
-$j='txtarea_txt,act__23_';
 $r=['cleanmail','cleanbr','deln','striplink','cleanpunct','addlines','entities','utf8','url','lower','html2conn','txt2array','dump2array'];
-foreach($r as $k=>$v)$ret.=lj('',$j.$v.'____txtarea',$v);
-//$ret.=lj('txtx','popup_plup__2_buildtable_buildtable*j___txtarea','txt2array');
-//$ret.=lj('txtx','popup_plup__2_buildtable_buildtable*jb___txtarea','dump2array');
-//$ret.=lj('','popup_plup___buildtable____txtarea','buildtable').' '
-$ret.=self::convbt();
+foreach($r as $k=>$v)$ret.=lj('','txtarea_txt,act_txtarea_23_'.$v,$v);
+$ret=lj('txtx','popup_converts,home','converts');
+$ret.=lj('txtx','popup_plug___connectors','conn');
+$ret.=lj('txtx','popup_plug___sconn','sconn');
+if(auth(6))$ret.=lj('txtx','popup_exec,home','exec');
+$ret.=lj('txtx','txtarea_converts,act__23_x','x').' ';
 $reb=textarea('repla','',15,1).' '.textarea('replb','',15,1).' ';
-//$reb.=lj('popsav',$j.'replace____txtarea|repla|replb','replace');
-$reb.=lja('popbt',atj('replacetxt','txtarea'),'replace').br();
-$reb.=inputj('url','url',$j.'src____url','','1');//import
-//$reb.=lj('popbt','txtarea_app__3_mercury_callxt___url',nms(132)).' ';
-$reb.=lj('popsav',$j.'src____url',nms(132)).' ';
-$reb.=lj('popbt',$j.'brut____url','brut').' ';
-$reb.=lj('popbt','wyswyg_txt,area___conn2html____txtarea',picto('after'),att('conn2html'));
+$reb.=lj('popsav','txtarea_txt,act_txtarea,repla,replb_23_replace','replace').br();
+//$reb.=lja('popbt',atj('replacetxt',['txtarea','repla','replb']),'replace');
+$reb.=inputj('url','','txtarea_txt,act_url_23_src','url');//import
+$reb.=lj('popsav','txtarea_txt,act_url_23_src',nms(132)).' ';
+$reb.=lj('popbt','txtarea_txt,act_url_23_brut','brut').' ';
+$reb.=lj('popbt','wyswyg_txt,area_txtarea_3_conn2html',picto('after'),att('conn2html'));
 return divc('nbp',$ret).$reb;}
 
-//conv
-static function conv($p,$o,$res){$ret=ajxg($res);
-return converts::act($ret,$p,$o);}
-
-static function convbt(){
-//$j='txtarea_txt,conv__23_';
-$j='txtarea_converts,act__23_'; $ret='';
-$r=['unescape','base64','ascii','binary','bin/dec','timestamp','php'];//'utf8','htmlentities','url',
-//foreach($r as $v)$ret.=lj('',$j.$v.'_1_txtarea',$v);//.lj('',$j.$v.'__txtarea','-').' '
-//$ret=select(atd('cnv'),$r,'vv',''); $ret.=lj('popsav',$j.'__1_txtarea','exec').' ';
-$ret.=lj('txtx','popup_converts,home','converts');
-$ret.=lj('txtx','popup_plup___connectors','conn');
-$ret.=lj('txtx','popup_plup___sconn','sconn');
-if(auth(6))$ret.=lj('txtx','popup_exec,home','exec');
-$ret.=lj('txtx',$j.'x','x').' ';
-return $ret;}
-
 //call
-static function call($n,$b,$res){$nd=self::log(); $rb=ajxr($res);
-$rb[1]=html_entity_decode_b($rb[1]??'');
+static function call($n,$b,$prm){$nd=self::log();
 if(!$n)$n=msql::findlast('users',$nd,'txt');
-msql::modif('users',$nd.'_txt_'.$n,$rb,'one','',1);
+msql::modif('users',$nd.'_txt_'.$n,$prm,'one','',1);
 return btn('txtyl','ok');}
 
 //mnu
 static function btn($d,$nd,$tx){//version,node,
 $r=msql::choose('',$nd,'txt'); $nxt=msql::nextnod($r); $ret='';
 if($d){$ret.=btd('bck','').' ';
-	$ret.=btd('bts',lj('popbt','bck_txt,call_tit,txtarea_xd_'.$d,nms(27))).' ';//save
+	$ret.=lj('popbt','bck_txt,call_tit,txtarea_xd_'.$d,nms(27)).' ';//save
 	$ret.=lj('txtx','plgtxt_txt,call___'.$d.'_'.$tx,$d).' ';//reload
 	$ret.=lj('','bck_txt,del__xd_'.$d.'_'.$tx,picto('del'),att(nms(43)));
 	$ret.=lj('','plgtxt_txt,home____'.$tx,picto('close'),att(nms(42)));}
 if($nd){
 	$ret.=lj('','plgtxt_txt,home___'.$nxt.'_'.$tx,picto('add'),att(nms(44)));
-	//$ret.=lj('','popup_txt,files___txt_'.$nd.'_'.$tx,picto('window'),att(nms(25)));
 	$ret.=togbub('txt,files',$nd.'_'.$tx,picto('smenu'));}
 if($d)$ret.=msqbt('',$nd.'_txt_'.$d);
-//$ret.=lj('popsav','wyswyg_txt,area___conn2html____txtarea',picto('valid'),att('conn2html'));
-//$ret.=lj('','popup_plup___txt_stx*area',picto('code'),att('wyswyg'));
 return $ret;}
 
-static function home($d,$tx){$nd=self::log(); req('art'); $msg='';
+static function home($d,$tx){$nd=self::log(); $msg='';
 if($d)$ra=msql_read('',$nd.'_txt_'.$d,'');
 if($d && is_array($ra)){$msg=stripslashes(valr($ra,1,1)); $msg=html_entity_decode_b($msg);}
 if($d && !$ra && $nd)msql::modif('users',$nd.'_txt_'.$d,['title',''],'one','',1);
 $ret=self::paste($d).' ';
 if($d)$ret.=input1('tit',stripslashes(valr($ra,1,0))).' ';
 $ret.=self::btn($d,$nd,$tx).br();
-$ret.=div('',conn_edit(''));//ats('width:630px;')
+$ret.=div('',edit::bt(''));//ats('width:630px;')
 $ret.=div('',self::btact('',''));
 $s=ats('width:100%; min-height:360px; padding:4px 8px; margin-top:2px;');
 $edt=divc('col1',textarea('txtarea',$msg,44,4,$s));
@@ -138,9 +113,8 @@ $ret.=divd('bck','');
 Head::add('csscode','
 .tab{font-size:large; padding:6px; border:1px dotted silver; max-height:320px; word-wrap:break-word; overflow-y:auto;}
 .grid-pad{grid-template-columns:auto 40%;}');
-$ret.=js_code('document.getElementById(\'txtarea\').innerHTML=localStorage[\'m1\']');//Head::add('
+$ret.=jscode('document.getElementById(\'txtarea\').innerHTML=localStorage[\'m1\']');//Head::add('
 return btd('plgtxt',$ret);}
 
 }
-
 ?>
