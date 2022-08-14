@@ -1,5 +1,4 @@
-<?php
-//philum_exec
+<?php //exec
 
 class exec{
 static function form_insert($r){$ret='';
@@ -40,9 +39,9 @@ static function js(){return 'function jumpMenuIns(fc){
 	var lk=fc+\'(\'+vr+\')\';
 	insert_b(lk,\'codarea\');}';}
 
-static function run($a,$b,$res){$d=ajxg($res);
+static function run($a,$b,$prm){[$d]=$prm;
 if(!auth(6))return;
-if(hostname()!='86.49.245.213.rev.sfr.net')return;
+//if(hostname()!='86.49.245.213.rev.sfr.net')return;
 $f='_datas/exec'.date('ymd').'.php'; mkdir_r($f);
 if(is_file($f))unlink($f);
 //$d=str_replace(['sql(','rq('],'',$d);
@@ -53,7 +52,8 @@ return isset($ret)?$ret:'';}
 
 static function home($p){$rid='plg'.randid();
 //Head::add('jscode',self::js());
-$j=$rid.'_exec,run__2_____codarea';
+$j=$rid.'_exec,run_codarea_2';
+$f='_datas/exec'.date('ymd').'.php'; mkdir_r($f); //fopen($f,'r+'); $p=read_file($f);
 if($_SESSION['auth']<6)$bt=btn('txtalert','need auth>6');
 else{$bt=lj('',$j,picto('ok')).' ';
 	$bt.=lj('txtx','popup_exec,lib','lib').' ';

@@ -1,5 +1,4 @@
-<?php
-//philum_plugin_transport_img//client-server
+<?php //transport_img//client-server
 //session_start();
 /*if(!function_exists('p'))require_once('../progb/lib.php');//always_progb
 $servr=sesg('servr','philum.fr');//target
@@ -26,7 +25,7 @@ return $ret;}
 function scrut_dir_only_tri($dr,$vrf){
 if(is_dir($dr)){$dir=opendir($dr);
 	while($f=readdir($dir)){$drb=$dr.'/'.$f;
-	list($hub,$id,$name)=explode('_',$f);
+	[$hub,$id,$name]=explode('_',$f);
 	if($f!='..' && $f!='.' && $f && !is_dir($f) && $hub==$vrf){$ret[]=$f;}}}
 return $ret;}
 
@@ -72,7 +71,7 @@ foreach($r as $k=>$v){if($v)dl_file($d,$v);}}
 //php
 function dl_php_file($f){
 //msql/design/test_design_3.php
-list($dr,$db,$nd)=preg_split("/[|\.]/",$f); //echo $dr;//php7
+[$dr,$db,$nd]=preg_split("/[|\.]/",$f); //echo $dr;//php7
 $nb=str_replace($_SESSION['target_hub'],$_SESSION['qb'],$nd);
 if(!is_file('../'.$f)){
 $d=read_file('http://philum.fr/plug/_migration.php?php='.$f);
@@ -95,7 +94,7 @@ if(!$verif)echo "error"; else echo btn("txtyl",'saved');
 $_SESSION['datasaved'][$_GET['data']]=1;}
 //target_hub//css users msql datas
 function import_hub(){$h=$_SESSION['target_hub'];
-$dirs=array('css','msql/users','msql/design','users','img','datas');
+$dirs=['css','msql/users','msql/design','users','img','datas'];
 foreach($dirs as $k=>$v){$ret.=lka('?target_hub='.$h.'&block='.$v,$v).' ';}
 $ret.=br();
 if($_GET['block']=='css'){batch_dl('css',$h);}
@@ -109,7 +108,7 @@ if($_GET['block']=='datas'){$txt='enter like "pub_art_from_56257" ';
 	if($_GET['data'])dl_data($h);}
 }
 
-function plug_migration($p,$o){
+function plug_migration($p,$o){$ret='';
 //css
 if($_GET['dir']){
 $r=scrut_dir_only_tri('../'.$_GET['dir'],$_GET['hub']);
