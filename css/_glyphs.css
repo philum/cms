@@ -1,4 +1,4 @@
-@font-face {font-family: 'glyph'; src: url('/fonts/glyphicons-regular.eot?iefix') format('eot'), url('/fonts/glyphicons-regular.woff') format('woff'), url('/fonts/glyphicons-regular.svg#g2') format('svg'), url("/fonts/glyphicons-regular.ttf") format("truetype");}
+@font-face {font-family: 'glyph'; src: url('/fonts/glyphicons-regular.eot?iefix') format('eot'), url('/fonts/glyphicons-regular.woff') format('woff'), url('/fonts/glyphicons-regular.svg#gl') format('svg'), url("/fonts/glyphicons-regular.ttf") format("truetype");}
 
 .glyph{position:relative; top:1px; display:inline-block; font-family:'glyph'; font-style:normal; font-weight:400; line-height:1; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
 

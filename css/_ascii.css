@@ -53,8 +53,8 @@
 .as-up:before{content:"\23f6";}
 .as-down:before{content:"\23f7";}
 .as-pause:before{content:"\23f8";}
-.as-record:before{content:"\23fa";}
 .as-circle:before{content:"\23fa";}
+.as-record:before{content:"\23fa";}
 .as-logout:before{content:"\23fb";}
 .as-login:before{content:"\23fc";}
 .as-view:before{content:"\23ff";}
@@ -72,7 +72,6 @@
 .as-emptycase:before{content:"\2610";}
 .as-valid:before{content:"\2611";}
 .as-unvalid:before{content:"\2612";}
-.as-pirate:before{content:"\2620";}
 .as-peace:before{content:"\262e";}
 .as-yinyang:before{content:"\262f";}
 .as-menu:before{content:"\2630";}
@@ -129,8 +128,8 @@
 .as-refresh:before{content:"\2941";}
 .as-triangle:before{content:"\29cd";}
 .as-symetry:before{content:"\29de";}
-.as-tag:before{content:"\29e3";}
 .as-diez:before{content:"\29e3";}
+.as-tag:before{content:"\29e3";}
 .as-delconn:before{content:"\29ee";}
 .as-conndot:before{content:"\29f0";}
 .as-connslct:before{content:"\29f1";}
@@ -190,7 +189,6 @@
 .as-mic:before{content:"\1f3a4";}
 .as-headphones:before{content:"\1f3a7";}
 .as-paint:before{content:"\1f3a8";}
-.as-video:before{content:"\1f3ac";}
 .as-movie:before{content:"\1f3ac";}
 .as-race:before{content:"\1f3c1";}
 .as-trophee:before{content:"\1f3c6";}
@@ -236,14 +234,13 @@
 .as-reload2:before{content:"\1f504";}
 .as-build:before{content:"\1f505";}
 .as-builders:before{content:"\1f506";}
-.as-speaker:before{content:"\1f50a";}
 .as-connector:before{content:"\1f50c";}
 .as-search2:before{content:"\1f50d";}
 .as-key:before{content:"\1f511";}
 .as-lock:before{content:"\1f512";}
 .as-unlock:before{content:"\1f513";}
-.as-link:before{content:"\1f517";}
 .as-url:before{content:"\1f517";}
+.as-link:before{content:"\1f517";}
 .as-clock:before{content:"\1f554";}
 .as-speakers:before{content:"\1f56a";}
 .as-local:before{content:"\1f574";}
@@ -252,8 +249,8 @@
 .as-editxt:before{content:"\1f589";}
 .as-edit2:before{content:"\1f58a";}
 .as-editor2:before{content:"\1f58e";}
-.as-structure:before{content:"\1f5a7";}
 .as-network:before{content:"\1f5a7";}
+.as-structure:before{content:"\1f5a7";}
 .as-save:before{content:"\1f5ab";}
 .as-admin:before{content:"\1f5b3";}
 .as-sticky:before{content:"\1f5c5";}
@@ -284,4 +281,9 @@
 .as-asterix2:before{content:"\1f7ba";}
 .as-previous:before{content:"\1f81c";}
 .as-next:before{content:"\1f81e";}
-.as-square:before{content:"\23f9";}
+.as-video:before{content:"\1f3ac";}
+.as-rss:before{content:"\0";}
+.as-fb:before{content:"\0";}
+.as-tw:before{content:"\0";}
+.as-square:before{content:"\0";}
+.as-mini:before{content:"\0";}

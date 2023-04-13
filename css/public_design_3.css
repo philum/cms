@@ -1,0 +1,94 @@
+body {background-color:#1c1c1c;}
+a {transition: all 0.20s linear; -webkit-transition: all 0.20s linear; -moz-transition: all 0.20s linear 0s;}
+h1 {color:#000000; font-family:Tahoma, Verdana; text-shadow: 0px 0px 10px #777;}
+h1 a {color:#000000;}
+h1 a:hover {color:#ffffff;}
+h2 {color:#ffffff; font-family:Trebuchet MS;}
+h2 a {color:#ffffff;}
+h2:hover {text-shadow:1px 1px 4px #fff;}
+h3 {color:#ffcc96; font-family:Trebuchet MS;}
+h4 {color:#ffffff; font-family:Trebuchet MS;}
+td {border-color:#5c5c5c; border-width:0 0 1px 0; border-style:dotted;}
+table {border-color:#5c5c5c; font-size:12px; padding:1px;}
+blockquote {border-color:#5c5c5c; font-size:13px; line-height:15px;}
+hr {border-color:#5c5c5c;}
+input {color:#ffffff; background-color:#bbb; border-color:#5c5c5c;}
+input:hover {background-color:#000000;}
+textarea {color:#ffffff; background-color:#bbb; border-color:#5c5c5c;}
+select {color:#ffffff; background-color:#bbb; border-color:#5c5c5c;}
+fieldset {border-radius:2px; border-width:1px; border-style:solid; border-color:rgba(92,92,92,0.5); margin:10px 0;}
+legend {border-color:#1c1c1c; padding:0 2px; border-radius:2px; border-width:1px; border-style:solid; border-color:rgba(92,92,92,0.5);}
+#page {text-align:left; margin:0px auto; width:700px; padding:0; border-width:0;}
+#banner {margin:0;}
+#menu {color:#ffffff; border-color:#5c5c5c; border-width:0; border-style:solid; margin:0;color:#ffffff; font-family:Trebuchet MS, Arrial;}
+#menu a {color:#ffffff; color:#ffffff;}
+#menu a:hover {color:#ffffff; color:#42ffff;}
+#leftbar {float:left; width:px; margin:0px 0 0 0;}
+#rightbar {border-color:#5c5c5c; float:right; width:px;}
+#content {border-color:#5c5c5c; margin:0;}
+#footer {color:#ffffff; background-color:#181818; border-color:#000000; clear:both; border-style:solid; border-width:1px 0 0 0; padding:10px; text-align:center;}
+#footer a {color:#ffffff;}
+#footer a:hover {color:#42ffff;}
+#article {border-color:#5c5c5c; border-style:dotted; border-width:0 0 1px 0; margin:0 0 20px 0;}
+#board {background-color:#000000; border-color:#5c5c5c;}
+.tab {border-color:#1c1c1c; margin:10px 0 0 0;}
+.panel {color:#ffcc96; font-family:Georgia; font-size:13px; padding:0; border-radius:0 0 4px 4px;}
+.justy {color:#ffffff; font-family:Georgia; font-size:16px; text-align:left; padding:0px; border-width:0; border-style:solid; background-repeat:none; padding:0;}
+.justy p {padding-left:0px;}
+.justy a {color:#42ffff; text-decoration:none;}
+.justy img {border-color:#ffffff; border-width:0px; border-style:solid;}
+.justy ul, .justy ol {margin:0 0 0 16px;}
+.active {color:#42ffff;}
+.active a:hover {color:#42ffff;}
+.txtit {color:#ffffff; font-family:Museo700-Regular, Trebuchet MS;}
+.txtit a {color:#ffffff;}
+.txtit a:hover {color:#42ffff;}
+.txtcadr a:hover {color:#42ffff;}
+.txtcadr {border-color:#5c5c5c; font-weight:bold; font-variant:small-caps; box-shadow: 0px 0px 10px #ccc;}
+.txtx, .txtred, .txtblc, .txtnoir, .txtyl {font-size:11px; letter-spacing:0px; border-width:0px; line-height:18px;}
+.txtx {color:#ffffff;}
+.txtx a {color:#ffffff;}
+.txtx a:hover {color:#42ffff;}
+.txtx:hover {box-shadow: 0px 3px 4px #fff inset, 0px 0px 4px #999;}
+.txtblc {color:#ffffff; background-color:#bbb;}
+.txtblc a {color:#ffffff;}
+.txtblc a:hover {color:#ffffff;}
+.txtblc:hover {box-shadow: 0px 3px 4px #fff inset, 0px 0px 4px #999;}
+.txtred {color:#ffffff; background-color:#181818; border-color:#000000; border-style:solid; border-width:0px; box-shadow: 0px 3px 4px #ddd inset, 0px 0px 2px #ff0000;}
+.txtred a {color:#ffffff;}
+.txtred a:hover {color:#42ffff;}
+.txtred:hover {box-shadow: 0px 0px 4px #ccc inset, 0px 0px 4px #ff0000;}
+.txtnoir {color:#000000; background-color:#ffffff; box-shadow:0px 0px 7px #bbb;}
+.txtnoir a {color:#bbb;}
+.txtnoir a:hover {color:#bbb;}
+.txtnoir.active {box-shadow: 0px 0px 4px red;}
+.txtyl {color:#000000; background-color:#42ffff;}
+.txtyl a {color:#000000;}
+.txtyl a:hover {color:#ffffff; border-color:#181818;}
+.txtalert {color:#000000; background-color:#ffffff;}
+.txtalert a {color:#000000;}
+.txtsmall {color:#42ffff; border-color:#bbb; font-family:Arial; font-size:10px; padding:0px 1px; border-width: 1px 0 0 0;}
+.txtsmall a {color:#ffffff;}
+.txtsmall a:hover {color:#ffffff;}
+.txtsmall2 {color:#ffcc96; font-family:Arial; font-size:9px; padding:0px 1px;}
+.txtsmall2 a {color:#ffffff;}
+.txtsmall2 a:hover {color:#ffffff;}
+.txtbox {color:#ffffff; background-color:#bbb; border-color:#5c5c5c;}
+.txtbox a {color:#ffffff;}
+.txtaa {background-color:#181818; /*active*/}
+.txtab {background-color:#181818; /*tabs*/}
+.txtab:hover {/*tabs*/}
+.txtac {/*spaces*/}
+.stabilo {background-color:#000000;}
+.blocktext {background-color:#000000; border-color:#5c5c5c;}
+.search input {border-color:#5c5c5c;}
+.search:hover input {border-color:#5c5c5c;}
+.twitter {border-color:#1c1c1c;}
+.twitter:hover {border-color:#5c5c5c;}
+.ul.pubart li {margin-bottom:0px;}
+.pubart_img {min-height:45px;}
+.nb_pages a {border-color:#5c5c5c;}
+.nb_pages a:hover {border-color:#5c5c5c;}
+.taxonomy li a {color:#ffffff;}
+.taxonomy li a:hover {color:#42ffff;}
+.philum a:hover {color:#42ffff;}
