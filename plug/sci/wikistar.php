@@ -69,8 +69,8 @@ if($r)foreach($r as $k=>$v){$rt[$k]=[];
 	if($rb)foreach($rb as $kb=>$el)$rt[$k][$kb]=clean_br(self::getxt($el));}//html2conn
 return $rt;}
 
-static function call($p,$o,$res=''){
-[$p,$o]=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $u=self::url($p);
 $bt=lkt('',$u,picto('url').domain($u)).' ';
 //for($i=0;$i<$n;$i++)$bt.=lj(active($i,$o),'smbd_simbad,call___'.ajx($p).'_'.$i,$i);
@@ -87,7 +87,7 @@ return [$r['ICRS AD'],$r['ICRS DC'],$r['Distance (LY)']];}
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_wikistar,call__3_'.$p.'_'.$o.'___'.$inpid;
+$j=$rid.'_wikistar,call_'.$inpid.'_3_'.$p.'_'.$o;
 $ret=inputj($inpid,$p,$j);
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}

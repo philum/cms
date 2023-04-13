@@ -1,4 +1,4 @@
-<?php //b
+<?php 
 class msqlvue{
 static $a=__CLASS__;
 static $cb='msqv';

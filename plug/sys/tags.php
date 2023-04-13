@@ -1,7 +1,7 @@
 <?php //see_tags
 class tags{
 static function fthemb($req){
-while([$suj]=mysqli_fetch_row($req)){
+while([$suj]=sql::qrw($req)){
 $unkill=explode(',',$suj);
 foreach($unkill as $vbl){$su=trim($vbl);
 if($su)$ret[$su]+=1;}}

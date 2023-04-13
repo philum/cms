@@ -1,4 +1,4 @@
-<?php //app_stats
+<?php 
 class stats{
 //sq
 static function sql($d,$n,$b=''){$ret='';
@@ -32,22 +32,23 @@ return $ret;}
 
 static function datas($c,$n){
 $sql=self::sql($c,$n); //if(auth(6))echo $sql;
-if($c=='nbutot')$ret=sql_b($sql,'v'); else $ret=sql_b($sql,'kv');
-if($c=='nbp'){$rb=sql_b(self::sql('nbp2',$n),'kv'); if($rb)$ret=array_merge($ret,$rb);}
-if($c=='nbpu'){$rb=sql_b(self::sql('nbpu2',$n),'kv'); if($rb)$ret=array_merge($ret,$rb);}
-if($c=='nbutot'){$ret+=sql_b(self::sql('nbutot2',$n),'v');}
+if($c=='nbutot')$ret=sql::call($sql,'v'); else $ret=sql::call($sql,'kv');
+if($c=='nbp'){$rb=sql::call(self::sql('nbp2',$n),'kv'); if($rb)$ret=array_merge($ret,$rb);}
+if($c=='nbpu'){$rb=sql::call(self::sql('nbpu2',$n),'kv'); if($rb)$ret=array_merge($ret,$rb);}
+if($c=='nbutot'){$ret+=sql::call(self::sql('nbutot2',$n),'v');}
 return $ret;}
 
-static function boot($c,$n,$res){
-[$nb]=explode('_',$res);
+static function boot($c,$n,$prm){[$nb]=$prm;
 $r=self::datas($c,$n?$n:$nb);
 $w=ses('stw')?ses('stw'):550; $h=ses('sth')?ses('sth'):100;
 return[$r,$w,$h];}
 
 //canvas
 static function draw_canvas($d,$w,$h){
-return bal('canvas',atd('myCanvas').atb('width',$w).atb('height',$h).atc(''),'error').balb('script','var c=document.getElementById("myCanvas");
-var ctx=c.getContext("2d"); ctx.font="12px Arial"; '.$d);}
+return tag('canvas',['id'=>'myCanvas','width'=>$w,'height'=>$h],'error').tagb('script','
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d"); ctx.font="12px Arial";
+'.$d);}
 
 static function canvas_mk($r,$w,$h,$t=''){$t='yes';
 $clr=$_SESSION['clrs'][$_SESSION['prmd']];
@@ -69,23 +70,23 @@ foreach($r as $k=>$v){$x2=$x1+$ecart; $ah=round($v/$xr*($h-12));
 //eco($ret,1);
 return $ret;}
 
-static function canvas_j($c,$n,$res){
-[$r,$w,$h]=self::boot($c,$n,$res);
+static function canvas_j($c,$n,$prm){
+[$r,$w,$h]=self::boot($c,$n,$prm);
 if($r)return self::canvas_mk($r,$w,$h);}//json_encode
 
-static function canvas($c,$n,$res){
-[$r,$w,$h]=self::boot($c,$n,$res);
+static function canvas($c,$n,$prm){
+[$r,$w,$h]=self::boot($c,$n,$prm);
 if($r)$ret=self::canvas_mk($r,$w,$h);
 return self::draw_canvas($ret,$w,$h);}
 
 //graph
 static function graph_mk($r,$w,$h){
-$dr='_datas'; $output=$dr.'/stats.png'; if(!is_dir($dr))mkdir($dr);
-if($r)img::graphics($output,$w,$h,$r,'000000','yes');//$_SESSION['clrs'][$_SESSION['prmd']][7]
-return image('/'.$output.'?'.randid(),'','');}
+$dr='_datas/stats/'; $f=$dr.'/'.date('ymd').'.png'; mkdir_r($f); if(!is_dir($dr))mkdir($dr);
+if($r)img::graphics($f,$w,$h,$r,'000000','yes');//$_SESSION['clrs'][$_SESSION['prmd']][7]
+return image('/'.$f.'?'.randid(),'','');}
 
-static function graph($c,$n,$res){
-[$r,$w,$h]=self::boot($c,$n,$res);
+static function graph($c,$n,$prm){
+[$r,$w,$h]=self::boot($c,$n,$prm);
 $t=array_sum($r).' '.($c=='nbp'?'vues':'visitors').' / '.count($r).' '.nms(4);
 if($r)return self::graph_mk($r,$w,$h).div('',$t);}
 
@@ -102,7 +103,7 @@ $j='popup_stats,statlist___'; $ret=''; //echo $c.'-'.$n;
 if($c=='nbv' or $c=='nbu')$ret='days: '.$n.br(); 
 if($c=='nbf')$ret='user: '.$n.br();
 elseif($c=='nbp')$ret='article: '.$n.br();
-$sql=self::list_sql($c,$n); $r=sql_b($sql,'',0); //p($r);
+$sql=self::list_sql($c,$n); $r=sql::call($sql,'',0); //p($r);
 if($c=='nbv' or $c=='nbu' or $c=='nbf'){if($r)foreach($r as $k=>$v){
 	$id=segment($v[0],'=','&'); $id=strto($id=strfrom($id,'_'),'_');//del popart_12___
 	if(is_numeric($id)){$suj=ma::suj_of_id($id); //else $suj=$id;
@@ -115,18 +116,18 @@ return $ret;}
 //consolidate
 static function solid($day_max_known){
 $sql=self::sql('nbuv',$day_max_known);
-$r=sql_b($sql,''); $n=0; $rb=[];
+$r=sql::call($sql,''); $n=0; $rb=[];
 $mnd=array_flip($_SESSION['mnd']);
 if($r)foreach($r as $k=>$v){$qbd=val($mnd,$v[0],ses('qb'));
-	$ex=sql('id','qds','v','qb="'.$qbd.'" and day="'.$v['1'].'"');
-	if(!$ex){$rb[]='(NULL,"'.$qbd.'","'.$v['1'].'","'.$v['2'].'","'.$v['3'].'")'; $n+=1;}}
-insert('qds',implode(',',$rb));
+	$ex=sql('id','qds','v',['qb'=>$qbd,'day'=>$v['1']]);
+	if(!$ex){$rb[]=[$qbd,$v['1'],$v['2'],$v['3']]; $n+=1;}}
+sql::sav2('qds',$rb,1);
 return $n;}
 
 //read_stats
 static function read($c,$n){
-$r=sql('day,'.$c,'qds','kv','qb="'.ses('qb').'" and day>"'.date('ymd',calc_date($n)).'"');
-//$rv=sql('iq','qdv2','k','qb="'.ses('qb').'" and time>"'.calc_date($n).'"');
+$r=sql('day,'.$c,'qds','kv','qb="'.ses('qb').'" and day>"'.date('ymd',timeago($n)).'"');
+//$rv=sql('iq','qdv2','k','qb="'.ses('qb').'" and time>"'.timeago($n).'"');
 $w=ses('stw')?ses('stw'):550; $h=ses('sth')?ses('sth'):100;
 if($r){
 	if($c=='nbu')$nb=self::datas('nbutot',$n); else $nb=array_sum($r);
@@ -135,22 +136,22 @@ if($r){
 
 //freespace
 static function lightlive(){
-$db=install::db(ses('qd'));
-if(!$db['live'])return 'er';
-if(!$db['live2']){$sql=str_replace('_live','_live2',$db['live']); qr($sql);}
-$tim=calc_date(30); $day=date('Y-m-d H:i:s',$tim);
+//$db=install::db(ses('qd'));
+//if(!$db['live'])return 'er';
+//if(!$db['live2']){$sql=str_replace('_live','_live2',$db['live']); qr($sql);}
+$tim=timeago(30); $day=date('Y-m-d H:i:s',$tim);
 $lastid=sql('id','qdv','v','time>"'.$day.'" order by id limit 1');
 if(is_numeric($lastid)){
-qrid('insert into '.ses('qdv2').' select * from '.ses('qdv').' where id<'.$lastid);
-qr('delete from '.ses('qdv').' where id<"'.$lastid.'"'); reflush('qdv');}
+sql::qrid('insert into '.ses('qdv2').' select * from '.ses('qdv').' where id<'.$lastid);
+qr('delete from '.ses('qdv').' where id<"'.$lastid.'"'); sql::reflush('qdv');}
 return ses('qdv').' was cleaned from id '.$lastid;}
 
 //com
-static function board($c,$n,$res){//p($rs);
-$ret=lj($c=='nbv'?'active':'','stat_stats,home__3_nbv_'.$n,'nbv').' ';
-$ret.=lj($c=='nbu'?'active':'','stat_stats,home__3_nbu_'.$n,'nbu').' ';
+static function board($c,$n,$prm){//p($rs);
+$ret=lj(active($c,'nbv'),'stat_stats,home__3_nbv_'.$n,'nbv').' ';
+$ret.=lj(active($c,'nbu'),'stat_stats,home__3_nbu_'.$n,'nbu').' ';
 $nbr=[7,30,90,180,365,730,1460,2920,4840];
-foreach($nbr as $v)$ret.=lj($v==$n?'active':'','stat_stats,home__3_'.$c.'_'.$v,$v).' ';
+foreach($nbr as $v)$ret.=lj(active($v,$n),'stat_stats,home__3_'.$c.'_'.$v,$v).' ';
 if(auth(6))$ret.=lj('','popup_stats,statlist__3_'.$c.'_'.$n,picto('filelist'));
 if(auth(6))$ret.=lj('','popup_stats,lightlive__3_','cleaner');
 if(auth(6))$ret.=lj('','popup_stats,statsee__js_','live');
@@ -159,9 +160,9 @@ return divb($ret,'nbp','stt');}
 static function daytime($d){
 return mktime(0,0,0,substr($d,2,2),substr($d,4,2),substr($d,0,2));}
 
-static function call($p,$o){if(!$p)$p=0; $o=100; $ret=[];
+static function call($p,$o){if(!$p)$p=0; $o=100; $ret=[]; $qdl=qd('live');
 //$r=sql('iq,qb,page,time','qdv','','id>'.$p.' order by id desc');
-$r=sql_inner('ip,qb,page,DATE_FORMAT('.qd('live').'.time,\'%H:%i:%s\')','qdp','qdv','iq','','where '.qd('live').'.id>'.($p).' order by '.qd('live').'.id desc limit '.$o);
+$r=sql::inner('ip,qb,page,DATE_FORMAT('.$qdl.'.time,\'%H:%i:%s\')','qdp','qdv','iq','',$qdl.'.id>'.($p).' order by '.$qdl.'.id desc limit '.$o);
 if($r)foreach($r as $k=>$v)$ret[]=[$k,$v[3],$v[0],$v[2]];
 return tabler($ret,'txtx','txtx');}
 
@@ -178,16 +179,16 @@ Head::add('jscode',temporize('sttimer',$j,3000));
 return divd($rid,self::call($p,$o));}
 
 //plug
-static function home($c,$n,$res=''){
+static function home($c,$n,$prm=[]){
 static $i; $i++; if($i==2)return;
 $c=$c?$c:'nbv'; $n=$n?$n:7; ses('png',1);
-[$w,$h]=opt($res,'_',2); ses('stw',$w?$w:550); ses('sth',$h?$h:100);
+[$w,$h]=arr($prm,2); ses('stw',$w?$w:550); ses('sth',$h?$h:100);
 $day_max_known=sql('day','qds','v','qb="'.ses('qb').'" and day<"'.date('ymd').'" order by id desc limit 1');
-if($day_max_known<date('ymd',calc_date(1)))$ret=self::solid($day_max_known);
-//if(ses('png'))$ret.=self::graph($c,$n,$res).br().br();
-//else $ret.=divd('graph',self::canvas($c,$n,$res)).br().br();
+if($day_max_known<date('ymd',timeago(1)))$ret=self::solid($day_max_known);
+//if(ses('png'))$ret.=self::graph($c,$n,$prm).br().br();
+//else $ret.=divd('graph',self::canvas($c,$n,$prm)).br().br();
 $ret=self::read($c,$n).br();
-$ret.=self::board($c,$n,$res);
+$ret.=self::board($c,$n,$prm);
 //stat_upd();
 return divd('stat',$ret);}
 }

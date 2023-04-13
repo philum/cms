@@ -31,7 +31,7 @@ return div(atc('cols').ats('columns:auto 200px; line-height:1.6em;'),$ret);}
 static function pictos(){$ret=''; $rb=[];
 $r=msql::read('system','edition_pictos','',1); $s='columns:auto 180px; line-height:1.6em;';
 if($r)foreach($r as $k=>$v)$rb[$v[1]][]=[$k,$v[0]];
-if($rb)foreach($rb as $k=>$v){$ret.=balb('h2',$k); $bt='';
+if($rb)foreach($rb as $k=>$v){$ret.=tagb('h2',$k); $bt='';
 	foreach($v as $ka=>$va)$bt.=divc('',pictit($va[0],$va[1],36).' '.$va[0]);
 	$ret.=div(atc('cols').ats($s),$bt);}
 return $ret;}

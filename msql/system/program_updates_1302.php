@@ -1,19 +1,16 @@
-<?php
-//philum_microsql_program_updates_1302
-$r["_menus_"]=array('day','text');
-$r[1]=array('0203','ajout de \'over-blog\' et \'wordpress\' dans les d�finitions g�n�riques d\'importation ;');
-$r[2]=array('0210','r�surrection du composant \'2cols\', qui d�pend de la rstr 17 de fa�on globale, et d\'un param�tre d\'article de fa�on locale ;');
-$r[3]=array('0222','ajout d\'un composant pour l\'�dition de l\'article parent, disponible dans les divers points d\'entr�e d\'un article (rss, batch, admenu, �dition) ;
-tous ces points d\'entr�e sont rendus sensibles � la config des restrictions (save in popup, autoparent, autopublish) ;');
-$r[4]=array('0223','am�lioration du batch :
-- les s�lecteurs de contexte de l\'article (cat�gorie et parent) s\'affichent lors de l\'importation ponctuelle ;
-- on peut pr�parer la cat�gorie d\'un article avant le batch ;
-- le r�sultat du batch utilise le module \'recents\' ;');
-$r[5]=array('0224','r�paration de la mise � jour auto des bases publiques du finder');
-$r[6]=array('0225','ic�nes dans le menu Apps');
-$r[7]=array('0226','les articles enregistr�s n\'ont plus besoin d\'attendre le \'rebuild\' pour appara�tre dans les r�sultats (c\'�tait un �cueil du champ temporel) ');
-$r[8]=array('0227','correctif prise en compte d\'un article fra�chement publi� par le cache');
-$r[9]=array('0228','la rstr art_mod (60) sert � d�sactiver les modules d\'articles dans une popup pour gagner en vitesse');
-$r[10]=array('0229','r�novation du syst�me d\'auto-reboot apr�s fermeture de la session (apr�s une heure sans activit�) ;');
-
-?>
+<?php //msql/program_updates_1302
+$r=["_menus_"=>['day','text'],
+"1"=>['0203','ajout de \'over-blog\' et \'wordpress\' dans les dÃ©finitions gÃ©nÃ©riques d\'importation ;'],
+"2"=>['0210','rÃ©surrection du composant \'2cols\', qui dÃ©pend de la rstr 17 de faÃ§on globale, et d\'un paramÃ¨tre d\'article de faÃ§on locale ;'],
+"3"=>['0222','ajout d\'un composant pour l\'Ã©dition de l\'article parent, disponible dans les divers points d\'entrÃ©e d\'un article (rss, batch, admenu, Ã©dition) ;
+tous ces points d\'entrÃ©e sont rendus sensibles Ã  la config des restrictions (save in popup, autoparent, autopublish) ;'],
+"4"=>['0223','amÃ©lioration du batch :
+- les sÃ©lecteurs de contexte de l\'article (catÃ©gorie et parent) s\'affichent lors de l\'importation ponctuelle ;
+- on peut prÃ©parer la catÃ©gorie d\'un article avant le batch ;
+- le rÃ©sultat du batch utilise le module \'recents\' ;'],
+"5"=>['0224','rÃ©paration de la mise Ã  jour auto des bases publiques du finder'],
+"6"=>['0225','icÃ´nes dans le menu Apps'],
+"7"=>['0226','les articles enregistrÃ©s n\'ont plus besoin d\'attendre le \'rebuild\' pour apparaÃ®tre dans les rÃ©sultats (c\'Ã©tait un Ã©cueil du champ temporel) '],
+"8"=>['0227','correctif prise en compte d\'un article fraÃ®chement publiÃ© par le cache'],
+"9"=>['0228','la rstr art_mod (60) sert Ã  dÃ©sactiver les modules d\'articles dans une popup pour gagner en vitesse'],
+"10"=>['0229','rÃ©novation du systÃ¨me d\'auto-reboot aprÃ¨s fermeture de la session (aprÃ¨s une heure sans activitÃ©) ;']];

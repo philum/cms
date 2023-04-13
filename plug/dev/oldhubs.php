@@ -1,20 +1,21 @@
-<?php //oldhubs
+<?php 
+class oldhubs{
 
-function oldhubs_build($p,$o){
-//$r=msql_read('',nod('umnum'),$p);
+static function build($p,$o){
+//$r=msql::read('',nod('umnum'),$p);
 //$r=sqb('name,count(name)','qda','kv','group by name');
 
-//$r=sqb('id','qda','rv','where frm="ES" or frm="_system"'); //pr($r);
-//$r=sqb('id,tag','qdt','kv',''); pr($r);
-//$r=sqb('id,idtag','qdta','kv',''); //pr($r);
-//$r=sqb('id,suj','qda','kv','where frm="ES"'); //pr($r);
-//$r=sql_inner('id,msg','qda','qdm','id','kv','limit 100',1);//,"C","E","H","NR","GR"
+//$r=sql('id','qda','rv','frm="ES" or frm="_system"'); //pr($r);
+//$r=sql('id,tag','qdt','kv',''); pr($r);
+//$r=sql('id,idtag','qdta','kv',''); //pr($r);
+//$r=sql('id,suj','qda','kv','frm="ES"'); //pr($r);
+//$r=sql::inner('id,msg','qda','qdm','id','kv','limit 100',1);//,"C","E","H","NR","GR"
 $r=sql('id','qda','rv','mail="" and frm in("D","C","E","H","NR","GR","ES");');//
 //p($r);
 
 //$id=445;
 //$f='http://www.ummo-ciencias.org/Cartas/D58-5%20Bases%20biogeneticas%20del%20Cosmos%20-%20Informe%20a%20Alicia%20Araujo%20[4].htm';
-//$f=utf8_encode($f);
+//$f=utf8enc($f);
 //$f=rawurlencode($f);
 //$f=htmlentities($f);
 //$d=file_get_context($f);//
@@ -27,10 +28,10 @@ if($r)foreach($r as $k=>$v){
 	$last=array_pop($ra);
 	if(substr($last,1,4)=='http')$lk=conv::delhook($last); else $lk='';
 	echo ma::popart($v).'-'.$lk.br();
-	//if($lk)update('qda','mail',$lk,'id',$v);
+	//if($lk)sql::upd('qda',['mail'=>$lk],$v);
 
-	//$rb=sqb('id,val','qdd','kv','where ib='.$k.' and val="related"'); pr($rb);
-	//if($rb)foreach($rb as $kb=>$vb)echo $kb.'-';//sqldel('qdd',$kb);
+	//$rb=sql('id,val','qdd','kv','ib='.$k.' and val="related"'); pr($rb);
+	//if($rb)foreach($rb as $kb=>$vb)echo $kb.'-';//sql::del('qdd',$kb);
 
 /*
 $pos=strpos($v,' ');
@@ -38,7 +39,7 @@ if($pos){
 $suj=substr($v,0,$pos);
 $sujb=substr($v,$pos);
 $ret='['.$suj.']'.$sujb;
-//update('qda','suj',$ret,'id',$k);
+//sql::upd('qda',['suj'=>$ret},$k);
 echo $ret.br();}*/
 
 //echo $k.'-'.$v.br();
@@ -47,18 +48,18 @@ echo $ret.br();}*/
 
 	//$sq='frm="_ES",suj="'.$v[0].'",thm="'.$v[0].'",day="'.$day.'",mail="'.urldecode($v[2]).'" where id='.$idb.'';
 	//qr('update pub_art set '.$sq);
-	//$rb=sqb('id,idtag','qdta','kv','where idart='.$v,1); pr($rb);
-	//$rb=sqb('id','qdta','rv','where idtag='.$k); //pr($rb);
-	//$va=sqb('id','qdt','v','where id='.$v); //pr($rb);
-	//foreach($rb as $kb=>$vb){sqldel('qdta',$vb); sqldel('qdt',$k);}
+	//$rb=sql('id,idtag','qdta','kv','idart='.$v,1); pr($rb);
+	//$rb=sql('id','qdta','rv','idtag='.$k); //pr($rb);
+	//$va=sql('id','qdt','v','id='.$v); //pr($rb);
+	//foreach($rb as $kb=>$vb){sql::del('qdta',$vb); sql::del('qdt',$k);}
 	//if(!$va)echo $v.br();
-	//if(!$va)sqldel('qdta',$k);
+	//if(!$va)sql::del('qdta',$k);
 	
 }
 /*
 //install art
-$r=sqb('nod,name,id,suj,frm','qda','ar','where nod="ummo" and frm="_system" and suj="free" and id>100');
-$rb=msql_read('',nod('es_3'),'',1); //pr($rb);
+$r=sql('nod,name,id,suj,frm','qda','ar','nod="ummo" and frm="_system" and suj="free" and id>100');
+$rb=msql::read('',nod('es_3'),'',1); //pr($rb);
 //echo count($rb);//647/191
 foreach($rb as $k=>$v){
 	$idb=$r[$k]['id'];
@@ -84,26 +85,26 @@ foreach($rb as $k=>$v){
 }*/
 return tabler($r);}
 
-function oldhubs_j($p,$o,$res=''){
-[$p,$o]=ajxp($res,$p,$o);
-$ret=oldhubs_build($p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
+$ret=self::build($p,$o);
 return $ret;}
 
-function oldhubs_r(){
+static function r(){
 return ['aa'=>'a','bb'=>'b'];}
 
-function oldhubs_menu($p,$o,$rid){
-$ret=select_j('inp','pfunc','','oldhubs/oldhubs_r','','2');
-//$ret.=togbub('plug','oldhubs_oldhubs*r',btn('popbt','select...'));
+static function menu($p,$o,$rid){
+$ret=select_j('inp','pclass','','oldhubs/r','','2');
+//$ret.=togbub('app','oldhubs/r',btn('popbt','select...'));
 $ret.=input('inp',$p).' ';
-$ret.=lj('',$rid.'_plug__2_oldhubs_oldhubs*j___inp',picto('ok')).' ';
+$ret.=lj('',$rid.'_oldhubs,call_inp',picto('ok')).' ';
 return $ret;}
 
-function plug_oldhubs($p,$o){$rid=randid('plg');
+static function home($p,$o){$rid=randid('plg');
 ses('qdaa','pub_art_a');
-$bt=oldhubs_menu($p,$o,$rid);
-$ret=oldhubs_build($p,$o);
+$bt=self::menu($p,$o,$rid);
+$ret=self::build($p,$o);
 //$bt.=msqbt('',nod('oldhubs'));
 return $bt.divd($rid,$ret);}
-
+}
 ?>

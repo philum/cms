@@ -85,8 +85,8 @@ return self::build($p,$o);}
 
 static function menu($p,$o,$rid){
 $j=$rid.'_spialgo,call';
-$js=atb('onmouseover','wheelcount2(event,\''.$j.'\')'); $js='';
-$ret=inputj('inp',$p,$j.'_inp',$js).lj('',$j.'_inp',picto('ok')).' ';
+$pr=['onmouseover'=>'wheelcount2(event,\''.$j.'\')']; $pr=[];
+$ret=inputj('inp',$p,$j.'_inp','','',$pr).lj('',$j.'_inp',picto('ok')).' ';
 if($p>1)$ret.=lj('txtx',$j.'___'.($p-1),picto('before'));
 $ret.=lj('txtx',$j.'___'.($p+1),picto('after'));
 return $ret;}
@@ -94,7 +94,7 @@ return $ret;}
 static function home($p,$o){
 $rid='spg'; if(!$p)$p=42;
 Head::add('csscode',self::css());
-//Head::add('jscode',self::js('spg_app__2_spialgo_call',$p));
+//Head::add('jscode',self::js('spg_spialgo,call__2_',$p));
 $ret=spialgo::build($p,$o);
 return divd($rid,$ret);}
 }

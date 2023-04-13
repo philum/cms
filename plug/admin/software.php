@@ -16,7 +16,7 @@ if($r)foreach($r as $k=>$v)if(!val($rb,$k))$ret.=lj('','popup_software,patch___'
 if($ret)$ret=btn('txtyl','patch needed: '.$ret);
 if($p && !$rb[$p]){
 	$ret=lj('txtalert','upd_software,state',$r[$p][0].': '.$r[$p][1]);
-	$ret.=plugin('patchs',$r[$p][0]);
+	$ret.=patchs::home($r[$p][0]);
 	msql::modif('server','program_patches',1,'shot',0,$p);}
 return $ret;}
 
@@ -42,7 +42,7 @@ $r[]=self::patch();
 foreach($r as $k=>$v)$ret.=divc('',$v);
 return $ret;}
 
-static function dirs(){return ['progb','prog','plug','msql/system','msql/server','msql/lang','msql/design','msql/users','js','css','fonts','gdf','json/system','imgb/icons','imgb/avatar','pub'];}
+static function dirs(){return ['progb','prog','plug','msql/system','msql/server','msql/lang','msql/design','msql/users','js','css','fonts','gdf','json/system','imgb/icons','imgb/avatar','imgb/usr','pub'];}
 static function files(){
 return ['ajax.php','app.php','call.php','index.php','plug.php','install.php'];}
 
@@ -63,7 +63,8 @@ $r=self::files(); foreach($r as $k=>$v)$rb[$v]=$rb[$v]=ftime($v);
 $r=self::dirs(); foreach($r as $k=>$v)$rb+=self::recense($v);
 if($p==2)$ra=json::read('srv','software');
 json::write('srv','software',$rb);
-if($p==1)return json::brut('srv','software');
+if($p==1){header('Content-Type: text/json');
+	return json::brut('srv','software');}
 if($p==2){
 	tar::files('_backup/philum.tar.gz',array_keys($rb));//phar
 	return array_diff($ra,$rb);}
@@ -79,20 +80,21 @@ static function archive($u){//u:calling server
 $f=http($u).'/'.json::url('srv','upd');
 $d=file_get_contents($f);
 $r=json_decode($d,true);
-$r=array_merge($r[0],$r[1]);
+if($r)$r=array_merge($r[0],$r[1]);
 $f='_backup/upd.tar.gz';//work file
 return tar::files($f,$r);}
 
-static function call($p=''){$ret=''; $rc=[];
+static function call($p=''){$ret=''; $rb=[]; $rc=[];
 $ra=self::build();//local files
 //if(prms('aupdate'))return;
-$f=philum().'/call/software,build/1';
-$rb=json_decode(file_get_contents($f),true);//dist files
+$f=upsrv().'/call/software,build/1';
+$d=file_get_contents($f);
+if($d)$rb=json_decode($d,true);//dist files
 if($rb)$rc=self::compare($ra,$rb);
 if($rc)foreach($rc[2] as $k=>$v)unlink($v);//old files
 json::write('srv','upd',$rc);//needed files
-$f=philum().'/call/software,archive/'.nohttp(host());//distant will build archive
-$fa=file_get_contents($f); $fb='_backup/upd.tar.gz'; copy(philum().'/'.$fa,$fb);
+$f=upsrv().'/call/software,archive/'.nohttp(host());//distant will build archive
+$fa=file_get_contents($f); $fb='_backup/upd.tar.gz'; copy(upsrv().'/'.$fa,$fb);
 tar::untar($fb,'');//install files
 return divd('updb',self::state($p).self::rapport($rc).self::tabler($rc));}
 
@@ -106,8 +108,4 @@ if(auth(7))$bt.=lj('txtx','upd_pubdate,call',pictxt('export','publish site'));
 if($p)$ret=self::call($p); else $ret=self::state();
 return $bt.divd('upd',$ret);}
 }
-
-function plug_software($p,$o){
-return software::home($p);}
-
 ?>

@@ -14,7 +14,7 @@ return $ret;}
 
 static function cm_parents($p){
 $sql='select name from _sys where func like "%='.$p.'(%" or  func like "%.'.$p.'(%" or  func like "%('.$p.'(%" or  func like "\n'.$p.'(%"'; 
-$r=sql_b($sql,'k');
+$r=sql::call($sql,'k');
 return $r;}
 
 static function cm_parents_r($p){$r=self::cm_parents($p);
@@ -22,7 +22,7 @@ if($r)foreach($r as $k=>$v)$r[$k]=self::cm_parents($k);
 return $r;}
 
 static function core_map($r,$p){$ret=[];
-$d=sql_b('select func from _sys where name="'.$p.'"','v'); //echo hr().$p.'-'.$d;
+$d=sql::call('select func from _sys where name="'.$p.'"','v'); //echo hr().$p.'-'.$d;
 foreach($r as $va)if($va!=$p)if($n=substr_count($d,$va.'('))$ret[$va]=$n; //p($ret);
 if($ret)foreach($ret as $k=>$v)$ret[$k]=self::core_map($r,$k);
 return $ret;}
@@ -30,7 +30,7 @@ return $ret;}
 //p(get_defined_static functions());
 static function map($p='',$o='',$prm=[]){
 [$p,$o]=prmp($prm,$p,$o);
-$r=sql_b('select name from _sys','rv'); //p($r);
+$r=sql::call('select name from _sys','rv'); //p($r);
 if(!$r or !$p)return;
 $ra=self::core_map($r,$p); //pr($ra);
 $rb=self::cm_parents_r($p); //pr($rb);
@@ -42,7 +42,7 @@ $ret.=self::make_div_r($rb);
 return $ret;}
 
 static function home($p='',$o=''){$rid='plg'.randid();
-$ret=autoclic($rid.'p',$p,10,244,'',1).' ';
+$ret=inputb($rid.'p',$p,10,'',244,[]);
 $ret.=lj('',$rid.'_coremap,map___'.$rid.'p',picto('ok'));
 return $ret.divd($rid,self::map($p));}
 }

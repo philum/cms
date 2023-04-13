@@ -8,7 +8,7 @@ if($xt==".jpg" or $xt==".png" or $xt==".gif"){$img=img::make_thumb_c($f);
 $f=str_replace(array('users/','imgb/icons/'),'',$f); $fb=ajx($f,0); 
 if(is_numeric($ds)){//bkg
 	if($isr)$ret=lj("popbt",'bkg'.$ds.'_dsnav,home___'.$fb.'_bkg',$v);
-	//if($isr)$ret=toggle('popbt',$v.$ds.'_dsnav,home_'.$fb.'_bkg',$v).' '.btd($v.$ds,"");
+	//if($isr)$ret=toggle('popbt',$v.$ds.'_dsnav,home___'.$fb.'_bkg',$v).' '.btd($v.$ds,"");
 	else{[$w,$h]=getimagesize($f); $tx=$v.' ('.$w.' * '.$h.')'; //if(is_file($f))
 	$ret=lj('','css'.$ds.'_stylsav___'.$fb.'_'.$ds.'_2',$img.$tx).hr();}}
 if($ds=="gl"){if($isr)$ret=lj("popbt",'popup_gallery__3x_'.$fb,$v);}//photo

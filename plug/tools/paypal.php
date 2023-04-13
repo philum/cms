@@ -1,6 +1,6 @@
-<?php //paypal
-
-function paypal_build($p,$o){
+<?php 
+class paypal{
+static function build($p,$o){
 $ret='<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="KXBHH6X89UUTY">
@@ -9,8 +9,8 @@ $ret='<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target=
 </form>';
 return $ret;}
 
-function plug_paypal($p,$o){$rid=randid('plg');
-$ret=paypal_build($p,$o);
+static function home($p,$o){$rid=randid('plg');
+$ret=self::build($p,$o);
 return divd($rid,$ret);}
-
+}
 ?>

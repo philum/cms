@@ -1,8 +1,9 @@
 <?php
-// _philum_installer
+// _
 //|_| |_| | |  | | |\/|
 //|   | | | |_ |_| |  |
-//http://philum.fr 2004-2022
+//philum.fr 2004-2022
+//installer
 session_start();
 ini_set('display_errors','1');
 error_reporting(E_ALL);
@@ -81,11 +82,7 @@ return balise('form','name="form" method="post" action="'.$go.'"',$ret);}
 function connect_file(){
 $lc=post('localhost'); $ro=post('root'); $db=post('database'); $ps=post('password');
 return w(1).'
-$db=\''.$db.'\';
-$qr=mysqli_connect(\''.$lc.'\',\''.$ro.'\',\''.$ps.'\',$db);
-$qr->query(\'SET NAMES '.(ses('enc')=='utf-8'?'utf8':'latin1').'\');//to use on utf8 database
-ini_set(\'default_charset\',\'ISO-8859-1\');//to use on utf8 server//should be set in virtualserver
-$_SESSION[\'qr\']=$qr;
+new sql([\''.$lc.'\',\''.$ro.'\',\''.$ps.'\',\''.$db.'\']);
 '.w(0);}
 
 function test_connection(){$f='params/_connectx.php';

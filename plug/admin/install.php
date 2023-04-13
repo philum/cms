@@ -1,7 +1,7 @@
 <?php //philum_install
 class install{
 static function db($qd=''){if(!$qd)$qd=ses('qd');// && 1==2
-if(ses('enc')=='utf-8'){$charset='utf8mb4'; $langset='utf8mb4_general_ci';}
+if(sql::$enc=='utf8'){$charset='utf8mb4'; $langset='utf8mb4_unicode_ci';}
 else{$charset='latin1'; $langset='latin1_general_ci';}
 $collate='collate '.$langset;
 //$instructions='ENGINE=MyISAM '.$collate.' DEFAULT CHARSET='.$charset.';';
@@ -303,15 +303,18 @@ CREATE TABLE IF NOT EXISTS `'.$qd.'_img` (
 
 return $ret;}
 
-function home($qd){
-if(!$qd)return;
+static function home1($qd='pub'){
 $r=self::db($qd); $ret='';
 if(ses('auth')>6 or ses('first'))
 foreach($r as $k=>$sql){
-	$req=mysqli_query($_SESSION['qr'],$sql);
+	$req=mysqli_query(sql::$qr,$sql);
 	if(mysqli_connect_errno())print_r(mysqli_connect_error());
 	else $ret.=divc('',$qd.'_'.$k.': ok');}
 $_SESSION['first']='';
 return $ret;}
+
+static function home($qd='pub'){
+ses('qd',$qd);
+return sqldb::batchinstall();}
 }
 ?>

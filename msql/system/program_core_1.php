@@ -1,172 +1,171 @@
-<?
-//philum_microsql_program_core_1
-$r["_menus_"]=array('function','variables','usage','return','context');
-$r[1]=array('p','r','print_r','echo array','utils');
-$r[2]=array('br','','','','html');
-$r[3]=array('hr','','','','html');
-$r[4]=array('sep','','','','');
-$r[5]=array('ul','v','balise','embed content','html');
-$r[6]=array('li','v','balise','embed content','html');
-$r[7]=array('bal','b,v','b=balise c=class t=text','balise html','html');
-$r[8]=array('balb','b,p,v','','','html');
-$r[9]=array('balc','b,c,v','','','html');
-$r[10]=array('span','p,v','','','');
-$r[11]=array('btn','c,v','class text','span balise','html');
-$r[12]=array('btd','d,v','id txt','span balise with id value','html');
-$r[13]=array('bts','d,v','','','');
-$r[14]=array('div','p,v','attributs value','balise div','html');
-$r[15]=array('divb','p,v','','','');
-$r[16]=array('divc','c,v','class value','balise div','html');
-$r[17]=array('divd','d,v','id value','balise div','html');
-$r[18]=array('divs','s,v','style text','','');
-$r[19]=array('sj','d','javascript fonctin SaveJ','SaveJ(\'sj\');','utils');
-$r[20]=array('atb','d,v','html attribut','d=\"v\"','html');
-$r[21]=array('atc','d','','','html');
-$r[22]=array('atd','d','','','html');
-$r[23]=array('ats','d','','','html');
-$r[24]=array('atj','d,j','javascript value of function with double quote','(\'j\');','html');
-$r[25]=array('atjb','r','','','html');
-$r[26]=array('atbb','d','','','html');
-$r[27]=array('button','c,j,v','class javascript text','html button','html');
-$r[28]=array('lien','c,l,v','class link text','a href with class','html');
-$r[29]=array('slien','l,v=\'\'','simple link and text','a href','html');
-$r[30]=array('dlien','c,l,v','class link text','a href in a div','html');
-$r[31]=array('llien','c,l,v','class link text','a href inside a li balise with class','html');
-$r[32]=array('lient','c,l,v','class link text','a href opening a new window','html');
-$r[33]=array('lienh','oc,ov,v,c=\'\'','onclick onmouseover onmouseout text','a balise with javascript','html');
-$r[34]=array('liensubmit','c,call,v','class argument_called for javascript of the current form action ;text','ajax button for a form','html');
-$r[35]=array('lienj','c,p,j,v,a=\'\'','class js_function js_value text','a link for ajax called onClick','html');
-$r[36]=array('lj','c,j,v,a=\'\'','class js text','a balise with javascript function \'SaveJ\' - shortcut to lienj()','html');
-$r[37]=array('blj','c,id,j,v','','','html');
-$r[38]=array('ljc','c,d,j,v,o=\'\',p=\'\'','','','html');
-$r[39]=array('llj','c,j,v,id=\'\',a=\'\'','','','html');
-$r[40]=array('lj_tog','n,d,v','','','html');
-$r[41]=array('lienbub','v,lk,oc=\'\',ov=\'\',id=\'\',tg=\'\'','','','button');
-$r[42]=array('saveiec','j,cat,rid,cid=\'\',v=\'\',x=\'\',c=\'\'','','','button');
-$r[43]=array('toggle','c,j,v,n=\'\'','class js text','toggle button with ajax call js_function','button');
-$r[44]=array('bubble','c,ja,j,v','','','');
-$r[45]=array('popbub','d,j,v,c=\'\',o=\'\'','','','');
-$r[46]=array('togbub','d,ja,jb,v','','','');
-$r[47]=array('overbub','d,ja,jb,v','','','');
-$r[48]=array('image','d,w=\'\',h=\'\',p=\'\'','image width height','html embed image','builders');
-$r[49]=array('img','d','','','builders');
-$r[50]=array('rolloverimg','a,b','','','builders');
-$r[51]=array('etc','d,n','','','strings');
-$r[52]=array('check_update','','','','action');
-$r[53]=array('btn_switch','d,g,l,v','session_name, indicator for true, link, text','button off/on with alert','button');
-$r[54]=array('req','d,j=\'\'','','','sql');
-$r[55]=array('reqonce','p','','','sql');
-$r[56]=array('rcptb','db','show tables','mysql_query','sql');
-$r[57]=array('lstrc','rq','make array from range 0 in mysql_fetch_array','array','sql');
-$r[58]=array('sec','db','','','sql');
-$r[59]=array('msq','ph,bz','build sequence for res() from ph=SELECT attributs and bz=WHERE attributs','formated string','sql');
-$r[60]=array('qr','r','used by rse() and ser()','mysql_fetch_array','sql');
-$r[61]=array('qra','r','','','sql');
-$r[62]=array('qrw','r','','','sql');
-$r[63]=array('res','ph,bz','ph=asked columns bz=where condition','object mysql_fetch_array','sql');
-$r[64]=array('ser','ph,bz','multiple datas of an entry in ph where bz','simple array to use in list($a,$b)=ser($ph,$bz)','sql');
-$r[65]=array('rse','ph,bz','ph=asked column bz=where condition','string result','sql');
-$r[66]=array('msquery','sql','','','sql');
-$r[67]=array('insert','b,d','','','sql');
-$r[68]=array('update','bs,in,v,col,id','UPDATE bs SET in=v WHERE col=id','nothing (and no error)','sql');
-$r[69]=array('squ','bs,v,w','','','sql');
-$r[70]=array('delete','bs,id','delete in bs where id','nothing','sql');
-$r[71]=array('reflush','bs,o=\'\'','ALTER TABLE bs ORDER BY id :: used by delete()','nothing','sql');
-$r[72]=array('lastid','bs','sql command','id of most recent entry','request');
-$r[73]=array('sqv','d,n=\'\',b=\'\'','','','sql');
-$r[74]=array('sql','d,b,p,q,bug=\'\'','','','sql');
-$r[75]=array('sql_b','sql,p,b=\'\'','','','sql');
-$r[76]=array('atbr','r','','','html');
-$r[77]=array('attr','r','','','html');
-$r[78]=array('balise','b,r,d','b=balise r=attributs t=text :: 
+<?php //msql/program_core_1
+$r=["_menus_"=>['function','variables','usage','return','context'],
+"1"=>['p','r','print_r','echo array','utils'],
+"2"=>['br','','','','html'],
+"3"=>['hr','','','','html'],
+"4"=>['sep','','','',''],
+"5"=>['ul','v','balise','embed content','html'],
+"6"=>['li','v','balise','embed content','html'],
+"7"=>['bal','b,v','b=balise c=class t=text','balise html','html'],
+"8"=>['balb','b,p,v','','','html'],
+"9"=>['balc','b,c,v','','','html'],
+"10"=>['span','p,v','','',''],
+"11"=>['btn','c,v','class text','span balise','html'],
+"12"=>['btd','d,v','id txt','span balise with id value','html'],
+"13"=>['bts','d,v','','',''],
+"14"=>['div','p,v','attributs value','balise div','html'],
+"15"=>['divb','p,v','','',''],
+"16"=>['divc','c,v','class value','balise div','html'],
+"17"=>['divd','d,v','id value','balise div','html'],
+"18"=>['divs','s,v','style text','',''],
+"19"=>['sj','d','javascript fonctin SaveJ','SaveJ(\'sj\');','utils'],
+"20"=>['atb','d,v','html attribut','d=\"v\"','html'],
+"21"=>['atc','d','','','html'],
+"22"=>['atd','d','','','html'],
+"23"=>['ats','d','','','html'],
+"24"=>['atj','d,j','javascript value of function with double quote','(\'j\');','html'],
+"25"=>['atjb','r','','','html'],
+"26"=>['atbb','d','','','html'],
+"27"=>['button','c,j,v','class javascript text','html button','html'],
+"28"=>['lien','c,l,v','class link text','a href with class','html'],
+"29"=>['slien','l,v=\'\'','simple link and text','a href','html'],
+"30"=>['dlien','c,l,v','class link text','a href in a div','html'],
+"31"=>['llien','c,l,v','class link text','a href inside a li balise with class','html'],
+"32"=>['lient','c,l,v','class link text','a href opening a new window','html'],
+"33"=>['lienh','oc,ov,v,c=\'\'','onclick onmouseover onmouseout text','a balise with javascript','html'],
+"34"=>['liensubmit','c,call,v','class argument_called for javascript of the current form action ;text','ajax button for a form','html'],
+"35"=>['lienj','c,p,j,v,a=\'\'','class js_function js_value text','a link for ajax called onClick','html'],
+"36"=>['lj','c,j,v,a=\'\'','class js text','a balise with javascript function \'SaveJ\' - shortcut to lienj()','html'],
+"37"=>['blj','c,id,j,v','','','html'],
+"38"=>['ljc','c,d,j,v,o=\'\',p=\'\'','','','html'],
+"39"=>['llj','c,j,v,id=\'\',a=\'\'','','','html'],
+"40"=>['lj_tog','n,d,v','','','html'],
+"41"=>['lienbub','v,lk,oc=\'\',ov=\'\',id=\'\',tg=\'\'','','','button'],
+"42"=>['saveiec','j,cat,rid,cid=\'\',v=\'\',x=\'\',c=\'\'','','','button'],
+"43"=>['toggle','c,j,v,n=\'\'','class js text','toggle button with ajax call js_function','button'],
+"44"=>['bubble','c,ja,j,v','','',''],
+"45"=>['popbub','d,j,v,c=\'\',o=\'\'','','',''],
+"46"=>['togbub','d,ja,jb,v','','',''],
+"47"=>['overbub','d,ja,jb,v','','',''],
+"48"=>['image','d,w=\'\',h=\'\',p=\'\'','image width height','html embed image','builders'],
+"49"=>['img','d','','','builders'],
+"50"=>['rolloverimg','a,b','','','builders'],
+"51"=>['etc','d,n','','','strings'],
+"52"=>['check_update','','','','action'],
+"53"=>['btn_switch','d,g,l,v','session_name, indicator for true, link, text','button off/on with alert','button'],
+"54"=>['req','d,j=\'\'','','','sql'],
+"55"=>['reqonce','p','','','sql'],
+"56"=>['rcptb','db','show tables','mysql_query','sql'],
+"57"=>['lstrc','rq','make array from range 0 in mysql_fetch_array','array','sql'],
+"58"=>['sec','db','','','sql'],
+"59"=>['msq','ph,bz','build sequence for res() from ph=SELECT attributs and bz=WHERE attributs','formated string','sql'],
+"60"=>['qr','r','used by rse() and ser()','mysql_fetch_array','sql'],
+"61"=>['qra','r','','','sql'],
+"62"=>['qrw','r','','','sql'],
+"63"=>['res','ph,bz','ph=asked columns bz=where condition','object mysql_fetch_array','sql'],
+"64"=>['ser','ph,bz','multiple datas of an entry in ph where bz','simple array to use in list($a,$b)=ser($ph,$bz)','sql'],
+"65"=>['rse','ph,bz','ph=asked column bz=where condition','string result','sql'],
+"66"=>['msquery','sql','','','sql'],
+"67"=>['insert','b,d','','','sql'],
+"68"=>['update','bs,in,v,col,id','UPDATE bs SET in=v WHERE col=id','nothing (and no error)','sql'],
+"69"=>['squ','bs,v,w','','','sql'],
+"70"=>['delete','bs,id','delete in bs where id','nothing','sql'],
+"71"=>['reflush','bs,o=\'\'','ALTER TABLE bs ORDER BY id :: used by delete()','nothing','sql'],
+"72"=>['lastid','bs','sql command','id of most recent entry','request'],
+"73"=>['sqv','d,n=\'\',b=\'\'','','','sql'],
+"74"=>['sql','d,b,p,q,bug=\'\'','','','sql'],
+"75"=>['sql_b','sql,p,b=\'\'','','','sql'],
+"76"=>['atbr','r','','','html'],
+"77"=>['attr','r','','','html'],
+"78"=>['balise','b,r,d','b=balise r=attributs t=text :: 
 attributs_rule : array(\"id\"=>1,5=>\'txtx\')
 where key=html_attribut=>value
 numerical code of attributs is : 
-array(1=>\"type\",2=>\"name\",3=>\"id\",4=>\"value\",5=>\"class\",6=>\"size\",7=>\"maxlenght\",8=>\"onKeyPress\",9=>\"cols\",10=>\"rows\",11=>\"wrap\",12=>\"action\",13=>\"method\",14=>\"for\",15=>\"onchange\",16=>\"style\")','html balise from an array of attributes','html');
-$r[79]=array('input','t,d,v,c=\'\',h=\'\'','type: 1,0 (text,hidden) or any input_type ; id value class','input text for forms','forms');
-$r[80]=array('input2','t,n,v,c=\'\'','type name value class','input text for forms','forms');
-$r[81]=array('autoclic','n,v,s,mx,c,h=\'\'','input text auto-hide content','balise input with javascript','forms');
-$r[82]=array('jholder','v','','','forms');
-$r[83]=array('hidden','n,d,v','name id value','input for forms ','forms');
-$r[84]=array('checkbox','n,v,t,chk','chk=0/1 if checked','checkbox for a form','forms');
-$r[85]=array('offon','d','','','action');
-$r[86]=array('checkbox_j','id,v,t=\'\',b=\'\'','','','forms');
-$r[87]=array('checkbob','id,v,a,b','','','forms');
-$r[88]=array('checkact','id,v,t','','','forms');
-$r[89]=array('label','id,c,s,t','id class style text','label balise connected to id_input (for=\"id\")','forms');
-$r[90]=array('radiobuttons','r,h','array checked_key','radio balises from keys of array','forms');
-$r[91]=array('btnsav','c,id,j','','','button');
-$r[92]=array('txarea','n,d,cl,rw,c=\'\'','name text cols rows','text area','forms');
-$r[93]=array('txareac_btns','','','','forms');
-$r[94]=array('divedit','id,c,s,j,d','','','forms');
-$r[95]=array('txareac','id,c,s,j,d','','','forms');
-$r[96]=array('txarea1','msg,cont','msg, art or track (0/1), continue value (0/1)','textarea used for edit articles, callable from ajax','component');
-$r[97]=array('formcreate','go,fll','create a form callin the url go and containing fll','balise form','forms');
-$r[98]=array('goodarea','v,id,css,j,n','jv=javascripts n=size or cols','balise input text or a textarea','forms');
-$r[99]=array('goodarea_b','v,id,c,j,n,h','','','forms');
-$r[100]=array('imgform','here,d,t=\'\'','here=url to call cl=class oth=text ttl=title attribut (on rollover)','upload form','forms');
-$r[101]=array('upload','d,p','','','forms');
-$r[102]=array('upload_btn','id,j,t','','','forms');
-$r[103]=array('loadjs','f,d,t=\'\'','','','forms');
-$r[104]=array('batch_defil','r','array','option balises from keyx of array','builder');
-$r[105]=array('menuder_form','r,d','call batch_defil() with r (options) and name the select input d','input select','builder');
-$r[106]=array('batch_defil_kv','r,here,kv','array checked_key kk/kv/vv/vk = usage of the values of the array (key-value) :
+array(1=>\"type\",2=>\"name\",3=>\"id\",4=>\"value\",5=>\"class\",6=>\"size\",7=>\"maxlenght\",8=>\"onKeyPress\",9=>\"cols\",10=>\"rows\",11=>\"wrap\",12=>\"action\",13=>\"method\",14=>\"for\",15=>\"onchange\",16=>\"style\")','html balise from an array of attributes','html'],
+"79"=>['input','t,d,v,c=\'\',h=\'\'','type: 1,0 (text,hidden) or any input_type ; id value class','input text for forms','forms'],
+"80"=>['input2','t,n,v,c=\'\'','type name value class','input text for forms','forms'],
+"81"=>['autoclic','n,v,s,mx,c,h=\'\'','input text auto-hide content','balise input with javascript','forms'],
+"82"=>['jholder','v','','','forms'],
+"83"=>['hidden','n,d,v','name id value','input for forms ','forms'],
+"84"=>['checkbox','n,v,t,chk','chk=0/1 if checked','checkbox for a form','forms'],
+"85"=>['offon','d','','','action'],
+"86"=>['checkbox_j','id,v,t=\'\',b=\'\'','','','forms'],
+"87"=>['checkbob','id,v,a,b','','','forms'],
+"88"=>['checkact','id,v,t','','','forms'],
+"89"=>['label','id,c,s,t','id class style text','label balise connected to id_input (for=\"id\")','forms'],
+"90"=>['radiobuttons','r,h','array checked_key','radio balises from keys of array','forms'],
+"91"=>['btnsav','c,id,j','','','button'],
+"92"=>['txarea','n,d,cl,rw,c=\'\'','name text cols rows','text area','forms'],
+"93"=>['txareac_btns','','','','forms'],
+"94"=>['divedit','id,c,s,j,d','','','forms'],
+"95"=>['txareac','id,c,s,j,d','','','forms'],
+"96"=>['txarea1','msg,cont','msg, art or track (0/1), continue value (0/1)','textarea used for edit articles, callable from ajax','component'],
+"97"=>['formcreate','go,fll','create a form callin the url go and containing fll','balise form','forms'],
+"98"=>['goodarea','v,id,css,j,n','jv=javascripts n=size or cols','balise input text or a textarea','forms'],
+"99"=>['goodarea_b','v,id,c,j,n,h','','','forms'],
+"100"=>['imgform','here,d,t=\'\'','here=url to call cl=class oth=text ttl=title attribut (on rollover)','upload form','forms'],
+"101"=>['upload','d,p','','','forms'],
+"102"=>['upload_btn','id,j,t','','','forms'],
+"103"=>['loadjs','f,d,t=\'\'','','','forms'],
+"104"=>['batch_defil','r','array','option balises from keyx of array','builder'],
+"105"=>['menuder_form','r,d','call batch_defil() with r (options) and name the select input d','input select','builder'],
+"106"=>['batch_defil_kv','r,here,kv','array checked_key kk/kv/vv/vk = usage of the values of the array (key-value) :
 kk=send and show k;
 kv=send k and show v;
 vv=send and show v;
 vk=send v and show k
--- used by menuder_form_kv','select balise with options and checked_value','builder');
-$r[107]=array('menuder_form_kv','r,d,here,kv','build option calling batch_defil_kv() knowing here=selected value and kv=key or value to use for value and title of the options','input select','builder');
-$r[108]=array('menuder_h','r,id,d','','','builder');
-$r[109]=array('menuderj_prep','pr,id,t,opt=\'\'','','','builder');
-$r[110]=array('slct_cat','id,idb,t,n=\'\'','','','builder');
-$r[111]=array('hidden_slct','id,f,v=\'\'','','','builder');
-$r[112]=array('menuder_j','r,tg,id','','','builder');
-$r[113]=array('headers_balises','r','','used by headers','headers');
-$r[114]=array('headers_r','t,r','','used by headers','headers');
-$r[115]=array('headers','title,css_out,css_in,javs','title of page css_url css stylsheets javascript balises','html headers','headers');
-$r[116]=array('meta','d,v,c','meta d=v and content=c','used by headers','headers');
-$r[117]=array('css_link','d,m=\'\'','link to css','used by headers','headers');
-$r[118]=array('js_link','d','js link','used by headers','headers');
-$r[119]=array('css_code','d','css code','used by headers','headers');
-$r[120]=array('js_code','d','js code','used by headers','headers');
-$r[121]=array('temporize','name,func,p','name of the function, func=content, p=milliseconds :: temporize() will call a javascript cuntion every p seconds','javascript','component');
-$r[122]=array('relod','v','reload to a page','javascript immediately applied','builder');
-$r[123]=array('make_table','r,csa=\'\',csb=\'\'','datas=array of arrays, csb is only for the first range','balise table','builders');
-$r[124]=array('make_divtable','r,h=\'\'','','','builders');
-$r[125]=array('make_tables','rt,r,csa,csb','datas=array of arrays, csb is only for the first range, if it is present in titles','balise table','builders');
-$r[126]=array('array_conn','r','','','meca');
-$r[127]=array('make_tabs','r,ud=\'\',c=\'\'','array with keys used as tabs','html javascript tabs','builders');
-$r[128]=array('slct_menus','r,lk,vf,cs1,cs2,kv','r=array (keys will be used) lk=link (like /?var=) vf=verif (var) cs1=active cs2=normal css kv=k or v: use key or value','list of links with detection of activated ','builders');
-$r[129]=array('slct_menus_tags','r,lk,vf,ct,csa,kv','r=array lk=link (like /?var=) vf=verif (var) ct=if nb is called, render also the number of occurences) cs1=css (use active class if detect var) kv=k/v: use key or value','list of links under li balise with detection of activated ','builders');
-$r[130]=array('slctmenusj','r,cal,lk,vf,sep','r=array (keys will be used) lk=link (like /?var=) vf=verif (var) cal=javascript to call','list of links in javascript with detection of selected','builders');
-$r[131]=array('slctmenus_sj','r,cal,go,vf','array, js_command for SaveJ, active value (verif)','list of links calling ajax (SaveJ) with string VAR in js_command replaced by the key of each array','utils');
-$r[132]=array('jump_btns','id,v,add,c=\'\'','buttons of values separated by \"|\" in v sent by javascript to id and replacing the input id if add=0 or adding the words in add (like \', \')','buttons who send values in an input','builders');
-$r[133]=array('mkdir_r','u','build directories topology from a string like dir1/dir11/dir111','nothing','directories');
-$r[134]=array('rmdir_r','dr','path dir file topo_number','delete files of a directory, including other dirs ;
-option of explode_dir function (used inside a routine)','directories');
-$r[135]=array('write_file','f,t','file_url text to save in f','save file on server','directories');
-$r[136]=array('read_file','f','open datas from fil f','text','directories');
-$r[137]=array('get_file','f','','','readers');
-$r[138]=array('file_get_context','f','','','readers');
-$r[139]=array('curl_get_contents','f','','','readers');
-$r[140]=array('joinable','d','','','readers');
-$r[141]=array('explore','dr,p=\'\',o=\'\'','','','directories');
-$r[142]=array('explode_dir','r,j,func','used after explore() in obtain_from_dir()','array of files in $j directory applied to the function $func','directories');
-$r[143]=array('func','d,k,f,n','it\'s an example of func() used  by explode_dir()','string for array built by explode_dir()','directories');
-$r[144]=array('obtain_from_dir','dr,func','call explore() with dr and explode_dir() knowing func','array of result of the function $func on the files found recursively in drectory $dr','directories');
-$r[145]=array('gz_create','f,fb','file_url bz_name of the compressed archive','store a bz archive','component');
-$r[146]=array('gz_write','d,f','bz_url file_name of the decompressed archive','store a file from a bz archive','component');
-$r[147]=array('unpack_gz','f,d','gz_file target_directory','extract fils from gz archive in a directory','component');
-$r[148]=array('witch_quote','v','choose witch sort of quote to protect by slashes :: used only by dump()','formated $v','msql');
-$r[149]=array('create_page','t,p','t=content p=name of base','final step for build a msql table before to write it','msql');
-$r[150]=array('dump','r,p','array of arrays and name of node like \'hub_table\'','prepared values for create_page()','msql');
-$r[151]=array('dump_x','r,p','','','msql');
-$r[152]=array('plug_motor','dr,nod,defsb','call a microtable base/nod or create it using _menus_ defsb','array of arrays','msql');
-$r[153]=array('auto_menus','r','r=array of any key of a msql_array (an array)','generated array of _menus_ range in a msql_array','msql');
-$r[154]=array('save_vars','dr,nod,defs','save microtable: directory table defs=array of arrays','nothing','msql');
-$r[155]=array('modif_vars','dr,nod,arr,k,dfb=\'\'','  (like hub_table) =array of arrays =\'add\' / \'push\' / \'del\' / value (optionnal)','the modified microtable with $arr','msql');
-$r[156]=array('msql_modif','dr,nod,defs,dfb,act,n','dir node definitions menus action value 
+-- used by menuder_form_kv','select balise with options and checked_value','builder'],
+"107"=>['menuder_form_kv','r,d,here,kv','build option calling batch_defil_kv() knowing here=selected value and kv=key or value to use for value and title of the options','input select','builder'],
+"108"=>['menuder_h','r,id,d','','','builder'],
+"109"=>['menuderj_prep','pr,id,t,opt=\'\'','','','builder'],
+"110"=>['slct_cat','id,idb,t,n=\'\'','','','builder'],
+"111"=>['hidden_slct','id,f,v=\'\'','','','builder'],
+"112"=>['menuder_j','r,tg,id','','','builder'],
+"113"=>['headers_balises','r','','used by headers','headers'],
+"114"=>['headers_r','t,r','','used by headers','headers'],
+"115"=>['headers','title,css_out,css_in,javs','title of page css_url css stylsheets javascript balises','html headers','headers'],
+"116"=>['meta','d,v,c','meta d=v and content=c','used by headers','headers'],
+"117"=>['css_link','d,m=\'\'','link to css','used by headers','headers'],
+"118"=>['js_link','d','js link','used by headers','headers'],
+"119"=>['css_code','d','css code','used by headers','headers'],
+"120"=>['js_code','d','js code','used by headers','headers'],
+"121"=>['temporize','name,func,p','name of the function, func=content, p=milliseconds :: temporize() will call a javascript cuntion every p seconds','javascript','component'],
+"122"=>['relod','v','reload to a page','javascript immediately applied','builder'],
+"123"=>['make_table','r,csa=\'\',csb=\'\'','datas=array of arrays, csb is only for the first range','balise table','builders'],
+"124"=>['make_divtable','r,h=\'\'','','','builders'],
+"125"=>['make_tables','rt,r,csa,csb','datas=array of arrays, csb is only for the first range, if it is present in titles','balise table','builders'],
+"126"=>['array_conn','r','','','meca'],
+"127"=>['make_tabs','r,ud=\'\',c=\'\'','array with keys used as tabs','html javascript tabs','builders'],
+"128"=>['slct_menus','r,lk,vf,cs1,cs2,kv','r=array (keys will be used) lk=link (like /?var=) vf=verif (var) cs1=active cs2=normal css kv=k or v: use key or value','list of links with detection of activated ','builders'],
+"129"=>['slct_menus_tags','r,lk,vf,ct,csa,kv','r=array lk=link (like /?var=) vf=verif (var) ct=if nb is called, render also the number of occurences) cs1=css (use active class if detect var) kv=k/v: use key or value','list of links under li balise with detection of activated ','builders'],
+"130"=>['slctmenusj','r,cal,lk,vf,sep','r=array (keys will be used) lk=link (like /?var=) vf=verif (var) cal=javascript to call','list of links in javascript with detection of selected','builders'],
+"131"=>['slctmenus_sj','r,cal,go,vf','array, js_command for SaveJ, active value (verif)','list of links calling ajax (SaveJ) with string VAR in js_command replaced by the key of each array','utils'],
+"132"=>['jump_btns','id,v,add,c=\'\'','buttons of values separated by \"|\" in v sent by javascript to id and replacing the input id if add=0 or adding the words in add (like \', \')','buttons who send values in an input','builders'],
+"133"=>['mkdir_r','u','build directories topology from a string like dir1/dir11/dir111','nothing','directories'],
+"134"=>['rmdir_r','dr','path dir file topo_number','delete files of a directory, including other dirs ;
+option of explode_dir function (used inside a routine)','directories'],
+"135"=>['write_file','f,t','file_url text to save in f','save file on server','directories'],
+"136"=>['read_file','f','open datas from fil f','text','directories'],
+"137"=>['get_file','f','','','readers'],
+"138"=>['file_get_context','f','','','readers'],
+"139"=>['curl_get_contents','f','','','readers'],
+"140"=>['joinable','d','','','readers'],
+"141"=>['explore','dr,p=\'\',o=\'\'','','','directories'],
+"142"=>['explode_dir','r,j,func','used after explore() in obtain_from_dir()','array of files in $j directory applied to the function $func','directories'],
+"143"=>['func','d,k,f,n','it\'s an example of func() used  by explode_dir()','string for array built by explode_dir()','directories'],
+"144"=>['obtain_from_dir','dr,func','call explore() with dr and explode_dir() knowing func','array of result of the function $func on the files found recursively in drectory $dr','directories'],
+"145"=>['gz_create','f,fb','file_url bz_name of the compressed archive','store a bz archive','component'],
+"146"=>['gz_write','d,f','bz_url file_name of the decompressed archive','store a file from a bz archive','component'],
+"147"=>['unpack_gz','f,d','gz_file target_directory','extract fils from gz archive in a directory','component'],
+"148"=>['witch_quote','v','choose witch sort of quote to protect by slashes :: used only by dump()','formated $v','msql'],
+"149"=>['create_page','t,p','t=content p=name of base','final step for build a msql table before to write it','msql'],
+"150"=>['dump','r,p','array of arrays and name of node like \'hub_table\'','prepared values for create_page()','msql'],
+"151"=>['dump_x','r,p','','','msql'],
+"152"=>['plug_motor','dr,nod,defsb','call a microtable base/nod or create it using _menus_ defsb','array of arrays','msql'],
+"153"=>['auto_menus','r','r=array of any key of a msql_array (an array)','generated array of _menus_ range in a msql_array','msql'],
+"154"=>['save_vars','dr,nod,defs','save microtable: directory table defs=array of arrays','nothing','msql'],
+"155"=>['modif_vars','dr,nod,arr,k,dfb=\'\'','  (like hub_table) =array of arrays =\'add\' / \'push\' / \'del\' / value (optionnal)','the modified microtable with $arr','msql'],
+"156"=>['msql_modif','dr,nod,defs,dfb,act,n','dir node definitions menus action value 
 Actions are : 
 (defs is a value of a range) :
 - one : modif value n
@@ -175,275 +174,273 @@ Actions are :
 - arr : replace the array 
 - mdf : replace value present in defs
 - del : deleted values present in defs
-- add : add values of defs ; if n=\'mdf\' verif if value already exists before to add it','saved array','msql');
-$r[157]=array('msql_save','dr,nod,defs,dfb','save array of arrays defs in base/nod adding dfb as _menus_  :: resolve root problems','nothing','msql');
-$r[158]=array('msql_read','dr,nod,in=\'\',u=\'\'','directory nod=table i=range (optionnal) :: resolve root problems','array of a table 
+- add : add values of defs ; if n=\'mdf\' verif if value already exists before to add it','saved array','msql'],
+"157"=>['msql_save','dr,nod,defs,dfb','save array of arrays defs in base/nod adding dfb as _menus_  :: resolve root problems','nothing','msql'],
+"158"=>['msql_read','dr,nod,in=\'\',u=\'\'','directory nod=table i=range (optionnal) :: resolve root problems','array of a table 
 or a part of it 
-or only the value there is only one range','msql');
-$r[159]=array('msql_read_b','dr,nod,in=\'\',u=\'\',ra=\'\'','','','msql');
-$r[160]=array('msq_where','dr,nod,n,d,o=\'\'','','','msql');
-$r[161]=array('msq_select','dr,pr,nd','select microbases in directory  from user  and table= (in \'bs_\') if theses tables are numeroted','array of needed tables from selection','msql');
-$r[162]=array('msq_find_last','dr,pr,nod','directory hub table','previous empty value to fill (1,2,4 existing return 3)','msql');
-$r[163]=array('msq_find_next','r','array','routine of msq_find_next','routine');
-$r[164]=array('msq_findnext_entry','r','','','msql');
-$r[165]=array('msq_goodtable','d','value of a table designed by string command as \'base/node�key\' in a connector ; abble to decide if the key is a number of table or a key of one table','table','msql');
-$r[166]=array('msq_tri','r,n,vrf','array, number, verif','return the values of a column of a table','msql');
-$r[167]=array('msq_cat','r,n','array number','make a list form the column of a table (unique key)','msql');
-$r[168]=array('msq_reorder','r','reorder the key of a table, beginning from 1','array','msql');
-$r[169]=array('msq_move','r,ka,va','','','msql');
-$r[170]=array('msq_walk','r,n,func,p','array, number, function, param','apply a function with param to each value of a column n','msql');
-$r[171]=array('msq_walk_k','r,func','array, function','apply a function to the keys','msql');
-$r[172]=array('msq_prep','r','affect numeric keys to a table, from 1','table with numerical keys','msql');
-$r[173]=array('copy_msql','da,na,db,nb','da=directory of a na=node of a db=directory of b nb=node of b','duplicate a msql base using a name (db/nb.php)','msql');
-$r[174]=array('copymsql','da,na,db,nb','','','msql');
-$r[175]=array('msql_read_prep','b,d','','','');
-$r[176]=array('msql_read_kv','b,d','','','msql');
-$r[177]=array('msq_n','dr,nod,d','','','msql');
-$r[178]=array('msq_append','defs,d','','','');
-$r[179]=array('msq_merge','r,dr,nd','','','msql');
-$r[180]=array('msq_ses','v,dr,nod,u','','','msql');
-$r[181]=array('msq_f','dr,nod','','','msql');
-$r[182]=array('edit_msql_shot','dir,nod,row,col,res','','','msql');
-$r[183]=array('make_list_r','r','','','builders');
-$r[184]=array('define_mods_cond','vl','vl=table of modules','structure of blocks to build for the current condition','mods');
-$r[185]=array('val_to_mod_b','p','','','mods');
-$r[186]=array('popart','d,p=\'\',t=\'\'','','','arts');
-$r[187]=array('jread','c,id,v','','','arts');
-$r[188]=array('pecho_arts','id','call informations about article id in cache if possible or in database','array: day,frm,suj,img,nod,thm,lu,re,host,mail,ib','arts');
-$r[189]=array('read_msg','d,m','id, option','content of an article, options : 
+or only the value there is only one range','msql'],
+"159"=>['msql_read_b','dr,nod,in=\'\',u=\'\',ra=\'\'','','','msql'],
+"160"=>['msq_where','dr,nod,n,d,o=\'\'','','','msql'],
+"161"=>['msq_select','dr,pr,nd','select microbases in directory  from user  and table= (in \'bs_\') if theses tables are numeroted','array of needed tables from selection','msql'],
+"162"=>['msq_find_last','dr,pr,nod','directory hub table','previous empty value to fill (1,2,4 existing return 3)','msql'],
+"163"=>['msq_find_next','r','array','routine of msq_find_next','routine'],
+"164"=>['msq_findnext_entry','r','','','msql'],
+"165"=>['msq_goodtable','d','value of a table designed by string command as \'base/nodeÂ§key\' in a connector ; abble to decide if the key is a number of table or a key of one table','table','msql'],
+"166"=>['msq_tri','r,n,vrf','array, number, verif','return the values of a column of a table','msql'],
+"167"=>['msq_cat','r,n','array number','make a list form the column of a table (unique key)','msql'],
+"168"=>['msq_reorder','r','reorder the key of a table, beginning from 1','array','msql'],
+"169"=>['msq_move','r,ka,va','','','msql'],
+"170"=>['msq_walk','r,n,func,p','array, number, function, param','apply a function with param to each value of a column n','msql'],
+"171"=>['msq_walk_k','r,func','array, function','apply a function to the keys','msql'],
+"172"=>['msq_prep','r','affect numeric keys to a table, from 1','table with numerical keys','msql'],
+"173"=>['copy_msql','da,na,db,nb','da=directory of a na=node of a db=directory of b nb=node of b','duplicate a msql base using a name (db/nb.php)','msql'],
+"174"=>['copymsql','da,na,db,nb','','','msql'],
+"175"=>['msql_read_prep','b,d','','',''],
+"176"=>['msql_read_kv','b,d','','','msql'],
+"177"=>['msq_n','dr,nod,d','','','msql'],
+"178"=>['msq_append','defs,d','','',''],
+"179"=>['msq_merge','r,dr,nd','','','msql'],
+"180"=>['msq_ses','v,dr,nod,u','','','msql'],
+"181"=>['msq_f','dr,nod','','','msql'],
+"182"=>['edit_msql_shot','dir,nod,row,col,res','','','msql'],
+"183"=>['make_list_r','r','','','builders'],
+"184"=>['define_mods_cond','vl','vl=table of modules','structure of blocks to build for the current condition','mods'],
+"185"=>['val_to_mod_b','p','','','mods'],
+"186"=>['popart','d,p=\'\',t=\'\'','','','arts'],
+"187"=>['jread','c,id,v','','','arts'],
+"188"=>['pecho_arts','id','call informations about article id in cache if possible or in database','array: day,frm,suj,img,nod,thm,lu,re,host,mail,ib','arts'],
+"189"=>['read_msg','d,m','id, option','content of an article, options : 
 - brut : not converted to html
 - noimages : kill images
 - nl : absolute urls (with http)
 - 2 : preview only
-- 3 : full text','arts');
-$r[190]=array('rqt','id,n=\'\'','','','arts');
-$r[191]=array('find_id','id','give id of an article called by unkwonw parameter as title, id, or \"last\"','id of existing and published article','arts');
-$r[192]=array('last_art_rqt','','','','arts');
-$r[193]=array('last_art_day','','','','arts');
-$r[194]=array('last_art','lastdate','','','arts');
-$r[195]=array('id_of_suj','id','use title of an article','return id of article','arts');
-$r[196]=array('id_of_ib','ib','child of an article','new id','arts');
-$r[197]=array('ib_of_id','id','parent of an article','new id','arts');
-$r[198]=array('suj_of_id','id','title of article','string','arts');
-$r[199]=array('data_val','v,id,cat,val','value to recuperate in \'qdd\' where id, cat and val are known - use rse()','value from mysql - specific to mysql table \'qdd\' (datas)','sql');
-$r[200]=array('count_art','suj,frm','suj=title of article frm=category','number of published articles found','arts');
-$r[201]=array('cache_art','id','','','arts');
-$r[202]=array('tri_tag','v','basic action of tri_tags() :: explode  by \',\' and trim it, used for tags','array from string','meca');
-$r[203]=array('tri_tags','r','convert all values or tha array r (containing tags with commas) in an array of tag in key, and number of occurences in value','formated array','meca');
-$r[204]=array('isgoodhubname','user','','','meca');
-$r[205]=array('forbidden_img','nnm','eradic words containing one of masks specified in admin/config/params/21 forbidden_images','formated string','meca');
-$r[206]=array('xt','v','give the strlower extension in v','formated string','meca');
-$r[207]=array('xtb','v','give the strlower 4 last chars in v','formated string ','meca');
-$r[208]=array('is_image','doc','verify if doc is an image','true','meca');
-$r[209]=array('read_rss_data','data,t,r','','','rss');
-$r[210]=array('read_rss','f,t,r','system/program_functions.php=file_url =master_balise name (like \'item\') =array of sub-balises (like \'title\',\'description\')','array of arrays of an sml or rss source','rss');
-$r[211]=array('read_xml','f','','','rss');
-$r[212]=array('load_xml','f,o=\'\'','','','rss');
-$r[213]=array('mkdts','','','','rss');
-$r[214]=array('rss_date','date','find timestamp from rss formated date','timestamp','rss');
-$r[215]=array('rss_time','date','','','rss');
-$r[216]=array('mkday','d=\'\',p=\'\'','timestamp','datadav using \'ymd\'','dates');
-$r[217]=array('calc_date','d','d=timestamp','timestamp of $d days before','dates');
-$r[218]=array('mtime','','','','dates');
-$r[219]=array('time_ago','dt','php date(dt,df=timestamp) use relative time','formated string like \'2h 10min ago\'','dates');
-$r[220]=array('on2cols','r,w,p','r is an array with key=label and value=content, w=total width, with of labels=1/p','table in divs','builders');
-$r[221]=array('onxcols','re,prm,w','','','builders');
-$r[222]=array('scroll','r,d,n,w=\'\',h=\'\'','obj=array used to build txt, nb is the limit for create a scrool','div with ovrflow if needed','builders');
-$r[223]=array('scroll_b','r,d,n,w=\'\',h=\'\',id=\'\'','','','builders');
-$r[224]=array('iframe','d,large=\'\'','url width','iframe balise','html');
-$r[225]=array('correct_internal_url','f,h=\'\'','','','');
-$r[226]=array('eradic_acc','d','convert all accentuated  characters to normal','formated string','filters');
-$r[227]=array('protect_utf','d','','','filters');
-$r[228]=array('utf8_decode_b','d','','','filters');
-$r[229]=array('html_entity_decode_b','v','','','filters');
-$r[230]=array('unescape','d','convert entities like %u to ascii code (hex to dec)','ascii code','filters');
-$r[231]=array('utflatindecode','d','convert recognized entities like %u to html code','decoded utflatin','filters');
-$r[232]=array('urlutf','d,p','','','filters');
-$r[233]=array('normalize','d','forbid special characters and accept only A-aZ-z0-9','formated string','filters');
-$r[234]=array('parse','v','','','filters');
-$r[235]=array('strip_tags_b','d','','','filters');
-$r[236]=array('clean_acc','v','kill all types of accents','formated string','filters');
-$r[237]=array('clean_punct','in','apply typographic rules','formated string','filters');
-$r[238]=array('clean_punct_b','v','apply typographic rules specific to bad spaces around the quote \" (slower)','formated string','filters');
-$r[239]=array('lowercase','v','strtolower but keep ucfirst for each words','formated string','filters');
-$r[240]=array('br2nl','tx','string with <br /> <br> <br/>','delete /n and replace <br> by /n','filters');
-$r[241]=array('delbr','tx','','','filters');
-$r[242]=array('deln','tx','del /n','cleanup','filters');
-$r[243]=array('embed_detect','v,s,e,n=\'\'','string start-cut end-cut cut_from','the part of $v who begin and finish with $s and $e','meca');
-$r[244]=array('plink','f','','','builders');
-$r[245]=array('prepdlink','val','','','builders');
-$r[246]=array('preplink','lk','link','root of link','builders');
-$r[247]=array('quotes','d','clean up all kinds of quotes in one classic \'\"\' and apply clean_punct() and lowercase()','formated string for titles','filters');
-$r[248]=array('scale_img','w,h,wo,ho,s','width height desired_width desired_height option (vertical priority =1)','part of make_mini','images');
-$r[249]=array('make_mini','in,out,w,h,s','path desired_path width height option (vertical)','url of built miniature','images');
-$r[250]=array('imgalpha','img','path','part of make_mini','images');
-$r[251]=array('thumb_name','d,w,h','id width height','name of a miniature','images');
-$r[252]=array('make_thumb_c','d,size=\'\',s=\'\'','','','images');
-$r[253]=array('popim_w','im,d','','','images');
-$r[254]=array('popim','im,v,id=\'\'','','','images');
-$r[255]=array('popthumb','f,s=\'\'','','','images');
-$r[256]=array('save_get','','','','meca');
-$r[257]=array('rebuild_get','','','','meca');
-$r[258]=array('by_pages','r,p','give result of r by pages if needed, with limit of 10 objects by page','list of pages','meca');
-$r[259]=array('detect_uget','d','','','meca');
-$r[260]=array('recup_get','dr','','','meca');
-$r[261]=array('nb_page_lk','','','','');
-$r[262]=array('nb_page','tot,npg,page,no=\'\'','total nb_of_pages current_page','list by approximation of pages','mecanics');
-$r[263]=array('make_ban_b','here,qb','','','');
-$r[264]=array('mails_list','','','','');
-$r[265]=array('recup_mails_tosend','','','','');
-$r[266]=array('prep_mail_html','suj,v,url','','','');
-$r[267]=array('send_mail_html','dest,suj,v,from,url','','','');
-$r[268]=array('send_mail_txt','dest,suj,v,from,url','','','');
-$r[269]=array('send_mail','format,to,suj,msg,from,url','','','');
-$r[270]=array('contact','t,c','','','');
-$r[271]=array('msqmimes','','','','');
-$r[272]=array('mimes_types','d','','','');
-$r[273]=array('mimes','d,t=\'\',sz=\'\'','','','');
-$r[274]=array('read_apps_reader','f','','','');
-$r[275]=array('read_apps','v','','','');
-$r[276]=array('match_vdir','dr,nd,rv','','','');
-$r[277]=array('m_apps','r,cnd,dir,p=\'\',o=\'\'','','','');
-$r[278]=array('r_apps','','','','');
-$r[279]=array('apps_arts_thumb','d','','','');
-$r[280]=array('desktop_apps','id,va,opt,o','','','');
-$r[281]=array('desk_icon','k,j','','','');
-$r[282]=array('desktop_build_ico','r,c','','','');
-$r[283]=array('app_list','r,c,cl=\'\'','','','');
-$r[284]=array('desktop_cond','p,o=\'\'','','','');
-$r[285]=array('desktop_js','','','','');
-$r[286]=array('poplist','','','','');
-$r[287]=array('call_finder','p,o','','','');
-$r[288]=array('eye','p=\'\'','','','');
-$r[289]=array('randid','','','','');
-$r[290]=array('nchar','o,n','value number','same value n times (repetitive value)','builders');
-$r[291]=array('rstr','n','value of restriction \'n\' (number)','no restriction return \'true\'','utils');
-$r[292]=array('auth','n','','','');
-$r[293]=array('prmb','n','','','');
-$r[294]=array('nms','d','number of the nomination','nominations (helps_nominations)','builders');
-$r[295]=array('rq','f','php link','require','mecanics');
-$r[296]=array('yesno','d','','','');
-$r[297]=array('yesnoses','d','','','');
-$r[298]=array('define_s','v,d','give the the session s the value d if session is not set, then give get value to session','value of the session $v','html');
-$r[299]=array('getorpost','v,d','value data','post replace get, get replace data','utils');
-$r[300]=array('get','v','','','');
-$r[301]=array('geta','v,d','','','');
-$r[302]=array('post','d,v=\'\'','','','');
-$r[303]=array('ses','d,v=\'\'','call session from his name','value of session','utils');
-$r[304]=array('sesr','d,k,v=\'\'','','','');
-$r[305]=array('sesv','v,p=\'\',b=\'\'','','','');
-$r[306]=array('sesmk','v,p=\'\',b=\'\'','value_name function_name, reset','make session for datas (cache system)','mecanics');
-$r[307]=array('sesone','v,p=\'\'','','','');
-$r[308]=array('strin','v,s','','','');
-$r[309]=array('strchr_b','v,s','','','');
-$r[310]=array('strrchr_b','v,s','value separator','part of string after the separator, not including it','utils');
-$r[311]=array('substrpos','d,s','','','');
-$r[312]=array('substrrpos','d,s','','','');
-$r[313]=array('subtopos','ret,a,b','','','');
-$r[314]=array('split_r','d,n','data number','split at n position','mecanics');
-$r[315]=array('strprm','d,n=\'\',s=\'\'','','','');
-$r[316]=array('strdeb','v,s','','','');
-$r[317]=array('str_until','d,s','','','');
-$r[318]=array('split_one','s,v,n=\'\'','part of value after and before string (n=0), or after and before the last found string (n=1), let the sides a his place (right or left) if other is empty','an array with entries','mecanics');
-$r[319]=array('split_right','s,v,n=\'\'','','','');
-$r[320]=array('split_only','s,v,p=\'\',t=\'\'','','','');
-$r[321]=array('strsplit','v','php str_split() for php4','array of each letter of $v','mecanics');
-$r[322]=array('array_combine_a','a,b','a=keys b=values','combined array','mecanics');
-$r[323]=array('array_merge_b','r,rb','','','');
-$r[324]=array('array_merge_r','a,b','','','');
-$r[325]=array('array_unshift_b','&r,k,v','','','');
-$r[326]=array('array_reverse_b','r,s=\'\'','','','');
-$r[327]=array('array_keys_b','r','','','');
-$r[328]=array('array_keys_r','r,n','r=array in an array n=range: key_target','array: values of a range','mecanics');
-$r[329]=array('array_keys_k','r,n','','','');
-$r[330]=array('in_array_b','va,r','find key in ranges r where value=va','like in_array() ','mecanics');
-$r[331]=array('in_array_r','r,d,n','array value number','verif if value exist in recursive array at column n','mecanics');
-$r[332]=array('array_add_r','ra,rb','add values to recursive arrays','new array','mecanics');
-$r[333]=array('array_walk_b','r,func,p1,p2','array function param2 param3','array of results of function apply to values of \'r\' as param1','mecanics');
-$r[334]=array('array_part','d,s,n','data split number','the occurrence \'n\' of the pattern \'d\' split with \'s\'','mecanics');
-$r[335]=array('array_push_after','ra,rb,p','','','');
-$r[336]=array('explode_k','d,a,b','','','');
-$r[337]=array('implode_k','r,a,b','','','');
-$r[338]=array('implode_r','r,a,b','','','');
-$r[339]=array('compact_val','r,a,b','','','');
-$r[340]=array('decompact_conn','d','data','convert string to connector','routine');
-$r[341]=array('decompact_conn_b','d','data','convert string to connector ; force �option to be at the end','routine');
-$r[342]=array('decompact_mod','d','','','');
-$r[343]=array('subparams','d','data','extract list of values from variable of a connector','routine');
-$r[344]=array('subparams_a','d','data','extract list of values from options of a connector','routine');
-$r[345]=array('good_param','d','options deductions from connectors','array','mecanics');
-$r[346]=array('splice','r,n','','','');
-$r[347]=array('count_r','r','','','');
-$r[348]=array('nearest','d,s','','','');
-$r[349]=array('currentwidth','','','','');
-$r[350]=array('content_width','','','','');
-$r[351]=array('curwidth_set','d','','','');
-$r[352]=array('pagewidth','d,f=\'\'','','','');
-$r[353]=array('act','d,n','','','');
-$r[354]=array('hexrgb','d,o=\'\'','hex2rgba','rgba()','');
-$r[355]=array('invert_color','p,o','choose best background (black or white) from color','hex color','mecanics');
-$r[356]=array('jc','','','','');
-$r[357]=array('jd','','','','');
-$r[358]=array('gf','f','file','good root file','mecanics');
-$r[359]=array('gd','d','','','');
-$r[360]=array('prog','b=\'\',c=\'\'','','','');
-$r[361]=array('philum','','','','');
-$r[362]=array('https','f','link','strip https','mecanics');
-$r[363]=array('http','f','','','');
-$r[364]=array('utmsrc','f','','','');
-$r[365]=array('host','','','','');
-$r[366]=array('htac','d','part of url knowing htaccess','the param of variable formated','utils');
-$r[367]=array('htacc','d','part of url knowing htaccess for \'read\' or \'id\'','the param of variable formated','utils');
-$r[368]=array('urlread','d','','','');
-$r[369]=array('hardurl','d','','','');
-$r[370]=array('good_url','id,v','deprecated :: build explicit url from formated title (suj) if present, or i by default','url of an article found by htacc(\'read\')','builders');
-$r[371]=array('subdom','v','make url from hub v, depend if subdomain or htaccess are activated ','url','utils');
-$r[372]=array('prep_host','nod','good url with thttp for hub=nod if subdomain or htaccess or nothing activated','formated string','builders');
-$r[373]=array('hostname','','','','');
-$r[374]=array('mobile','','','','');
-$r[375]=array('feedproxy','f','','','');
-$r[376]=array('findroot_b','u','','','');
-$r[377]=array('radical_domain','f','','','');
-$r[378]=array('radical_root','f','','','');
-$r[379]=array('nbof','n,i','number (count), numeber (value of nms)','plurial or signle of objects (nomination)','utils');
-$r[380]=array('plurial','n,i','r=array of objects','letter \"s\" if $r>1','utils');
-$r[381]=array('flags','d','country','image flag of contry','builders');
-$r[382]=array('ascii','d,n=\'\'','d=ascii value, n=size','ascii code','builders');
-$r[383]=array('svg','d','','','');
-$r[384]=array('picto','d,c=\'\'','','','');
-$r[385]=array('pictxt','p,t=\'\',s=\'\'','','','');
-$r[386]=array('pictit','p,t,s=\'\'','','','');
-$r[387]=array('imgico','f,t=\'\',h=\'\'','','image of icon','builders');
-$r[388]=array('icon','v,t=\'\',h=\'\',jc=\'\'','data directory','icon (image from icon/system by default)','builders');
-$r[389]=array('ico','d,t=\'\'','','','');
-$r[390]=array('callico','d,t=\'\',s=\'\',c=\'\'','','','');
-$r[391]=array('icosys','d,s=\'\'','','','');
-$r[392]=array('helps','d,nd=\'\'','key of helps_txts table','value of entry','builders');
-$r[393]=array('hlpbt','d,p=\'\'','key of helps_txts table','button (?) opening help in a popup','builders');
-$r[394]=array('msqlink','b,p,t,d=\'\',c=\'\'','base table (number)','build link to table','builders');
-$r[395]=array('msqhlp','j,d','','','');
-$r[396]=array('msqhlptxt','d','','','');
-$r[397]=array('recup_fileinfo','doc','file','formated date and size of a file','utils');
-$r[398]=array('ftime','f,d=\'\'','file','formated date of a file ','directories');
-$r[399]=array('fsize','f','file','formated size of a file ','directories');
-$r[400]=array('fwidth','f','','','');
-$r[401]=array('ajx','v,p=\'\'','','','');
-$r[402]=array('ajxr','res','','','');
-$r[403]=array('ajxg','d','','','');
-$r[404]=array('memtmp','','','','');
-$r[405]=array('core','f,p,v1,v2,v3,v4','call the function p or f with 4 values','depend of the function','maths');
-$r[406]=array('clplug_j','d,a=\'\',b=\'\'','','','');
-$r[407]=array('call_func','c,r,v','css specific_array value','shortcut to lj() but params for SaveJ are in an array','utils');
-$r[408]=array('callplug','c,t,pl,f,p,v','','','');
-$r[409]=array('call_plug','c,t,f,p,v','class target_div plug_name option value','shortcut to lj() specific for plugins (decide if prepare for popup)','builders');
-$r[410]=array('plugin','d,p=\'\',o=\'\',ob=\'\',res=\'\'','plugin param1 param2','result of a plugin with params','builders');
-$r[411]=array('plugin_func','d,f,p=\'\',o=\'\',res=\'\'','','','');
-$r[412]=array('plug_core','d,p=\'\',o=\'\',res=\'\'','','','');
-$r[413]=array('alert','d','','','');
-$r[414]=array('patch_replace','bs,in,wh,repl','replace in by repl where wh in bs','confirmation success','database');
-$r[415]=array('chrono','d','','','');
-$r[416]=array('pr','r','','','');
-$r[417]=array('window','d','','','');
-$r[418]=array('eco','d,o=\'\'','','','');
-
-?>
+- 3 : full text','arts'],
+"190"=>['rqt','id,n=\'\'','','','arts'],
+"191"=>['find_id','id','give id of an article called by unkwonw parameter as title, id, or \"last\"','id of existing and published article','arts'],
+"192"=>['last_art_rqt','','','','arts'],
+"193"=>['last_art_day','','','','arts'],
+"194"=>['last_art','lastdate','','','arts'],
+"195"=>['id_of_suj','id','use title of an article','return id of article','arts'],
+"196"=>['id_of_ib','ib','child of an article','new id','arts'],
+"197"=>['ib_of_id','id','parent of an article','new id','arts'],
+"198"=>['suj_of_id','id','title of article','string','arts'],
+"199"=>['data_val','v,id,cat,val','value to recuperate in \'qdd\' where id, cat and val are known - use rse()','value from mysql - specific to mysql table \'qdd\' (datas)','sql'],
+"200"=>['count_art','suj,frm','suj=title of article frm=category','number of published articles found','arts'],
+"201"=>['cache_art','id','','','arts'],
+"202"=>['tri_tag','v','basic action of tri_tags() :: explode  by \',\' and trim it, used for tags','array from string','meca'],
+"203"=>['tri_tags','r','convert all values or tha array r (containing tags with commas) in an array of tag in key, and number of occurences in value','formated array','meca'],
+"204"=>['isgoodhubname','user','','','meca'],
+"205"=>['forbidden_img','nnm','eradic words containing one of masks specified in admin/config/params/21 forbidden_images','formated string','meca'],
+"206"=>['xt','v','give the strlower extension in v','formated string','meca'],
+"207"=>['xtb','v','give the strlower 4 last chars in v','formated string ','meca'],
+"208"=>['is_image','doc','verify if doc is an image','true','meca'],
+"209"=>['read_rss_data','data,t,r','','','rss'],
+"210"=>['read_rss','f,t,r','system/program_functions.php=file_url =master_balise name (like \'item\') =array of sub-balises (like \'title\',\'description\')','array of arrays of an sml or rss source','rss'],
+"211"=>['read_xml','f','','','rss'],
+"212"=>['load_xml','f,o=\'\'','','','rss'],
+"213"=>['mkdts','','','','rss'],
+"214"=>['rss_date','date','find timestamp from rss formated date','timestamp','rss'],
+"215"=>['rss_time','date','','','rss'],
+"216"=>['mkday','d=\'\',p=\'\'','timestamp','datadav using \'ymd\'','dates'],
+"217"=>['calc_date','d','d=timestamp','timestamp of $d days before','dates'],
+"218"=>['mtime','','','','dates'],
+"219"=>['time_ago','dt','php date(dt,df=timestamp) use relative time','formated string like \'2h 10min ago\'','dates'],
+"220"=>['on2cols','r,w,p','r is an array with key=label and value=content, w=total width, with of labels=1/p','table in divs','builders'],
+"221"=>['onxcols','re,prm,w','','','builders'],
+"222"=>['scroll','r,d,n,w=\'\',h=\'\'','obj=array used to build txt, nb is the limit for create a scrool','div with ovrflow if needed','builders'],
+"223"=>['scroll_b','r,d,n,w=\'\',h=\'\',id=\'\'','','','builders'],
+"224"=>['iframe','d,large=\'\'','url width','iframe balise','html'],
+"225"=>['correct_internal_url','f,h=\'\'','','',''],
+"226"=>['eradic_acc','d','convert all accentuated  characters to normal','formated string','filters'],
+"227"=>['protect_utf','d','','','filters'],
+"228"=>['utf8_decode_b','d','','','filters'],
+"229"=>['html_entity_decode_b','v','','','filters'],
+"230"=>['unescape','d','convert entities like %u to ascii code (hex to dec)','ascii code','filters'],
+"231"=>['utflatindecode','d','convert recognized entities like %u to html code','decoded utflatin','filters'],
+"232"=>['urlutf','d,p','','','filters'],
+"233"=>['normalize','d','forbid special characters and accept only A-aZ-z0-9','formated string','filters'],
+"234"=>['parse','v','','','filters'],
+"235"=>['strip_tags_b','d','','','filters'],
+"236"=>['clean_acc','v','kill all types of accents','formated string','filters'],
+"237"=>['clean_punct','in','apply typographic rules','formated string','filters'],
+"238"=>['clean_punct_b','v','apply typographic rules specific to bad spaces around the quote \" (slower)','formated string','filters'],
+"239"=>['lowercase','v','strtolower but keep ucfirst for each words','formated string','filters'],
+"240"=>['br2nl','tx','string with <br /> <br> <br/>','delete /n and replace <br> by /n','filters'],
+"241"=>['delbr','tx','','','filters'],
+"242"=>['deln','tx','del /n','cleanup','filters'],
+"243"=>['embed_detect','v,s,e,n=\'\'','string start-cut end-cut cut_from','the part of $v who begin and finish with $s and $e','meca'],
+"244"=>['plink','f','','','builders'],
+"245"=>['prepdlink','val','','','builders'],
+"246"=>['preplink','lk','link','root of link','builders'],
+"247"=>['quotes','d','clean up all kinds of quotes in one classic \'\"\' and apply clean_punct() and lowercase()','formated string for titles','filters'],
+"248"=>['scale_img','w,h,wo,ho,s','width height desired_width desired_height option (vertical priority =1)','part of make_mini','images'],
+"249"=>['make_mini','in,out,w,h,s','path desired_path width height option (vertical)','url of built miniature','images'],
+"250"=>['imgalpha','img','path','part of make_mini','images'],
+"251"=>['thumb_name','d,w,h','id width height','name of a miniature','images'],
+"252"=>['make_thumb_c','d,size=\'\',s=\'\'','','','images'],
+"253"=>['popim_w','im,d','','','images'],
+"254"=>['popim','im,v,id=\'\'','','','images'],
+"255"=>['popthumb','f,s=\'\'','','','images'],
+"256"=>['save_get','','','','meca'],
+"257"=>['rebuild_get','','','','meca'],
+"258"=>['by_pages','r,p','give result of r by pages if needed, with limit of 10 objects by page','list of pages','meca'],
+"259"=>['detect_uget','d','','','meca'],
+"260"=>['recup_get','dr','','','meca'],
+"261"=>['nb_page_lk','','','',''],
+"262"=>['nb_page','tot,npg,page,no=\'\'','total nb_of_pages current_page','list by approximation of pages','mecanics'],
+"263"=>['make_ban_b','here,qb','','',''],
+"264"=>['mails_list','','','',''],
+"265"=>['recup_mails_tosend','','','',''],
+"266"=>['prep_mail_html','suj,v,url','','',''],
+"267"=>['send_mail_html','dest,suj,v,from,url','','',''],
+"268"=>['send_mail_txt','dest,suj,v,from,url','','',''],
+"269"=>['send_mail','format,to,suj,msg,from,url','','',''],
+"270"=>['contact','t,c','','',''],
+"271"=>['msqmimes','','','',''],
+"272"=>['mimes_types','d','','',''],
+"273"=>['mimes','d,t=\'\',sz=\'\'','','',''],
+"274"=>['read_apps_reader','f','','',''],
+"275"=>['read_apps','v','','',''],
+"276"=>['match_vdir','dr,nd,rv','','',''],
+"277"=>['m_apps','r,cnd,dir,p=\'\',o=\'\'','','',''],
+"278"=>['r_apps','','','',''],
+"279"=>['apps_arts_thumb','d','','',''],
+"280"=>['desktop_apps','id,va,opt,o','','',''],
+"281"=>['desk_icon','k,j','','',''],
+"282"=>['desktop_build_ico','r,c','','',''],
+"283"=>['app_list','r,c,cl=\'\'','','',''],
+"284"=>['desktop_cond','p,o=\'\'','','',''],
+"285"=>['desktop_js','','','',''],
+"286"=>['poplist','','','',''],
+"287"=>['call_finder','p,o','','',''],
+"288"=>['eye','p=\'\'','','',''],
+"289"=>['randid','','','',''],
+"290"=>['nchar','o,n','value number','same value n times (repetitive value)','builders'],
+"291"=>['rstr','n','value of restriction \'n\' (number)','no restriction return \'true\'','utils'],
+"292"=>['auth','n','','',''],
+"293"=>['prmb','n','','',''],
+"294"=>['nms','d','number of the nomination','nominations (helps_nominations)','builders'],
+"295"=>['rq','f','php link','require','mecanics'],
+"296"=>['yesno','d','','',''],
+"297"=>['yesnoses','d','','',''],
+"298"=>['define_s','v,d','give the the session s the value d if session is not set, then give get value to session','value of the session $v','html'],
+"299"=>['getorpost','v,d','value data','post replace get, get replace data','utils'],
+"300"=>['get','v','','',''],
+"301"=>['geta','v,d','','',''],
+"302"=>['post','d,v=\'\'','','',''],
+"303"=>['ses','d,v=\'\'','call session from his name','value of session','utils'],
+"304"=>['sesr','d,k,v=\'\'','','',''],
+"305"=>['sesv','v,p=\'\',b=\'\'','','',''],
+"306"=>['sesmk','v,p=\'\',b=\'\'','value_name function_name, reset','make session for datas (cache system)','mecanics'],
+"307"=>['sesone','v,p=\'\'','','',''],
+"308"=>['strin','v,s','','',''],
+"309"=>['strchr_b','v,s','','',''],
+"310"=>['strrchr_b','v,s','value separator','part of string after the separator, not including it','utils'],
+"311"=>['substrpos','d,s','','',''],
+"312"=>['substrrpos','d,s','','',''],
+"313"=>['subtopos','ret,a,b','','',''],
+"314"=>['split_r','d,n','data number','split at n position','mecanics'],
+"315"=>['strprm','d,n=\'\',s=\'\'','','',''],
+"316"=>['strdeb','v,s','','',''],
+"317"=>['str_until','d,s','','',''],
+"318"=>['split_one','s,v,n=\'\'','part of value after and before string (n=0), or after and before the last found string (n=1), let the sides a his place (right or left) if other is empty','an array with entries','mecanics'],
+"319"=>['split_right','s,v,n=\'\'','','',''],
+"320"=>['split_only','s,v,p=\'\',t=\'\'','','',''],
+"321"=>['strsplit','v','php str_split() for php4','array of each letter of $v','mecanics'],
+"322"=>['array_combine_a','a,b','a=keys b=values','combined array','mecanics'],
+"323"=>['array_merge_b','r,rb','','',''],
+"324"=>['array_merge_r','a,b','','',''],
+"325"=>['array_unshift_b','&r,k,v','','',''],
+"326"=>['array_reverse_b','r,s=\'\'','','',''],
+"327"=>['array_keys_b','r','','',''],
+"328"=>['array_keys_r','r,n','r=array in an array n=range: key_target','array: values of a range','mecanics'],
+"329"=>['array_keys_k','r,n','','',''],
+"330"=>['in_array_b','va,r','find key in ranges r where value=va','like in_array() ','mecanics'],
+"331"=>['in_array_r','r,d,n','array value number','verif if value exist in recursive array at column n','mecanics'],
+"332"=>['array_add_r','ra,rb','add values to recursive arrays','new array','mecanics'],
+"333"=>['array_walk_b','r,func,p1,p2','array function param2 param3','array of results of function apply to values of \'r\' as param1','mecanics'],
+"334"=>['array_part','d,s,n','data split number','the occurrence \'n\' of the pattern \'d\' split with \'s\'','mecanics'],
+"335"=>['array_push_after','ra,rb,p','','',''],
+"336"=>['explode_k','d,a,b','','',''],
+"337"=>['implode_k','r,a,b','','',''],
+"338"=>['implode_r','r,a,b','','',''],
+"339"=>['compact_val','r,a,b','','',''],
+"340"=>['decompact_conn','d','data','convert string to connector','routine'],
+"341"=>['decompact_conn_b','d','data','convert string to connector ; force Â§option to be at the end','routine'],
+"342"=>['decompact_mod','d','','',''],
+"343"=>['subparams','d','data','extract list of values from variable of a connector','routine'],
+"344"=>['subparams_a','d','data','extract list of values from options of a connector','routine'],
+"345"=>['good_param','d','options deductions from connectors','array','mecanics'],
+"346"=>['splice','r,n','','',''],
+"347"=>['count_r','r','','',''],
+"348"=>['nearest','d,s','','',''],
+"349"=>['currentwidth','','','',''],
+"350"=>['content_width','','','',''],
+"351"=>['curwidth_set','d','','',''],
+"352"=>['pagewidth','d,f=\'\'','','',''],
+"353"=>['act','d,n','','',''],
+"354"=>['hexrgb','d,o=\'\'','hex2rgba','rgba()',''],
+"355"=>['invert_color','p,o','choose best background (black or white) from color','hex color','mecanics'],
+"356"=>['jc','','','',''],
+"357"=>['jd','','','',''],
+"358"=>['gf','f','file','good root file','mecanics'],
+"359"=>['gd','d','','',''],
+"360"=>['prog','b=\'\',c=\'\'','','',''],
+"361"=>['philum','','','',''],
+"362"=>['https','f','link','strip https','mecanics'],
+"363"=>['http','f','','',''],
+"364"=>['utmsrc','f','','',''],
+"365"=>['host','','','',''],
+"366"=>['htac','d','part of url knowing htaccess','the param of variable formated','utils'],
+"367"=>['htacc','d','part of url knowing htaccess for \'read\' or \'id\'','the param of variable formated','utils'],
+"368"=>['urlread','d','','',''],
+"369"=>['hardurl','d','','',''],
+"370"=>['good_url','id,v','deprecated :: build explicit url from formated title (suj) if present, or i by default','url of an article found by htacc(\'read\')','builders'],
+"371"=>['subdom','v','make url from hub v, depend if subdomain or htaccess are activated ','url','utils'],
+"372"=>['prep_host','nod','good url with thttp for hub=nod if subdomain or htaccess or nothing activated','formated string','builders'],
+"373"=>['hostname','','','',''],
+"374"=>['mobile','','','',''],
+"375"=>['feedproxy','f','','',''],
+"376"=>['findroot_b','u','','',''],
+"377"=>['radical_domain','f','','',''],
+"378"=>['radical_root','f','','',''],
+"379"=>['nbof','n,i','number (count), numeber (value of nms)','plurial or signle of objects (nomination)','utils'],
+"380"=>['plurial','n,i','r=array of objects','letter \"s\" if $r>1','utils'],
+"381"=>['flags','d','country','image flag of contry','builders'],
+"382"=>['ascii','d,n=\'\'','d=ascii value, n=size','ascii code','builders'],
+"383"=>['svg','d','','',''],
+"384"=>['picto','d,c=\'\'','','',''],
+"385"=>['pictxt','p,t=\'\',s=\'\'','','',''],
+"386"=>['pictit','p,t,s=\'\'','','',''],
+"387"=>['imgico','f,t=\'\',h=\'\'','','image of icon','builders'],
+"388"=>['icon','v,t=\'\',h=\'\',jc=\'\'','data directory','icon (image from icon/system by default)','builders'],
+"389"=>['ico','d,t=\'\'','','',''],
+"390"=>['callico','d,t=\'\',s=\'\',c=\'\'','','',''],
+"391"=>['icosys','d,s=\'\'','','',''],
+"392"=>['helps','d,nd=\'\'','key of helps_txts table','value of entry','builders'],
+"393"=>['hlpbt','d,p=\'\'','key of helps_txts table','button (?) opening help in a popup','builders'],
+"394"=>['msqlink','b,p,t,d=\'\',c=\'\'','base table (number)','build link to table','builders'],
+"395"=>['msqhlp','j,d','','',''],
+"396"=>['msqhlptxt','d','','',''],
+"397"=>['recup_fileinfo','doc','file','formated date and size of a file','utils'],
+"398"=>['ftime','f,d=\'\'','file','formated date of a file ','directories'],
+"399"=>['fsize','f','file','formated size of a file ','directories'],
+"400"=>['fwidth','f','','',''],
+"401"=>['ajx','v,p=\'\'','','',''],
+"402"=>['ajxr','res','','',''],
+"403"=>['ajxg','d','','',''],
+"404"=>['memtmp','','','',''],
+"405"=>['core','f,p,v1,v2,v3,v4','call the function p or f with 4 values','depend of the function','maths'],
+"406"=>['clplug_j','d,a=\'\',b=\'\'','','',''],
+"407"=>['call_func','c,r,v','css specific_array value','shortcut to lj() but params for SaveJ are in an array','utils'],
+"408"=>['callplug','c,t,pl,f,p,v','','',''],
+"409"=>['call_plug','c,t,f,p,v','class target_div plug_name option value','shortcut to lj() specific for plugins (decide if prepare for popup)','builders'],
+"410"=>['plugin','d,p=\'\',o=\'\',ob=\'\',res=\'\'','plugin param1 param2','result of a plugin with params','builders'],
+"411"=>['plugin_func','d,f,p=\'\',o=\'\',res=\'\'','','',''],
+"412"=>['plug_core','d,p=\'\',o=\'\',res=\'\'','','',''],
+"413"=>['alert','d','','',''],
+"414"=>['patch_replace','bs,in,wh,repl','replace in by repl where wh in bs','confirmation success','database'],
+"415"=>['chrono','d','','',''],
+"416"=>['pr','r','','',''],
+"417"=>['window','d','','',''],
+"418"=>['eco','d,o=\'\'','','','']];

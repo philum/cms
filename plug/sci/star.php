@@ -10,7 +10,7 @@ if($sq['ra']??[])$ret.='ra>'.substr($sq['ra'][0],1).',ra<'.substr($sq['ra'][1],1
 if($sq['dc']??[])$ret.='dc>'.substr($sq['dc'][0],1).',dc<'.substr($sq['dc'][1],1).',';
 if($sq['ds'][0]??'')$ret.='dist'.$sq['ds'][0].',';
 if($sq['ds'][1]??'')$ret.='dist'.$sq['ds'][1].',';
-return btn('txtx','Query: '.input('',$ret,atz(48)));}
+return btn('txtx','Query: '.input('',$ret,'48'));}
 
 static function simbad($sq){$ret='';
 if($sq['hip']??''){$hip=$sq['hip'][0]; $ret='hip'.$hip; }
@@ -87,9 +87,9 @@ return $sq;}
 static function bounds($sq){
 if(isset($sq['radius'])){$ra=''; $dc=''; $n=$sq['radius'];
 	if(!isset($sq['ra'][0])){$w='';
-		if(isset($sq['hip'][0])){$w='hip="'.qres($sq['hip'][0]).'"'; unset($sq['hip']);}
-		if(isset($sq['hd'][0])){$w='hd="'.qres($sq['hd'][0]).'"'; unset($sq['hd']);}
-		if($w)[$ra,$dc]=sql_b('select ra,dc from hipparcos where '.$w,'w',0); if($ra)$ra*=15;}
+		if(isset($sq['hip'][0])){$w='hip="'.sql::qres($sq['hip'][0]).'"'; unset($sq['hip']);}
+		if(isset($sq['hd'][0])){$w='hd="'.sql::qres($sq['hd'][0]).'"'; unset($sq['hd']);}
+		if($w)[$ra,$dc]=sql::call('select ra,dc from hipparcos where '.$w,'w',0); if($ra)$ra*=15;}
 	else{$ra=substr($sq['ra'][0],1); $dc=$sq['dc'][0]??0; if($dc)$dc=substr($dc,1);}
 	if($ra){$sq['ra'][0]='>'.($ra-$n); $sq['ra'][1]='<'.($ra+$n);}
 	if($dc){$sq['dc'][0]='>'.($dc-$n); $sq['dc'][1]='<'.($dc+$n);}
@@ -114,7 +114,7 @@ if($and=val($wr,'and'))$w=implode(' and ',$and);
 if($or=val($wr,'or'))$w=implode(' or ',$or);
 $cols=['hd','hip','rarad','decrad','dist','spect','mag'];
 if($o)array_push($cols,'lum','ra','dc');
-if($w)$r=sql_b('select '.implode(',',$cols).' from hipparcos where '.$w.'','',0);//auth(6)?1:
+if($w)$r=sql::call('select '.implode(',',$cols).' from hipparcos where '.$w.'','',0);//auth(6)?1:
 if($r)foreach($r as $k=>$v){//if(round($v[4])<99999)
 	$r[$k][2]=maths::deg2ra(rad2deg($v[2]));//
 	$r[$k][3]=maths::deg2dec(rad2deg($v[3]));//
@@ -129,13 +129,15 @@ static function call($p,$o,$prm=[]){
 [$p,$o]=prmp($prm,$p,$o);
 if(strpos($p,'§')!==false){[$p,$t]=cprm($p);//obsolete
 	return lj('txtx','popup_star,call___'.ajx($p).'_'.$o,pictxt('stars',$t==1?$p:$t)).'';}
+if($o && $o!=2)return lj('txtx','popup_star,call___'.ajx($p),pictxt('stars',$o==1?$p:$o)).'';
 $sq=self::sq($p); if(!$sq)return 'no star found in Hipparcos catalog';
 $r=self::build($sq,$o);
 $bt=lj('txtx','popup_star,infosrq___'.ajx(json_encode($sq)),picto('info2').nbof(count($r),16)).' ';
 $bt.=self::simbad($sq).' ';
 $bt.=self::simbad2($sq);
 $rb=array_column($r,1); $p=implode(',',$rb);
-$bt.=lj('txtx','pagup_starmap4,build___'.$p,pictxt('map','map')).' ';
+$bt.=lj('txtx','popup_starmap4,build___'.$p,pictxt('map','map2d')).' ';
+$bt.=lj('txtx','popup_starmap2,build___'.$p,pictxt('map','map3d')).' ';
 $bt.=lj('txtx','popup_iframe__xr_/app/star3d/'.$p.'___autosize',pictxt('galaxy2','3d'));
 if($o==2)$bt='';//starinfos
 if($r){
@@ -147,7 +149,7 @@ else return btn('popdel',nms(11).' '.nms(16)).$bt;}
 
 static function menu($p,$o,$rid){
 $j=$rid.'_star,call_inp'.$rid.'_2__'.$o;
-$ret=inputj('inp'.$rid,$p?$p:self::$default,$j,atz(61)).' ';
+$ret=inputj('inp'.$rid,$p?$p:self::$default,$j,'',61).' ';
 $ret.=lj('',$j,picto('ok')).' ';
 $ret.=hlpbt('star');
 return $ret;}

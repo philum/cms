@@ -1,26 +1,26 @@
 <?php //msql/helps_txts
 $r=["_menus_"=>['description'],
-"philum_pub_txt"=>['[http://philum.fr/2§[phi1§32::picto]:popart] [v[:ver]§txtsmall2:css] [http://philum.fr§[philum:picto]]'],
-"update_ok_alert"=>['mettre à jour le htaccess /ajax.php et le server param 5 (141201)'],
+"philum_pub_txt"=>['[http://philum.fr/2Â§[phi1Â§32::picto]:popart] [v[:ver]Â§txtsmall2:css] [http://philum.frÂ§[philum:picto]]'],
+"update_ok_alert"=>['mettre Ã  jour le htaccess /ajax.php et le server param 5 (141201)'],
 "conn_help_txt"=>['General Principle
 
 Connectors are written between brackets containing a \":\".
 They are located on the right and not on the left for optimization reasons.
-[param§option:conn]
+[paramÂ§option:conn]
 
 Shaping connectors :
 - [http://url.com] : \'word\' attached to a url.
 - [mot:b] : \'word\' to \'bold\'.
-- [[http://lien.com§example]:b] or [http://lien.com§[example:b]]: the connectors are have associated connectors: .jpg, .mp3, .mp4, .pdf, .webm etc.
+- [[http://lien.comÂ§example]:b] or [http://lien.comÂ§[example:b]]: the connectors are have associated connectors: .jpg, .mp3, .mp4, .pdf, .webm etc.
 
 Some connectors accept multiple options (width/height) :
-[img.jpg§140/140:thumb]
+[img.jpgÂ§140/140:thumb]
 
 To display a second instance connector of a button, simply do :
-[param§option:conn§button]
+[paramÂ§option:connÂ§button]
 
 To open a connector on the spot, there is a special connector for this in an openable menu :
-- [ID:read§open:jconn]
+- [ID:readÂ§open:jconn]
 
 The connector to call a module (paging objects) :
 The first 4 parameters of a module are: \"param/title/mode/option\".
@@ -30,9 +30,9 @@ Recent\" module for a \"public\" category, a \"hello\" title, a \"panel\" displa
 Connectors to call a plugin :
 Plugins receive only one parameter and one option:
 - [microarts:plug]
-- [hello§1:connectors:plug] //there the option adds square brackets
+- [helloÂ§1:connectors:plug] //there the option adds square brackets
 To create a button :
-- [hello§1:connectors:plug§bt] //but it doesn\'t work if \"hello\" is replaced by \"hello:b\" because it will be interpreted in the first instance, and will return its html code.
+- [helloÂ§1:connectors:plugÂ§bt] //but it doesn\'t work if \"hello\" is replaced by \"hello:b\" because it will be interpreted in the first instance, and will return its html code.
 
 You can call a plugin through a module : 
 - [microarts:plug:module]
@@ -97,14 +97,12 @@ A width of 0 mean delete this bloc, as visible in the bloc \'system\' named \'bl
 Be carefull if you permut two column right and left, to be sure modules are affected to that column
 
 Informations about widths in console are used to determinate widths of images and video and can be adjusted'],
-"designcond"=>['All the edition of design affect a special css, who will not be seen by the visitor.
-Only buttons \'apply\' will affect the design visitors can see.
+"designcond"=>['The start of a css editing session uses a specific style sheet.
+The registration will affect the css seen by the visitors.
 
-At booting the css_builder select the current design
+The Exit button disactivates the automatic update of the results on the site page.
 
-Open two windows to watch the changes
-
-To select a css in a context, duplicate design module and specify it\'s condition'],
+It is possible to assign a design to a reading context (cat, home, etc.) by adding a dedicated system module, and after having duplicated the design and noted its id.'],
 "formail"=>['Thank you for your message'],
 "userforms"=>['your datas has been saved with success'],
 "fontserver"=>['inject new definitions to the table \'server/edition_typos\',
@@ -117,23 +115,25 @@ The news definitions can come from :
 "clbasic"=>['To write connecteors or module we use the language named \'codeline basic\', abble to call functions from core, or others modules or connectors.
 
 /apply functions to param
-_PARAM§txtit:css
+_PARAMÂ§txtit:css
 /or
 txtit:css
 
 /iteration
-txtit:css§u:html§18:size
+txtit:cssÂ§u:htmlÂ§18:size
 
 /tables
-+system/edition_typosbrowsers/§msql_read:core 
++system/edition_typosbrowsers/Â§msql_read:core 
 make_table:core
 _1 _2:text
 
 /call a connector
-_PARAM§txtit:css§h:conn'],
+_PARAMÂ§txtit:cssÂ§h:conn'],
 "templates"=>['templates for articles need to be assigned in console (global) or in article himself (local) to be activated ;
 
 use restriction 55 \'user template\' to activate the procedure of searching user template, then public template, then the one bydefault. (not needed for the template of articles)'],
+"template"=>['layout structure
+suffix \'j\': if rstr(8) enabled (ajax mode)'],
 "track_follow"=>['the mail let you to receive other comments'],
 "track_captcha"=>['copy code here'],
 "update_ok"=>['The software is up-to-date'],
@@ -146,6 +146,7 @@ You must be in Dev (/?dev=dev) for the modifications take effect.
 \'2prod\' means copy progb in prog.'],
 "blocsystem"=>['The bloc \'system\' is not used to build a Div ;
 It define the parameters of the blocks of modules.'],
+"block"=>['Module block (div) to which the module belongs'],
 "import_art"=>['URL of article to import'],
 "public_design"=>['this will affect public design'],
 "modules"=>['- content : built for the main div ;
@@ -165,7 +166,7 @@ It define the parameters of the blocks of modules.'],
 - template (\'book\' by default) ;
 - template for cover (\'book_cover\') :
 
-ex: [cat=public~nbdays=30,412 413 414§hello/2/book:book]
+ex: [cat=public~nbdays=30,412 413 414Â§hello/2/book:book]
 
 It\'s possible to create an ID list using the plugin \'favs\'.'],
 "call_arts"=>['Parameters for script to articles :
@@ -176,8 +177,8 @@ It\'s possible to create an ID list using the plugin \'favs\'.'],
 - nbdays : \'30-60\' from 30 to 60 jours
 - lasts : \'0-10\' the 10 last articles
 - preview : \'true/false/full\' display mode
-- priority : level of priority (1 à 4)
-- nopriority : level of priority to exclude (1 à 4)
+- priority : level of priority (1 Ã  4)
+- nopriority : level of priority to exclude (1 Ã  4)
 - lenght : \'<4000\' less than 4000 characters'],
 "htaccess"=>['The file named \'.htaccess\' must have enough permissions.
 
@@ -198,7 +199,11 @@ The existing icons are in the editor.'],
 - local/global/distant : virtual directories
 - virtual/real : shared files mode
 - picto/mini : pictos or thumbnails'],
-"comline"=>['Commande-line:  Some modules need as parameter a command of module (MenusJ, Apps,...), also like the connector \':module\'.'],
+"comline"=>['Module control line
+- connecteur [SCRIPTÂ§bouton:module:ok]
+- or [SCRIPTÂ§bouton:MODULENAME:module:ok]
+- or [:MODULENAME:module:ok].
+- url : /module/SCRIPT'],
 "mod_cond"=>['Default contexts are (nothing), home, cat, art.
 [0-9] : context of a article (id)
 [a-z] : context of a targeted category
@@ -250,8 +255,8 @@ The \"post-treat\" option acts as a trim output, and allows you to delete the fi
 "apps"=>['the restriction 61 is activated : the default Apps are loaded, and the yours are added after (system/default_apps)'],
 "apps_add"=>['Apps presets. when rstr 61 is active, the user apps replace the system apps.
 The button \"upload\" will replace all your apps ! make bakups'],
-"trackhelp"=>['- links, images and vidéos (youtube etc...) are automatically converted
-- link to an article from the site : \'1234§link\' or \'1234:pub\' (display title) 
+"trackhelp"=>['- links, images and vidÃ©os (youtube etc...) are automatically converted
+- link to an article from the site : \'1234Â§link\' or \'1234:pub\' (display title) 
 - #public : call the room \'public\' of the Chat'],
 "suggest"=>['You can import web content from the article url, a preview will try to display. Don\'t worry if the page doesn\'t display correctly.
 
@@ -267,10 +272,10 @@ The context of a module is defined in the output of each module. If a module is 
 "console_mods"=>['Here are the number of versions of the table of mods.
 This menu does not affect the configuration. 
 To set the current mods as visible for the visitors, do \'apply\' or set it in [config/params/table_mods:l] (change the number, that will create a new table from current if it not exists)'],
-"scripts"=>['param/title/command/option/cache/hide/template/br:module§button[,]'],
+"scripts"=>['p:param,t:titre,d:commande,o:option,ch:cache,hd:hide,tp:template,bt:button,dv:div,pv:private,pp:popupÂ§bbutton:module[/n]'],
 "video"=>['Youtube, Dailymotion, Vimeo, Rutube, vk.com, Livestream'],
-"popvideo"=>['- option §1 : load video player
-- option §440/320 : width/height'],
+"popvideo"=>['- option Â§1 : load video player
+- option Â§440/320 : width/height'],
 "pdf"=>['The PDF player need to be loged on Google '],
 "art_render"=>['The default mode of render of articles are given by the restrictions 5 and 41 (config arts) but can be overloaded here with : false, preview, full, read, auto'],
 "desklr"=>['attributs of Desktop :
@@ -287,7 +292,7 @@ philum/photo/space (random img of folder)'],
 - name:twitter = open a rss fromTwitter
 - 1234:pub = link to an article (ID)
 - bold:b, italic:i, underscore:u, thethree:b:i:u
-- connectors : [param§option:connector]'],
+- connectors : [paramÂ§option:connector]'],
 "artstats"=>['The stats for an article are visibles only after have been flushed (one time by day)'],
 "track_orth"=>['Please think to be understood, and breath three times before to write !'],
 "tracks_error1"=>['bad Captcha'],
@@ -315,7 +320,7 @@ Url : /api/{command}'],
 "menubub"=>['types of menububs : 
 - (no type) : (a-z) = category, (0-9) = article, /module/... = link 
 - module : open content of a module (ex: ///lines/4///1:categories ) 
-- plug : (open a plug) 
+- app : (open an app) 
 - ajax : (ex: popup_track___admin)'],
 "spitable"=>['Atoms are represented by means of their electronic configuration. The electrons are distributed in orbits, and each orbit has potentially as many sub-orbit than the number of the orbit (the 5th can have 5 sub-orbits). Each sub-orbit has an identical configuration, made of a number of locations of electrons increasing of 4 to each sub-orbital level. The number of electrons in each orbit is the sum of sub-orbital (eg 32 is composed of 2+6+10+14).
 
@@ -365,19 +370,19 @@ To integrate it in a web page via an iframe (use id) :
 http://oumo.fr/plug/umrec/1464
 From the editor (article or comments):
 [1464:umcom:on] display the block
-[1464§1:umcom:on] display the link'],
+[1464Â§1:umcom:on] display the link'],
 "mercury"=>['Universal web player'],
 "mercurykey"=>['Admin: add the api_key (mercury.com) in the mercury table, row 1 column 0'],
 "not_published"=>['Article not published'],
 "tables"=>['Separators : 
 - columns:\"|\" or [coma]
-- lines: \"¬\"or [line break]'],
+- lines: \"Â¬\"or [line break]'],
 "twits"=>['calls a series of twits designated by their numerical id and separated by a space'],
 "tweetfeed_help"=>['use only one or more \'api_arts\' module'],
 "purpose"=>['Add and vote on proposals; you can only delete your entry on the current day.'],
-"nodes"=>['This will create a new layer of hubs (a Node).
-Change node : /?qd=nodename
-Write $qd=\"pub2\"; in _connectx to assign a domaine name to the node \'pub2\'.'],
+"nodes"=>['This will create a new layer of Hubs (a Node).
+Launch a node: /?qd=nodename
+Modify the mysql connection to associate another database, otherwise a new set of tables with the new prefix will be created.'],
 "updatenotes"=>['release notes'],
 "lastupdate"=>['Last synchronization'],
 "softwareupdated"=>['The software has been updated'],
@@ -385,7 +390,7 @@ Write $qd=\"pub2\"; in _connectx to assign a domaine name to the node \'pub2\'.'
 "softwaredist"=>['Distant version'],
 "updatedetails"=>['details of the last update'],
 "updateno"=>['This server is not set to receive updates'],
-"cookie"=>['The cookie named \"iq\" contains the id of your IP, which makes it possible to consider only one visitor even if your IP changes. See [privacy:help§data privacy policy].'],
+"cookie"=>['The cookie named \"iq\" contains the id of your IP, which makes it possible to consider only one visitor even if your IP changes. See [privacy:helpÂ§data privacy policy].'],
 "privacy"=>['The site does not use or resell any data related to visitors, except for site traffic statistics.
 All activities on the site are cancelled on average every year.'],
 "urmrsrch"=>['Search for :

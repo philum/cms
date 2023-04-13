@@ -5,7 +5,7 @@ class feed{
 static function array_to_xml($r,&$x){
 foreach($r as $k=>$v){if(is_numeric($k))$k='item'.$k;
 if(is_array($v)){$sub=$x->addChild($k); self::array_to_xml($v,$sub);}
-else $x->addChild($k,htmlspecialchars(utf8_encode($v)));}}
+else $x->addChild($k,htmlspecialchars(utf8enc($v)));}}
 
 static function xml_to_array($d){
 $x=simplexml_load_string($d,'SimpleXMLElement',LIBXML_NOCDATA);
@@ -41,8 +41,8 @@ return $res;}
 
 static function home($p,$o){$rid=randid('feed');
 $bt=self::menu($p,$o,$rid);
-$res=self::build($p,$o);
-return $bt.divd($rid,$res);}
+$ret=self::build($p,$o);
+return $bt.divd($rid,$ret);}
 
 }
 ?>

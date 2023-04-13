@@ -5,10 +5,10 @@ static function update(){
 $txt=msql::val('system','default_htaccess',1);
 $ok=write_file('.htaccess',$txt);
 if($ok)return btn('txtyl',$ok).' '.hlpbt('htaccess');
-return btn('txtyl',lkc('txtx','/?admin=htaccess','admin/htaccess'));}
+return btn('txtyl',lkc('txtx','/admin/htaccess','htaccess'));}
 
-static function mkdefault($var1,$var2,$res){$rb=ajxr($res);
-$r=msql::modif('system','default_htaccess',$rb,'one',[],1);
+static function mkdefault($var1,$var2,$prm=[]){
+$r=msql::modif('system','default_htaccess',$prm,'one',[],1);
 return btn('txtyl','saved');}
 
 static function default(){

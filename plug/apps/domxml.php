@@ -64,7 +64,7 @@ echo htmlspecialchars($innerHTML);}*/
 	catch(Exception $e){$ret.=''; alert($e);}
 	//$ret=self::explore($div);
 	//self::myTextNode($div,$a,$dom);
-	//try{foreach($div->childNodes as $va){$ret.=balb($va->tagName($i),$va->nodeValue); pr($va);}}
+	//try{foreach($div->childNodes as $va){$ret.=tagb($va->tagName($i),$va->nodeValue); pr($va);}}
 	//catch(Exception $e){$ret.='';}*/
 	
 	//echo $div->length; pr($div);
@@ -87,7 +87,7 @@ foreach($r->childNodes as $k=>$v){
 		$tag=$v->tagName; //echo $tag.br();
 		$val=$v->nodeValue;
 		$a=$tag=='a'?ath($v->getAttribute('href')):'';
-		if($tag && $val)$ret.=bal($tag,$a,self::explore($v));
+		if($tag && $val)$ret.=tag($tag,$a,self::explore($v));
 		else $ret.=$val;
 		}
 	else{//pr($v);
@@ -108,8 +108,8 @@ foreach($r->childNodes as $k=>$v){
 		//$a=$tag=='a'?ath($v->parentNode->getAttribute('href')):'';
 		//if($tag=='br')$ret.=br();
 		//$ret.=$v->nodeValue;
-		//$ret.=bal($tag,$a,$val);
-		//if($tag)$ret.=bal($tag,$a,$v->nodeValue);
+		//$ret.=tag($tag,$a,$val);
+		//if($tag)$ret.=tag($tag,$a,$v->nodeValue);
 		//else 
 		elseif($val!='modifier' && $val!='modifier le code' && $val!=' | ')$ret.=$val;
 		//else $ret.=$val;
@@ -121,7 +121,7 @@ return $ret;}
 static function build($f,$o){
 //self::test();
 //echo $f='https://fr.dompedia.org/wiki/'.$p;
-//$d=get_file($f); $d=utf8_decode_b($d);
+//$d=get_file($f); $d=utf8dec_b($d);
 //$o=0;
 $dom=fdom($f); //pr($dom);
 if($dom)foreach($dom->getElementsByTagName('div') as $k=>$div)
@@ -132,7 +132,7 @@ if($dom)foreach($dom->getElementsByTagName('div') as $k=>$div)
 	//$ret=$div->ownerDocument->saveHTML($div);
 	}
 //eco($ret);
-$ret=utf82ascii($ret);
+$ret=utf2ascii($ret);
 $ret=str_replace('<h2>Sommaire</h2>','',$ret);
 $ret=preg_replace('/\[.*\][,]|\[.*\]/','',$ret);
 return $ret;}

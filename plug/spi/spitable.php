@@ -80,9 +80,8 @@ foreach($r as $k=>$v){$c=$v<=$p?'active':'';
 return $ret;}
 
 static function menu($p){
-$j='spit_spitable,call_inpst_2_';
-//$ret=inputj('inpst',$p,$j,'',atz(4).atch(sj($j)),'number');
-$ret=input1('inpst',$p,4,'number','','');//,['onchange'=>sj($j)]
+$j='spit_spitable,call_inpst_2_'; $pr=['onchange'=>sj($j),'type'=>'number'];
+$ret=inputb('inpst',$p,4,'number',$pr);
 $ret.=lj('popbt',$j,picto('ok')).' ';
 $ret.=lk('/app/spt',picto('organigram'));
 return $ret;}
@@ -110,9 +109,9 @@ static function mktable_empty($r){//p($r);
 $n=max(array_keys($r)); ksort($r); $tr='';
 for($i=1;$i<=$n;$i++){$td='';
 	if(val($r,$i)){$nb=max(array_keys($r[$i])); $td=''; ksort($r[$i]); 
-	for($o=1;$o<=$nb;$o++)$td.=balc('td','',valr($r,$i,$o));
-	$tr.=balc('tr','',$td);}}
-return balc('table','',$tr);}
+	for($o=1;$o<=$nb;$o++)$td.=tagb('td',valr($r,$i,$o));
+	$tr.=tagb('tr',$td);}}
+return tagb('table',$tr);}
 
 static function home($p){$p=$p?$p:118;
 Head::add('csscode','td{margin:0; padding:1px;}');

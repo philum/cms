@@ -1,4 +1,4 @@
-<?php //iterator
+<?php 
 
 class iterator implements Iterator{
 private $position=0;
@@ -13,11 +13,12 @@ public function next(){++$this->position;}
 public function valid(){return isset($this->array[$this->position]);}
 }
 
-function plug_iterator($p,$o){
+class iterator{
+static function home($p,$o){
 $it=new iterator;
 $r=$it->build1();
 $r=$it->build2();
 foreach($it as $k=>$v)$ret.=$v;
 return $ret;}
-
+}
 ?>

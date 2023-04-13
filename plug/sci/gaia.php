@@ -20,7 +20,7 @@ if($sq['ds']??'')$wr['and'][]='parallax'.implode(' and parallax',$sq['ds']).'';/
 if($wr['and']??'')$w=implode(' and ',$wr['and']);
 if($wr['or']??'')$w=implode(' or ',$wr['or']);
 $cols=['gid','ra','dc','parallax','mag'];
-$r=sql_b('select '.implode(',',$cols).' from gaia where '.$w.' order by ra asc limit 500','',0);//auth(6)?1:
+$r=sql::call('select '.implode(',',$cols).' from gaia where '.$w.' order by ra asc limit 500','',0);//auth(6)?1:
 if($r)foreach($r as $k=>$v){
 	$rb[$k][0]=$v[0];
 	$rb[$k][1]=maths::deg2ra($v[1]);
@@ -39,7 +39,7 @@ $r=self::build($p,$o);
 if($r)return scroll($r,tabler($r,1),20);
 else return btn('txtyl',nms(11).' '.nms(16));}
 
-static function menu($p,$o,$rid){$ret=input1('inp'.$rid,$p,61).' ';
+static function menu($p,$o,$rid){$ret=input('inp'.$rid,$p,61).' ';
 $ret.=lj('',$rid.'_gaia,call_inp_'.$o.$rid,picto('ok')).' ';
 $ret.=hlpbt('gaia');
 return $ret;}

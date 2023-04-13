@@ -1,4 +1,4 @@
-<?php //codev
+<?php 
 class codev{
 static function find_end($ret,$start,$a,$b){
 	$posa=strpos($ret,$start);
@@ -37,7 +37,7 @@ if(!is_file($dr.$oa))$oa=$o.'.js'; $sav='save: '.$oa;
 if($p)$d=read_file($dr.$oa);
 $d=str_replace(array('<'.'?php'."\n","\n".'?'.'>','<'.'?php','?'.'>'),'',$d);
 if($fc)$d=self::find_end($d,'static function '.$fc.'(','{','}');
-//$ret=textarea('txt',htmlentities($d),52,26,atc('console')).br();
+//$ret=textarea('txt',htmlentities($d),52,26,['class'=>'console']).br();
 $ret=lj('','codev_codev,home___'.$p.'_'.$o.'_'.$fc,picto('ok')).' ';
 $ret.=lj('popsav','cbk_codev,codsav_txt_xd_'.$p.'|'.ajx($oa).'|'.ajx($fc),$sav).btd('cbk','').br();
 $ret.='<textarea id="txt" class="console" style="min-width:550px; min-height:320px;">'.($d).'</textarea>';//htmlentities

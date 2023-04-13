@@ -1,89 +1,86 @@
-<?php
-//philum_microsql_program_updates_1303
-$r["_menus_"]=array('day','text');
-$r[1]=array('0301','- la d�tection des d�finitions g�n�riques est rendue secondaire apr�s les d�finitions locales (c\'est plus logique) ;
-- le menu Apps est rendu sensible au param�tre \'hide\'');
-$r[2]=array('0302','- petites am�liorations de l\'ordre du confort lors de l\'usage du moteur de recherche ;
-- le compteur d\'articles �tait en rade (affich�s dans le menu hubs)');
-$r[3]=array('0304','ajout d\'un composant tr�s primitif permettant de dessiner � main lev�e (tools/draw, plugin \'draw\' et nouvelle version de JQuery) : il faut coller le lien dans un connecteur :img afin de l\'enregistrer dans l\'article');
-$r[4]=array('0306','ajout du support des images en base 64 (ce qui permet d\'enregistrer les images engendr�es par le plugin \'draw\')');
-$r[5]=array('0307','fix pb de \'rien qui s\'affiche\' apr�s usage de l\'�diteur wyswyg, quand un contenu est d�j� plac�');
-$r[6]=array('0309','fix pb d\'\'ic�ne \'link\' qui s\'affiche � l\'ext�rieur de la restriction \'link\' (27)');
-$r[7]=array('0312','- rub_taxo r�f�re � des donn�es permanentes ; 
-- le nombre d\'articles affich� tient compte des inclusions (count_r) ; ');
-$r[8]=array('0312','- fix pb addressage d\'image du connecteur :web ;
+<?php //msql/program_updates_1303
+$r=["_menus_"=>['day','text'],
+"1"=>['0301','- la dÃ©tection des dÃ©finitions gÃ©nÃ©riques est rendue secondaire aprÃ¨s les dÃ©finitions locales (c\'est plus logique) ;
+- le menu Apps est rendu sensible au paramÃ¨tre \'hide\''],
+"2"=>['0302','- petites amÃ©liorations de l\'ordre du confort lors de l\'usage du moteur de recherche ;
+- le compteur d\'articles Ã©tait en rade (affichÃ©s dans le menu hubs)'],
+"3"=>['0304','ajout d\'un composant trÃ¨s primitif permettant de dessiner Ã  main levÃ©e (tools/draw, plugin \'draw\' et nouvelle version de JQuery) : il faut coller le lien dans un connecteur :img afin de l\'enregistrer dans l\'article'],
+"4"=>['0306','ajout du support des images en base 64 (ce qui permet d\'enregistrer les images engendrÃ©es par le plugin \'draw\')'],
+"5"=>['0307','fix pb de \'rien qui s\'affiche\' aprÃ¨s usage de l\'Ã©diteur wyswyg, quand un contenu est dÃ©jÃ  placÃ©'],
+"6"=>['0309','fix pb d\'\'icÃ´ne \'link\' qui s\'affiche Ã  l\'extÃ©rieur de la restriction \'link\' (27)'],
+"7"=>['0312','- rub_taxo rÃ©fÃ¨re Ã  des donnÃ©es permanentes ; 
+- le nombre d\'articles affichÃ© tient compte des inclusions (count_r) ; '],
+"8"=>['0312','- fix pb addressage d\'image du connecteur :web ;
 - fix pb affectation de la rstr 60 aux modules d\'articles ;
-- fix faille de s�curit� dans affectation des sessions ;');
-$r[9]=array('0312','- am�lioration gestion recherche bool�enne : usage de \'*\' � la fin de la requ�te (commande url) ;
-- ajout de rstr 62 (auto dig) : interdit l\'extension de la recherche aux plages temporelles suivantes ;');
-$r[10]=array('0313','rstr 63 : edit divs, permet d\'�diter les modules sur place');
-$r[11]=array('0313','am�lioration du fonctionnement de Desktop : fix pb de r�activation, interdiction ic�nes contradictoire, non affichage de la fen�tre par d�faut si on d�sire des fen�tres particuli�res (boot) ;');
-$r[12]=array('0313','- correctif connecteur \'rss_read\' pour retrouver la source des images ;
-- fix emp�chement de l\'affichage des articles des hubs ferm�s ;');
-$r[13]=array('0314','�dition des modules : 
-- r�novation du g�n�rateur de ligne de commande ;
-- ajout d\'un bouton \'preview\' qui affiche le rendu des param�tres courants ;');
-$r[14]=array('0314','- fix pb affichage des non-connecteurs (texte simple entre crochets) ;
+- fix faille de sÃ©curitÃ© dans affectation des sessions ;'],
+"9"=>['0312','- amÃ©lioration gestion recherche boolÃ©enne : usage de \'*\' Ã  la fin de la requÃªte (commande url) ;
+- ajout de rstr 62 (auto dig) : interdit l\'extension de la recherche aux plages temporelles suivantes ;'],
+"10"=>['0313','rstr 63 : edit divs, permet d\'Ã©diter les modules sur place'],
+"11"=>['0313','amÃ©lioration du fonctionnement de Desktop : fix pb de rÃ©activation, interdiction icÃ´nes contradictoire, non affichage de la fenÃªtre par dÃ©faut si on dÃ©sire des fenÃªtres particuliÃ¨res (boot) ;'],
+"12"=>['0313','- correctif connecteur \'rss_read\' pour retrouver la source des images ;
+- fix empÃªchement de l\'affichage des articles des hubs fermÃ©s ;'],
+"13"=>['0314','Ã©dition des modules : 
+- rÃ©novation du gÃ©nÃ©rateur de ligne de commande ;
+- ajout d\'un bouton \'preview\' qui affiche le rendu des paramÃ¨tres courants ;'],
+"14"=>['0314','- fix pb affichage des non-connecteurs (texte simple entre crochets) ;
 - fix pb affichage du module \'codeline\' ;
-- r�novation module \'contact\' (dans une popup) ;');
-$r[15]=array('0315','- fix pb acc�s aux messages depuis le menu admin
-- fix mauvais encodage des sauts de lignes dans la version du message envoy� par mail
+- rÃ©novation module \'contact\' (dans une popup) ;'],
+"15"=>['0315','- fix pb accÃ¨s aux messages depuis le menu admin
+- fix mauvais encodage des sauts de lignes dans la version du message envoyÃ© par mail
 - fix pas de sujet dans le mail ;
-- ajout de la nomination 85 \'message � l\'admin\'');
-$r[16]=array('0316','nouvelle interface du moteur de recherche, en ajax');
-$r[17]=array('0317','- ajout d\'un composant \'search\' au \'user_menu\' ;
-- affichage des r�sultats d\'une recherche vide portant seulement sur les param�tres ;
-- possibilit� d\'appeler un article depuis son ID ;
-- r�sultats mis en cache ;');
-$r[18]=array('0318','- la r�daction du script d\'appel d\'articles utilise le & comme s�parateur de param�tres au lieu ~
-- la console propose un bloc modules \'lab\' qui sert pour les tests');
-$r[19]=array('0319','- rstr 64 : del blocks, n\'affiche pas le contenu des blocs en mode preview ;
-- r�vision des appels mysql, tout passe par la fonction sql() ;');
-$r[20]=array('0320','- am�lioration du comportement du Batch, qui propose lacc�s aux articles nouvellement import�s ;
-- plusieurs correctifs pour les pb rencontr�s lors du traitement d\'une Url contenant des guillemets (eh oui) ;
-- r�vision du flux rss (appel� comme plugin, il chargeait des scripts) ;
-- les aides contextuelles pr�sentent syst�matiquement un lien vers msql pour les �diter ;');
-$r[21]=array('0321','- l\'importateur ne tente plus d\'acc�der � une page en l\'absence de d�finitions, pour permettre l\'ajout de d�finitions (+ une aide contextuelle) ;
-- ajout de filtres au moteur de recherche : ex: \"mot1 mot2:tag mot3:th�me\" va renvoyer les r�sultats commun aux 3 recherches, une litt�rale, une sur les tags, et une sur le tag utilisateur \'th�me\' ;');
-$r[22]=array('0322','- correctif pages ajax, support du champ temporel ;
-- r�vision du plugin \'book\' : pictos, images qui passaient pas, autoread ;');
-$r[23]=array('0323','- petits correctifs de pr�sentation des tableaux (en css), et du d�filement des popup trop grandes (pas de scroll horizontal) ;
-- fix pb affichage derni�re page dans \'book\' ;
-- la table public_template n\'�tait appel�e par l\'update ;
-- correctif d�tection d\'url pour l\'importateur, capable de d�tecter des variantes d\'url (r�pertoires), qui doivent figurer avant dans la table pour �tre prises en compte ;
-- ajout du filtre \'titres\' dans le moteur de recherche (limite la recherche aux titres) ;');
-$r[24]=array('0324','- les routines du moteur de recherche sont log�es dans un plugin (7Ko) ;
-- un changement de protocole oblige � reformuler certains modules de Apps qui utilisent des appels � msql en ajax (se fier � ceux par d�faut) ;
-- fix pb images dans book (pas test�) ;
-- fix liens coh�rents entre pages ;
-- l\'appel des pages active le module content en entier (pour pas voir les titres partir) ;');
-$r[25]=array('0325','- le param�tre \'hide\' des scripts de modules n\'est plus ignor� ;
-- am�lioration de la pr�sentation du mode \'flap\' du finder ;
-- quelques ic�nes system ont �t� ajout�s ;');
-$r[26]=array('0326','- modification du fonctionnement de la rstr 60 \'artmod\' : n\'affiche pas les modules d\'articles mais affiche un bouton pour les joindre (comme dans les popups) ;
-- am�lioration du fonctionnement et de l\'apparence du syst�me des commentaires (images qui d�passent, r��dition, css, aides) ;');
-$r[27]=array('0327','- ajout du connecteur :divtable, qui remplace les tables par d�faut (sans connecteur) et qui renvoie un tableau en css ;
+- ajout de la nomination 85 \'message Ã  l\'admin\''],
+"16"=>['0316','nouvelle interface du moteur de recherche, en ajax'],
+"17"=>['0317','- ajout d\'un composant \'search\' au \'user_menu\' ;
+- affichage des rÃ©sultats d\'une recherche vide portant seulement sur les paramÃ¨tres ;
+- possibilitÃ© d\'appeler un article depuis son ID ;
+- rÃ©sultats mis en cache ;'],
+"18"=>['0318','- la rÃ©daction du script d\'appel d\'articles utilise le & comme sÃ©parateur de paramÃ¨tres au lieu ~
+- la console propose un bloc modules \'lab\' qui sert pour les tests'],
+"19"=>['0319','- rstr 64 : del blocks, n\'affiche pas le contenu des blocs en mode preview ;
+- rÃ©vision des appels mysql, tout passe par la fonction sql() ;'],
+"20"=>['0320','- amÃ©lioration du comportement du Batch, qui propose laccÃ¨s aux articles nouvellement importÃ©s ;
+- plusieurs correctifs pour les pb rencontrÃ©s lors du traitement d\'une Url contenant des guillemets (eh oui) ;
+- rÃ©vision du flux rss (appelÃ© comme plugin, il chargeait des scripts) ;
+- les aides contextuelles prÃ©sentent systÃ©matiquement un lien vers msql pour les Ã©diter ;'],
+"21"=>['0321','- l\'importateur ne tente plus d\'accÃ©der Ã  une page en l\'absence de dÃ©finitions, pour permettre l\'ajout de dÃ©finitions (+ une aide contextuelle) ;
+- ajout de filtres au moteur de recherche : ex: \"mot1 mot2:tag mot3:thÃ¨me\" va renvoyer les rÃ©sultats commun aux 3 recherches, une littÃ©rale, une sur les tags, et une sur le tag utilisateur \'thÃ¨me\' ;'],
+"22"=>['0322','- correctif pages ajax, support du champ temporel ;
+- rÃ©vision du plugin \'book\' : pictos, images qui passaient pas, autoread ;'],
+"23"=>['0323','- petits correctifs de prÃ©sentation des tableaux (en css), et du dÃ©filement des popup trop grandes (pas de scroll horizontal) ;
+- fix pb affichage derniÃ¨re page dans \'book\' ;
+- la table public_template n\'Ã©tait appelÃ©e par l\'update ;
+- correctif dÃ©tection d\'url pour l\'importateur, capable de dÃ©tecter des variantes d\'url (rÃ©pertoires), qui doivent figurer avant dans la table pour Ãªtre prises en compte ;
+- ajout du filtre \'titres\' dans le moteur de recherche (limite la recherche aux titres) ;'],
+"24"=>['0324','- les routines du moteur de recherche sont logÃ©es dans un plugin (7Ko) ;
+- un changement de protocole oblige Ã  reformuler certains modules de Apps qui utilisent des appels Ã  msql en ajax (se fier Ã  ceux par dÃ©faut) ;
+- fix pb images dans book (pas testÃ©) ;
+- fix liens cohÃ©rents entre pages ;
+- l\'appel des pages active le module content en entier (pour pas voir les titres partir) ;'],
+"25"=>['0325','- le paramÃ¨tre \'hide\' des scripts de modules n\'est plus ignorÃ© ;
+- amÃ©lioration de la prÃ©sentation du mode \'flap\' du finder ;
+- quelques icÃ´nes system ont Ã©tÃ© ajoutÃ©s ;'],
+"26"=>['0326','- modification du fonctionnement de la rstr 60 \'artmod\' : n\'affiche pas les modules d\'articles mais affiche un bouton pour les joindre (comme dans les popups) ;
+- amÃ©lioration du fonctionnement et de l\'apparence du systÃ¨me des commentaires (images qui dÃ©passent, rÃ©Ã©dition, css, aides) ;'],
+"27"=>['0327','- ajout du connecteur :divtable, qui remplace les tables par dÃ©faut (sans connecteur) et qui renvoie un tableau en css ;
 - ajout du connecteur :plup, permet d\'ouvrir un plugin dans une popup (en dev) ;
-- le template book est int�gr� aux templates par d�faut, et tous ses styles sont d�port�s dans la table css par d�faut (il faut \'append defaults\' pour les ajouter) ;');
-$r[28]=array('0327','- usage de javascript dans le Flap du Finder ;
-- le moteur de recherche peut recevoir une ligne de commande d\'articles du style : priority=4~nbdays=30');
-$r[29]=array('0328','- ajout du connecteur :popvideo
-- la navigation par pages en ajax prend en charge les appels de modules');
-$r[30]=array('0328','automatisation de la cha�ne \'suggest\' : 
-- la mention \'publi� par\' est ajout�e � l\'article import�
-- l\'entr�e est marqu�e comme lue
-- les doublons sont d�tect�s
-- le visiteur acc�de � un rapport de publication de ses articles identifi�s par son email, auxquels il peut acc�der
-- un mail est envoy� au visiteur pour l\'informer de la publication');
-$r[31]=array('0329','- petites am�lioration de la compatibilit� lorsqu\'on se contente d\'inverser les couleurs
+- le template book est intÃ©grÃ© aux templates par dÃ©faut, et tous ses styles sont dÃ©portÃ©s dans la table css par dÃ©faut (il faut \'append defaults\' pour les ajouter) ;'],
+"28"=>['0327','- usage de javascript dans le Flap du Finder ;
+- le moteur de recherche peut recevoir une ligne de commande d\'articles du style : priority=4~nbdays=30'],
+"29"=>['0328','- ajout du connecteur :popvideo
+- la navigation par pages en ajax prend en charge les appels de modules'],
+"30"=>['0328','automatisation de la chaÃ®ne \'suggest\' : 
+- la mention \'publiÃ© par\' est ajoutÃ©e Ã  l\'article importÃ©
+- l\'entrÃ©e est marquÃ©e comme lue
+- les doublons sont dÃ©tectÃ©s
+- le visiteur accÃ¨de Ã  un rapport de publication de ses articles identifiÃ©s par son email, auxquels il peut accÃ©der
+- un mail est envoyÃ© au visiteur pour l\'informer de la publication'],
+"31"=>['0329','- petites amÃ©lioration de la compatibilitÃ© lorsqu\'on se contente d\'inverser les couleurs
 - les classes de \'book\' passent dans la feuille globale
 - fix pb de sauts de lignes dans les commentaires
-- ajout d\'un syst�me de surveillance de pr�sence de modules critiques, avec une alerte');
-$r[32]=array('0330','- petites am�lioration du book : fix bad fix, css, espacements, affichage d\'une couverture en mode preview, largeur artificielle, d�filement js, multi-affichages
-- fix pb de quelques �checs d\'enregistrement d\'article : autor�activation, gestion de la temporalit�
-- le bouton \'�pingler\' de la popup sert aussi � la garder au premier plan');
-$r[33]=array('0331','- correctifs de la g�n�ration de largeur du constructeur css (content padding compt� deux fois, et ignorer les divs inusit�es dans le module \'blocks\')
-- correctifs book : multi-fen�tres, pb de largeur due au scroll
-- les icones des tags renvoient le r�sultat dans une popup ;');
-
-?>
+- ajout d\'un systÃ¨me de surveillance de prÃ©sence de modules critiques, avec une alerte'],
+"32"=>['0330','- petites amÃ©lioration du book : fix bad fix, css, espacements, affichage d\'une couverture en mode preview, largeur artificielle, dÃ©filement js, multi-affichages
+- fix pb de quelques Ã©checs d\'enregistrement d\'article : autorÃ©activation, gestion de la temporalitÃ©
+- le bouton \'Ã©pingler\' de la popup sert aussi Ã  la garder au premier plan'],
+"33"=>['0331','- correctifs de la gÃ©nÃ©ration de largeur du constructeur css (content padding comptÃ© deux fois, et ignorer les divs inusitÃ©es dans le module \'blocks\')
+- correctifs book : multi-fenÃªtres, pb de largeur due au scroll
+- les icones des tags renvoient le rÃ©sultat dans une popup ;']];

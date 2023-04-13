@@ -1,4 +1,4 @@
-<?php //a/rss
+<?php 
 class rssin{
 static $mth=0;
 //1
@@ -39,19 +39,19 @@ if(strpos($lnk,'feedproxy'))$lnk=self::feedproxy($lnk);
 //if(substr($lnk,0,1)=='/')$lnk=http(domain($f)).$lnk;
 if(!$dat){$dc=$v->children('http://purl.org/dc/elements/1.1/'); $dat=$dc->date;}
 //if($v->content)$txt=$v->content; elseif($v->description)$txt=$v->description; else $txt=$v->summary;//content
-//if(is_utf($va))$va=utf8_decode_b($va); if($txt)$txt=($txt);
+//if(is_utf($va))$va=utf8dec_b($va); if($txt)$txt=($txt);
 $ret[]=[$va,$lnk,$dat,$txt];}//utfenc
 return $ret;}
 
 static function feedproxy($f){
 if(substr($f,0,2)=='//')$f='http:'.$f; $d=get_file($f);
 $enc=between(strtolower($d),'charset=','"','');
-if(strtolower($enc)=='utf-8')$d=utf8_decode_b($d);
+if(strtolower($enc)=='utf-8')$d=utf8dec_b($d);
 $s='<meta property="og:url" content="'; if(strpos($d,$s))return between($d,$s,'"');
 $s="<link rel='canonical' href='"; if(strpos($d,$s))return between($d,$s,"'");}
 
 //3
-static function load_dom($f,$o=''){$rt=[];
+static function load_dom($f,$o=''){$rt=[]; if(!$f)return $rt;
 $dom=fdom($f,0); $r=$dom->getElementsByTagName('item');
 foreach($r as $item){$suj=''; $lnk=''; $com=''; $guid=''; $dat=''; $pdat=''; $txt='';
 	foreach($item->childNodes as $child){$nod=$child->nodeName;
@@ -69,7 +69,7 @@ foreach($r as $item){$suj=''; $lnk=''; $com=''; $guid=''; $dat=''; $pdat=''; $tx
 return $rt;}
 
 //pop
-static function rssin_old($f){self::$mth=1;
+static function rssin_old($f){self::$mth=3;
 $rss=self::read_old($f,'item',['title','link','guid','pubDate']); $nb=count($rss); $i=0;
 if(is_array($rss))for($i=1;$i<=$nb;$i++){[$va,$lnk,$guid,$date]=arr(val($rss,$i),4);
 	if(!$lnk)$lnk=$guid;
@@ -79,11 +79,11 @@ return $ret;}
 static function rssin_xml($f){self::$mth=2;
 $rss=self::load_xml($f); $ret=[];
 if($rss)foreach($rss as $k=>$v){[$va,$lnk,$dat,$txt]=$v; 
-	if($dat)$dat=rss_date($dat); //$va=utf8_decode_b($va);
+	if($dat)$dat=rss_date($dat); //$va=utf8dec_b($va);
 	$ret[]=[$va,$lnk,$dat,$txt];}
 return $ret;}
 
-static function rssin_dom($f){self::$mth=3;
+static function rssin_dom($f){self::$mth=1;
 $rss=self::load_dom($f); $ret=[];
 if($rss)foreach($rss as $k=>$v){
 	[$va,$lnk,$dat,$txt]=$v; 
@@ -92,7 +92,7 @@ if($rss)foreach($rss as $k=>$v){
 return $ret;}
 
 //load
-static function recognize_article($f,$d,$alx){$d=clean_title($d);
+static function recognize_article($f,$d,$alx){$d=str::clean_title($d);
 if(is_string($f) && isset($alx[$f]))return $alx[$f]; 
 elseif(isset($alx[$d]))return $alx[$d];
 elseif(isset($alx[substr($f??'',7)]))return $alx[substr($f,7)];
@@ -105,19 +105,20 @@ $r=$_SESSION['rqt']??[]; $ret=[];
 if($r)foreach($r as $k=>$v){$ret[$v[2]]=$k; $ret[$v[9]]=$k;}
 return $ret;}
 
-static function load($f,$mth=1){$r=[];
+static function load($f,$mth=2){$r=[];
 $alx=self::alx();//sesmk2('rssin','alx');
-if($mth)self::$mth=$mth; $ret=[];
+$ret=[];
 switch($mth){
 	case(1):$r=self::rssin_dom($f);break;
 	case(2):$r=self::rssin_xml($f);break;
 	case(3):$r=self::rssin_old($f);break;
-	default: $r=self::rssin_dom($f);//3
+	default: $r=self::rssin_dom($f);//1
 		if(!$r)$r=self::rssin_xml($f);//2
-		if(!$r)$r=self::rssin_old($f);//1
+		if(!$r)$r=self::rssin_old($f);//3
 	break;}
 if($r)foreach($r as $k=>$v){[$suj,$lnk,$dat,$txt]=arr($v,4);
-	$suj=utf8_decode_b($suj); $suj=trim(del_n(strip_tags($suj))); $suj=clean_title($suj); $lnk=utmsrc($lnk); 
+	$suj=utf8dec_b($suj); $suj=trim(str::del_n(strip_tags($suj)));
+	$suj=str::clean_title($suj); $lnk=utmsrc($lnk); 
 	//if(strpos($lnk,'feedproxy'))$lnk=self::feedproxy($lnk);
 	//if(strpos($lnk,'spip.'))$lnk=strto($lnk,'spip.').strend($lnk,'/spip');
 	$id=self::recognize_article($lnk,$suj,$alx);
@@ -136,8 +137,8 @@ $ret.=chrono('time');
 return $ret;}
 
 static function call($kn,$u){//rssin
-[$kn,$mth]=expl('-',$kn,2);
-[$f,$o]=prepdlink($u); $f=http($f); $i=0; $ret=''; chrono();
+[$kn,$mth]=expl('-',$kn,2); chrono();
+[$f,$o]=prepdlink($u); $f=http($f); $i=0; $ret=''; //$mth=2;
 $r=self::load($f,$mth); $nb=count($r); //$ret=hidden('addop',1);
 foreach($r as $k=>$v){$btc=''; [$va,$lnk,$dat,$id,$txt]=$v; $i++;
 	if($id)$btc.=ma::popart($id).' '; $lnj=ajx($lnk);
@@ -149,7 +150,7 @@ $btc.=lkt('',$lnk,picto('url')); $btc.=btn('txtsmall',$dat);
 if($va)$ret.=divc('',$btc.' '.$va);}//$id?'hide':
 $ret=scroll($nb,$ret,22,'');
 $bt=self::lk($kn,$u,$f);
-return $bt.balc('ul','panel',$ret);}
+return $bt.tagc('ul','panel',$ret);}
 
 static function xss(){return self::menu(3).xss::home('','');}
 static function twss(){return self::menu(3).twss::home('','');}
@@ -161,14 +162,16 @@ $bt.=lj('txtsmall','rssj_rssin,xss___'.$p.'','xss').' ';
 $bt.=lj('txtsmall','rssj_rssin,twss___'.$p.'','twss').' ';
 return $bt;}
 
-static function home($p,$o){$ret=[];//rssj
-$r=msql::read('',nod($p),'',1); $bt='';
+static function home($p,$o=''){$ret=[];//rssj
+$r=msql::read('',nod($p),'',1); $bt=''; $ro=[];
 if($r)foreach($r as $k=>$v){$v3=isset($v[3])?$v[3]:''; $ro[]=$v3;
 	if($o && $o==$v3)$d=self::call($k,$v[0]); else $d='';
 	if($d)$c=' active'; else $c='';
-	if(isset($v[0]))$ret[$v[2]][]=toggle($c,'rsj'.$k.'_rssin,call_'.$k.'_'.ajx($v[0]),$v[1]??preplink($v[0])).' '.btd('rsj'.$k,$d).br();}
-if(auth(6))$bt=self::menu($p,max($ro));
-return $bt.make_tabs($ret,'rss','nbp');}
+	if(isset($v[0]))$ret[$v[2]][]=toggle($c,'rsj'.$k.'_rssin,call___'.$k.'_'.ajx($v[0]),$v[1]??preplink($v[0])).' '.btd('rsj'.$k,$d).br();}
+if(auth(6) && $ro)$bt=self::menu($p,max($ro));
+$ret=tabs($ret,'rss','nbp');
+if($o)return $ret;
+return $bt.divd('rssj',$ret);}
 
 }
 ?>

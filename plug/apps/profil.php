@@ -30,25 +30,25 @@ static function sav($p,$o,$r){
 $rb=sesmk('mysqli_profil'); $i=0;
 if($rb)foreach($rb as $k=>$v){$ra[$k]=$r[$i]; $i++;}
 $id=sql('id','profil','v','user="'.$r[0].'"');
-if($id)qr('update '.qd('profil').' set '.implode(',',atmrup($ra,'')).' where user="'.$r[0].'" limit 1');
-else insert('profil',mysqlra($ra,1));
+if($id)qr('update '.qd('profil').' set '.implode(',',sql::atmrk($ra,'')).' where user="'.$r[0].'" limit 1');
+else sql::sav('profil',$ra);
 return btn('txtyl','ok');}
 
 static function avatar($u){$f=adm::avatarimg($u);
 return image('/'.$f,'48','48',ats('vertical-align:0px;'));}
 
 static function form($r,$o=''){
-//$ret=balb('h2','','My Profil :)');
+//$ret=tagb('h2','','My Profil :)');
 $ret=hidden('user',ses('USE'));
 //$ret.=divc('',btn('popw',ses('USE')));
 $ret.=divc('',lj('txtsmall','popup_adm,avatar___1',btd('avatar',self::avatar(ses('USE')))));
-$ret.=divc('',input1('name',val($r,'name')).btn('popw','identité'));
-$ret.=divc('',input1('com',val($r,'com')).btn('popw','présentation'));
+$ret.=divc('',inputb('name',$r['name']??'').btn('popw','identité'));
+$ret.=divc('',inputb('com',$r['com']??'').btn('popw','présentation'));
 $ret.=hidden('cp','0');
-//$cp=bal('input',array('type'=>'text','id'=>'cp','value'=>$r['cp'],'onkeyup'=>"num_finger('cp',5);"),'');
+//$cp=input('cp',$r['cp'],'',['onkeyup'=>"num_finger('cp',5);"]);
 //$ret.=divc('',$cp.btn('popw','Code postal'));
-$ret.=divc('',input1('gps',$r['gps']).ljb('popw','geo()','','GPS'));
-$ret.=divc('',lj('popsav','bts_profil,sav_user,name,com,cp,gps_xd',nms(57)));
+$ret.=divc('',input('gps',$r['gps']).btj('GPS','geo()','popw'));
+$ret.=divc('',lj('popsav','bts_profil,sav_user,name,com,cp,gps_xd',nms(27)));
 $ret.=divc('','').br();
 if(!get('callj'))$ret.=divb('','','googleMap','height:200px;border:1px solid gray');
 return divc('form',$ret);}//on2cols($rb,700,5)
@@ -58,7 +58,7 @@ static function mysqli_profil(){
 return ['user'=>'var','name'=>'var','com'=>'var','cp'=>'int','gps'=>'var','photo'=>'var','day'=>'int'];}
 
 static function profile_init($b){ses($b,qd($b));
-mysql::install($b,mysqli_profil(),0);}
+sqlop::install($b,mysqli_profil(),0);}
 
 //load
 static function datas($ud){
@@ -71,7 +71,6 @@ if($r['com'])$ret.=divc('',btn('txtx','Présentation').btn('popbt',$r['com'])).br
 $ret.=divc('',btn('txtx','Localisation').btn('popbt',self::distance($r['gps']))).br();
 return $ret;}*/
 
-//plugin('profil',$p,$o)
 static function home($p,$o){$rid='plg'.randid(); //echo $p.'-'.$o;
 profile_init('profil');
 $r=self::datas(ses('USE')); //p($r);

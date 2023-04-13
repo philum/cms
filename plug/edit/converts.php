@@ -22,7 +22,7 @@ return $ret;}
 static function ascii_encode($d){$ret='';
 $d=str_replace(['&','#',';'],'',$d); $r=explode(' ',$d);
 foreach($r as $k=>$v){$rb[]='&#'.trim($v).';';
-	//$rb[]='%u'.utf8_encode(self::unicode(dechex($v)));
+	//$rb[]='%u'.utf8enc(self::unicode(dechex($v)));
 	//$rb[]=mb_convert_encoding('&#'.$v.';','UTF-8','HTML-ENTITIES');}
 }
 return implode(' ',$rb);}
@@ -44,12 +44,12 @@ return str_replace($ara,$arb,$d);}
 static function act($txt,$d,$enc){$ret='';
 if($d=='html2conn'){$ret=conv::call($txt);}
 elseif($d=='conn2html'){$ret=conn::read($txt);}
-elseif($d=='utf8')$ret=$enc?utf8_encode(utf8_encode($txt)):utf8_decode_b($txt);//
+elseif($d=='utf8')$ret=$enc?utf8enc(utf8enc($txt)):utf8dec_b($txt);//
 elseif($d=='base64')$ret=$enc?base64_encode($txt):base64_decode($txt);
 elseif($d=='htmlentities')$ret=$enc?htmlentities($txt,ENT_QUOTES,'ISO-8859-15',false):html_entity_decode($txt);
 elseif($d=='url')$ret=$enc?urlencode($txt):urldecode($txt);
 elseif($d=='ajx')$ret=ajx($txt,$enc?0:1);
-elseif($d=='unescape')$ret=$enc?$ret:decode_unicode($txt,"");
+elseif($d=='unescape')$ret=$enc?$ret:str::decode_unicode($txt,"");
 elseif($d=='ascii'){if($enc)$ret=self::ascii_encode($txt); else $ret=self::ascii_decode($txt);}
 elseif($d=='binary')$ret=$enc?self::ascii2bin($txt):self::bin2ascii($txt);
 elseif($d=='bin/dec')$ret=$enc?decbin($txt):bindec($txt);
@@ -65,7 +65,7 @@ elseif($d=='tan')$ret=tan(deg2rad($txt));
 elseif($d=='asin')$ret=rad2deg(asin($txt));
 elseif($d=='acos')$ret=rad2deg(acos($txt));
 elseif($d=='atan')$ret=rad2deg(atan($txt));
-elseif($d=='indent'){reqp('indent'); $ret=indent_build($txt);}
+elseif($d=='indent')$ret=indent::build($txt);
 elseif($d=='md')$ret=codeline::parse($txt,'','md');
 elseif($d=='meta'){[$ti,$tx]=web::metas($txt); $ret='ti:'.$ti.n().'tx:'.$tx;}
 elseif($d=='counts'){$r=explode(' ',$txt); $ret=strlen($txt).' chars, '.count($r).' words';}
@@ -90,12 +90,12 @@ $r=['php','hexdec','dechex','deg2rad','rad2deg','sin','cos','tan','asin','acos',
 foreach($r as $v)$ret.=lj('txtx',$j.''.$v.'_1',$v).' ';
 	$ret.=lj('txtx',$j.'counts_1','counts').' ';
 	$ret.=ljb('txtx','transhtml',[$rid,$ria],'&uarr;').' ';
-$ret.=br().textarea($ria,$p,51,8,atc('console'));
+$ret.=br().textarea($ria,$p,51,8,['class'=>'console']);
 return $ret;}
 
 static function home($p,$o){$rid='plg'.randid();
 $bt=self::menu($p,$o,$rid);
 $ret=self::call($p,$o);
-return $bt.textarea($rid,$ret,51,8,atc('console'));}
+return $bt.textarea($rid,$ret,51,8,['class'=>'console']);}
 }
 ?>

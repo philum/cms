@@ -1,7 +1,8 @@
-<?php //spidatas
+<?php 
+class spidatas{
 
 //http://www.elementschimiques.fr/?fr/elements/z/17
-function spidatas_spi(){
+static function spi(){
 return '<div class="el g-1 z-1" data-z="1" data-s="H" data-w="1.01" data-n="Hydrogène" data-f="0" data-v="1 K" data-i="<span id="fougere_elements_config_2">1s1</span>" data-g="1" data-c="#22aaaa"><a href="?fr/elements/z/1">1 <big>H</big> <em>1 K</em></a></div>
 <div class="el g-1 z-2" data-z="2" data-s="He" data-w="4" data-n="Hélium" data-f="8" data-v="1 K" data-i="<span id="fougere_elements_config_3">1s2</span>" data-g="1" data-c="#22aaaa"><a href="?fr/elements/z/2">2 <big>He</big> <em>1 K</em></a></div>
 <div class="el g-2 z-3" data-z="3" data-s="Li" data-w="6.94" data-n="Lithium" data-f="1" data-v="2 L" data-i="<span id="fougere_elements_config_4">[He] 2s1</span>" data-g="2" data-c="#449eaa"><a href="?fr/elements/z/3">3 <big>Li</big> <em>2 L</em></a></div>
@@ -107,7 +108,7 @@ return '<div class="el g-1 z-1" data-z="1" data-s="H" data-w="1.01" data-n="Hydr
 <div class="el g-5 z-102" data-z="102" data-s="No" data-w="259" data-n="Nobélium" data-f="10" data-v="5 O" data-i="<span id="fougere_elements_config_104">[Rn] 5f14 7s2</span>" data-g="5" data-c="#aa7caa"><a href="?fr/elements/z/102">102 <big>No</big> <em>5 O</em></a></div>';}
 
 //http://www.ptable.com/?lang=fr#Writeup/Wikipedia
-function spidatas_spi_b(){return '
+static function spi_b(){return '
 <td class="Element Nonmetal s" style="">
 <a href="http://fr.wikipedia.org/wiki/Hydrog%C3%A8ne">
 <big><strong an="1">1</strong>
@@ -566,12 +567,8 @@ function spidatas_spi_b(){return '
 18<br />
 8</small></a></td><br />';}
 
-/*function plug_spidatas($p,$o){
-$f='http://www.tlaxcala-int.org/rss_lg.asp?lg_rss=fr';
-return spidatas_xml($f);}*/
-
-function spidatas_spi_r(){
-$d=spidatas_spi();
+static function spi_r(){
+$d=self::spi();
 $r=explode("\n",$d);
 foreach($r as $v){
 $n=between($v,'data-z="','"');
@@ -593,8 +590,8 @@ $rb[$n]['c']=between($v,'data-c="','"');
 }
 return $rb;}
 
-function spidatas_spi_rb(){
-$d=spidatas_spi_b();
+static function spi_rb(){
+$d=self::spi_b();
 $r=explode('<td ',$d);
 foreach($r as $v){
 $n=between($v,'an="','"');
@@ -609,10 +606,10 @@ $rb[$n]['orb']=str_replace(array('<br />'."\n",'<br>'),'-',$orb);
 }
 return $rb;}
 
-function plug_spidatas($p,$o){
+static function home($p,$o){
 $r=msql::read('','public_atomic_2','');
-$ra=spidatas_spi_r(); pr($ra);
-$rb=spidatas_spi_rb(); pr($rb);
+$ra=self::spi_r(); pr($ra);
+$rb=self::spi_rb(); pr($rb);
 foreach($r as $k=>$v)if($k!='_menus_'){
 	$r[$k][4]=$ra[$k]['level'];//
 	$r[$k][3]=$rb[$k]['orb'];
@@ -621,7 +618,7 @@ foreach($r as $k=>$v)if($k!='_menus_'){
 	if($rb[$k]['name'])$r[$k][0]=$rb[$k]['name'];
 	$r[$k][7]=str_replace('(not discovered yet)','',$v[7]);
 }
-pr($r);
+//pr($r);
 //msql::save('','public_atomic_1',$r);
 return $ret;}
 

@@ -35,8 +35,8 @@ pr($ret);
 }
 
 static function menu($p,$o,$rid){$ret=input('inp',$p).' ';
-$ret.=lj('',$rid.'_app__2_searchnum_call_inp',picto('ok')).' ';
-$ret.=lj('','popup_msqedit,call___searchnum*1_id,num,val',picto('edit'));
+$ret.=lj('',$rid.'_searchnum,call_inp',picto('ok')).' ';
+$ret.=lj('','popup_msqedit,call_id,num,val__searchnum*1',picto('edit'));
 return $ret;}
 
 static function home($p,$o){$rid=randid('searchnum');

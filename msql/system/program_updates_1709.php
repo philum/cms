@@ -1,7 +1,4 @@
-<?php
-//philum_microsql_program_updates_1709
-$r["_menus_"]=array('date','text');
-$r[1]=array('0901','publication');
-$r[2]=array('0926','am�lioration du gestionnaire yandex, qui passe en mode connecteurs, pour gagner en vitesse et en usabilit�');
-
-?>
+<?php //msql/program_updates_1709
+$r=["_menus_"=>['date','text'],
+"1"=>['0901','publication'],
+"2"=>['0926','amÃ©lioration du gestionnaire yandex, qui passe en mode connecteurs, pour gagner en vitesse et en usabilitÃ©']];

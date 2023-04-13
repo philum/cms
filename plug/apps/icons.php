@@ -1,4 +1,4 @@
-<?php //pictos
+<?php 
 class icons{
 
 static function ascii($d){
@@ -7,7 +7,7 @@ $c25='&#9617;'; $c50='&#9618;'; $c75='&#9619;'; $c100='&#9608;';}
 static function clrs(){return ['dddddd','ffffff','00ffff','ff00ff','ffff00','888','ff0000','00ff00','0000ff','000000'];}
 
 static function pick(){$r=self::clrs(); $ret='';
-for($i=0;$i<10;$i++){$ret.=ljb('bk'.$i,'icons_pick('.$i.')','',' ');}
+for($i=0;$i<10;$i++){$ret.=btj(' ','icons_pick('.$i.')','bk'.$i);}
 return divc('pixels',$ret);}
 
 static function css(){$r=self::clrs(); $ret='';
@@ -88,7 +88,7 @@ return self::read();}
 
 //edit
 static function ljd($d,$i){//return '<a onclick="icons_toggle(this,'.$i.')" ondragover="icons_toggle(this,'.$i.')" class="bk'.$d.'"> </a>';
-return ljb('bk'.$d,'icons_toggle(this,'.$i.')','','');}
+return btj($i,'icons_toggle(this,'.$i.')','bk'.$d);}
 
 static function icon($d,$id){
 $r=str_split($d); $n=16; $nb=$n*$n; $sz=16; $ret='';
@@ -103,11 +103,11 @@ if(auth(6)){
 	$ret=lj('popbt','pctpanel_icons,read___'.$k,picto('ok'));
 	$ret.=lj('popdel','pctpanel_icons,del___'.$k,picto('del')).' ';
 	$ret.=input('pctnam'.$id,$k);
-	$ret.=ljb('popbt','icons_sav',$id.'\',\'1','save').' ';
-	$ret.=ljb('popbt" id="cbk'.$id,'icons_build',$k.'\',\''.$id,picto('builders')).' ';
+	$ret.=ljb('popbt','icons_sav',[$id,'1'],'save').' ';
+	$ret.=ljb('popbt" id="cbk'.$id,'icons_build',[$k,$id],picto('builders')).' ';
 	$ret.=btd('prw'.$id,self::pictosys($k)).br();}
-$ret.=ljb('popbt','icons_fill',$id.'\',\'0','empty');
-$ret.=ljb('popbt','icons_fill',$id.'\',\'1','fill');
+$ret.=ljb('popbt','icons_fill',[$id,'0'],'empty');
+$ret.=ljb('popbt','icons_fill',[$id,'1'],'fill');
 $ret.=divc('',self::pick()).br();
 if($k)$ret.=self::icon($d,$id);
 $ret.=divc('clear','');
@@ -118,7 +118,7 @@ static function pictosys($d){$nm='?time='.randid();
 return imgico('/imgb/icons/system/philum/16/'.$d.'.png'.$nm,$nm,4,root());}//'../'
 
 static function read(){$id=randid();
-$r=msql_read('system','program_icons','',1); ksort($r);
+$r=msql::read('system','program_icons','',1); ksort($r);
 if($r)foreach($r as $k=>$v){$im=self::pictosys($k).' ';
 	//self::graphics($v,16,16,'../imgb/icons/system/philum/16/'.$k.'.png');
 	$ret[]=lj('','popup_icons,edit__js_'.$k,$im.$k).br();}

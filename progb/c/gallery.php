@@ -1,4 +1,4 @@
-<?php //b/gallery
+<?php 
 class gallery{
 static $a=__CLASS__;
 

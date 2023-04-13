@@ -1,4 +1,4 @@
-<?php //b
+<?php 
 class _{
 static $a='model';
 static $cb='mdl';

@@ -24,7 +24,7 @@ return jscode(self::js($ret,$id));}
 
 static function call($d,$id,$s=''){
 $s=$s?$s:$_SESSION['graphsz']; [$w,$h]=explode('-',$s); $w=$w?$w:200; $h=$h?$h:60;
-$ret=balc('canvas','" id="canvas'.$id.'" width="'.$w.'px" height="'.$h.'px" style="border:1px dotted grey;','');
+$ret=tag('canvas',['id'=>'canvas'.$id,'width'=>$w.'px','height'=>$h.'px','style'=>'border:1px dotted grey;'],'');
 $ret.=self::com($d,$id);
 return $ret;}
 
@@ -33,9 +33,9 @@ $d=str_replace("\n",' ',$d);
 return iframe('/app/canvas/'.$d.'/'.$id.'&fz=420-300',440);}
 
 static function edit($d,$id){
-$d=str_replace(' ',"\n",$d); //$d=utf8_decode($d);
+$d=str_replace(' ',"\n",$d); //$d=utf8dec_b($d);
 $ret.=lj('popbt','graph'.$id.'_canvas,iframe_graphjs__'.$id,'see').br();
-$ret.=textarea('" id="graphjs',$d,50,16);
+$ret.=textarea('',$d,50,16,['id'=>'graphjs']);
 return $ret;}
 
 static function ex(){return 'rect=0,0,100,44,ff0000

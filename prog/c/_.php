@@ -1,5 +1,6 @@
-<?php //b
+<?php 
 class _{
+static $a='model';
 static $cb='mdl';
 
 function __construct(){self::$cb=randid();}
@@ -9,12 +10,12 @@ $ret=$p.'-'.$o;
 return $ret;}
 
 static function call($p,$o,$prm=[]){
-$p=$prm[0]??$p;
+$p=$prm[0]??$p;//[$p,$o]=prmp($p,$o,$prm);
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o){$bid='inp';
-$j=self::$cb.'_model,call_'.$bid.'_2__'.$o;
+$j=self::$cb.'_'.self::$a.',call_'.$bid.'_2__'.$o;
 $ret=inputj($bid,$p,$j);
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}

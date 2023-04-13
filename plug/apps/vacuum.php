@@ -41,7 +41,7 @@ return $ret;}
 static function home($p,$o){$rid=randid('plg');
 if(!$p)$bt=self::menu($p,$o,$rid);
 else return self::build($p,$o);
-return $bt.divd($rid,$ret);}
+return $bt.divd($rid,'');}
 
 }
 ?>

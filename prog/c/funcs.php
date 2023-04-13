@@ -1,4 +1,4 @@
-<?php //b/funcs
+<?php 
 class funcs{
 static $a=__CLASS__;
 static $cb='fnc';
@@ -34,8 +34,8 @@ foreach(self::$rf as $k=>$v)$rb[$k]=self::occurrences($v,$k); //pr($rb);
 foreach($rb as $k=>$v)foreach($v as $ka=>$va)if($ka==$p)return tabler($va); else{$rd[$ka]=count($va); $rc[$ka]=$k;}
 //else return tabler(self::$rf,'',1);
 arsort($rd);
-$rt=array_merge_recursive($rd,$rc);
-pr($rt);}
+$rt=array_merge_recursive($rd,$rc);//pr($rt);
+}
 
 static function call($p,$o,$prm=[]){
 $p=$prm[0]??$p;

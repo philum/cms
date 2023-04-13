@@ -12,8 +12,8 @@ static function menu($s,$l){$s=$s?$s:128; $l=$l?$l:1000; if($s>200000)$l=100000;
 	foreach($r as $v)$ret.=lj($s>=$v?'popsav':'popbt','ascii_ascii,call___'.$v.'-'.$l,chr_b($v),att($v));
 	$j='ascii_ascii,call_inp1';
 	$ret.=inputj('inp1',$s.'-1000',$j); $ret.=lj('',$j,picto('ok')).' ';
-	$ret.=lkc('','/plug/ascii/'.$s.'-'.$l,picto('link')).' ';
-	$ret.=ljb('popsav','insert','&#'.$s.';',chr_b($s),'','insert');
+	$ret.=lkc('','/app/ascii/'.$s.'-'.$l,picto('link')).' ';
+	$ret.=ljb('popsav','insert','&#'.$s.';',chr_b($s),att('insert'));
 return $ret;}
 
 static function call($p,$o,$prm=[]){
@@ -26,8 +26,8 @@ else{$ret='';
 	$ret.=self::menu($start,$length);}
 //signs
 foreach($r as $k=>$v)if($v){
-	if(auth(6))$bt.=ljb('','insert_b',[$v.' ','ascarea'],chr_b($v),'',att($v)).' ';
-	else $bt.=ljb('','insert','&#'.$v.';',chr_b($v),'',att($v)).' ';}
+	if(auth(6))$bt.=ljb('','insert_b',[$v.' ','ascarea'],chr_b($v),att($v)).' ';
+	else $bt.=ljb('','insert','&#'.$v.';',chr_b($v),att($v)).' ';}
 $ret.=divs('font-size:large; line-height:140%;',$bt);
 return $ret;}
 
@@ -35,8 +35,8 @@ static function callb($p,$o,$prm=[]){
 $p=$prm[0]??'';
 return self::call('',$p);}
 
-static function home($p,$o='',$res=''){$bt='';
-if(auth(6))$bt=input1('ascarea','',60).' '.lj('popw','ascii_ascii,callb_ascarea',picto('ok'));
-return $bt.divd('ascii',self::call($p,$o,$res));}
+static function home($p,$o=''){$bt='';
+if(auth(6))$bt=input('ascarea','',60).' '.lj('popw','ascii_ascii,callb_ascarea',picto('ok'));
+return $bt.divd('ascii',self::call($p,$o));}
 }
 ?>

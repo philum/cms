@@ -1,5 +1,4 @@
 <?php //app
-
 class appmodel{
 static $a=__CLASS__;
 static $default='';
@@ -19,7 +18,7 @@ static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
 $j=$rid.'_appmodel,call_'.$inpid.'_3_'.$p.'_'.$o;
 $ret=inputj($inpid,$p,$j);
-//$ret=textarea('inp',$p,40,4,atc('console'));
+//$ret=textarea('inp',$p,40,4,['class'=>'console']);
 $ret.=lj('',$j,picto('ok')).' ';
 //$ret.=msqbt('',nod(self::$a.'_1'));
 return $ret;}
@@ -28,7 +27,7 @@ static function install($b){
 //ses($b,qd($b));//name of table
 //1=drop table on change $r !
 $r=['tit'=>'var','txt'=>'text','day'=>'int'];
-mysql::install($b,$r,0);}
+sqlop::install($b,$r,0);}
 
 static function home($p,$o){
 $rid=randid(self::$a); $ret='';
@@ -38,8 +37,4 @@ if($p)$ret=self::build($p,$o);
 return $bt.divd($rid,$ret);}
 
 }
-
-function plug_appmodel($p,$o){
-return appmodel::home($p,$o);}
-
 ?>

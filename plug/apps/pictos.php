@@ -9,22 +9,21 @@ return divd('scroll',$ret);}
 
 static function edit($k){//echo $k;
 $d=msql::val('system','program_pictos',$k); 
-$ret=btn('txtsmall',$k).' '.input1('edit'.$k,$d,30);
+$ret=btn('txtsmall',$k).' '.input('edit'.$k,$d,30);
 $ret.=lj('txtbox','ico'.$k.'_pictos,save__x_'.$k.'__edit'.$k,'save').' ';
 $ret.=lj('txtyl','ico'.$k.'_pictos,save__x_'.$k,'del').br().br();
 //$ret.=sesmk2('pictos','see','edit'.$k,0);
 ses::$r['popt']='edit_picto';
 return $ret;}
 
-static function save($k,$d,$res){
-$file=ajxg(trim($res)); $r=[$file];
-$r=msql::modif('system','program_pictos',$r,'one','',$k);
-$_SESSION['icons'][$k]=$file;
-return ico($file);}
+static function save($k,$d,$prm=[]){$f=prm[0]??'';
+$r=msql::modif('system','program_pictos',[$f],'one','',$k);
+$_SESSION['icons'][$k]=$f;
+return ico($f);}
 
-static function refresh($k,$d,$res){
-$_SESSION['icons']=msql_read('system','program_pictos','');
-//$_SESSION['picto']=msql_read('system','edition_pictos','');
+static function refresh($k,$d){
+$_SESSION['icons']=msql::read('system','program_pictos','');
+//$_SESSION['picto']=msql::read('system','edition_pictos','');
 return ico($file);}
 
 static function home($d,$id){$rid='bld'.randid();

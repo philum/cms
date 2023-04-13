@@ -1,25 +1,26 @@
-<?php //sconn
+<?php 
+class sconn{
 
-function sconn_build($p,$o){
+static function build($p,$o){
 if($o)$p='['.$p.']';
 $ret=codeline::read($p,'','test');
 return $ret;}
 
-function sconn_j($p,$o,$res=''){
-[$p,$o]=ajxp($res,$p,$o);
-$ret=sconn_build($p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
+$ret=self::build($p,$o);
 return $ret;}
 
-function sconn_menu($p,$o,$rid){
-$j=$rid.'_plug__2_sconn_sconn*j___inp'.$rid;
-$js='onkeyup="'.sj($j).'" onclick="'.sj($j).'"';
+static function menu($p,$o,$rid){
+$j=$rid.'_sconn,call_inp'.$rid;
+$js=['onkeyup'=>sj($j),'onclick'=>sj($j)];
 $ret=editarea('inp'.$rid,$p,54,8,$js);
 //$ret.=lj('',$j,picto('ok')).' ';
 return $ret;}
 
-function plug_sconn($p,$o){$rid='plg'.randid();
-$bt=sconn_menu($p,$o,$rid);
-$ret=sconn_j($p,$o);
+static function home($p,$o){$rid='plg'.randid();
+$bt=self::menu($p,$o,$rid);
+$ret=self::call($p,$o);
 return $bt.div(atd($rid),$ret);}
-
+}
 ?>

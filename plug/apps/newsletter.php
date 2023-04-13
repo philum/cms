@@ -11,13 +11,13 @@ if(!$d){$n=1;$c='';}elseif(!rstr($k)){$n=0;$c='active';}
 $ret[]=offon($n).' '.btn($cx,lj('','rstr_params___'.$k.'_'.$n,$v)).br();}
 
 static function edit(){$r=mails::datas();
-$r=msql_read('',nod('mails'),'',1);
+$r=msql::read('',nod('mails'),'',1);
 if($r)foreach($r as $k=>$v){$i++; $n='nl'.$i; $c=''; if($v[1])$c='active';
 	$ret.=lj('',$n.'_newsletter,mmsav',$k).br();}
 return div(atd('nldt').atc('nbp'),$ret);}
 
 static function read(){$here=host();
-ses('nl',1); $ret=mod::build_modules('newsletter',''); sesz('nl');
+geta('nl',1); $ret=mod::block('newsletter',''); getz('nl');
 $ret=str_replace('img id="rez" src="imgc/','img src="'.$here.'/imgc/',$ret);
 $ret=str_replace('img id="rez" src="img/','img src="'.$here.'/img/',$ret);
 $ret=str_replace('img src="users/','img src="'.$here.'/users/',$ret);
@@ -36,8 +36,8 @@ return helps('newsletter_ok').' ('.$i.')';}
 
 static function prep(){
 $suj=$_SESSION['qb'].' '.mkday('',1);
-$ret=input('suj',$suj,atz(40)).br();
-$ret.=textarea('dpl',mails::datas(1),40,10,ats('40').atb('maxlength','10000')).br();
+$ret=input('suj',$suj,'40').br();
+$ret.=textarea('dpl',mails::datas(1),40,10,['size'=>'40','maxlength'=>'10000']).br();
 $ret.=lj('popsav','nws_newsletter,batch_suj,dpl','ok');
 return divd('nws',$ret);}
 

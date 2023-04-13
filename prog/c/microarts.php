@@ -1,4 +1,4 @@
-<?php //b/microarts
+<?php 
 
 class microarts{
 static $default='';
@@ -6,26 +6,24 @@ static $nbp=10;
 
 static function del($p,$o){
 $rid='mia'.normalize($p);
-if(is_numeric($o))delete('qdi',$o);
+if(is_numeric($o))sql::del('qdi',$o);
 else return lj('popdel',$rid.'_microarts,del___'.ajx($p).'_'.substr($o,1),pictxt('del',nms(76).'?'));
 return self::call($p,1);}
 
 static function resav($p,$o,$prm){[$msg]=$prm;
 $msg=str_replace("\r","\n",$msg);
-if(is_numeric($o))sqlup('qdi',['msg'=>$msg],'id',$o);
+if(is_numeric($o))sqlup('qdi',['msg'=>$msg],$o);
 return self::call($p,1);}
 
 static function edit($p,$o){$ret='';
-$msg=sql('msg','qdi','v','id='.$o); $rid='mia'.normalize($p); $xid=rid($p);
+$msg=sql('msg','qdi','v',$o); $rid='mia'.normalize($p); $xid=rid($p);
 $ret=lj('txtblc',$rid.'_microarts,resav_'.$xid.'_x_'.ajx($p).'_'.$o,picto('save2'));
 $ret.=editarea($xid,$msg,64,8);
 return $ret;}
 
-static function save($p,$o,$prm=[]){
-$msg=$prm[0]??''; $ret='';
-$msg=strip_tags($msg); $msg=embed_links($msg); //$msg=repair_latin($msg);
-$r=[0,ses('USE'),'',date('ymd'),ses('qb'),'microart',$p,$msg,0,ses('iq'),'']; //pr($r);
-$nid=insert('qdi',mysqlra($r,1));
+static function save($p,$o,$prm=[]){$msg=$prm[0]??''; $ret='';
+$msg=strip_tags($msg); $msg=str::embed_links($msg);
+$nid=sql::sav('qdi',[0,ses('USE'),'',date('ymd'),ses('qb'),'microart',$p,$msg,0,ses('iq'),'']);
 return self::call($p,1);}
 
 static function create($p,$o){$ret=''; $rid='mia'.normalize($p);
@@ -47,7 +45,7 @@ return ['tit'=>$v[1],'del'=>$del,'edt'=>$edt,'txt'=>$txt,'id'=>$id];}
 static function one($p,$id){
 $r=sql('id,day,msg,name','qdi','','id="'.$id.'"');
 $rb[]=read($r,$p); $tmp=self::tmp();
-return $bt.vue::call($tmp,$rb);}
+return vue::call($tmp,$rb);}
 
 static function build($p,$o=1){$rid='mia'.normalize($p);
 $ret=''; $edt=''; $del=''; $rb=[]; if(!$o)$o=1;
@@ -69,7 +67,7 @@ $ret=self::build($p,$o);
 return $bt.$ret;}
 
 static function menu(){
-return $r;}
+return;}
 
 static function nav($p,$o,$rid){
 if(!$p)$p=self::$default; //$rid='mia'.normalize($p);

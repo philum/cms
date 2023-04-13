@@ -10,21 +10,21 @@ foreach($r as $k=>$v){$rb[]=[$k,div(ats('width:'.round($v*$ratio).'px; border:1p
 return tabler($rb);}
 
 static function twits($p,$o){$w=''; $n=10000; $rb=[]; $rc=[];
-if($p){$w='where mentions like "%'.$p.'%"'; if($o)$w.=' and date>"'.calc_date($o).'"';}
+if($p){$w='where mentions like "%'.$p.'%"'; if($o)$w.=' and date>"'.timeago($o).'"';}
 $r=sqb('id,date','qdtw','kv',$w.' order by twid desc limit '.$n);
 if($r)foreach($r as $k=>$v)if($v){$day=date('ymd',$v); $rb[$day][]=1;}
 if($rb)foreach($rb as $k=>$v)$rc[$k]=count($v);
 return self::graph($rc);}
 /*
 static function tags($p,$o){$w; $rb=[]; $rc=[];
-if($o)$w=' and date>"'.calc_date($o).'"';
-$r=sql_inner('tag,count(idart)','qdt','qdtg','idtag','kv','tag="'.$p.'" '.$w);
+if($o)$w=' and date>"'.timeago($o).'"';
+$r=sql::inner('tag,count(idart)','qdt','qdtg','idtag','kv','tag="'.$p.'" '.$w);
 if($r)foreach($r as $k=>$v)if($v){$day=date('ymd',$v); $rb[$day][]=1;}
 if($rb)foreach($rb as $k=>$v)$rc[$k]=count($v);
 return self::graph($rc);}*/
 
 static function arts($p,$o){$rb=[]; $cat=$o?'frm="'.$o.'" and ':'';
-$r=sql('id,day','qda','kv',$cat.'nod="'.ses('qb').'" and day>"'.calc_date($o).'" limit 1000');
+$r=sql('id,day','qda','kv',$cat.'nod="'.ses('qb').'" and day>"'.timeago($o).'" limit 1000');
 if($r)foreach($r as $k=>$v)if($v){$day=date('ymd',$v); $rb[$day]=isset($rb[$day])?$rb[$day]+1:1;}
 if($rb)return self::graph($rb);}
 
@@ -35,8 +35,8 @@ if($rb)return json_encode($rb);}
 
 static function dist($p,$o){$rb=[]; $cat=$o?'frm="'.$o.'" and ':'';
 //$r=sql('id,day','qda','kv',$cat.'nod="'.ses('qb').'" order by day asc'); //Oyagaa Ayoo Yissaa
-//$r=sql('id,day','qda','kv','(frm="312oay") and day>"'.calc_date(365).'" order by day desc');
-//$r=sql('id,day','qda','kv','(frm="Oyagaa Ayoo Yissaa") and day>"'.calc_date(365).'" order by day desc');
+//$r=sql('id,day','qda','kv','(frm="312oay") and day>"'.timeago(365).'" order by day desc');
+//$r=sql('id,day','qda','kv','(frm="Oyagaa Ayoo Yissaa") and day>"'.timeago(365).'" order by day desc');
 $r=sql('id,day','qda','kv','(frm="Oyagaa Ayoo Yissaa" or frm="312oay") order by day desc');
 $old=time(); $dist=0; $rb=[]; $rd=[];
 if($r)foreach($r as $k=>$v){

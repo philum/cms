@@ -1,10 +1,10 @@
-<?php //b
+<?php 
 class msqlvue{
 static $a=__CLASS__;
 static $cb='msqv';
 
 static function viewer($p,$i,$n){$bt=''; $p=ajx($p);
-if($i>1)$bt=lj('',$cb.'_msqlvue,build___'.$p.'_'.($i-1),picto('previous'));
+if($i>1)$bt=lj('',self::$cb.'_msqlvue,build___'.$p.'_'.($i-1),picto('previous'));
 $bt.=lj('',self::$cb.'_msqlvue,build___'.$p.'_'.($i),picto('refresh'));
 if($i<$n)$bt.=lj('',self::$cb.'_msqlvue,build___'.$p.'_'.($i+1),picto('next'));
 return divb($bt);}

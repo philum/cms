@@ -1,5 +1,4 @@
-<?php //exif
-
+<?php 
 class exif{
 static $default='';
 
@@ -26,8 +25,4 @@ if($p)$ret=self::build($p,$o);
 return $bt.divd($rid,$ret);}
 
 }
-
-function plug_exif($p,$o){
-return exif::home($p,$o);}
-
 ?>

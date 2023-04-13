@@ -1,4 +1,4 @@
-<?php //b/polls
+<?php 
 class polls{
 static $a=__CLASS__;
 
@@ -12,7 +12,7 @@ return $ret;}
 
 static function menu($p,$o,$rid){$bid='inp'.$rid;
 $j=$rid.'_'.self::$a.',call_'.$bid.','.$rid;
-$ret.=inputj($bid,$p,$j);
+$ret=inputj($bid,$p,$j);
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}
 

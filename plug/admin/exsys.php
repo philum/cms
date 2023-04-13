@@ -7,7 +7,7 @@ static function sys($p,$o,$prm=[]){if($prm)[$p,$o]=$prm;
 if(auth(6))return exc($p);}
 
 static function home($p,$o){$rid='plg'.$p;
-$ret=autoclic('param',$p,10,244,'',1).' ';
+$ret=inputb('param',$p,10,'',244,[]);
 $ret.=lj('',$rid.'_exsys,sys_param',picto('ok'));
 return $ret.divd($rid,$ret);}
 }

@@ -1,5 +1,4 @@
-<?php //score
-
+<?php 
 class score{
 static $a=__CLASS__;
 static $default='';
@@ -100,20 +99,20 @@ ses('score',$rd);//get('score','1');
 $ret=ma::output_arts($rd,'score','art');
 return $bt.divc('content',$ret);}
 
-static function call($p,$o,$res=''){
-$ra=ajxr($res); $cat=$ra[0]; unset($ra[0]);
+static function call($p,$o,$ra=[]){
+$cat=$ra[0]; unset($ra[0]);
 $r=array_combine(array_keys(self::$r),$ra); //p($r);
 $ret=self::build($r,$cat);
 return $ret;}
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_score,call__3_____cat|'; $ret='';
+$j=$rid.'_score,call_cat,'; $ret='';
 $cats=sql('distinct(frm)','qda','rv',''); array_unshift($cats,'');
-$ret.=select(atd('cat'),$cats,'vv','').br();
+$ret.=select(['id'=>'cat'],$cats,'vv','').br();
 foreach(self::$r as $k=>$v)$ret.=bar($k,0,10,0,100,'jumphtml','240px').' '.btn('txtx',$v).br();
 //$ret=inputj($inpid,$p,$j);
-$ret.=lj('',$j.implode('|',array_keys(self::$r)),picto('ok')).' ';
+$ret.=lj('',$j.implode(',',array_keys(self::$r)),picto('ok')).' ';
 //$ret.=msqbt('',nod(self::$a.'_1'));
 return $ret;}
 
@@ -124,8 +123,4 @@ $ret='';
 return $bt.divd($rid,$ret);}
 
 }
-
-function plug_score($p,$o){
-return score::home($p,$o);}
-
 ?>

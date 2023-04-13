@@ -6,11 +6,11 @@ $ret=md5($p);
 if(is_numeric($o))$ret=substr($ret,0,$o);
 return $ret;}
 
-static function menu($p,$o,$rid){$ret.=input1('inp',$p,'').' ';
+static function menu($p,$o,$rid){$ret.=input('inp',$p,'').' ';
 $ret.=lj('',$rid.'_md5,call_inp',picto('ok')).' ';
 return $ret;}
 
-static function plug_md5($p,$o){$rid='plg'.randid();
+static function home($p,$o){$rid='plg'.randid();
 $bt=self::menu($p,$o,$rid); $ret=self::call($p,$o);
 return $bt.divd($rid,$ret);}
 }

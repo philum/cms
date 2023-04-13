@@ -1,4 +1,4 @@
-<?php //a/conn//}//dev
+<?php //}//dev
 
 class conn{
 #syntax_system
@@ -32,44 +32,44 @@ if(rstr(70))self::retape($d,$id);
 $d=nl2br($d);
 return $d;}
 
-static function read2($d,$p=''){
+static function read2($d,$p='',$o=''){
 if($p)$d=self::connbr($d);
 $ret=self::parser($d);
 if(!$p)$ret=embed_p($ret);
-$ret=nl2br($ret);
+if(!$o)$ret=nl2br($ret);
 return $ret;}
 
 static function connbr($msg){return $msg;
-$r=[':q]',':h]',':h1]',':h2]',':h3]',':h4]',':ul]',':ol]',':table]',':figure]',':video]',':php]',':photo]',':iframe]'];
-$n=count($r);//':slider]'
+$r=[':q]',':h]',':h1]',':h2]',':h3]',':h4]',':ul]',':ol]',':table]',':figure]',':video]',':php]',':photo]',':iframe]']; $n=count($r);
 for($i=0;$i<$n;$i++)$msg=str_replace($r[$i]."\n\n",$r[$i]."\n",$msg);
 return $msg;}
 
-static function retape($ret,$id){if(isset($_SESSION['rtp'.$id])){
-$r=msql::ses('oldconn','system','connectors_old',1); if($r)$k=array_keys($r);
-$ret=delbr($ret,"\n"); $ret=clean_br($ret); $ret=str_replace($k,$r,$ret);
-if($id){update('qdm','msg',$ret,'id',$id); $_SESSION['rtp'.$id]='';}}}
+static function retape($ret,$id){if(isset($_SESSION['rtp'.$id])){$rk=[];
+$r=msql::ses('oldconn','system','connectors_old',1); if($r)$rk=array_keys($r);
+$ret=delbr($ret,"\n"); $ret=str::clean_br($ret); if($rk)$ret=str_replace($rk,$r,$ret);
+if($id){sql::upd('qdm',['msg'=>$ret],$id); $_SESSION['rtp'.$id]='';}}}
 
 static function retape_conn($c,$id){
+if(!isset($_SESSION['rtp'.$id]))$_SESSION['rtp'.$id]='';
 $r=msql::ses('oldconn','system','connectors_old',1); $ret='';
-if(isset($r[$c])){vadd($_SESSION,'rtp'.$id,$c.'->'.$r[$c]."\n"); return $r[$c];}
+if(isset($r[$c])){$_SESSION['rtp'.$id].=$c.'->'.$r[$c]; return $r[$c];}
 return $c;}
 
 #img
 static function replaceinimg($id,$a,$b){
 $d=sql('img','qda','v',$id); $d=str_replace($a,$b,$d);
-update('qda','img',$d,'id',$id);}
+sql::upd('qda',['img'=>$d],$id);}
 
 static function add_im_img($nnw,$id){
-if(!$id)$id=ses('read'); if(!$id)return;
+if(!$id)$id=ses('read'); if(!$id or $id=='test')return;
 $nnw=str_replace(['users/','img/'],'',$nnw);
 $d=sql('img','qda','v','id="'.$id.'"');
-if(strpos($d,$nnw)===false)update('qda','img',$d.'/'.$nnw,'id',$id);}
+if(strpos($d,$nnw)===false)sql::upd('qda',['img'=>$d.'/'.$nnw],$id);}
 
 static function replaceinmsg($id,$a,$b,$c=''){
 $d=sql('msg','qdm','v',$id); if($c)$d=str_replace($a.':'.$c,$b,$d); $d=str_replace($a,$b,$d);
-$d=clean_br_lite($d); update('qdm','msg',$d,'id',$id);
-if($c=='b64')update('qda','host',strlen($d),'id',$id);}
+$d=str::clean_br_lite($d); sql::upd('qdm',['msg'=>$d],$id);//
+if($c=='b64')sql::upd('qda',['host'=>strlen($d)],$id);}
 
 static function add_im_msg($id,$a,$b,$c='img'){
 $b=str_replace(['users/','img/'],'',$b);
@@ -104,8 +104,8 @@ $did=strend(strto($da,'.'),'_');
 if($sz>1000){
 	$bt.=btn('txtred',$w.'px/'.$h.'px - '.$sz.'ko');
 	//$bt.=lj('txtyl',$did.'_img,rewrite__3_'.ajx($da),'rewrite');//resolve exef
-	$bt.=lj('txtyl',$did.'_img,reduce__3_'.ajx($da),'reduce to 940|940');
-	$bt.=lj('txtyl',$did.'_img,reduce__3_'.ajx($da).'_1','reduce by 50%');
+	$bt.=lj('txtyl',$did.'_img,reduce__3_'.ajx($da).'_0_'.$id,'reduce to 940|940');
+	$bt.=lj('txtyl',$did.'_img,reduce__3_'.ajx($da).'_1_'.$id,'reduce by 50%');
 	$bt.=lj('popdel',$did.'_img,restore__3_'.ajx($da).'_'.$id,'restore');}
 elseif($w>1000)$bt.=lj('txtyl',$did.'_img,reduce__3_'.ajx($da).'_1','reduce by 50% ('.$w.'px '.$sz.'Ko)');
 if($xt=='.png' && $sz>200)$bt.=lj('txtyl',$did.'_img,png2jpg__3_'.ajx($da).'_'.$id,'png2jpg-'.$sz);
@@ -128,9 +128,9 @@ if($id){$nmw=$qb.'_'.$id.'_'.substr(md5($da),0,6).$xt;//soon, del qb
 		if($dcb!=$dc)if(is_file($dcb))$dc=$dcb;
 		if(strpos($dc,' '))$dc=urlencode($dc);
 		if(strpos($da,'cadtm.org')){$nmw=$da.':jpg'; if($id)self::add_im_msg($id,$da,$nmw); return $nmw;}
-		$dc=urlenc($dc);//$dc=htmlentities($dc);
+		$dc=str::urlenc($dc);//$dc=htmlentities($dc);
 		if(!$ok){$d=curl_get_contents($dc);
-			if(strlen($d)>1000 && strpos($d,'Forbidden')===false && strpos($d,'<')===false){
+			if($d && strlen($d)>1000 && strpos($d,'Forbidden')===false && strpos($d,'<')===false){
 				$er=write_file('img/'.$nmw,$d); $ok=1;
 				if(is_zip('img/'.$nmw))gz2im('img/'.$nmw);}//ziped img
 			if(!$ok)$ok=@copy($dc,'img/'.$nmw);}}
@@ -154,21 +154,22 @@ if(substr($da??'',0,4)=='http'){//if(eradic_acc($da)==$da)
 	if(strpos($da,'Capture-'))$da=str_replace("d'",'d%E2%80%99',$da);//['d?',]
 	if(strpos($da,' '))$da=urlencode($da);
 	//$ok=joinable($da); if($ok)[$w,$h]=arr(@getimagesize($da),2); if($w>$pw)$w=$pw;
-	return image($da,'')."\n\n";}
+	return image($da,'');}//."\n\n"
 else $pre=jcim($da);//,1
 $dca=$pre.$da; $http=''; $com=''; $p['style']=''; $w=''; $h='';
 if($nl){$http=host().''; $dca=str_replace('../','',$dca);}
 if(is_file($dca))[$w,$h]=getimagesize($dca); else{$w=''; $h=''; $da=self::recup_image($da);}
 if(!$w && !$pre){$dca=$da; $w=$pwb;}
 if(rstr(17))$pwb/=2;
-if(rstr(9) && !$com && $w<$pwb)$p['style']='float:left; margin-right:10px;';
-if($w && $w<$pwb)$p['style'].=' width:'.$w.'px;';
-$p['src']=$http.'/'.$dca; if(!rstr(9) && $h>40)$br="\n\n";
+//if(rstr(9) && !$com && $w<$pwb)$p['style']='float:left; margin-right:10px;';
+//if($w && $w<$pwb)$p['style'].=' width:'.$w.'px;';
+$p['src']=$http.'/'.$dca; //if(!rstr(9) && $h>40)$br="\n\n";
+$p['title']=ses::adm('alert');
 $ret='<img'.attr($p).' />';//image()
-if($nl)return $ret.$br;
+if($nl)return $ret;//.$br
 if($w>$pw && $pw && !$com)$ret=ljb('','SaveBf',ajx($da).'_'.$w.'_'.$h.'_'.$id,$ret).$br;
 if(auth(6) && rstr(121) && !$nl)$ret=self::rzim($ret,$da,$dca,$id,$w,$h);
-return $ret.$br;}
+return $ret;}//.$br
 
 #connectors
 static function connectors($da,$m,$id='',$nl=''){
@@ -192,11 +193,13 @@ case(':h5'):return '<h5>'.$d.'</h5>';break;
 case(':e'):return '<sup>'.$d.'</sup>';break;
 case(':n'):return '<sub>'.$d.'</sub>';break;
 case(':s'):return '<small>'.$d.'</small>';break;
-case(':k'):return '<strike>'.$d.'</strike>';break;
+case(':k'):return '<del>'.$d.'</del>';break;
 case(':q'):return '<blockquote>'.$d.'</blockquote>';break;
 case(':section'):return '<section>'.$d.'</section>';break;
 case(':center'):return '<center>'.$d.'</center>';break;
 case(':quote'):return '<quote>'.$d.'</quote>';break;
+case(':aside'):return '<aside>'.$d.'</aside>';break;
+case(':time'):return '<time>'.$d.'</time>';break;
 case(':fact'):return '<fact>'.$d.'</fact>';break;
 //case(':sup'):return '<sup>'.$d.'</sup>';break;
 //case(':sub'):return '<sub>'.$d.'</sub>';break;
@@ -215,6 +218,9 @@ case(':blue'):return mk::pub_clr($d,'#333399');break;
 case(':parma'):return mk::pub_clr($d,'#993399');break;
 case(':green'):return mk::pub_clr($d,'#339933');break;
 case(':numlist'):return mk::make_li($d,'ol');break;
+case(':right'):return divs('text-align:right;',$d);break;
+case(':float'):return mk::pub_float($d);break;
+case(':clear'):return divc('clear',$d);break;
 case(':footlist'):return mk::footlist($d,$id);break;//
 case(':link'):return md::special_link($d);break;
 case(':w'):return mk::wlink($d);break;
@@ -226,6 +232,44 @@ case(':art'):return pop::pubart($d);break;
 case(':url'):return mk::pub_url($d,$id);break;
 case(':read'):return pop::openart($d,$m);break;
 case(':content'):return pop::openart($d,3);break;
+case(':import'):return ma::import_art($d,$m);break;
+case(':quote2'):return mk::quote2($d,$id);break;
+case(':callquote'):return mk::callquote($d,'',$id);break;//unused
+case(':articles'):return pop::arts_mod($d,$id);break;
+case(':search'):return lj('popw','popup_search,home___'.ajx($d),pictxt('search',$d));break;
+case(':table'):return mk::table($d);break;
+case(':divtable'):return mk::dtable($d);break;
+case(':frame'):return mk::frame($d,$m); break;
+case(':underline'):return mk::underline($d,$m); break;
+case(':nh'):return mk::nh($d,$id,$nl); break;
+case(':nb'):return mk::nb($d,$id,$nl); break;
+case(':pre'):return tagb('pre',str::htmlentities_a($d));break;
+case(':code'):return tagb('code',delbr($d));break;
+case(':php'):return few::progcode($d); break;
+case(':console'):return divc("console",$d);break;
+case(':figure'):return pop::figure($d,$pw,$nl,$id);break;
+case(':lang'):return mk::translate($d,$m);break;
+case(':iframe'):return mk::iframe_bt($d,$m,$nl);break;
+case(':msql'):return mk::msqcall($d,$id,'');break;
+case(':module'):return mod::callmod($d); break;
+case(':modpop'):return mk::modpop($d); break;
+case(':twitter'):return pop::twitart($d,$id,'',$nl);break;
+case(':twapi'):return pop::twitapi($d);break;
+case(':twits'):return pop::twits($d,$id);break;
+case(':twusr'):return twit::play_usrs($d);break;
+case(':twimg'):return twit::img($d,1); break;
+case(':img'):return image($d); break;
+case(':jpg'):return image($d.'.jpg'); break;//old
+case(':webm'):return pop::getmp4($d.'.webm',$id,rstr(145)?0:1); break;
+case(':mp4'):return pop::getmp4($d.'.mp4',$id,rstr(145)?0:1); break;
+case(':mp3'):return pop::getmp3($d.'.mp3',$id,rstr(145)?0:1); break;
+case(':gim'):return pop::getimg($d,$id,$m,$nl,$pw); break;//onetime
+case(':vid'):return pop::getmp4($d,$id,1); break;
+case(':video'):return video::any($d,$id,$m,$nl);break;
+case(':videourl'):return video::lk($d);break;
+case(':play'):return video::call($d,$id,$pw,$m,$nl);break;
+case(':audio'):return pop::getmp3(goodroot($d),$id,0);break;
+case(':pdf'):return mk::pdfreader($d,$m); break;
 case(':photos'):return mk::photos($d,$id);break;
 case(':gallery'):return mk::gallery($d,$id);break;
 case(':slider'):return mk::slider($d,$id,$nl);break;
@@ -233,64 +277,23 @@ case(':slider'):return mk::slider($d,$id,$nl);break;
 case(':jukebox'):return mk::jukebox($d,$m,$id);break;
 case(':radio'):return radio::call($d,'',$id);break;
 case(':script'):return '<script src="'.$d.'"></script>'."\n"; break;
-case(':import'):return ma::import_art($d,$m);break;
-case(':quote2'):return mk::quote2($d,$id);break;
-case(':callquote'):return mk::callquote($d,'',$id);break;//unused
-case(':articles'):return pop::arts_mod($d,$id);break;
-case(':search'):return lj('popw','popup_search,home___'.ajx($d),pictxt('search',$d));break;
-case(':formail'):return mk::form($d,'mailform'.$id.'_tracks,formail');break;
+case(':formail'):return mk::form($d,'mailform'.$id.'_tracks,formail','');break;
 case(':chat'):return chat::home($d?$d:$id,5);break;
 case(':chatxml'):return chatxml::home($d?$d:$id);break;
 case(':room'):return lj('','popup_chatxml,home___'.$d,pictxt('chat',$d));break;
 case(':shop'):return cart::home('shop',$d,$id);break;//unused
 case(':prod'):return cart::home('prod',$d,$id);break;//unused
 case(':forum'):return forum::home($d?$d:$id);break;//unused
-case(':draw'):return plugin('draw');break;
-case(':icon'):return icon($d);break;
-case(':right'):return divs('text-align:right;',$d);break;
-case(':float'):return mk::pub_float($d);break;
-case(':clear'):return divc('clear',$d);break;
-case(':table'):return mk::table($d);break;
-case(':divtable'):return mk::dtable($d);break;
-case(':frame'):return mk::frame($d,$m); break;
-case(':underline'):return mk::underline($d,$m); break;
-case(':nh'):return mk::nh($d,$id,$nl); break;
-case(':nb'):return mk::nb($d,$id,$nl); break;
-case(':pre'):return balb('pre',htmlentities_a($d));break;
-case(':code'):return balb('code',delbr($d));break;
-case(':php'):return few::progcode($d); break;
-case(':console'):return divc("console",$d);break;
-case(':figure'):return pop::figure($d,$pw,$nl,$id);break;
+case(':draw'):return draw::home();break;
 case(':scan'):return mk::scan_txt($d,$m);break;
-case(':lang'):return mk::translate($d,$m);break;
-case(':iframe'):return mk::iframe_bt($d,$m,$nl);break;
 case(':object'):return obj($d,'');break;
-case(':facebook'):return mk::fb_bt($d);break;
 case(':imgtxt'):return mk::imgtxt($d);break;
 case(':imgdata'):return pop::imgdata($d);break;
 case(':download'):return mk::download($d);break;
-case(':msql'):return mk::msqcall($d,$id,'');break;
-case(':module'):return mod::mkmodr($d); break;
-case(':modpop'):return mk::modpop($d); break;
-case(':ajxget'):return ajx($d); break;
-case(':ajax'):return pop::ajlk($d);break;
-case(':rss_input'):return rss::call('',$d);break;
-case(':twitter'):return pop::twitart($d,$id,'',$nl);break;
-case(':twapi'):return pop::twitapi($d);break;
-case(':twits'):return pop::twits($d,$id);break;
-case(':twusr'):return twit::play_usrs($d);break;
-case(':pdf'):return mk::pdfreader($d,$m); break;
-case(':mp4'):return pop::getmp4($d,$id); break;
-case(':mp3'):return pop::getmp3($d,$id); break;
-case(':jpg'):return self::place_image($d,$m,$nl,$pw,$id); break;
-case(':img'):return pop::getimg($d,$id,$m,$nl,$pw); break;
-case(':vid'):return pop::getmp4($d,$id); break;
-case(':audio'):return pop::getmp3(goodroot($d),$id);break;
-case(':video'):return video::any($d,$id,$m,$nl);break;
-case(':play'):return video::call($d,$id,$pw,$m,$nl);break;
-case(':videourl'):return video::lk($d);break;
-case(':twimg'):return twit::img($d,1); break;
-case(':image'):return image($d); break;
+case(':ajxget'):return ajx($d); break;//old
+case(':ajax'):return pop::ajlk($d);break;//old
+case(':rss_input'):return rss::build('',$d);break;
+case(':facebook'):return mk::fb_bt($d);break;
 case(':exif'):return pop::getxif($d); break;
 //case(':b64'):return img64($d); break;
 case(':b64'):return img('img/'.self::b64img($d,$id,$m)); break;
@@ -311,8 +314,7 @@ case(':toggle_text'):return pop::toggle_div($d,0,$nl);break;
 //case(':toggle_quote'):return pop::toggle_div($d,1,$nl);break;
 case(':toggle'):return pop::toggle_div($d,1,$nl);break;
 case(':toggle_conn'):return pop::toggle_conn($d,$nl);break;
-case(':rss_art'):return rss::art($d,0,0);break;
-case(':rss_read'):return rss::art($d,1,0);break;
+case(':api_read'):return mc::api_read($d);break;
 case(':webpage'):return mk::webpage($d);break;
 case(':webview'):return mk::webview($d,$id);break;
 case(':readhtml'):return get_file(goodroot($d));break;
@@ -322,9 +324,9 @@ case(':web'):return web::call($d,0,$id);break;
 case(':wiki'):return mk::wiki($d,0); break;
 case(':dico'):return mk::wiktionary($d,0); break;
 case(':idart'):return ma::id_of_suj($d);break;
-case(':book'):return plugin('book',$d,$id); break;
-case(':popbook'):return plugin('book',$d,'x'); break;
-case(':petition'):return plugin('petition',$id,10); break;
+case(':book'):return book::home($d,$id); break;
+case(':popbook'):return book::home($d,'x'); break;
+case(':petition'):return petition::home($id,10); break;
 case(':track'):return art::trkone($d); break;
 case(':to'):return art::tracks_to($d); break;
 case(':cols'):return mk::cols($d,$m); break;
@@ -333,11 +335,11 @@ case(':help'):return divc('twit',helps($d)); break;
 case(':plan'):return mk::plan($id,$m,$d); break;
 case(':artwork'):return mk::artwork($d,$m); break;
 case(':look'):return mk::artlook($d); break;
+case(':icon'):return icon($d);break;
 case(':svg'):[$p,$o]=cprm($d); return svg::call($p,$o); break;
-case(':math'):return tag('math','',codeline::parse($d,'','math')); break;
-case(':plug'):[$p,$o,$fc]=decompact_conn($d); return plugin($fc,$p,$o); break;
-case(':app'):[$p,$o,$fc]=decompact_conn($d); return appin($fc,'home',$p,$o); break;
-case(':apps'):return mod::read_apps_link($d); break;
+case(':math'):return tagb('math',codeline::parse($d,'','math')); break;
+case(':app'):[$p,$o,$fc]=unpack_conn($d); return appin($fc,'home',$p,$o); break;
+case(':dskbt'):return mod::read_apps_link($d); break;
 case(':appbt'):return pop::btapp($d,$nl); break;
 case(':connbt'):return pop::connbt($d,$nl); break;
 case(':bt'):return pop::btapp($d,$nl); break;//obs
@@ -371,21 +373,20 @@ case(':caviar'):return mk::caviar($d); break;
 case(':private'): if(auth(6))return $d.' '.picto('secret'); break;
 case(':dev'):if(auth(4))return $d; break;
 case(':exec'):return codeline::exec_run($d,$id); break;
-case(':on'):return '['.balc('code','',delbr($d)).']'; break;
+case(':on'):return '['.tagb('code',delbr($d)).']'; break;
 case(':no'):return; break;
 case(':ko'):return $d; break;}
 if($da=='--')return hr();
-elseif($xt=='.mp3'||$xt=='.m4a')return pop::getmp3(goodroot($da),$id);
 elseif($xt=='.m3u8')return twit::upvideo_m3u8($da);
 elseif($xt=='.pdf')return mk::pdfdoc($da,$nl,$pw);
-elseif($xt=='.svg'){[$p,$w,$h]=subparams($da); return image(goodroot($p),$w,$h);}
+elseif($xt=='.svg'){[$p,$w,$h]=subparams($da); return image(goodroot($p),$w,$h);}//svg($da)
 elseif($xt=='.txt'){$dt=goodroot($da); return lkt('',$dt,strrchr($dt,'/'));}
 elseif($xt=='.gz')return mk::download($da);
-elseif($xt=='.svg')return svg($da);
+elseif($xt=='.mp3'||$xt=='.m4a')return pop::getmp3(goodroot($da),$id,rstr(145));
 elseif($xt=='.mp4'||$xt=='.ogg'||$xt=='.webm'){//.h264
 	if($m!=3)return lj('txtx','pagup_usg,video___'.ajx($da),pictxt('video',strend($da,'/')));
 	else{[$d,$t]=cprm($da); $d=goodroot($d);
-		if($t)return lkt('',$d,$t); else return pop::getmp4($da,$id);}}
+		if($t)return lkt('',$d,$t); else return pop::getmp4($da,$id,rstr(145));}}
 //links
 $res=self::connlk($da,$id,$m,$nl,$pw); if($res=='-')return; if($res)return $res;
 $cn=substr($c,1); //echo $cn.'-';
@@ -400,10 +401,10 @@ if(is_img($da) && strpos($da,'§')===false && strpos($da,'<')===false){
 if((strpos($da,'§')!==false or strpos($da,'http')!==false) && strpos($da,'<a')===false){//secure double hooks
 	[$p,$o]=cprm($da); //echo $p.'§'.$o.br();
 	if(is_img($p)){//image§text
-		if(substr($p,0,4)=='http')$p=conn::get_image($p,$id,$m);
+		//if(substr($p,0,4)=='http')$p=conn::get_image($p,$id,$m);
 		if(is_img($o))return mk::popim($p,image(goodroot($o)),$id);//mini
-		return mk::popim($p,pictxt('img',$o),$id);
-		return pop::figure($p.'§'.$o,$pw,$nl,$id);}
+		//return pop::figure($p.'§'.$o,$pw,$nl,$id);
+		return mk::popim($p,pictxt('img',$o),$id);}
 	elseif(is_img($o)){//link§image
 		if(substr($o,0,4)=='http')$o=conn::get_image($o,$id,$m);
 		if(substr($p,0,4)=='http')return lk($p,conn::place_image($o,$m,$nl,$pw,$id));
@@ -411,18 +412,18 @@ if((strpos($da,'§')!==false or strpos($da,'http')!==false) && strpos($da,'<a')==
 		else return $o;}
 	elseif(strpos($p,'.pdf')!==false)return mk::pdfdoc($da,$nl,$pw);
 	elseif(strpos($p,'wikipedia.org')!==false)return mk::wiki($da,0);
-	elseif(strpos($p,'twitter.com')!==false && strpos($p,'status/')!==false)return pop::poptwit($da,$id,'',$nl);
+	elseif(strpos($p,'twitter.com')!==false && strpos($p,'status/')!==false)return pop::poptwit($da,'',$nl);
 	elseif(strpos($p,':iframe')){if($nl)return struntil($p,':iframe');
 		return lj('','popup_conn,parser___['.ajx($p).']_3_test',pictxt('window',$o));}
 	elseif(substr($p,0,4)=='http')return rstr(111)&&!$nl?mk::webview($da,$id):lka($p,$o);
-	/*elseif(strpos($p,':')){if($nl)return struntil($p,':'); $ic=pop::mime(strend($p,':'),'window');//if isconn
+	/*elseif(strpos($p,':')){if($nl)return struntil($p,':'); $ic=mime(strend($p,':'),'window');//if isconn
 		return lj('','popup_conn,parser___['.ajx($p).']_3_test',pictxt($ic,$o));}*/
 	elseif(substr($p,0,1)=='/')return lkt('',$p,$o);
 	elseif(strpos($p,'/'))return lkt('',goodroot($p),$o);
 	//elseif(strpos($p,'@'))return lkt('',$p,$o?$o:domain($p));
 	elseif(is_numeric($p) && strpos($o,':')===false)return ma::jread('',$p,$o);}
-elseif(substr($da,0,1)=='@' && $tw=substr($da,1))return pop::poptwit($da,$id,'ban',$nl);
-elseif(substr($da,0,1)=='#' && $tw=substr($da,1))return pop::poptwit($da,$id,'search');
+elseif(substr($da,0,1)=='@' && $tw=substr($da,1))return pop::poptwit($da,'ban',$nl);
+elseif(substr($da,0,1)=='#' && $tw=substr($da,1))return pop::poptwit($da,'search',$nl);
 //elseif(strpos($da,'@'))return str_replace('@',picto('arobase'),$da);
 }//avoid plugs
 

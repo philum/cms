@@ -16,11 +16,11 @@ return $ret;}
 static function levels($d){$ret='';
 $r=[2,4,10,12,18,20,30,36,38,48,54,56,70,80,86,88,102,112,118];
 foreach($r as $k=>$v){$c=$v<=$d?'active':'';
-	$ret.=lj($c,'spigrow_app__2_spigrow_table_'.$v,btn('',$v)).' ';}
+	$ret.=lj($c,'spigrow_spigrow,table___'.$v,btn('',$v)).' ';}
 return $ret;}
 
 static function menu($d){$d=$d?$d:118;
-$ret=input1('spigrowx',$d,'','','1').' ';
+$ret=inputb('spigrowx',$d,'','1').' ';
 $ret.=lj('txtbox','spigrow_spigrow,call_spigrowx','ok').' ';
 if($d>1)$ret.=lj('txtbox','spigrow_spigrow,call___'.($d-1),picto('before')).' ';
 $ret.=lj('txtbox','spigrow_spigrow,call___'.($d+1),picto('after')).' ';

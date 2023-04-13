@@ -24,12 +24,11 @@ static function conn($d){
 [$od,$oq]=split_one('/',$op);
 //echo $ob.'-'.$od.'-'.$oq.br();
 if($oq)switch($od){
-case('bal'):return balb($oq,$ob);break;
-case('plug'):return plugin($oq,$ob);break;}
+case('bal'):return tagb($oq,$ob);break;
 else switch($op){
 case('br'):return br();break;
-case('b'):return balb($op,$ob);break;
-case('u'):return balb($op,$ob);break;}
+case('b'):return tagb($op,$ob);break;
+case('u'):return tagb($op,$ob);break;}
 return '('.$d.')';}
 
 static function call($p,$o,$prm=[]){
@@ -37,7 +36,7 @@ static function call($p,$o,$prm=[]){
 return self::parse($p,$o);}
 
 static function menu($p,$o,$rid){
-$ret.=textarea('tx',$p,44,11,atc('console')).' ';
+$ret.=textarea('tx',$p,44,11,['class'=>'console']).' ';
 $ret.=lj('',$rid.'_bazx,call_tx',picto('ok')).' ';
 return $ret;}
 

@@ -34,7 +34,6 @@ array_unshift($r,$tts);
 return tabler($r,'txtred','txtx');}
 
 static function home($nod,$tmp){
-//require_once('plug/msqads.php');
 $ret=lj('txtbox','msqt_msqtemplate,home___'.ajx($nod).'_'.ajx($tmp),picto('ok')).br();
 if($tmp){$tpl=msql::val('',nod('template'),$tmp);
 	if(!$tpl)$tpl=msql::val('','public_template',$tmp);

@@ -9,7 +9,8 @@ if($ra)foreach($ra as $k=>$v)if($v[8])$rc[$v[8]]=['nm'=>$v[0],'clr'=>$v[5],'plan
 if($p=='knownstars')$p=implode(',',array_keys_r($ra,8));
 
 $cl='hip,round(rarad,2),round(decrad,2),round(dist*3.261564,2),round(x,2)*100,round(y,2)*100,round(z,2)*100,spect,hd';
-$r=sql_b('select '.$cl.' from hipparcos where hip in('.$p.')','',0); //pr($r);
+$qp=implode('","',explode(',',$p));
+$r=sql::call('select '.$cl.' from hipparcos where hip in("'.$qp.'")','',0); //pr($r);
 if(!$r)return;
 array_unshift($r,['Sun',3.1416,0,0,0,0,0,0]);
 array_unshift($r,['Yooma',3.28,0.16,14.6,0,0,0,0,0,'','','',"Oomo"]);
@@ -147,7 +148,7 @@ window.addEventListener("DOMContentLoaded",function(){
 });';}
 
 static function play($p){$rid=('scn');//randid
-return bal('canvas',['id'=>$rid,'class'=>'canvas'],'');}
+return tag('canvas',['id'=>$rid,'class'=>'canvas'],'');}
 
 static function call($p,$o,$prm=[]){
 $p=$prm[0]??$p;

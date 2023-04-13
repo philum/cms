@@ -1,62 +1,59 @@
-<?php
-//philum_microsql_program_updates_1106
-$r["_menus_"]=array('day','txt');
-$r[1]=array('110601','r�novation des connecteurs vid�o pour qu\'ils renvoie plut�t des iframe que des embed');
-$r[2]=array('110602','- d�placement de fonctions pour optimiser les appels ;
-- renommage / mise en conformit� des plug-ins ;
+<?php //msql/program_updates_1106
+$r=["_menus_"=>['day','txt'],
+"1"=>['110601','rÃ©novation des connecteurs vidÃ©o pour qu\'ils renvoie plutÃ´t des iframe que des embed'],
+"2"=>['110602','- dÃ©placement de fonctions pour optimiser les appels ;
+- renommage / mise en conformitÃ© des plug-ins ;
 - petites modifs sur le module twitter ;
 - ajout d\'une classe \'twitter\' dans les css (faire un update dans css_builder pour l\'ajouter) ;
-- petits correctifs pr�c�dents mouvements sur les tickets ;');
-$r[3]=array('110603','petites am�liorations css_builder : 
-- l\'ajout de css ouvre directement l\'�dition au bon endroit (d�tection-d�duction en cas de d�synchronisation due � la suppression de classes);
-- la position est d�sign� par les noms au lieu des num�ros ;
-- les tables sont r�empil�es automatiquement (pour �viter la d�synchronisation)');
-$r[4]=array('110604','mise � jour de jwplayer, le lecteur .flv prend d�sormais en charge les .mp4 (et .aac), et les lecteurs QuickTime, windowsmediavideo et real media sont (tout simplement) d�pr�ci�s. Les formats suivants ne sont plus support�s (ils n\'ont jamais servi en huit ans !) : m4a .mov .mpg .wmv .asf .rmv .ram .rm');
-$r[5]=array('110605','r�paration du syst�me de fabrication des Sliders');
-$r[6]=array('110606','les liens contenant une image et pointant vers une image se r�duisent � l\'image du lien (souvent la grande) afin de ne pas laisser une miniature dont le lien renvoie vers la grande image (ils sont oblig�s de faire �a car leur CMS ne g�re pas les dimensions)');
-$r[7]=array('110607','facilitation du bouton \'msql\' dans l\'�diteur externe : quand aucune d�finition d\'importation de site n\'est reconnue, ce bouton va cr�er l\'entr�e et afficher le formulaire o� il n\'y a plus qu\'� les �diter (mais �a peut encore s\'am�liorer)');
-$r[8]=array('110608','ajout du param�tre \'google\' dans master_admin, qui accepte un identifiant google pour l\'aide au r�f�rencement en produisant une balise meta \'google-site-verification\'');
-$r[9]=array('110608','correctif des r�gles de transport pendant les op�rations en ajax pour r�soudre un probl�me de caract�res interdits (r�gle global, puissante, appliqu�e partout)');
-$r[10]=array('110608','am�lioration du protocole de mise � jour du programme, pour les pages t�l�charg�es une � une : bzcompress n\'�tant pas support� par tous les serveurs, base64 est utilis� � la place (aurait d� y penser avant !)');
-$r[11]=array('110608','ajout d\'un plug-in \'sitemap\' : signal� par le robot.txt, sans indication, renvoie la liste des sitemaps des hubs en tenant compte du nom de sous-domaine ; appel� avec la variable \'?hub=x\', renvoie le sitemap du hub, tenant compte de la date et du niveau de priorit� donn� par les tags \'Une\' et \'Stay\'');
-$r[12]=array('110609','l\'ajout d\'ancres automatique rendu capable de mettre en conformit� les r�f�rences pour y appliquer ensuite les ancres');
-$r[13]=array('110609','le rendu des recherches n\'a plus � �tre pr�sent� sous la forme qui sert � la recherche (respect de la casse) ; les mots recherch�s par le moteur ou manuellement par la variable \'&look=\' font appel � la fonction str_detect(), dont le troisi�me argument, s\'il est pr�sent, ne renvoie pas les r�sultats dans lesquels aucune occurrence n\'a �t� trouv�e. ');
-$r[14]=array('110610','les publi�s de trackbacks par l\'utilisateur ou par l\'admin (qui d�mod�re) font appel � la fonction user_mail_r() utilis�e par tous les envois postaux en masse (newsletter, d�ploiement, alertes...) ce qui l\'autorise d�sormais � informer les personnes ayant d�j� particip� � une discussion d\'�tre inform�es de la publication d\'un nouveau message.');
-$r[15]=array('110610','mise en conformit� avec html 5 notamment en utilisant la balise <article>, et en utilisant les classes \'entry\' dans le template par d�faut');
-$r[16]=array('110611','am�liorations fiabilit� : 
-- trackbacks : gestion des caract�res sp�ciaux, adaptation de la largeur maximale des images/vid�os ;
-- connecteur php : caract�res interdits, affichage d\'un overflow si n�cessaire �a d�passe, correctifs utiles � highlight_string() (coloration syntaxique) ;
+- petits correctifs prÃ©cÃ©dents mouvements sur les tickets ;'],
+"3"=>['110603','petites amÃ©liorations css_builder : 
+- l\'ajout de css ouvre directement l\'Ã©dition au bon endroit (dÃ©tection-dÃ©duction en cas de dÃ©synchronisation due Ã  la suppression de classes);
+- la position est dÃ©signÃ© par les noms au lieu des numÃ©ros ;
+- les tables sont rÃ©empilÃ©es automatiquement (pour Ã©viter la dÃ©synchronisation)'],
+"4"=>['110604','mise Ã  jour de jwplayer, le lecteur .flv prend dÃ©sormais en charge les .mp4 (et .aac), et les lecteurs QuickTime, windowsmediavideo et real media sont (tout simplement) dÃ©prÃ©ciÃ©s. Les formats suivants ne sont plus supportÃ©s (ils n\'ont jamais servi en huit ans !) : m4a .mov .mpg .wmv .asf .rmv .ram .rm'],
+"5"=>['110605','rÃ©paration du systÃ¨me de fabrication des Sliders'],
+"6"=>['110606','les liens contenant une image et pointant vers une image se rÃ©duisent Ã  l\'image du lien (souvent la grande) afin de ne pas laisser une miniature dont le lien renvoie vers la grande image (ils sont obligÃ©s de faire Ã§a car leur CMS ne gÃ¨re pas les dimensions)'],
+"7"=>['110607','facilitation du bouton \'msql\' dans l\'Ã©diteur externe : quand aucune dÃ©finition d\'importation de site n\'est reconnue, ce bouton va crÃ©er l\'entrÃ©e et afficher le formulaire oÃ¹ il n\'y a plus qu\'Ã  les Ã©diter (mais Ã§a peut encore s\'amÃ©liorer)'],
+"8"=>['110608','ajout du paramÃ¨tre \'google\' dans master_admin, qui accepte un identifiant google pour l\'aide au rÃ©fÃ©rencement en produisant une balise meta \'google-site-verification\''],
+"9"=>['110608','correctif des rÃ¨gles de transport pendant les opÃ©rations en ajax pour rÃ©soudre un problÃ¨me de caractÃ¨res interdits (rÃ¨gle global, puissante, appliquÃ©e partout)'],
+"10"=>['110608','amÃ©lioration du protocole de mise Ã  jour du programme, pour les pages tÃ©lÃ©chargÃ©es une Ã  une : bzcompress n\'Ã©tant pas supportÃ© par tous les serveurs, base64 est utilisÃ© Ã  la place (aurait dÃ» y penser avant !)'],
+"11"=>['110608','ajout d\'un plug-in \'sitemap\' : signalÃ© par le robot.txt, sans indication, renvoie la liste des sitemaps des hubs en tenant compte du nom de sous-domaine ; appelÃ© avec la variable \'?hub=x\', renvoie le sitemap du hub, tenant compte de la date et du niveau de prioritÃ© donnÃ© par les tags \'Une\' et \'Stay\''],
+"12"=>['110609','l\'ajout d\'ancres automatique rendu capable de mettre en conformitÃ© les rÃ©fÃ©rences pour y appliquer ensuite les ancres'],
+"13"=>['110609','le rendu des recherches n\'a plus Ã  Ãªtre prÃ©sentÃ© sous la forme qui sert Ã  la recherche (respect de la casse) ; les mots recherchÃ©s par le moteur ou manuellement par la variable \'&look=\' font appel Ã  la fonction str_detect(), dont le troisiÃ¨me argument, s\'il est prÃ©sent, ne renvoie pas les rÃ©sultats dans lesquels aucune occurrence n\'a Ã©tÃ© trouvÃ©e. '],
+"14"=>['110610','les publiÃ©s de trackbacks par l\'utilisateur ou par l\'admin (qui dÃ©modÃ¨re) font appel Ã  la fonction user_mail_r() utilisÃ©e par tous les envois postaux en masse (newsletter, dÃ©ploiement, alertes...) ce qui l\'autorise dÃ©sormais Ã  informer les personnes ayant dÃ©jÃ  participÃ© Ã  une discussion d\'Ãªtre informÃ©es de la publication d\'un nouveau message.'],
+"15"=>['110610','mise en conformitÃ© avec html 5 notamment en utilisant la balise <article>, et en utilisant les classes \'entry\' dans le template par dÃ©faut'],
+"16"=>['110611','amÃ©liorations fiabilitÃ© : 
+- trackbacks : gestion des caractÃ¨res spÃ©ciaux, adaptation de la largeur maximale des images/vidÃ©os ;
+- connecteur php : caractÃ¨res interdits, affichage d\'un overflow si nÃ©cessaire Ã§a dÃ©passe, correctifs utiles Ã  highlight_string() (coloration syntaxique) ;
 - galerie photo ajax : pas de clignotement entre les images ;
 etc...
-');
-$r[17]=array('110612','ajout d\'un �diteur dans le module \'connector\' pour laisser plus d\'amplitude � cr�er des objets uniques (la fonctionnalit� �tant puissante il fallait que cela se voit en ouvrant le module !)');
-$r[18]=array('110612','nouveau dessin de l\'admin, fonctions isol�es pour �tre mieux joignable depuis la home dans le menu # :: penser � \'upload_admin-css\'');
-$r[19]=array('110612','correctifs et am�lioration d�ergonomie dans l\'admin microsql (reorder applique sort() si les clefs ne sont pas num�riques)');
-$r[20]=array('110612','cr�ation d\'une table de r�f�rence pour les fonctions de lib : system/program_functions');
-$r[21]=array('110613','am�lioration substantielle du plug-in \'[exec:b]\' qui aide � tester du code en ligne (re�oit l\'aide sur les fonctions), depuis que cette appli a d�couvert un nouveau d�bouch�, la prog en ligne...');
-$r[22]=array('110614','ajout du module [tab_mods:b] qui permet de consulter des modules signal�s par des onglets.
-Contrairement � MenusJ qui s\'informe en temps r�el sur l\'�tat des donn�es demand�es, tab_mods utilise celles qui ont �t� charg�es mais pas affich�es.
-Donc le chargement est plus long, mais son fonctionnement permet de n\'afficher que les onglets pour lesquels un contenu a �t� trouv�.');
-$r[23]=array('110624','�chec d\'une fourche �volutive dont on n\'a r�percut� que les am�nagements :
-- r�formes de nominations
-- r�novation de css_builder, plus pr�cis : gestion des conditions
+'],
+"17"=>['110612','ajout d\'un Ã©diteur dans le module \'connector\' pour laisser plus d\'amplitude Ã  crÃ©er des objets uniques (la fonctionnalitÃ© Ã©tant puissante il fallait que cela se voit en ouvrant le module !)'],
+"18"=>['110612','nouveau dessin de l\'admin, fonctions isolÃ©es pour Ãªtre mieux joignable depuis la home dans le menu # :: penser Ã  \'upload_admin-css\''],
+"19"=>['110612','correctifs et amÃ©lioration dÂergonomie dans l\'admin microsql (reorder applique sort() si les clefs ne sont pas numÃ©riques)'],
+"20"=>['110612','crÃ©ation d\'une table de rÃ©fÃ©rence pour les fonctions de lib : system/program_functions'],
+"21"=>['110613','amÃ©lioration substantielle du plug-in \'[exec:b]\' qui aide Ã  tester du code en ligne (reÃ§oit l\'aide sur les fonctions), depuis que cette appli a dÃ©couvert un nouveau dÃ©bouchÃ©, la prog en ligne...'],
+"22"=>['110614','ajout du module [tab_mods:b] qui permet de consulter des modules signalÃ©s par des onglets.
+Contrairement Ã  MenusJ qui s\'informe en temps rÃ©el sur l\'Ã©tat des donnÃ©es demandÃ©es, tab_mods utilise celles qui ont Ã©tÃ© chargÃ©es mais pas affichÃ©es.
+Donc le chargement est plus long, mais son fonctionnement permet de n\'afficher que les onglets pour lesquels un contenu a Ã©tÃ© trouvÃ©.'],
+"23"=>['110624','Ã©chec d\'une fourche Ã©volutive dont on n\'a rÃ©percutÃ© que les amÃ©nagements :
+- rÃ©formes de nominations
+- rÃ©novation de css_builder, plus prÃ©cis : gestion des conditions
 - bouton \'new_from\'
 - ajouts d\'aides contextuelles
-');
-$r[24]=array('110624','ajout du javascript GNU/GPL \'live.js\' qui permet de visualiser en temps r�el les changements apport�s aux classes css (dans css_builder, afficher les deux fen�tres c�te � c�te)');
-$r[25]=array('110625','ajout de boutons de contr�le du mode d\'enregistrement dans css_builder : afin de choisir d\'enregistrer ou non les conditions ;
-nouvelle fonction \'array_append\' (pour les mises � jour, remplace array_combine_append)');
-$r[26]=array('110626','augmentation de la port�e de ajax dans css_builder : le css est �ditable sur place dans le site (couleurs et classes). Si la session d\'�dition du design n\'est pas active, ce sont les css publics qui sont affect�s.');
-$r[27]=array('110628','r�novation du module \'submenus\' qui supplante l\'onglet \'menus\' dans l\'admin : d�sormais on peut �crire des hi�rarchies virtuelles dans chaque module, qui re�oit les moyens d\'en g�n�rer et de les pr�visualiser.
-Pour l\'utiliser il faut updater les css utilisateur et sp�cifiquement \'#menuH ul li\' (qui ne peut �tre r��crit par l\'updater puisqu\'il existe d�j�), ainsi que les css de l\'admin.');
-$r[28]=array('110630','r�novation du module \'user_menus\' :
-- suppression des 11 restrictions qui servaient � le d�finir ;
-- �criture d\'un vrai module capable d\'ordonner et renommer les liens');
-$r[29]=array('110630','connecteur :microsql
-l\'utilisation s\'am�liore d\'un param�tre � de sorte � choisir parmi une ligne la donn�e d\'une colonne sp�cifique.
-syntaxe [directory/hub_node_row�col:microsql ]
-et pour les bases � indicatif �a donne :
-syntaxe [directory/hub_node_nb_row�col:microsql ]
-avec \'directory\' optionnel, o� \'lang\' choisit la langue par d�faut');
-
-?>
+'],
+"24"=>['110624','ajout du javascript GNU/GPL \'live.js\' qui permet de visualiser en temps rÃ©el les changements apportÃ©s aux classes css (dans css_builder, afficher les deux fenÃªtres cÃ´te Ã  cÃ´te)'],
+"25"=>['110625','ajout de boutons de contrÃ´le du mode d\'enregistrement dans css_builder : afin de choisir d\'enregistrer ou non les conditions ;
+nouvelle fonction \'array_append\' (pour les mises Ã  jour, remplace array_combine_append)'],
+"26"=>['110626','augmentation de la portÃ©e de ajax dans css_builder : le css est Ã©ditable sur place dans le site (couleurs et classes). Si la session d\'Ã©dition du design n\'est pas active, ce sont les css publics qui sont affectÃ©s.'],
+"27"=>['110628','rÃ©novation du module \'submenus\' qui supplante l\'onglet \'menus\' dans l\'admin : dÃ©sormais on peut Ã©crire des hiÃ©rarchies virtuelles dans chaque module, qui reÃ§oit les moyens d\'en gÃ©nÃ©rer et de les prÃ©visualiser.
+Pour l\'utiliser il faut updater les css utilisateur et spÃ©cifiquement \'#menuH ul li\' (qui ne peut Ãªtre rÃ©Ã©crit par l\'updater puisqu\'il existe dÃ©jÃ ), ainsi que les css de l\'admin.'],
+"28"=>['110630','rÃ©novation du module \'user_menus\' :
+- suppression des 11 restrictions qui servaient Ã  le dÃ©finir ;
+- Ã©criture d\'un vrai module capable d\'ordonner et renommer les liens'],
+"29"=>['110630','connecteur :microsql
+l\'utilisation s\'amÃ©liore d\'un paramÃ¨tre Â§ de sorte Ã  choisir parmi une ligne la donnÃ©e d\'une colonne spÃ©cifique.
+syntaxe [directory/hub_node_rowÂ§col:microsql ]
+et pour les bases Ã  indicatif Ã§a donne :
+syntaxe [directory/hub_node_nb_rowÂ§col:microsql ]
+avec \'directory\' optionnel, oÃ¹ \'lang\' choisit la langue par dÃ©faut']];

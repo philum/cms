@@ -1,6 +1,6 @@
-<?php //clock
-
-function uclock_needle_css($id,$sz,$clr,$w,$h){return '
+<?php 
+class clock{
+static function uclock_needle($id,$sz,$clr,$w,$h){return '
 	#'.$id.'{
 		background:'.$clr.';
 		width:'.$w.'px;
@@ -17,7 +17,7 @@ function uclock_needle_css($id,$sz,$clr,$w,$h){return '
 		transition: all 0.2s linear;
 	}';}
 
-function clock_head(){
+static function head(){
 	$unit=15;
 	$size1=$unit*10;//xee
 	$size2=$unit*15;//xsi
@@ -90,15 +90,15 @@ function clock_head(){
 		top:calc(50% - 9px);
 		border-radius:8px;
 	}
-	'.uclock_needle_css('needleHour',$size1,$hourclr,8,$size1/2).'
-	'.uclock_needle_css('needleMin',$size2,$minclr,6,$size2/2).'
-	'.uclock_needle_css('needleSec',$size3,$secclr,4,$size3/2).'
+	'.self::uclock_needle('needleHour',$size1,$hourclr,8,$size1/2).'
+	'.self::uclock_needle('needleMin',$size2,$minclr,6,$size2/2).'
+	'.self::uclock_needle('needleSec',$size3,$secclr,4,$size3/2).'
 	');
 	
-	Head::add('jscode',clock_js());
+	Head::add('jscode',self::js());
 }
 
-function clock_js(){return '
+static function js(){return '
 	function clock(){
 		var date=new Date();
 		var time=Math.round(date.getTime()/1000);
@@ -120,29 +120,29 @@ function clock_js(){return '
 	}
 	setInterval(function(){clock();},1000);';}
 
-function plug_clock($p,$o){
-clock_head();
-	$ret=bal('div',array('id'=>'clock'),'');
+static function home($p,$o){
+self::head();
+	$ret=tag('div',array('id'=>'clock'),'');
 	//landmarkSub
 	for($i=0;$i<60;$i++){
-		$landmarkSub=bal('div',array('id'=>'landmarkSub'),'');
-		$ret.=bal('div',array('id'=>'landmarkFrame','style'=>'transform: rotate('.($i*6).'deg);'),$landmarkSub);}
+		$landmarkSub=tag('div',array('id'=>'landmarkSub'),'');
+		$ret.=tag('div',array('id'=>'landmarkFrame','style'=>'transform: rotate('.($i*6).'deg);'),$landmarkSub);}
 	//landmark
 	for($i=0;$i<12;$i++){
-		$landmark=bal('div',array('id'=>'landmark'),'');
-		$ret.=bal('div',array('id'=>'landmarkFrame','style'=>'transform: rotate('.($i*30).'deg);'),$landmark);
-		$hour=bal('div',array('id'=>'landmarkText','style'=>'transform: rotate(-'.($i*30).'deg);'),($i?$i:12));
-		$ret.=bal('div',array('id'=>'landmarkTextFrame','style'=>'transform: rotate('.($i*30).'deg) translate(0px, 0px);'),$hour);}
-	$needleMin=bal('div',array('id'=>'needleHour'),' ');
-	$ret.=bal('div',array('id'=>'needleHourFrame'),$needleMin);
-	$needleMin=bal('div',array('id'=>'needleMin'),' ');
-	$ret.=bal('div',array('id'=>'needleMinFrame'),$needleMin);
-	$needleSec=bal('div',array('id'=>'needleSec'),' ');
-	$ret.=bal('div',array('id'=>'needleSecFrame'),$needleSec);
-	$ret.=bal('div',array('id'=>'clockCenter'),'');
-	$ret.=bal('div',array('id'=>'digit'),'');
+		$landmark=tag('div',array('id'=>'landmark'),'');
+		$ret.=tag('div',array('id'=>'landmarkFrame','style'=>'transform: rotate('.($i*30).'deg);'),$landmark);
+		$hour=tag('div',array('id'=>'landmarkText','style'=>'transform: rotate(-'.($i*30).'deg);'),($i?$i:12));
+		$ret.=tag('div',array('id'=>'landmarkTextFrame','style'=>'transform: rotate('.($i*30).'deg) translate(0px, 0px);'),$hour);}
+	$needleMin=tag('div',array('id'=>'needleHour'),' ');
+	$ret.=tag('div',array('id'=>'needleHourFrame'),$needleMin);
+	$needleMin=tag('div',array('id'=>'needleMin'),' ');
+	$ret.=tag('div',array('id'=>'needleMinFrame'),$needleMin);
+	$needleSec=tag('div',array('id'=>'needleSec'),' ');
+	$ret.=tag('div',array('id'=>'needleSecFrame'),$needleSec);
+	$ret.=tag('div',array('id'=>'clockCenter'),'');
+	$ret.=tag('div',array('id'=>'digit'),'');
 	$ret.=jscode('clock();');
-	$ret=bal('div',array('id'=>'clockFrame'),$ret);
+	$ret=tag('div',array('id'=>'clockFrame'),$ret);
 return $ret;}
-
+}
 ?>

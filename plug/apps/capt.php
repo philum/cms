@@ -43,7 +43,7 @@ foreach($r as $v){$ret.=$v->nodeValue;}
 return $ret;}*/
 
 static function read($f){
-$d=file_get_contents($f); //$d=utf8_decode_b($d);
+$d=file_get_contents($f); //$d=utf8dec_b($d);
 $d=html_detect($d,'<div id="liste">');
 $http=http(domain($f));
 $dom=new DomDocument;
@@ -58,7 +58,7 @@ foreach($dom->getElementsByTagName('a') as $k=>$v){//p($v);
 		$ra[]=$u;
 		$rf[]=self::read2($u);}}//if($k<10)
 foreach($dom->getElementsByTagName('span') as $k=>$v){
-	if($v->getAttribute('class')=='lien')$rb[]=utf8_decode_b(trim($v->nodeValue));}
+	if($v->getAttribute('class')=='lien')$rb[]=utf8dec_b(trim($v->nodeValue));}
 foreach($dom->getElementsByTagName('div') as $k=>$v){
 	if($v->getAttribute('class')=='resultat'){
 		$vb=$v->getElementsByTagName('p')->item(1)->nodeValue;
@@ -73,7 +73,7 @@ for($i=0;$i<$n;$i++){
 return $rd;}
 
 static function read2($f){
-$d=file_get_contents($f); //$d=utf8_decode_b($d);
+$d=file_get_contents($f); //$d=utf8dec_b($d);
 $d=html_detect($d,'<div id="renseignement" class="Card frame table">');
 //$http=http(domain($f));
 $dom=new DomDocument;
@@ -81,8 +81,8 @@ $dom->validateOnParse=true;
 libxml_use_internal_errors(true);
 $dom->loadHtml($d);//pr($dom);
 foreach($dom->getElementsByTagName('tr') as $k=>$v){//pr($v);
-	$col=utf8_decode_b(trim($v->childNodes[0]->nodeValue));
-	$val=utf8_decode_b(trim($v->childNodes[2]->nodeValue));
+	$col=utf8dec_b(trim($v->childNodes[0]->nodeValue));
+	$val=utf8dec_b(trim($v->childNodes[2]->nodeValue));
 	if($col=='Statut' or $col=='Adresse (RCS)' or $col=='Code postal' or $col=='Ville' or $col=='Forme juridique' or $col=='Capital social' or $col=='Date création entreprise' or $col=='Chiffre d\'affaires')$rb[$col]=$val;}
 $n=count($rb);
 //pr($rb);
@@ -104,7 +104,7 @@ return $ret;}
 static function menu($p,$o,$rid){
 $ret=input('inp1','4637z').' '.input('inp2','75').' ';
 //4637z,4641z,4661z,4665z,4646z,4647z,4648z
-$ret.=lj('',$rid.'_app__3_capt_call___inp1|inp2',picto('ok')).' ';
+$ret.=lj('',$rid.'_capt_call_inp1,inp2',picto('ok')).' ';
 return $ret;}
 
 //$f='https://www.societe.com/cgi-bin/liste?nom=&dirig=&pre=&ape=4637z&dep=75';

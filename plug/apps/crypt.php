@@ -14,7 +14,7 @@ static function mkkey($n){//n=32:256bits,16=128bits
 $ret=openssl_random_pseudo_bytes($n,$strong);
 if($strong)return base64_encode($ret); else return 'not secure';}
 
-//crypt
+//encrypt
 static function pkcs7_pad($d,$size){
 $length=$size-strlen($d)%$size;
 return $d.str_repeat(chr($length),$length);}
@@ -40,7 +40,7 @@ static function decrypt($d,$iv){$k=self::encryption_key(); $iv=base64_decode($iv
 return openssl_decrypt($d,'AES-256-CBC',$k,0,$iv);}
 
 static function call($p,$o,$prm=[]){$ret='';
-[$d,$iv]=arr($prm);//init vector
+[$d,$iv]=arr($prm,2);//init vector
 if($p==1)$ret=self::encrypt_build($d,$iv);
 elseif($p==2)$ret=self::decrypt_build($d,$iv);
 elseif($p==3)$ret=self::mkkey(32);
@@ -50,14 +50,14 @@ elseif($p==6)$ret=self::decrypt($d,$iv);
 return $ret;}
 
 static function menu($p,$o,$rid){
-$ret=input('iv',$o,'public key').br();
+$ret=input('iv',$o?$o:'public key').br();
 $ret.=textarea('txt',$p,'');
 $ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_1_'.$rid.'_','encrypt').' ';
 $ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_2_'.$rid.'_','decrypt').' ';
 $ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_3_'.$rid.'_','private key').' ';
 $ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_4_'.$rid.'_','public key').' ';
-$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_5_'.$rid.'_','encrypt').' ';
-$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_6_'.$rid.'_','decrypt').' ';
+$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_5_'.$rid.'_','encrypt2').' ';
+$ret.=lj('popbt',$rid.'_crypt,call_txt,iv_2_6_'.$rid.'_','decrypt2').' ';
 //$ret.=lj('','popup_msqedit,call__crypt*1_id,val',picto('edit'));
 return $ret;}
 

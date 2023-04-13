@@ -1,4 +1,4 @@
-<?php //b/finder
+<?php 
 class finder{
 //utils
 static function normalize($n){//let the "/"
@@ -293,26 +293,26 @@ static function flist($r,$p,$rb){
 $o=self::mkprm($rb,'alone',5); $ret='';
 foreach($r as $k=>$v){
 	[$url,$img,$j,$xt,$dist,$prop,$f,$typ,$id]=vals($v,['url','img','j','xt','dist','prop','f','typ','id']); 
-	$ico=$img?$img:pop::mimes($typ,'',18);
+	$ico=$img?$img:mimes($typ,'',18);
 	$div=div(atc('fisub').atd($id),'');
-	if($v['r'])$lk=toggle('',$v['id'].'_finder,home_'.$j.$o,$f);//'&#9658; '.
-	else{$lk=toggle('',$v['id'].'_finder,reader_'.$j.$dist,$f);}
+	if($v['r'])$lk=toggle('',$v['id'].'_finder,home___'.$j.$o,$f);//'&#9658; '.
+	else{$lk=toggle('',$v['id'].'_finder,reader___'.$j.$dist,$f);}
 	$ret.=divc('fipop',$ico.' '.$lk.' '.$div);}//.' '.$v['opt']
 return $ret;}
 
 static function panel($r,$p,$rb){
 $o=self::mkprm($rb,'',4); $ret='';
 foreach($r as $k=>$v){$div=divd($v['id'],'');
-	$ico=$v['img']?$v['img']:pop::mimes($v['typ'],'',18);
+	$ico=$v['img']?$v['img']:mimes($v['typ'],'',18);
 	if($v['r'])$lk=lj('','fndr_finder,home___'.$v['j'].$o,$v['f']);
-	else $lk=toggle('',$v['id'].'_finder,reader_'.$v['j'].$v['dist'],$v['f']);
+	else $lk=toggle('',$v['id'].'_finder,reader___'.$v['j'].$v['dist'],$v['f']);
 	$ret.=divc('fipop',$ico.' '.$lk.$div);}//.' '.$v['opt']
 return $ret;}
 
 static function icons($r,$p,$rb){
 $o=self::mkprm($rb,'',4); $ret='';
 foreach($r as $k=>$v){$dst=$v['dist']??'';
-	$thumb=$v['img']??pop::mimes($v['typ'],'',32);
+	$thumb=$v['img']??mimes($v['typ'],'',32);
 	if($v['r'])$lk='fndr_finder,home__15_'.$v['j'].$o;
 	else $lk='popup_finder,reader__15_'.$v['j'].$dst.'_1';
 	$ret.=lj('icones',$lk,$thumb.br().$v['f']);}
@@ -321,7 +321,7 @@ return divc('',$ret);}
 static function recursive($r,$p,$rb){
 $o=self::mkprm($rb,'alone',5); $ret='';
 foreach($r as $k=>$v){$id=normalize($p.$k);
-	$lk=toggle('',$id.'_finder,home_'.ajx($p.'/'.$k).'_'.$o,$k);
+	$lk=toggle('',$id.'_finder,home___'.ajx($p.'/'.$k).'_'.$o,$k);
 	if(is_array($v))$rte=self::recursive($v,$p.'/'.$k,$rb); else $rte='';
 		$div=div(atc('fisub').atd($id),$rte);
 	$ret.=divc('fipop',' &#9658; '.$lk.' '.$div);}
@@ -330,11 +330,11 @@ return $ret;}
 static function conn($r,$p,$rb){
 $o=self::mkprm($rb,'alone',5).'_1'; $ret='';//1=popup
 foreach($r as $k=>$v){if(isset($v['j'])){
-	$ico=$v['img']??''; if(!$ico)$ico=pop::mimes($v['typ'],'','32');
+	$ico=$v['img']??''; if(!$ico)$ico=mimes($v['typ'],'','32');
 	//$ico=isset($v['typ'])?$im:'';
 	$conn=$v['conn']??'';
 	//$div=span(atc('').atd($v['id']),'');
-	//if($v['r'])$lk=toggle('icones','popup_finder,home_'.$v['j'].$o,$ico.br().$v['f']);
+	//if($v['r'])$lk=toggle('icones','popup_finder,home___'.$v['j'].$o,$ico.br().$v['f']);
 	if($v['r'])$lk=lj('icones','popup_finder,home___'.$v['j'].$o,$ico.br().$v['f']);
 	else $lk=ljb('icones','insert',$conn,$ico.br().$v['f']).' ';
 	if(isset($v['r']) or $conn)$ret.=$lk;}}
@@ -355,7 +355,7 @@ foreach($r as $k=>$v){if(is_array($v)){$np=$p.'/'.$k; $i++;
 	$j='active_list_finder(\'fdirs\','.$i.'); ';
 	$j.=sj('ffils_finder,flapf___'.ajx($np).'_'.$o);
 	$lk=ljb('',$j,'',$k);
-	$ul=bal('ul','style="display:none;"',self::flap_dirs($v,$np,$o));
+	$ul=tag('ul',['style'=>'display:none;'],self::flap_dirs($v,$np,$o));
 	$ret.=li($lk.$ul);}}
 return $ret;}
 
@@ -366,7 +366,7 @@ foreach($r as $k=>$v){if(isset($v['r'])){
 	$furl=$jc.$url;
 	if($img){[$w,$h]=self::sizes($furl);
 	$ico=ljb('','SaveBf','users(slash)'.$j.''.$w.'_'.$h,$img).' ';}
-	else $ico=pop::mimes($xt,'',18).' ';
+	else $ico=mimes($xt,'',18).' ';
 	$op=lkt('txtsmall',$furl,picto('url')).' ';//url
 	if($xt=='.mp3')$mp3=1; if($xt=='.jpg')$jpg=1; 
 	$lk=lj('','popup_finder,reader___'.$j.$dist,etc($f,40)).' ';

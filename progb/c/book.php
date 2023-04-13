@@ -1,4 +1,4 @@
-<?php //book
+<?php 
 class book{
 
 static function scroll0($msg,$rid){
@@ -32,10 +32,10 @@ $d='<iframe src="'.host().'/app/book/'.$d.'"></iframe>';
 return textarea('',htmlentities($d),44,4);}
 
 static function pages($id,$rid){
-$ret=lja('',atjr('autoread',[$id,$rid]),picto('play')).' ';
-$ret.=lja('','clearTimeout(timer)',picto('stop')).' ';
-$ret.=lja('',atjr('scrollt',['2',$rid]),picto('up')).' ';
-$ret.=lja('',atjr('scrollt',['1',$rid]),picto('down'));
+$ret=btj(picto('play'),atjr('autoread',[$id,$rid])).' ';
+$ret.=btj(picto('stop'),'clearTimeout(timer)').' ';
+$ret.=btj(picto('up'),atjr('scrollt',['2',$rid])).' ';
+$ret.=btj(picto('down'),atjr('scrollt',['1',$rid]));
 return divs('',$ret);}
 
 static function cover($t,$id){$t=str_replace(' ',"\n",$t); //$w=$_SESSION['prma']['content'];
@@ -58,18 +58,18 @@ cwset($_SESSION['prma']['content']-60); //[120:setwidth]
 if(!$o)$p['back']=self::prevnxt($id,$rid);
 $p['id']=$id;
 $r=ma::pecho_arts($id);
-if($id && !$r[11])return divc('txtalert',helps('not_published'));
+if($id && !$r[11])return divc('frame-red',helps('not_published'));
 $p['date']=mkday($r[0],1); $p['title']=$r[2]; 
 $p['opt']=$r[1]; //$p['tag']=$r[5];
 $p['length']=art::length($r[8]); 
 //$p['length'].=' '.lka(urlread($id),picto('articles'));
 $p['length'].=' '.ma::popart($id);
-$msg=sql('msg','qdm','v','id='.$id);
+$msg=sql('msg','qdm','v',$id);
 $msg=conn::read($msg,'',$id,1);
 $p['player']=self::pages($id,$rid);
 $p['msg']=self::scroll($msg,$rid);
 $ret=art::template($p,'book');
-//$_SESSION['cur_div']='content';//setwidth in template
+//ses::$r['curdiv']='content';//setwidth in template
 ses::$r['popw']=1000;
 return $ret;}
 
@@ -85,7 +85,7 @@ if(strpos($p,'§')){[$p,$o]=explode('§',$p);
 	[$t,$or,$tp,$oi]=explode('/',$o); if(!$tp)$tp='book'; 
 	$rb['title']=stripslashes($t);}
 //if(is_numeric($p) && ses('read')!=$p)return self::cover($t,$id);
-//if($o=='api')$r=api::callj($p,'','');else
+//if($o=='api')$r=api::call2($p);else
 if(strpos($p,'&') && strpos($p,'='))$r=api::mod_rq($p);//old format
 elseif(strpos($p,'|') && strpos($p,',')===false)$r=array_flip(explode('|',$p));
 if($id=='fav' or $id=='like' or $id=='poll')$r=sql('ib','qdf','k','type="'.$id.'" and iq="'.$p.'"',1);
@@ -104,7 +104,7 @@ foreach($r as $k=>$v){$i++; $io=$i.'. ';
 $rb['msg']=self::scroll($msg,$rid);
 $ret=divd('book'.$rid,art::template($rb,'book'));
 $ret.=jscode(self::js()).csscode(self::css());
-//$_SESSION['cur_div']='content';
+//ses::$r['curdiv']='content';
 return $ret;}
 }
 ?>

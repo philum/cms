@@ -7,7 +7,7 @@ else return 'no';}
 
 static function home($p,$o){$rid='plg'.randid();
 $ret.=input('ssh','service proftpd restart');
-$ret.=inpsw('ssb','****',atz(4));
+$ret.=inpsw('ssb','****',4);
 $ret.=lj('',$rid.'_ssh,call_ssh,ssb_xd_',picto('ok')).' ';
 return $ret.divd($rid,'');}
 }

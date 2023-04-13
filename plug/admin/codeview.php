@@ -26,7 +26,7 @@ if(is_file($f)){//echo $f.br();
 	if(is_array($reb)){//pr($reb);
 	foreach($reb as $func){
 	if($func){
-		[$id,$maj]=sql_b('select id,maj from _sys where name="'.$func.'"','r');
+		[$id,$maj]=sql::call('select id,maj from _sys where name="'.$func.'"','r');
 		$res=self::find_end($rea,'static function '.$func.'(','{','}'); 
 		//$res=substr($res,strpos($res,'{')+1,strrpos($res,'}'-1)); //eco($res,1);
 		$resav=addslashes($res);
@@ -148,17 +148,16 @@ lj('','codeview_codeview,home___progb_'.$v[1],$v[1]),
 lj('','popup_codeview,home___progb_'.ajx($v[1]).'_'.ajx($v[0]),$func));}
 
 static function findfunc($p,$o,$prm){[$p,$o]=arr($prm);
-$sql='select name,page,func from _sys where name="'.$p.'"'; $r=sql_b($sql,'');
+$sql='select name,page,func from _sys where name="'.$p.'"'; $r=sql::call($sql,'');
 $rb[]=['edit','page','static function']; if($r)$rb[]=self::ffunc_row($r[0]);
-$sql='select name,page,func from _sys where func like "%='.$p.'(%" or  func like "%.'.$p.'(%" or  func like "%('.$p.'(%" or  func like "\n'.$p.'(%"'; $r=sql_b($sql,'');
+$sql='select name,page,func from _sys where func like "%='.$p.'(%" or  func like "%.'.$p.'(%" or  func like "%('.$p.'(%" or  func like "\n'.$p.'(%"'; $r=sql::call($sql,'');
 if(!$r)return 'null'; 
 foreach($r as $k=>$v)$rb[]=self::ffunc_row($v); $n=count($rb);
 return btn('txtcadr','static function '.$p.'() '.$n.' '.plurial($n,19).'').tabler($rb,'txtblc');}
 
-static function home($dr,$f,$fc=''){
-require_once('params/_connectx.php');
+static function home($dr,$f,$fc=''){connect();
 if($dr=='param')$dr=$f=''; $ret=''; $res='';
-if(!$f && $fc)$f=sql_b('select page from _sys where name="'.$fc.'"','v');
+if(!$f && $fc)$f=sql::call('select page from _sys where name="'.$fc.'"','v');
 if(strpos($f,'.')===false && $f)$f.='.php'; if($fc=='all')$fc='';
 if(auth(6))$ret=lj('','codeview_codeview,home___'.$dr.'_'.$f.'_'.ajx($fc),picto('reload')).' ';
 if($dr=='save'){$_GET['sav']=1; $dr=$_SESSION['dr'];
@@ -170,7 +169,7 @@ if(auth(5)){
 	$ret.=btn('nbp',self::cv_btn('progb',$dr).self::cv_btn('plug',$dr).self::cv_btn('save',$dr)).' ';//self::cv_btn('all',$dr).
 	$nbfunc=count($_SESSION['rec']);
 	if(!$nbfunc)$nbfunc=sqb('count(id)','_sys','v','');
-	$ret.=balb('small',$nbfunc.' static functions').' ';
+	$ret.=tagb('small',$nbfunc.' static functions').' ';
 	$jp=ajx(strto($f,'.'));
 	//list
 	if($rep){ksort($rep); array_unshift($rep,'...');} else $rep[]='...';
@@ -185,7 +184,7 @@ if(auth(5)){
 	if($fc && auth(6)){$ret.=lj('','popup_codev,home___'.$dr.'_'.$jp.'_'.ajx($fc),picto('editxt')).' ';
 		if($dr=='plug')$ret.=lj('','popup_plug___'.$jp.'_'.ajx($fc),picto('window')).' ';}
 	//search
-	$ret.=input1('funcsrch',$fc,8).' '.lj('popbt','popup_codeview,findfunc_funcsrch','find').' '.lj('popbt','popup_coremap,map_funcsrch','map');
+	$ret.=input('funcsrch',$fc,8).' '.lj('popbt','popup_codeview,findfunc_funcsrch','find').' '.lj('popbt','popup_coremap,map_funcsrch','map');
 }
 if($dr!='save_all')return divd('codeview',$ret.$res);}
 }

@@ -1,32 +1,40 @@
-<?php
-//philum_microsql_default_template
-$r["_menus_"]=array('function');
-$r["article"]=array('[[_ID:anchor]
-[[_URL�_SUJ:url]�h2||:balise]
-[_OPEN [_OPT�txtsmall2:css] _SOCIAL _EDIT [_SEARCH�txtred:css]�[float:right:style]:div]
-[[_PARENT�txtcadr:css]
-[_BACK�txtx:css]_AVATAR[_AUTHOR�txtsmall:css] [_DATE�txtsmall:css] [_PID�txtsmall2:css] [_NBARTS�txtnoir:css] [_TAG�txtsmall:css] [_USERTAGS�txtsmall:css] [_LENGHT�txtsmall:css] [_SOURCE�txtx:css] [_TRACKS�txtsmall:css] [_PAGER�txtsmall:css] [_RSS�txtsmall2:css] [_WORDS�txtx:css] _PRIORITY _LANG �[margin:0 0 4px 0;:style]:div]
-[_ARTEDIT�[reponse_ID:id]:div][_ARTMOD�[float:right; width:150px; margin:10px 0 10px 10px;:style]:div]
-<!-- START -->
-[_THUMB_MSG[:clear]�[art_ID:id][_STY justy:class]:div]
-<!-- END -->
-_TRKBK�article|article:balise]
-');
-$r["track"]=array('[trk_ID:anchor][_EDIT�[float:right;:style]:div]
-[_AVATAR [_AUTHOR�txtsmall:css][:br]
-[_DATE�txtsmall2:css]�[imgl:class][width:60px; padding:0;:style]:div]
-[_MSG[:clear]�[_STY:class][margin-left:60px;:style]:div]');
-$r["product"]=array('[[[_ID�_SUJ:url]�txtcadr:css]
-_THUMB[_PRICE:div][_ADD2CART�[imgr txtsmall:class]:div]
-�[float:left; width:142px; margin:2px; padding:5px; border:1px solid black;:style]:div]');
-$r["rss"]=array('[[_URL�_SUJ:url]�h2:html]
-[[_OPT�txtsmall2:css]�[float:right:style]:div]
-[_DATE�txtsmall:css] 
-[_ARTEDIT�[reponse_ID:id]:div]
-	[[_THUMB_MSG�[panel justy:class]:div]
-	�[art_ID:id][_STY:class]:div]');
-$r["twitter"]=array('[[_AUTHOR�txtsmall:css][:br]
-_SUJ[:br][_DATE�txtsmall2:css]�[twitter:class][_ID:id]:div]');
-$r["gsm"]=array('[_ID:anchor] [_EDIT�[text-align:right;:style]:div] [_SEARCH�txtred:css][_EDITART�[reponse_ID:id]:div] [_BACK�txtx:css] [Par: _AUTHOR�txtsmall:css] [ [ [[_DAY�d:date][:br][_DAY�M:date]�[txtdate:class]:div] [:br][:br] [_TRACKS�txtx:css][:br][_TAG�txtsmall:css] [_USERTAGS�txtsmall:css] [_OPT�txtsmall2:css] �[gsm_element:class]:div] [_THUMB �[float:left; width:230px;:style]:div] [[_URL_SUJ�:url]�h2:html] [ _MSG [:br][:br] [[_URL�Lire la suite:url]�[txtsmall:class][text-align:right:style]:div] �[justy:class]:div] �[art_ID:id][_STY panel:class] [_ADDCLR:style]:div] [ �[clear:class]:div]');
-
-?>
+<?php //msql/default_template
+$r=["_menus_"=>['function'],
+"art"=>['[_BACK _AVATAR[_SEARCHÂ§txtbox:css] [_NBARTSÂ§txtnoir:css] [_DATEÂ§txtsmall2:css] [_AUTHOR _SOURCE _LENGTH _PRIORITY _BTIM _TRACKS _OPT _LANG _PIDÂ§txtsmall:css]Â§[meta_ID:id]:header][_EDITÂ§right:css]
+_THUMB[_PARENT:h4][[_URLÂ§_SUJ:url]:h1]
+_ARTEDIT_FLOAT[_ARTLANG _SOCIAL _WORDS _OPENÂ§grey right:css][_TAGÂ§txtsmall:divc] [:clear][_MSGÂ§[art_ID:id][justy:class]_JS:article]'],
+"cat"=>['[[_THUMB[_TAGÂ§txtsmall:divc]Â§row1 col1:divc]
+[[[_BACK _AVATAR[_SEARCHÂ§txtbox:css] [_NBARTSÂ§txtnoir:css] [_DATEÂ§txtsmall2:css] [_AUTHOR _SOURCE _LENGTH _PRIORITY _BTIM _TRACKS _OPT _LANG _PIDÂ§txtsmall:css]Â§[meta_ID:id]:div]
+[_PARENT:h4]
+[_EDITÂ§right:css][[_URLÂ§_SUJ:url]:h2]
+[_ARTLANG _SOCIAL _WORDS _OPENÂ§[grey:class][text-align:right:style]:div]:header]
+_FLOAT_ARTEDIT[_MSGÂ§[art_ID:id][panel:class]:article]Â§row1 col2:divc]
+Â§grid-art:divc][:clear]'],
+"cat2"=>['[[_THUMB[_TAGÂ§txtsmall:divc]Â§row1 col1:divc]
+[[[_BACK _AVATAR[_SEARCHÂ§txtbox:css] [_NBARTSÂ§txtnoir:css] [_DATEÂ§txtsmall2:css] [_AUTHOR _SOURCE _LENGTH _PRIORITY _BTIM _TRACKS _OPT _LANG _PIDÂ§txtsmall:css]Â§[meta_ID:id]:div]
+[_PARENT:h4]
+[_EDITÂ§right:css][[_JURLÂ§_SUJ:jurl]:h2]
+[_ARTLANG _SOCIAL _WORDS _OPENÂ§[grey:class][text-align:right:style]:div]:header]
+_FLOAT_ARTEDIT[_MSGÂ§[art_ID:id][panel:class]:article]Â§row1 col2:divc]
+Â§grid-art:divc][:clear]'],
+"read"=>['[_THUMB [_AVATAR[_SEARCHÂ§txtbox:css]_BACK [_DATEÂ§txtsmall2:css] [_NBARTSÂ§txtnoir:css] [_AUTHOR _SOURCE _LENGTH _PRIORITY _BTIM _TRACKS _OPT _LANG _PIDÂ§txtsmall:css]Â§[meta_ID:id]:div]
+[_PARENT:h4][_EDITÂ§right:css][[_URLÂ§_SUJ:url]:h1]
+[_ARTLANG _SOCIAL _WORDS _OPENÂ§grey right:css][:clear]
+_FLOAT[_TAGÂ§txtsmall:divc]:header]
+_ARTEDIT[_MSG[:clear]Â§[art_ID:id][justy:class]_JS:article]'],
+"track"=>['[trk_ID:anchor][_EDITÂ§[float:right;:style]:div]
+[_AVATAR [_AUTHORÂ§txtsmall:css][:br]
+[_DATEÂ§txtsmall2:css]Â§[imgl:class][width:60px; padding:0;:style]:div]
+[_MSG[:clear]Â§[_STY:class][margin-left:60px;:style]:div]'],
+"simple"=>['[[_EDITÂ§right:css]_BACK _AUTHOR [_DATEÂ§txtsmall2:css] [_NBARTSÂ§txtnoir:css] _LANG
+[[_URLÂ§_SUJ:url]:h2]Â§[meta_ID:id]:header]_ARTEDIT
+_FLOAT[_MSG[:clear]Â§[art_ID:id][justy:class]:article]'],
+"rss"=>['[[_URLÂ§_SUJ:url]Â§h2:html]
+[[_OPTÂ§txtsmall2:css]Â§[float:right:style]:div]
+[_DATEÂ§txtsmall:css] 
+[_ARTEDITÂ§[reponse_ID:id]:div]
+	[[_THUMB_MSGÂ§[panel justy:class]:div]
+	Â§[art_ID:id][_STY:class]:div]'],
+"twitter"=>['[[_AUTHORÂ§txtsmall:css][:br]
+_SUJ[:br][_DATEÂ§txtsmall2:css]Â§[twitter:class][_ID:id]:div]'],
+"gsm"=>['[_ID:anchor] [_EDITÂ§[text-align:right;:style]:div] [_SEARCHÂ§txtred:css][_EDITARTÂ§[reponse_ID:id]:div] [_BACKÂ§txtx:css] [Par: _AUTHORÂ§txtsmall:css] [ [ [[_DAYÂ§d:date][:br][_DAYÂ§M:date]Â§[txtdate:class]:div] [:br][:br] [_TRACKSÂ§txtx:css][:br][_TAGÂ§txtsmall:css] [_USERTAGSÂ§txtsmall:css] [_OPTÂ§txtsmall2:css] Â§[gsm_element:class]:div] [_THUMB Â§[float:left; width:230px;:style]:div] [[_URL_SUJÂ§:url]Â§h2:html] [ _MSG [:br][:br] [[_URLÂ§Lire la suite:url]Â§[txtsmall:class][text-align:right:style]:div] Â§[justy:class]:div] Â§[art_ID:id][_STY panel:class] [_ADDCLR:style]:div] [ Â§[clear:class]:div]']];

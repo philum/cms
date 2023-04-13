@@ -18,7 +18,7 @@ if(!is_file($f) && $rc)tar::files($f,$rc,0);//1=gz
 if(is_file($f))$ret=$f; elseif(!$rc)$ret='no'; else $ret='er';
 return $ret;}
 
-static function sm($p,$o,$res=''){$length=self::$length; $ret='-';
+static function sm($p,$o){$length=self::$length; $ret='-';
 $min=$p*$length; $max=$min+$length; //if($min=0)$min=8;
 $rc=scandir('img'); unset($rc[0]); unset($rc[1]);//$rc=explore('img','full');
 $rc=array_slice($rc,$min,$length); //p($rc);
@@ -35,10 +35,10 @@ return $ret;}
 static function copy($rc){//rmdir_r('imgd');
 foreach($rc as $v)rename('img/'.$v,'imgd/'.$v);}//copy($v,'imgd/'.substr($v,4));
 
-static function jb($p,$o,$res=''){$length=self::$length; //mkdir_r('imgd/');
+static function jb($p,$o){$length=self::$length; //mkdir_r('imgd/');
 $min=$p*$length; $max=$min+$length;
-$rq=sqr('msg','qdm','where id>'.$min.' and id<'.$max);
-while($r=mysqli_fetch_row($rq)){
+$rq=sql::com('msg','qdm',['>id'=>$min,'<id'=>$max]);
+while($r=sql::qrw($rq)){
 	$rb=self::findim($r[0],'.jpg');
 	if($rb)foreach($rb as $vb)if($vb)if(is_file($vb))$rc[]=$vb;
 	$rb=self::findim($r[0],'.gif');
@@ -54,7 +54,7 @@ $ok=self::tar($f,$rc);
 return $o?$f:lk($f,$f);}
 
 //from dir
-static function ja($p,$o,$res=''){$length=self::$length;
+static function ja($p,$o){$length=self::$length;
 $min=$p*$length; $max=$min+$length; //if($min=0)$min=8;
 $rc=scandir('img'); unset($rc[0]); unset($rc[1]);//$rc=explore('img','full');
 $rc=array_slice($rc,$min,$length); //p($rc);
@@ -67,11 +67,12 @@ $ok=self::tar($f,$rd);
 return $o?$f:lk($f,$f);}
 
 //from catalog
-static function call($p,$o,$res=''){$length=self::$length; chrono();
+static function call($p,$o,$prm=[]){
+$length=self::$length; chrono();
 $min=$p*$length; $max=$min+$length;
 ses('qda','pub_art'); $rc=[];
-$rq=sqr('id,img','qda','where id>"'.$min.'" and id<"'.$max.'"'); //p($r);
-while($r=mysqli_fetch_row($rq)){$d=$r[1];
+$rq=sql::com('id,img','qda',['>id'=>$min,'<id'=>$max]);
+while($r=sql::qrw($rq)){$d=$r[1];
 	//$d=sav::recenseim($r[0]); //echo $d;
 	$rb=explode('/',$d);
 	if($rb)foreach($rb as $kb=>$vb)if($vb)if(is_file('img/'.$vb))$rc['img/'.$vb]=1;}
@@ -85,17 +86,17 @@ return $o?$f:lk($f,$f);}
 //recense
 static function rec($p,$o){$length=self::$length;
 $min=$p*$length; $max=$min+$length; $rc=[];
-$rq=sqr('id,img','qda','where id>'.$min.' and id<'.$max); //p($r);
-while($r=mysqli_fetch_row($rq)){$d=$r[1];//
+$rq=sql::com('id,img','qda',['>id'=>$min,'<id'=>$max]);
+while($r=sql::qrw($rq)){$d=$r[1];//
 	$d=sav::recenseim($r[0],$r[1]);
-	if($d!=$r[1]){update('qda','img',$d,'id',$r[0]); $rc[]=1;}}
+	if($d!=$r[1]){sql::upd('qda',['img'=>$d],$r[0]); $rc[]=1;}}
 return $min.'-updated: '.count($rc);}
 
 //rename,store,use ref in storage,dl from srvim,replace in qda and msg
 static function rn($p,$o){$length=5000;//self::$length
 $min=$p*$length; $max=$min+$length; $rc=[]; $rd=[]; $i=0;
-$rq=sqr('id,img,nod','qda','where id>'.$min.' and id<'.$max); //p($r);
-while($r=mysqli_fetch_row($rq)){$d=$r[1]; $ka=$r[0]; $qb=$r[2];
+$rq=sql::com('id,img,nod','qda',['>id'=>$min,'<id'=>$max]); //p($r);
+while($r=sql::qrw($rq)){$d=$r[1]; $ka=$r[0]; $qb=$r[2];
 	$msg=sql('msg','qdm','v',$ka); $i++; $treated=0;
 	$rb=explode('/',$r[1]); $ref=$rb[0]; if(!$ref or !is_numeric($ref))$ref=1;
 	foreach($rb as $k=>$v)if($v && !is_numeric($v)){// && $i<1000
@@ -115,19 +116,19 @@ while($r=mysqli_fetch_row($rq)){$d=$r[1]; $ka=$r[0]; $qb=$r[2];
 		if($v && is_file('img/'.$v) && filesize('img/'.$v)<10){unlink('img/'.$v);
 			if(is_file('imgc/'.$v))unlink('imgc/'.$v); 
 			$d=str_replace($v,'',$d); img::del($id,$v); $rd[]=[$ka,$v];
-			update('qda','img',$d,'id',$r[0]);}
+			sql::upd('qda',['img'=>$d],$r[0]);}
 		elseif($v && $nv!=$v){$treated=1;
 			/**/$y=rename('img/'.$v,'img/'.$nv);
 			img::save($ka,$nv,$v);
 			$d=str_replace($v,$nv,$d);
-			update('qda','img',$d,'id',$r[0]);
+			sql::upd('qda',['img'=>$d],$r[0]);
 			$msg=str_replace($v,$nv,$msg);
 			$rc[]=[$ka,$nv,$v,$no,$treated];
 		}
 	}
 	if($treated){
-		//update('qda','img',$thumb,'id',$r[0]); //$rc[]=1;
-		//update('qdm','msg',$msg,'id',$r[0]);
+		//sql::upd('qda',['img'=>$thumb],$r[0]); //$rc[]=1;
+		//sql::upd('qdm',['msg'=>$msg],$r[0]);
 	}
 }
 pr($rd);
@@ -137,8 +138,8 @@ return $min.'-updated: '.count($rc);}
 static function rc($p){$length=5000;//self::$length
 $min=$p*$length; $max=$min+$length; $rc=[]; $rd=[]; $i=0;
 $ra=sql('im,id','qdg','kv','');
-$rq=sqr('id,img,nod','qda','where id>'.$min.' and id<'.$max); //p($r);
-while($r=mysqli_fetch_row($rq)){$ka=$r[0]; $d=$r[1]; $qb=$r[2];
+$rq=sql::com('id,img,nod','qda',['>id'=>$min,'<id'=>$max]); //p($r);
+while($r=sql::qrw($rq)){$ka=$r[0]; $d=$r[1]; $qb=$r[2];
 	$rb=explode('/',$r[1]); $ref=$rb[0]; if(!$ref or !is_numeric($ref))$ref=1;
 	foreach($rb as $k=>$v)if($v && !is_numeric($v)){if(val($ra,$v)==$ka)$rc[]=[$ka,$v,'',0];}}
 if($rc)sqlsav2('qdg',$rc); pr($rc);
@@ -147,26 +148,26 @@ return 'ok';}
 //repair error
 /*static function backupim_rp($p){$length=5000;//self::$length
 $min=$p*$length; $max=$min+$length; $rc=[]; $rd=[]; $i=0;
-$rq=sqr('id,ib,im,dc','qdg','where ib>'.$min.' and ib<'.$max); //p($r);
-while($r=mysqli_fetch_row($rq))if($i<10){$id=$r[0]; $ib=$r[1]; $im=$r[2]; $dc=$r[3]; $i++;
+$rq=sql::com('id,ib,im,dc','qdg',['>ib'=>$min,'<ib'=>$max]); //p($r);
+while($r=sql::qrw($rq))if($i<10){$id=$r[0]; $ib=$r[1]; $im=$r[2]; $dc=$r[3]; $i++;
 	[$hub,$id,$nm]=expl('_',$dc,3); $xt=xt($dc,1); $nm=strto($nm,'.');//no xt
 	if(strlen($nm)==11){echo $dc;
 		$y=rename('img/'.$im,'img/'.$dc);
-		sqldel('qdg',$id);
+		sql::del('qdg',$id);
 		$ims=sql('img','qda','v',$ib); $ims=str_replace($im,$dc,$ims); eco($ims);
-		update('qda','img',$ims,'id',$ib);
+		sql::upd('qda',['img'=>$ims],$ib);
 		$msg=sql('msg','qdm','v',$ib); $msg=str_replace($im,$dc,$msg); eco($msg);
-		update('qdm','msg',$msg,'id',$ib);
+		sql::upd('qdm',['msg'=>$msg],$ib);
 		}
 	}
 return 'ok';}*/
 
 //unusited
-static function others($p,$o,$res=''){$length=self::$length;
+static function others($p,$o){$length=self::$length;
 $min=$p*$length; $max=$min+$length; $ra=scandir_b('img');
 $f='_backup/imgqda_others_'.$p.'.tar'; if(is_file($f))unlink($f);
-$rq=sqr('img','qda','');//'where id>'.$min.' and id<'.$max
-while($r=mysqli_fetch_row($rq)){$rb=explode('/',$r[0]);
+$rq=sql::com('img','qda','');//['>id'=>$min,'<id'=>$max]
+while($r=sql::qrw($rq)){$rb=explode('/',$r[0]);
 	if($rb)foreach($rb as $kb=>$vb)if($vb)$rc[]=$vb;}
 $rd=array_diff($ra,$rc);
 //$rd=array_slice($rd,$min,$length);

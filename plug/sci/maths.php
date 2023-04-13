@@ -1,5 +1,4 @@
-<?php //maths
-
+<?php 
 class maths{
 static $bcs=20;
 
@@ -204,9 +203,9 @@ $a=deg2rad($a); $op=sin($a)*$h; $ad=cos($a)*$h;
 return [$op,$ad,$h];}
 
 static function star_xyz($r){
-//if(is_numeric($r))return sql2('x,y,z','umm.hipparcos','w',['hip'=>$r]);
-//if(is_numeric($r))$r=sql2('rarad,decrad,dist','umm.hipparcos','rv',['hip'=>$r]);
-//if(is_numeric($r))$r=sql2('ra,dc,dist','umm.hipparcos','rv',['hip'=>$r]);
+//if(is_numeric($r))return sql('x,y,z','umm.hipparcos','w',['hip'=>$r]);
+//if(is_numeric($r))$r=sql('rarad,decrad,dist','umm.hipparcos','rv',['hip'=>$r]);
+//if(is_numeric($r))$r=sql('ra,dc,dist','umm.hipparcos','rv',['hip'=>$r]);
 if(!is_array($r)){
 	if(strpos($r,' '))$r=explode(' ',$r);
 	else $r=simbad::callr($r);}

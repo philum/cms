@@ -1,28 +1,25 @@
-<?php
-//philum_microsql_connectors_codeline
-$r["_menus_"]=array('value');
-$r["balise"]=array('balise html spÈcifiant un ID et une classe : valueßbalise|id|class ; accepte les contenus vides');
-$r["html"]=array('balise');
-$r["div"]=array('balise div, params = attributs');
-$r["css"]=array('balise span spÈcifiant une classe css');
-$r["br"]=array('saut de ligne');
-$r["id"]=array('attribut de balises \'id\'');
-$r["class"]=array('attribut de balises \'class\'');
-$r["style"]=array('attribut de balises \'style\'');
-$r["name"]=array('attribut de balises \'name\'');
-$r["text"]=array('affiche du texte');
-$r["url"]=array('lien html');
-$r["link"]=array('lien html incluant le langage de modules');
-$r["anchor"]=array('renvoie une ancre (appelÈe par un lien avec un attribut \'name\')');
-$r["date"]=array('[_DAYßd/m/y:date] (Day Month Yeah I=minute Second - renvoie le timestamp actuel si _DAY est vide');
-$r["title"]=array('titre d\'un article, ‡ partir d\'un id ou de l\'ÈlÈment \'_ID\'');
-$r["read"]=array('contenu d\'un article (valeur numÈrique ou \'_ID\')');
-$r["image"]=array('affiche une image ');
-$r["thumb"]=array('fabrique une miniature ‡ partir d\'une image ou de \'_IMG1\' ; spÈcifier largeur/hauteur en paramËtre');
-$r["split"]=array('renvoie deux variables de la fonction \'split\' (prÈciser chaÓne et sÈparateur)');
-$r["cut"]=array('renvoie la partie situÈe entre deux repËres [abcdefßb/e:cut] (renvoie cd)');
-$r["conn"]=array('renvoie un connecteur [helloßb:conn]');
-$r["plug"]=array('renvoie un plug-in \'name\' (et sa fonction \'plug_name\') avec ses paramËtres [loginßregister:plug]');
-$r["core"]=array('rÈsultat d\'un algorithme du noyau');
-
-?>
+<?php //msql/connectors_codeline
+$r=["_menus_"=>['value'],
+"balise"=>['balise html sp√©cifiant un ID et une classe : value¬ßbalise|id|class ; accepte les contenus vides'],
+"html"=>['balise'],
+"div"=>['balise div, params = attributs'],
+"css"=>['balise span sp√©cifiant une classe css'],
+"br"=>['saut de ligne'],
+"id"=>['attribut de balises \'id\''],
+"class"=>['attribut de balises \'class\''],
+"style"=>['attribut de balises \'style\''],
+"name"=>['attribut de balises \'name\''],
+"text"=>['affiche du texte'],
+"url"=>['lien html'],
+"link"=>['lien html incluant le langage de modules'],
+"anchor"=>['renvoie une ancre (appel√©e par un lien avec un attribut \'name\')'],
+"date"=>['[_DAY¬ßd/m/y:date] (Day Month Yeah I=minute Second - renvoie le timestamp actuel si _DAY est vide'],
+"title"=>['titre d\'un article, √† partir d\'un id ou de l\'√©l√©ment \'_ID\''],
+"read"=>['contenu d\'un article (valeur num√©rique ou \'_ID\')'],
+"image"=>['affiche une image '],
+"thumb"=>['fabrique une miniature √† partir d\'une image ou de \'_IMG1\' ; sp√©cifier largeur/hauteur en param√®tre'],
+"split"=>['renvoie deux variables de la fonction \'split\' (pr√©ciser cha√Æne et s√©parateur)'],
+"cut"=>['renvoie la partie situ√©e entre deux rep√®res [abcdef¬ßb/e:cut] (renvoie cd)'],
+"conn"=>['renvoie un connecteur [hello¬ßb:conn]'],
+"plug"=>['renvoie un plug-in \'name\' (et sa fonction \'plug_name\') avec ses param√®tres [login¬ßregister:plug]'],
+"core"=>['r√©sultat d\'un algorithme du noyau']];

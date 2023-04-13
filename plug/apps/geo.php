@@ -1,5 +1,4 @@
-<?php //geo
-
+<?php 
 class geo{
 
 static function profil_js($gps){
@@ -31,11 +30,11 @@ google.maps.event.addDomListener(window,'load',initialize);
 /*static function algo_gps_distance($lat,$lon,$peri){//lieux dans un périmètre donné
 $formule="(6366*acos(cos(radians($lat))*cos(radians(`lat`))*cos(radians(`lon`) -radians($lon))+sin(radians($lat))*sin(radians(`lat`))))";
 $sql="SELECT ville,$formule AS dist FROM villes WHERE $formule<='$peri' ORDER by dist ASC";
-$r=sql_b($sql,'',1); p($r);
+$r=sql::call($sql,'',1); p($r);
 return $r;}*/
 
 static function profil_townfromgps($gps){[$lat,$lon]=explode('/',$gps); $mg=6;
-return sql_b('select ville from villes where lat_deg<"'.($lat+$mg).'" and lat_deg<"'.($lat-$mg).'" and lon_deg<"'.($lon+$mg).'" and lon_deg>"'.($lon-$mg).'"','v'); //p($r);
+return sql::call('select ville from villes where lat_deg<"'.($lat+$mg).'" and lat_deg<"'.($lat-$mg).'" and lon_deg<"'.($lon+$mg).'" and lon_deg>"'.($lon-$mg).'"','v'); //p($r);
 }
 
 static function get_distance_m($lat1,$lng1,$lat2,$lng2){
@@ -72,7 +71,5 @@ Head::add('js','http://maps.googleapis.com/maps/api/js');
 Head::add('jscode',self::profil_js($r['gps']));
 //$bt.=msqbt('',nod('geo_1'));
 return $bt.divd($rid,$ret);}
-
 }
-
 ?>

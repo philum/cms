@@ -69,21 +69,21 @@ static function save($d){$f='img/draw_temp.png'; //$d.='=';
 write_file($f,base64_decode(substr($d,22)));
 return image($f);}
 
-static function home($w,$h){if(!$w)$w=400;//cw();
+static function home($w=580,$h=420){//cw();
 Head::add('jslink','/js/jquery.js');
 Head::add('jscode',self::js());
 Head::add('csscode',self::css());
-$ret=balc('canvas','" id="canvas" width="'.$w.'px" height="'.$h.'px','');
+$ret=tag('canvas',['id'=>'canvas','width'=>$w.'px','height'=>$h.'px'],'');
 $r=['black','white','blue','green','yellow','orange','brown','red','indigo','violet','pink','cyan']; $n=count($r);
 for($i=0;$i<$n;$i++){
 	$c='" style="background: none repeat scroll 0% 0% '.$r[$i].';" data-couleur="'.$r[$i];
-	$cl.=balc('li','',lka($c,$r[$i]));}
-$ret.=balc('ul','" id="couleurs',$cl);
+	$cl.=tagb('li',lka($c,$r[$i]));}
+$ret.=tag('ul',['id'=>'couleurs'],$cl);
 $inp=label('largeur_pinceau','width');
-$inp.=input0('range','largeur_pinceau',atz(1).atb('min',2).atb('max',20));
-//$inp.=balc('output','" id="output','pixels');
-$inp.=input0('reset','reset','reset');
-$inp.=input0('button','save','save');
+$inp.=inp('largeur_pinceau','',1,['type'=>'range','min'=>2,'max'=>20]);
+//$inp.=tag('output',['id'=>'output'],'pixels');
+$inp.=inp('reset','reset','',['type'=>'reset']);
+$inp.=inp('save','save','',['type'=>'button']);
 $ret.='<form id="largeurs_pinceau">'.$inp.'</form>';
 return $ret;}
 }

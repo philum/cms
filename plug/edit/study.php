@@ -3,7 +3,7 @@ class study{
 static function sav($p,$o,$prm=[]){
 [$nod,$row,$col]=explode('-',$p);
 $ret=$prm[0]??''; $d=deln($ret);  $d=delbr($d,"\n"); //$d=delr($d);
-//eco($d,1);//$ret=utf82ascii($ret);
+//eco($d,1);//$ret=utf2ascii($ret);
 msql::modif('',nod('study_'.$nod),$d,'shot',trim($col),trim($row));
 return $ret;}
 
@@ -24,7 +24,7 @@ return tabler($rb,'txtbox');}
 static function call($p,$rid){
 //$bt=self::menu($p,$rid);
 $bt=pop::pubart($p);
-$r=msql_read('',nod('study_'.$p));
+$r=msql::read('',nod('study_'.$p));
 return $bt.self::read($r,$p);}
 
 static function hash($d,$p){
@@ -37,8 +37,7 @@ foreach($r as $v)if($v)$rb[]=[trim(addslashes($v)).'.','','',''];
 $rb=msql::save('',nod('study_'.$p),$rb,['text','description','commentaires','references']);
 return self::read($rb,$p);}
 
-static function build($p,$o,$res=''){
-$id=ajxg($res);
+static function build($p,$o,$prm=[]){$id=prm[0]??'';
 $d=sql('msg','qdm','v','id='.$id);
 if(is_array($d))return 'no';
 $d=codeline::parse($d,'','delconn');
@@ -47,7 +46,7 @@ return $ret;}
 
 static function input($p,$o){
 $next=msql::findlast('',ses('qb'),'study');
-$j=$p.'_study,build___'.$next.'__stdy';
+$j=$p.'_study,build_stdy__'.$next;
 $ret=inputj('stdy','',$j,'id of art');
 $ret.=lj('poph',$j,picto('ok'));
 //$ret.=divarea('stdy','','tab justy','border:1px dotted silver; min-height:22px;',$j);

@@ -1,16 +1,16 @@
-<?php //sticky
+<?php 
+class sticky{
 
-function popup_stick($d){
-return div(atd('popu').ats('width:320px; background-color:#ffd500; color:#000; padding:4px;'),$d);}
+static function js($id,$n=2){
+return 'document.getElementById(\''.$id.'\').innerHTML=localStorage[\'m'.$n.'\']';}
 
-function plug_sticky($d){$d=$d!=''?$d:1; $id='np'.randid(); $ret=hidden('cka','m'.$d);
-//$ret.=ljb('popbt" id="ckc','mem_storage',$id.'_m'.$d.'__1_ckc','save');
-//$ret.=ljb('popbt" id="ckb'.$d,'mem_storage',$id.'_m'.$d.'_1_1_ckb'.$d.'_memnu','restore');
-$ret.=ljb('" id="ckc','mem_storage',$id.'_cka__1_ckc',picto('save')).' ';
-$ret.=ljb('" id="ckb','mem_storage',$id.'_m'.$d.'_1_1_ckb'.$d,picto('reload')).' ';
-//$ret=divs('float:right;',$ret);
-$ret.=divedit($id,'','height:240px; overflow-x:hidden; overflow-y:auto; padding:10px;',$j,$txt);
-$ret.=jscode('document.getElementById(\''.$id.'\').innerHTML=localStorage[\'m'.$d.'\']');
-return popup_stick($ret);}
-
+static function home($n){$n=$n?$n:1; $id='np'.randid(); $ret=hidden('cka','m'.$n);
+$ret.=ljb('popbt','mem_storage',$id.'_m'.$n.'__1_ckc','save',atd('ckc'));
+$ret.=ljb('popbt','mem_storage',$id.'_m'.$n.'_1_1_ckb'.$n.'_memnu','restore',atd('ckb'.$n));
+//$ret.=ljb('','mem_storage',$id.'_cka__1_ckc',picto('save'),atd('ckc')).' ';
+//$ret.=ljb('','mem_storage',$id.'_m'.$n.'_1_1_ckb'.$n,picto('reload'),atd('ckb')).' ';
+$ret.=divedit($id,'','height:240px; overflow-x:hidden; overflow-y:auto; padding:10px;','','');
+$ret.=jscode(self::js($id,$n));
+return div(atd('popu').ats('width:320px; background-color:#ffd500; color:#000; padding:4px;'),$ret);}
+}
 ?>

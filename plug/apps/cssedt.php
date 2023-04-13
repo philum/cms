@@ -17,7 +17,7 @@ $r=self::vars(); $ret=get('nb'); $rb=[];
 //$ret=self::patch();
 foreach($r as $k=>$v){$rb[$k]=[$v];
 	if(($p && strpos($k,$p)!==false) or !$p or $p==$k)
-		$ret.=bal('span','class=icon',fa($k,32).br().$k).' ';}
+		$ret.=tag('span',atc('icon'),fa($k,32).br().$k).' ';}
 //msql::save('system','edition_glyphes_2',$rb); p($rb);
 return $ret;}
 
@@ -39,7 +39,7 @@ static function install($b){
 //ses($b,qd($b));//name of table
 //1=drop table on change $r !
 $r=['tit'=>'var','txt'=>'text','day'=>'int'];
-mysql::install($b,$r,0);}
+sqlop::install($b,$r,0);}
 
 static function home($p,$o){
 $rid=randid(self::$a);

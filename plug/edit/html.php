@@ -10,7 +10,7 @@ return $ret;}
 
 static function menu($p,$o,$rid){
 $j=$rid.'_html,call_inp'; $sj='SaveJ(\''.$j.'\')';
-$ret=divc('" onkeyup="'.$sj.'" onclick="'.$sj,textarea('inp',$p,60,10,atc('console'))).' ';
+$ret=divc('" onkeyup="'.$sj.'" onclick="'.$sj,textarea('inp',$p,60,10,['class'=>'console'])).' ';
 //$ret.=lj('',$j,picto('ok'));
 return $ret;}
 

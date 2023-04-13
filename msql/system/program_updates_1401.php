@@ -1,6 +1,3 @@
-<?php
-//philum_microsql_program_updates_1401
-$r["_menus_"]=array('date','text');
-$r[1]=array('0115','dans l\'importateur html, les dictionnaires sont reconnus et prennent forme d\'un connecteur :pop, pour afficher une bulle � c�t� d\'un lien');
-
-?>
+<?php //msql/program_updates_1401
+$r=["_menus_"=>['date','text'],
+"1"=>['0115','dans l\'importateur html, les dictionnaires sont reconnus et prennent forme d\'un connecteur :pop, pour afficher une bulle Ã  cÃ´tÃ© d\'un lien']];

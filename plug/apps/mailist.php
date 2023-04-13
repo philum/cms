@@ -20,10 +20,10 @@ return msql::read_b('',nod('mails'),'','',$defsb);}
 static function rb(){return msql::read('',nod('mails'),'');}
 static function rm($r,$d){msql::modif('',nod('mails'),$r,$d);}
 static function rs($r){msql::save('',nod('mails'),$r);}
-static function mailvoc(){return msql_read('lang','helps_newsletter','');}
+static function mailvoc(){return msql::read('lang','helps_newsletter','');}
 
 /*static function upgrade($p){//patch
-$r=msql_read('',$_SESSION['qb'].'_mails','');
+$r=msql::read('',$_SESSION['qb'].'_mails','');
 if($r)foreach($r as $k=>$v){if(substr($v[0],0,1)=='_' && !$v[4])$upg=1;}
 if($p==1 && $upg)return lj('txtx','popup_maillist,upgrade','upgrade');
 elseif($upg){foreach($r as $k=>$v){
@@ -50,8 +50,8 @@ else return divc('txtyl',$voc['answer_error']);}
 
 static function form(){$voc=sesmk2('mailist','mailvoc');
 $ret=btn('txtcadr',$voc['register']).' ';
-$ret.=input1('umail',$voc['form_mail'],22,'',1).' ';
-//$ret.=input1('uname',$voc['form_name'],'10','',1).' ';
+$ret.=inputb('umail',$voc['form_mail'],22,'',1).' ';
+//$ret.=inputb('uname',$voc['form_name'],'10','',1).' ';
 //$ret.=checkbox_j(1,'uopt','1','').' ';//|uopt
 $ret.=lj('txtbox','cbk_mailist,save_umail__1_2','ok').' ';
 return $ret;}
@@ -76,12 +76,12 @@ return divc('txtalert',$ret).' ';}
 static function uns($o){$voc=sesmk2('mailist','mailvoc');
 if($o)return self::unsb($a,$b,$o);
 $ret=btn('txtcadr',$voc['unregister']).' ';
-$ret.=input1('unmail',$voc['form_mail'],'14','',1).' ';
+$ret.=inputb('unmail',$voc['form_mail'],'14','',1).' ';
 $ret.=lj('txtbox','cbk_mailist,unsb_unmail__1_2','ok').' ';
 return $ret;}
 
 static function read(){
-return mod::build_modules('newsletter','');}
+return mod::block('newsletter','');}
 
 static function home($p,$o){//$id=randid('cbk');
 if($p=='')$ret=self::form($o);

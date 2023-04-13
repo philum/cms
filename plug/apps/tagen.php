@@ -1,5 +1,4 @@
-<?php //tagen
-
+<?php 
 class tagen{
 static $a=__CLASS__;
 static $db='pub_metaen';
@@ -19,7 +18,7 @@ static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
 $j=$rid.'_tagen,call_'.$inpid.'_3';
 //$ret=inputj($inpid,$p,$j);
-$ret=textarea('inp',$p,40,4,atc('console'));
+$ret=textarea('inp',$p,40,4,['class'=>'console']);
 $ret.=lj('',$j,picto('ok')).' ';
 //$ret.=msqbt('',nod(self::$a.'_1'));
 return $ret;}
@@ -28,7 +27,7 @@ static function install($b){
 //ses($b,qd($b));//name of table
 //1=drop table on change $r !
 $r=['tag'=>'var','cat'=>'var'];
-mysql::install($b,$r,0);}
+sqlop::install($b,$r,0);}
 
 static function home($p,$o){
 $rid=randid(self::$a); $ret='';
@@ -38,8 +37,4 @@ if($p)$ret=self::build($p,$o);
 return $bt.divd($rid,$ret);}
 
 }
-
-function plug_tagen($p,$o){
-return tagen::home($p,$o);}
-
 ?>

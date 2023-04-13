@@ -16,7 +16,7 @@ public $_prm;
 public $_url;
 
 public function __construct($n=''){if(!$n)$n=1;
-$r=msql_read('',nod('twit_'.$n),'',1);//msql (hub)_twit
+$r=msql::kv('',nod('twit_'.$n),'',1);//msql (hub)_twit
 if(isset($r[1]))$this->oauth_token=$r[1];
 if(isset($r[2]))$this->oauth_token_secret=$r[2];
 if(isset($r[3]))$this->oauth_consumer_key=$r[3];

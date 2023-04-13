@@ -1,12 +1,11 @@
-<?php //test
-
+<?php 
 class test{
 
-static function playmod($p,$o,$res=''){
+static function playmod($p,$o,$prm=[]){
 //list($m,$p,$t,$c,$d,$o,$ch,$hd,$tp,$nbr,$dv,$pv)
-$res=ajxg($res); $r=explode('/',$res); $t=divc('txtcadr',$p);
+$res=$prm[0]??''; $r=explode('/',$res); $t=divc('txtcadr',$p);
 msql::modif('',nod('test_1'),$r,'one','',$p);
-return $t.mod::mkmodr($res.':'.$p);}
+return $t.mod::call($res.':'.$p);}
 
 static function mod($p,$o){
 $r=msql::read_b('system','admin_modules','',1);//p($r);
@@ -14,12 +13,12 @@ $rh=msql::read_b('lang','admin_modules','',1);
 $rb=msql::read_b('',nod('test_1')); $ret=[];
 $t=divc('txtcadr',count($r).' modules');
 foreach($r as $k=>$v){
-	$rid=normalize('prm'.$k); $j='popup_app__3_test_playmod_'.ajx($k).'__'.$rid;
+	$rid=normalize('prm'.$k); $j='popup_test,playmod_'.$rid.'_3_'.ajx($k);
 	$ret[]=[$k,$rh[$k][0],inputj($rid,valr($rb,$k,0),$j),lj('',$j,picto('ok'))];}
 return $t.tabler($ret);}
 
-static function playconn($p,$o,$res=''){
-$res=ajxg($res); $t=divc('txtcadr',$res.':'.$p);
+static function playconn($p,$o,$prm=[]){
+$res=prm[0]??''; $t=divc('txtcadr',$res.':'.$p);
 msql::modif('',nod('test_2'),[$res],'one','',$p);
 return $t.conn::read('['.$res.':'.$p.']');}
 
@@ -29,30 +28,31 @@ $rh=msql::read_b('lang','connectors_all','',1);
 $rb=msql::read_b('',nod('test_2')); $i=0;
 foreach($r as $k=>$v)if(substr($k,0,1)!=':' && !$v[1]){$tst=valr($rb,$k,0); $i++;
 	if(!$tst)$tst=between($rh[$k][0],'[',':'); 
-	$rid=normalize('prm'.$k); $j='popup_app___test_playconn_'.ajx($k).'__'.$rid;
+	$rid=normalize('prm'.$k); $j='popup_test,playconn_'.$rid.'__'.ajx($k);
 	$ret[]=[$k,$rh[$k][0],inputj($rid,$tst,$j),lj('',$j,picto('ok'))];}
 $t=divc('txtcadr',$i.' connectors');
 return $t.tabler($ret);}
 
-static function matchres($p,$o,$res=''){
-$d=ajxg($res); $o=strpos($d,' ')?' IN BOOLEAN MODE':'';
-$sql='select pub_art.id,MATCH (msg) AGAINST ("'.$d.'"'.$o.') as score from pub_art inner join pub_txt on pub_txt.id=pub_art.id where day>'.calc_date(90).' and day<'.ses('dayx').' and nod="newsnet" and substring(frm,1,1)!="_" and re>0 and MATCH (msg) AGAINST ("'.$d.'"'.$o.') order by score DESC';
-$r=sql_b($sql,''); //pr($r);
+static function matchres($p,$o,$prm=[]){
+$d=prm[0]??''; $o=strpos($d,' ')?' IN BOOLEAN MODE':'';
+$sql='select pub_art.id,MATCH (msg) AGAINST ("'.$d.'"'.$o.') as score from pub_art inner join pub_txt on pub_txt.id=pub_art.id where day>'.timeago(90).' and day<'.ses('dayx').' and nod="newsnet" and substring(frm,1,1)!="_" and re>0 and MATCH (msg) AGAINST ("'.$d.'"'.$o.') order by score DESC';
+$r=sql::call($sql,''); //pr($r);
 return tabler($r);}
 
 static function match($p,$rid){
-$j=$rid.'_app__3_test_matchres__'.$rid.'_search';
+$j=$rid.'_test,matchres_search_3_test_'.$rid;
 $ret=inputj('search','',$j,'word').' ';
 $ret.=lj('',$j,picto('ok'));
 return $ret;}
 
-static function searchapp($p,$rid,$res=''){
-$d=ajxg($res); $r=scandir_r('plug'); $ret='';
+static function searchapp($p,$rid,$prm=[]){
+$d=$prm[0]??''; $ret='';
+$ra=scandir_r('plug'); $rb=scandir_r('progb'); $r=array_merge($ra,$rb);
 foreach($r as $k=>$v)if(strpos($v,$d))$ret.=divb($v);
 return $ret?$ret:'no';}
 
 static function search($p,$rid){
-$j='srap_app__3_test_searchapp__'.$rid.'_search';
+$j='srap_test,searchapp_search_3__'.$rid;
 $ret=inputj('search','',$j,'app').' ';
 $ret.=lj('',$j,picto('ok'));
 return $ret.divb('','','srap');}
@@ -63,9 +63,9 @@ if($p=='mod')return self::mod($p,$o);
 if($p=='conn')return self::conn($p,$o);
 if($p=='match')return self::match($p,$o);
 if($p=='search')return self::search($p,$o);
-if($p=='backup')return plugin('backup','');
-if($p=='backupim')return appin('backupim');
-if($p=='backupmsql')return plugin('backup_msql');
+if($p=='backup')return backup::home('','');
+if($p=='backupim')return backupim::home('','');
+if($p=='backupmsql')return msqa::backup_msql('');
 if($p=='reduceim')return reduceim::home($p,$o);}
 
 static function menu($p,$o,$rid){
@@ -87,8 +87,4 @@ $ret=self::call($p,$o);
 $bt.=msqbt('',nod('test_1'));
 return $bt.divd($rid,$ret);}
 }
-
-function plug_test($p,$o){
-return test::home($p,$o);}
-
 ?>

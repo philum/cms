@@ -1,10 +1,7 @@
-<?php
-//philum_microsql_admin_menus
-$r["_menus_"]=array('category');
-$r["Global"]=array('Admin');
-$r["Builders"]=array('Builders');
-$r["Microsql"]=array('Msql');
-$r["Articles"]=array('Articles');
-$r["User"]=array('Users');
-
-?>
+<?php //msql/admin_menus
+$r=["_menus_"=>['category'],
+"Global"=>['Admin'],
+"Builders"=>['Builders'],
+"Microsql"=>['Msql'],
+"Articles"=>['Articles'],
+"User"=>['Users']];

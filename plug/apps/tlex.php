@@ -11,15 +11,15 @@ return divc('txtalert',lk($ret).' '.nms(34).' '.nms(79));}
 //philum::articles
 static function share($p,$o,$prm=[]){$rid='plg'.randid();
 $p=$prm[0]??$p; $suj=ma::suj_of_id($p);
-$author=sql_inner('tag','qdt','qdta','idtag','v','where cat="auteurs" and idart="'.$p.'"');
+$author=sql::inner('tag','qdt','qdta','idtag','v',['cat'=>'auteurs','idart'=>$p]);
 if($author)$suj.=', '.ucfirst(nms(88)).' '.$author;
 $url=host().urlread($p);
 $j=atj('strcount','twpost');
-$s=atb('onclick',$j).atb('onkeypress',$j).atc('console');
+$pr=['onclick'=>$j,'onkeypress'=>$j,'class'=>'console'];
 $txt=host().'/'.$p;//$suj."\n\n".//philum
-$ret=bal('textarea',atd('twpost').atb('cols',50).atb('rows',5).$s,$txt).br();
+$ret=tag('textarea',['id'=>'twpost','cols'=>50,'rows'=>5,...$pr],$txt).br();
 $ret.=btn('popbt',nms(29).' '.nms(152).' :');
-$r=msql_read('',ses('qb').'_tlex','',1);
+$r=msql::read('',ses('qb').'_tlex','',1);
 if($r)foreach($r as $k=>$v)
 	$ret.=lj('popbt',$rid.'_tlex,post_twpost___'.$k,$v[0]).' ';
 else $ret.=helps('tlex');

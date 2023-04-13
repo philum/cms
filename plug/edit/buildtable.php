@@ -1,5 +1,4 @@
-<?php //buildtable
-
+<?php 
 class buildtable{
 
 static function add_quotes($r){
@@ -29,7 +28,7 @@ $p=str_replace(['[',']'],'',$p); $r=explode("\n",$p);
 foreach($r as $k=>$v){$rb=explode('=>',$v); $rt[trim($rb[0])]=trim($rb[1]);}
 return eco(msql::dump($rt),1);}
 
-static function menu($p,$o,$rid){//$ret.=input1('inp',$p,'').' ';
+static function menu($p,$o,$rid){//$ret.=input('inp',$p,'').' ';
 $ret.=lj('',$rid.'_buildtable,call_inp_2',picto('ok')).br();
 $ret.=textarea('inp',$p,54,18);
 return $ret;}
@@ -39,8 +38,4 @@ $bt=self::menu($p,$o,$rid);
 $ret=self::call($p,$o);
 return $bt.divd($rid,$ret);}
 }
-
-function plug_buildtable($p,$o){
-$bt=buildtable::home($p,$o);}
-
 ?>

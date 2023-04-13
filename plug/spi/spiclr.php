@@ -4,7 +4,7 @@ class spiclr{
 static function infos($d){
 $r=msql::row('','public_atomic',$d,1);
 if(!$r)return btn('txtx','Element '.$d);
-//$r['origin']=self::origin($d);
+$r['origin']=self::origin($d);
 return on2cols($r,470,3);}
 
 static function mkclr($val){
@@ -12,7 +12,7 @@ $d=dechex(255-round($val));
 return 'ff'.$d.$d;}
 
 static function colors(){
-return [''=>'ccc','Nonmetals'=>"92FF10",'Nobles Gasses'=>"05FFFF",'Alkali Metals'=>"FF9801",'Alkali Earth Metals'=>"BF6700",'Metalloids'=>"91C9D6",'Halogens'=>"FFFF00",'Metals'=>"ABABB0",'Transactinides'=>"C9C97A",'Lanthanides'=>"B3D7AB",'Actinides'=>"75ADAB",'undefined'=>"ffffff"];}
+if(!$col)return [''=>'ccc','Nonmetals'=>"92FF10",'Nobles Gasses'=>"05FFFF",'Alkali Metals'=>"FF9801",'Alkali Earth Metals'=>"BF6700",'Metalloids'=>"91C9D6",'Halogens'=>"FFFF00",'Metals'=>"ABABB0",'Transactinides'=>"C9C97A",'Lanthanides'=>"B3D7AB",'Actinides'=>"75ADAB",'undefined'=>"ffffff"];}
 
 static function clr($r,$col){
 if(!$col)return self::colors();
@@ -44,7 +44,7 @@ foreach($r as $k=>$v){$c=$v<=$d?'active':'';
 return $ret;}
 
 static function menu($d){$d=$d?$d:118;
-$ret=input1('spiclrx',$d,'','','1').' ';
+$ret=inputb('spiclrx',$d,'',1).' ';
 $ret.=lj('txtbox','spiclr_spiclr,call_spiclrx','ok').' ';
 if($d>1)$ret.=lj('txtbox','spiclr_spiclr,call___'.($d-1),picto('before')).' ';
 $ret.=lj('txtbox','spiclr_spiclr,call___'.($d+1),picto('after')).' ';

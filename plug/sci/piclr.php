@@ -4,7 +4,7 @@ static $conn=1;
 static function pi_car($d){return ;}
 
 static function build($p){
-$ra=msql_read('system','edition_colors','',1); //foreach($ra as $k=>$v)$rb[$i]=$v;
+$ra=msql::read('system','edition_colors','',1); //foreach($ra as $k=>$v)$rb[$i]=$v;
 $rb=array_keys($ra);
 $rand=[4,12,24,78,14,19,44,21,32,79];
 for($i=0;$i<10;$i++)$css.='.clr'.$i.'{background-color:'.$rb[$rand[$i]].';}'."\n";
@@ -20,7 +20,7 @@ $p=$prm[0]??$p;
 $ret=self::build($p);
 return $ret;}
 
-static function menu($p,$o,$rid){$ret=input1('inp',$p,'').' ';
+static function menu($p,$o,$rid){$ret=input('inp',$p,'').' ';
 $ret.=lj('',$rid.'_piclr,call_inp',picto('ok')).' ';
 return $ret;}
 

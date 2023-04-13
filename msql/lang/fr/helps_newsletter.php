@@ -1,19 +1,16 @@
-<?php
-//philum_microsql_helps_newsletter
-$r["_menus_"]=array('txt');
-$r["register"]=array('Incription ‡ la liste de diffusion');
-$r["see_newsletter"]=array('Newsletter actuelle');
-$r["answer_success"]=array('un mail de confirmation a ÈtÈ envoyÈ');
-$r["answer_exists"]=array('ce mail est dÈj‡ enregistrÈ');
-$r["answer_not_exists"]=array('mail non valide');
-$r["answer_error"]=array('champ mal renseignÈ');
-$r["form_name"]=array('nom');
-$r["form_mail"]=array('mail');
-$r["form_button"]=array('ok');
-$r["welcome_mail"]=array('Merci pour votre inscription');
-$r["unregister"]=array('dÈsabonnement');
-$r["unregister_success"]=array('l\'adresse mail a ÈtÈ effacÈe');
-$r["adios_mail"]=array('cliquer sur le lien de confirmation');
-$r["uns_mail"]=array('mail de dÈsinscription envoyÈ ‡');
-
-?>
+<?php //msql/helps_newsletter
+$r=["_menus_"=>['txt'],
+"register"=>['Incription √† la liste de diffusion'],
+"see_newsletter"=>['Newsletter actuelle'],
+"answer_success"=>['un mail de confirmation a √©t√© envoy√©'],
+"answer_exists"=>['ce mail est d√©j√† enregistr√©'],
+"answer_not_exists"=>['mail non valide'],
+"answer_error"=>['champ mal renseign√©'],
+"form_name"=>['nom'],
+"form_mail"=>['mail'],
+"form_button"=>['ok'],
+"welcome_mail"=>['Merci pour votre inscription'],
+"unregister"=>['d√©sabonnement'],
+"unregister_success"=>['l\'adresse mail a √©t√© effac√©e'],
+"adios_mail"=>['cliquer sur le lien de confirmation'],
+"uns_mail"=>['mail de d√©sinscription envoy√© √†']];

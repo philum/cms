@@ -232,8 +232,9 @@ if(!$p)$p=self::$default;
 return self::build($p,$o);}
 
 static function menu($p,$o,$rid){
-$ret=inputj('inp',$p?$p:self::$default,$rid.'_starmap4,call_inp_2').hlpbt('starmap');
-$ret.=lj('',$rid.'_starmap4,call_inp_2',picto('ok')).' ';
+$j=$rid.'_starmap4,call_inp_2';
+$ret=inputj('inp',$p?$p:self::$default,$j).hlpbt('starmap');
+$ret.=lj('',$j,picto('ok')).' ';
 //$ret.=checkbox('big','1','big',0);
 $ret.=lj('txtx',$rid.'_starmap4,call_inp___1','big').' ';
 $ret.=lj('txtx',$rid.'_starmap4,call___knownstars','known').' ';

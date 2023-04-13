@@ -12,7 +12,7 @@ if(!$rst[95])$ret['menuO']=popbub('overcat','',$ico[15],$top,$hv);
 if(!$rst[51])$ret['desk']=popbub('desk','',$ico[3],$top,$hv);
 if($auth>4){
 	if(!$rst[120])$ret['admin']=popbub('fadm','fastmenu',$ico[2],$top,$hv);
-	else $ret['admin']=llj('','popup_admin___all',$ico[2]);}
+	else $ret['admin']=popbub('fadm','fastmenu2',$ico[2],$top,$hv);}
 if(!$rst[75]){
 	if($top)$ret['search']=search_btn(1);
 	else $ret['search']=popbub('call','search',$ico[5],$top,$hv);}
@@ -22,7 +22,7 @@ if($auth>1){
 if($auth>2){
 	if(!$rst[79])$ret['addurl']=popbub('call','addart',$ico[7],$top,$hv);
 	//if(!$rst[79])$ret['addurl']=llj('','bubble_sav,addart',$ico[7]);
-	else $ret['addart']=li(lja('',sj('popup_edit,artform').' closebub(this);',$ico[7]));}
+	else $ret['addart']=li(btj($ico[7],sj('popup_edit,artform').' closebub(this);'));}
 if(!$rst[81])$ret['favs']=llj('','popup_favs,home',picto('bookmark2'));//favs
 if(!$rst[80])$ret['arts']=popbub('','arts',$ico[6],$top,$hv);//arts
 if(!$rst[82])$ret['lang']=popbub('lang','lang',$ico[9],$top,$hv);//lang
@@ -35,13 +35,13 @@ if($id && auth(6)){
 	$tag=lj('','popup_meta,metall___'.$id.'_3',picto('tag'));
 	$tit=lj('','popup_meta,titedt___'.$id.'_3',picto('meta'));
 	$edt=lj('','popup_edit,artform____'.$id.'__autosize',picto('edit'));
-	$edt2=lja('',atj('editart',$id),picto('editor'));
+	$edt2=btj(picto('editor'),atj('editart',$id));
 	//if(!$rst[1])$trk=li(lj('','popup_tracks,form___'.$id,picto('forum')));
-	$ret['edit']=li($tag).li($tit).li($edt).bal('li',atd('adt2'.$id),$edt2);}//.$trk
+	$ret['edit']=li($tag).li($tit).li($edt).tag('li',['id'=>'adt2'.$id],$edt2);}//.$trk
 $dev=ses('dev'); $ic=$dev=='b'||$dev=='c'?$ico[11]:$ico[12];
 if(auth(6) or $dev)$ret['dev']=popbub('dev','dev',$ic,$top,$hv);//dev
 $ret['fixit']=span(atd('fixtit').atc('etc'),' ');
-ses::$popadm+=$ret;}
+ses::$adm+=$ret;}
 
 //poplinks
 static function popadmin(){
@@ -50,10 +50,11 @@ if(get('admin')){$top='d';
 	$hom=popbub('adhome','',picto('phi2'),$top,1);
 	$rta=$hom.adm::menus();}
 elseif(get('msql')){$top='d'; $rta=msqa::menusj('');}
-else foreach(ses::$popadm as $k=>$v){
-	if(strstr('cache design hub alert log chrono srch',$k))$rtb.=$v;//user 
+else foreach(ses::$adm as $k=>$v){
+	if(strstr('cache design hub alert log chrono srch timetravel',$k))$rtb.=btn('popbt',$v).' '; 
+	elseif($k=='er')$rtb.=btn('popdel',implode(';',$v)).' '; 
 	else $rta.=$v;}
-$css=$top?'inline':''; ses::$popadm=[];
+$css=$top?'inline':''; ses::$adm=[];
 if(!ses('iqa'))$rta.=boot::cookie_accept();
 if($rta)$ret=mkbub($rta,$css,'','this.style.zIndex=popz+1;');
 if($rtb)$ret.=bts('position:fixed; right:0;',$rtb);//
@@ -62,19 +63,16 @@ if($top)Head::add('csscode','#page{padding-top:28px;}');
 else Head::add('csscode','#page{margin-left:28px;}');
 return $ret;}
 
-static function poplist(){$rid=randid('ppl');
-ses::$r['popm']=ljb('philum','poplist',$rid,btd($rid,'='));}
-
 #articles
 static function btapp($d,$nl=''){
-[$p,$o,$c]=decompact_conn($d); [$c,$ob]=cprm($c);//p§o:c§ob
-$ic=pop::mime($c,'cube'); $t=pictxt($ic,$ob?$ob:$c); if($ob==1)$t=picto('url');
+[$p,$o,$c]=unpack_conn($d); [$c,$ob]=cprm($c);//p§o:c§ob
+$ic=mime($c,'cube'); $t=pictxt($ic,$ob?$ob:$c); if($ob==1)$t=picto('url');
 $u='/app/'.$c; if($p){$u.='/'.$p; if($o)$u.='/'.$o;} if($nl)return lkt('',$u,$t); if(!$ob)$ob='conn';
 return lj('','popup_'.$c.',home__3_'.ajx($p).'_'.ajx($o),$t).' '.lkt('',$u,picto('chain'));}
 
 static function connbt($d,$nl=''){
-[$p,$o,$c]=decompact_conn($d); [$c,$ob]=cprm($c);//p§o:c§ob
-$ic=pop::mime($c,'cube'); $t=pictxt($ic,$ob?$ob:$c); if($ob==1)$t=picto('url');
+[$p,$o,$c]=unpack_conn($d); [$c,$ob]=cprm($c);//p§o:c§ob
+$ic=mime($c,'cube'); $t=pictxt($ic,$ob?$ob:$c); if($ob==1)$t=picto('url');
 $u='/app/'.$c; if($p){$u.='/'.$p; if($o)$u.='/'.$o;} if($nl)return lkt('',$u,$t); if(!$ob)$ob='conn';
 return lj('','popup_conn,parser__3_['.ajx($p.($o?'§'.$o:'').':'.$c).']_3_test',$t).' '.lkt('',$u,picto('chain'));}
 
@@ -95,7 +93,7 @@ if(is_img($pre.$im) && strpos($im,'<')===false){
 		if(auth(6) && rstr(121) && !$nl)$ret=conn::rzim($ret,$im,$pre.$im,$id,$w,$h);}
 	else{$im=conn::recup_image($im); $pre=jcim($im,$nl); if($im)$ret=img($pre.$im);}}
 else $ret=$im;
-return balb('figure',$ret.balb('figcaption',$t));}
+return tagb('figure',$ret.tagb('figcaption',$t));}
 
 static function pubart($d){[$v,$p]=split_one('§',$d,1);//plug
 if($p==1 or $p==2 or $p==3)return art::playb($v,$p);
@@ -109,12 +107,12 @@ elseif(is_numeric($v))return ma::jread('',$v,ma::suj_of_id($v));}
 static function arts_mod($v,$id){
 [$p,$t,$d,$o,$ch,$hd,$tp]=explode('/',$v);
 $load=api::mod_arts_row($p); unset($load[$id]);
-$ret=mod::mod_load($load,'',$t,$d,$o,1,$prw,$tp,$id);
+$ret=mod::mod_load($load,$t,$d,$o,1,3,$tp,$id,'');
 return $ret;}
 
 #toggles
 static function openart($p,$m=''){[$p,$t]=cprm($p); $rid=randid('opart');
-if($t)return toggle('',$rid.'_art,playc_'.$p.'_3',$t).divd($rid,'');
+if($t)return toggle('',$rid.'_art,playc___'.$p.'_3',$t).divd($rid,'');
 return ma::read_msg($p,$m==3?'inner':$m);}
 
 static function call_j($f,$d){[$f,$lk]=cprm($f);
@@ -122,8 +120,8 @@ if(is_numeric($f))$lk=pictxt('get',ma::suj_of_id($f)); else $f=goodroot($f);
 return lj('','popup_'.$d.'___'.ajx($f),$lk);}
 
 static function call_pop($d){[$v,$k]=cprm($d); $rid=randid('bpop'); 
-if(strpos($k,"\n"))$k=strto($k,"\n"); sesr('temp',$k,$v);
-return ljp('','popup_usg,poptxt___'.ajx($k),$k.' '.picto('get'),atd('bt'.$rid));}
+if(strpos($k,"\n"))$k=strto($k,"\n"); sesr('delaytxt',$k,$v);
+return lj('','popup_usg,poptxt___'.ajx($k),$k.' '.picto('get'),atd('bt'.$rid));}
 
 static function bubble_note($d,$t='',$nl=''){
 [$v,$tb]=cprm($d);
@@ -135,53 +133,51 @@ static function toggle_note($d,$t='',$nl=''){
 [$v,$tb]=cprm($d); $rid=rid($d); $t=$t?$t:$tb;
 $div=span(atd($rid).atc('twit panel').ats('display:none;'),$v);
 if($nl)return '['.$t.': '.$v.']';
-return ljb('','toggle_block',$rid,$t?$t:'(*)','bt'.$rid).$div;}
+return ljb('','toggle_block',$rid,$t?$t:'(*)',atd('bt'.$rid)).$div;}
 
 static function toggle_div($d,$o,$nl=''){[$v,$t]=cprm($d);
-if($o)$v=balb('blockquote',$v); if($nl)return balb('h4',$t).$v;
+if($o)$v=tagb('blockquote',$v); if($nl)return tagb('h4',$t).$v;
 return togbt($v,pictxt('lys',$t));}
 
 static function toggle_conn($d,$nl){[$id,$t]=cprm($d); $rid=rid('jop');
-if(is_numeric($id)){$j='_art,playc_'.$id.'_3'; $t=$t?$t:ma::suj_of_id($id);} else $j='_conn,read_'.$p.'['.$id.']';
+if(is_numeric($id)){$j='_art,playc___'.$id.'_3'; $t=$t?$t:ma::suj_of_id($id);}
+else $j='_conn,read_'.$d.'['.$id.']';
 return toggle('',$rid.$j,$t?$t:nms(25)).' '.btd($rid,'');}
 
 static function btart($d){[$id,$t]=split_one('§',$d);//conn
-if(substr($d,0,4)=='http')$j='popup_rss,cbk__3_'.ajx($id).'_1';
+if(substr($d,0,4)=='http')$j='popup_mc,api*read__3_'.ajx($id).'_1';
 else $j='popup_popart__3_'.$id.'_3'; $t=$t?$t:ma::suj_of_id($id);
-return lj('popbt',$j,pictxt('articles',$t?$t:preplink($d)));}
+return lj('popbt',$j,pictxt('articles',!$t&&$d?preplink($d):$t));}
 
 #lk
 static function pictoconn($t){
 [$t,$ico]=opt($t,':'); if($ico=='picto')$t=picto($t); return $t;}
 static function poplk($d,$id){[$lk,$t]=split_right('§',$d,1); 
-return ljp(att($tb),$id.'_mod,ajxlnk___'.ajx($lk),self::pictoconn($t));}
+return ljp(att($t),$id.'_mod,callmod___'.ajx($lk),self::pictoconn($t));}
 static function toglk($d){[$lk,$t]=split_right('§',$d,1);
-return togbub('mod,ajxlnk',ajx($lk),self::pictoconn($t));}
+return togbub('mod,callmod',ajx($lk),self::pictoconn($t));}
 static function ajlk($d){[$p,$o]=cprm($d);
 return lj('popbt',$p,$o);}
 
-static function vacuum_video($da,$id){
+static function vacuum_media($da,$id){
 if(substr($da,0,4)!='http')return $da;
 [$d,$t]=split_one('§',$da,1);
 $xt=xt($d); $qb=$_SESSION['qb']; $nmw=$d; $dc='';
-if($id){$nmw=$qb.'_'.$id.'_'.substr(md5($d),0,6).$xt; $dc=$d; $dc=urlenc($dc);}
+if($id){$nmw=$qb.'_'.$id.'_'.substr(md5($d),0,6).$xt; $dc=$d; $dc=str::urlenc($dc);}
 if(!is_file('video/'.$nmw) && $dc){@copy($dc,'video/'.$nmw);}//conn::replaceinmsg($id,$d,$nmw,'vid');
-if(is_file('video/'.$nmw))return 'video/'.$nmw.($t?'§'.$t:'');
+if(is_file('video/'.$nmw)){$sz=fsize('video/'.$nmw);
+	if($sz>50000){ses::$adm['alert']='media: '.$sz;//exclude from importation
+		conn::replaceinmsg($id,$da,str_replace('.mp4',':mp4',$da));}
+	return 'video/'.$nmw.($t?'§'.$t:'');}
 else return $da;}
 
-static function getmp4($d,$id){$d=self::vacuum_video($d,$id); return video($d);}
-static function getmp3($d,$id){$d=self::vacuum_video($d,$id); return audio($d);}
+static function getmp4($d,$id,$o=1){if($o)$d=self::vacuum_media($d,$id); return video($d);}
+static function getmp3($d,$id,$o=1){if($o)$d=self::vacuum_media($d,$id); return audio($d);}
 static function getimg($d,$id,$m,$nl,$pw){$im=conn::get_image($d,$id,$m);
 return conn::place_image($im,$m,$nl,$pw,$id);}
 static function getxif($d){$d=gcim($d); $r=imgexif($d); return img('/'.$d).tabler($r);}
 static function imgdata($d){[$d,$xt]=cprm($d); if(!$xt)$xt='jpeg';
 return img('data:image/'.$xt.';base64,'.base64_encode($d));}
-
-#mimes
-static function msqmimes(){return msql::kx('system','edition_mimes');}
-static function mime($d,$o=''){$r=sesmk2('pop','msqmimes','',0); return $r[$d]??($o?$o:'less');}
-static function mimes($d,$t='',$sz=''){$ta=self::mime($d,$t);
-if($ta && $ta!='less')$t=$ta; if(!$t)$t='file'; if($t)return picto($t,$sz);}
 
 #pages
 static function btpages_nb($nbp,$pg){
@@ -210,13 +206,13 @@ foreach($r as $k=>$v){$i++; if($k==$n)$a=$i;} $i=0;
 foreach($r as $k=>$v){$i++; if($i>$a-$na && $i<$a+$na)$rb[$k]=$v;}
 return $rb;}
 
-static function dig_it_j($n,$j){$r=pop::define_digr(); $ra=self::dig_it_j_nb($r,$n);//most_read,trk
+static function dig_it_j($n,$j){$r=self::define_digr(); $ra=self::dig_it_j_nb($r,$n);//most_read,trk
 if(!isset($ra[$n]))$ra[$n]=$n>365?round($n/365,2):$n; $nprev=time_prev($n);
 $ra[$n].=' '.($n<365?plurial($ra[$n],3):plurial($ra[$n],7));
 if($n!=1 && $n!=7)$ra[$n]=val($ra,$nprev).' '.nms(36).' '.$ra[$n];//from
-if($n>365)$ra[$n]=date('Y',calc_date($n));//from
-//return pop::btpages(1,$n,count($r),$j);
-return slctmenusj($ra,$j,$n);}//divc('float:right;',)
+if($n>365)$ra[$n]=date('Y',timeago($n));//from
+//return self::btpages(1,$n,count($r),$j);
+return slctmnuj($ra,$j,$n);}//divc('float:right;',)
 
 static function timetravel(){$r=self::define_digr(); $n=max(array_flip($r))/365;//365.24219
 unset($r[1]); unset($r[7]); unset($r[30]); unset($r[90]); $ret=[];
@@ -230,11 +226,6 @@ if($o>10)$s='auto '.$o.'px;'; else $s=(is_numeric($o)?$o:3).' auto;';
 $sty='columns:'.$s.'; column-gap:16px:';
 return div(atd($id).atc('cols'.$b).ats($sty),$ret);}
 
-static function good_rech($d=''){
-$d=$d?$d:ajx(get('search'),1); if(!$d)return;
-$d=str_replace('§',"'",$d); $d=utflatindecode($d); $d=clean_acc($d);
-$d=strip_tags($d); $d=stripslashes($d); return trim($d);}
-
 #img
 static function art_img($d,$id='',$n=''){if(!$d)return;
 $r=explode('/',$d); $n=$n?$n:$r[0]; if($n===0)return; $srv=prms('srvimg');
@@ -243,7 +234,7 @@ elseif($r)foreach($r as $k=>$v)if(is_file('img/'.$v)){
 	[$w,$h]=@getimagesize('img/'.$v); if($w>220 && $h>120 && $w<6400){$rb[$w]=$v; $rk[$w]=$k;}}
 	elseif($v && !is_numeric($v) && $srv && is_file($srv.'/img/'.$v))copy($srv.'/img/'.$v,'img/'.$v);
 if(isset($rb)){krsort($rb); $ret=current($rb);
-	if(!$n && $id && $ret)update('qda','img',$rk[key($rb)].$d,'id',$id);
+	if(!$n && $id && $ret)sql::upd('qda',['img'=>$rk[key($rb)].$d],$id);
 	return $ret;}}
 
 static function minimg($amg,$prm){if($prm=='no')return; $mg=self::art_img($amg); 
@@ -263,7 +254,7 @@ return $ret;}
 static function twitapi($d){[$p,$o]=cprm($d);
 return twit::call($p,$o);}
 
-static function poptwit($d,$id,$o='',$nl=''){[$n,$nm]=cprm($d);
+static function poptwit($d,$o='',$nl=''){[$n,$nm]=cprm($d);
 if(substr($n,-8)=='/photo/1')$n=substr($n,0,-8);
 //{$im=twit::getimg($n,1); return mk::popim($im,pictxt('img',$nm));}
 if(strpos($n,'/'))$n=strend($n,'/'); if(strpos($n,'?'))$n=strto($n,'?'); $bt=$nm?$nm:$n;
@@ -278,7 +269,7 @@ if(substr($k,0,4)=='http')$k=strend($k,'/'); if($nm==1)$nm=$k;
 if($nm=='thread')return self::twitapi($d);
 if($nm=='users')return twit::play_usrs($d);
 if(strpos($k,' '))return self::twits($d,$id);
-if($nm or !is_numeric($k))return self::poptwit($k.'§'.$nm,$id,$ty,$nl);
+if($nm or !is_numeric($k))return self::poptwit($k.'§'.$nm,$ty,$nl);
 if($nl)return lka($k);
 if($k)return twit::cache($k,$id);}
 

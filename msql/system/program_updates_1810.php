@@ -1,3 +1,6 @@
-<?php //philum/microsql/program_updates_1810
-$r=[1=>['1007','publication'],2=>['1015','r�fection du d�tecteur de traductions en relation avec une pr�c�dente r�forme de leur emplacement'],3=>['1019','- r�fection des champs de recherche : d�clenchement � la touche entr�e et possibilit� d\'ouvrir plusieurs fen�tres de recherche ;
-- r&d nodjs : s�paration des actions et des boutons'],4=>['1027','- r�fection de l\'�dition de certains param�tres de hubs (description + obsol�tes)']];
+<?php //msql/program_updates_1810
+$r=["1"=>['1007','publication'],
+"2"=>['1015','rÃ©fection du dÃ©tecteur de traductions en relation avec une prÃ©cÃ©dente rÃ©forme de leur emplacement'],
+"3"=>['1019','- rÃ©fection des champs de recherche : dÃ©clenchement Ã  la touche entrÃ©e et possibilitÃ© d\'ouvrir plusieurs fenÃªtres de recherche ;
+- r&d nodjs : sÃ©paration des actions et des boutons'],
+"4"=>['1027','- rÃ©fection de l\'Ã©dition de certains paramÃ¨tres de hubs (description + obsolÃ¨tes)']];

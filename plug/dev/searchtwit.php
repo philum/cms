@@ -1,26 +1,26 @@
-<?php //searchtwit
+<?php 
+class searchtwit{
 
-function searchtwit_build($p,$o){
+static function build($p,$o){
 $r=sql('ib','umt','kv','text like "%'.$p.'%"');
 return $r;}
 
-function searchtwit_j($p,$o,$res=''){
-
-[$p,$o]=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $_GET['search']=$p;
-$r=searchtwit_build($p,$o);
+$r=self::build($p,$o);
 if($r)$ret=ma::output_arts($r,'','art');
 else $ret='nothing';
 return $ret;}
 
-function searchtwit_menu($p,$o,$rid){$ret=input('inp',$p).' ';
-$ret.=lj('',$rid.'_plug__3_searchtwit_searchtwit*j___inp',picto('ok')).' ';
+static function menu($p,$o,$rid){$ret=input('inp',$p).' ';
+$ret.=lj('',$rid.'_searchtwit,call_inp',picto('ok')).' ';
 return $ret;}
 
-function plug_searchtwit($p,$o){$rid=randid('plg');
+static function home($p,$o){$rid=randid('plg');
 ses('umt','pub_umtwits');
-$bt=searchtwit_menu($p,$o,$rid);
-$ret=searchtwit_build($p,$o);
+$bt=self::menu($p,$o,$rid);
+$ret=self::build($p,$o);
 return $bt.divd($rid,$ret);}
-
+}
 ?>

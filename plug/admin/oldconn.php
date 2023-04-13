@@ -7,8 +7,8 @@ else{$r=sql('id,msg','qdm','kv','msg like "%'.$p.']%"',1); $n=count($r);}
 if($r)foreach($r as $k=>$v){
 	//qr('UPDATE '.qd('msg').' SET msg=REPLACE(msg,"'.$p.'","'.$repl.'") WHERE id='.$v.' limit 1',1);
 	$msg=str_replace($p.']',$repl.']',$v);
-	if($o=='ynd')update('ynd','txt',$msg,'id',$k);
-	else update('qdm','msg',$msg,'id',$k);}//pr(array_keys($r));
+	if($o=='ynd')sql::upd('ynd',['txt'=>$msg],$k);
+	else sql::upd('qdm',['msg'=>$msg],$k);}//pr(array_keys($r));
 return $p.'=>'.$repl.' in '.$n.' docs';}
 
 static function call($p,$o,$prm=[]){

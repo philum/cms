@@ -133,11 +133,11 @@ return $ret;}
 
 static function menu($p1,$p2,$rid){
 $j=$rid.'_starmap2,call_p1,p2_xr';
-$ret=inputj('p1',$p1?$p1:self::$default,$j,atz(36));
+$ret=inputj('p1',$p1?$p1:self::$default,$j,'',36);
 $ret.=lj('',$j,picto('ok')).hlpbt('starmap').' ';
-$ret.=inputj('p2',$p2?$p2:50,$j,'distance',atz(4).atb('step',10),'number');
+$ret.=inputj('p2',$p2?$p2:50,$j,'distance',4,['step'=>10,'type'=>'number']);
 $ret.=label('p2',btn('small','(limit horizon)')).' ';
-//$ret.=inputj('p3',1400,$j,atz(4)).label('p3','size').' ';
+//$ret.=inputj('p3',1400,$j,'',4).label('p3','size').' ';
 $ret.=lj('txtx',$rid.'_starmap2,call__2_'.self::$default,'default').' ';
 $ret.=lj('txtx',$rid.'_starmap2,call__2_knownstars_50','known').' ';
 $ret.=lj('txtx',$rid.'_starmap2,call__2_allstars_50','all').' ';

@@ -1,10 +1,10 @@
-<?php //b/citation
+<?php 
 
 class citation{
 static $default='';
 
 static function random(){
-$r=[1=>17,2=>35,3=>30,4=>4,5=>8,6=>10,7=>10,9=>7];
+$r=[1=>17,2=>35,3=>30,4=>4,5=>8,6=>10,7=>10,9=>7,10=>6,11=>10];
 $n=array_sum($r); $nb=rand(1,$n); $ib=0;
 foreach($r as $k=>$v)for($i=0;$i<$v;$i++){$ib++; if($ib==$nb)return [$k,$i];}}
 
@@ -14,10 +14,10 @@ $r=msql::read_b('',nod('citation_'.$na));//$nb=array_rand($r);
 if(!$r)return;
 $ra=array_shift($r); $t=$ra[0]; $ret=$r[$nb][0];
 //$b=lj('','ctt_citation,build___citation*1',picto('reload')).' ';
-return $ret.divc('small',$t);}
+$bt=lj('','ctt_citation,build',picto('after'));
+return divb($ret).divc('small',$t);}
 
 static function call($p,$o,$prm=[]){$p=$prm[0]??$p;
-if(strpos($o,';'))[$o,$ord]=opt($o,';',2);
 $ret=self::build($p,$o);
 return divb($ret,'twit','ctt');}
 
@@ -36,8 +36,4 @@ $bt=self::menu($p,$o,$rid);
 $ret=self::build($p,$o);
 return $bt.divd($rid,$ret);}
 }
-
-function plug_citation($p,$o){
-return citation::home($p,$o);}
-
 ?>

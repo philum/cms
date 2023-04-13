@@ -1,12 +1,13 @@
-<?php //ping
+<?php 
+class ping{
 
-function ping_j($p,$o,$res=''){
+static function call($p,$o,$prm=[]){
 $ret=chrono('ok');
 return $ret;}
 
-function plug_ping($p,$o){
+static function home($p,$o){
 chrono();
-$ret=ping_j($p,$o);
+$ret=self::call($p,$o);
 return $ret;}
-
+}
 ?>

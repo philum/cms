@@ -24,7 +24,7 @@ if(strrpos($d,'/')!==false)$d=substr($d,strrpos($d,'/')+1);
 return normalize($d);}
 
 static function home($p,$o){
-$dir='_datas/'.ses('qb').'_'; $f=base64_decode($p);
+$dir='_datas/dl/'; $f=base64_decode($p);
 if($f!='../' && strpos($f,'params')===false && is_file($f)){
 	//nb_of_dwnl
 	$nm=self::rednm($f); $nmf=$nm.'.txt';

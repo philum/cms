@@ -1,43 +1,48 @@
-<?php //sitemap
-static sitemap{
+<?php 
+class sitemap{
 
-static function prep_host_b($nod){
+static function host($nod){
 if($_SESSION['sbdm'])return subdomain($nod).'call/sitemap/'.$nod;
 else return 'http://'.$_SERVER['HTTP_HOST'].'/call/sitemap/'.$nod;}
 
-static function b_sitm($b,$d){//urlset//sitemapindex
+static function head($b,$d){//urlset//sitemapindex
+header('Content-Type: application/xml; charset=utf-8');
 return '<'.'?xml version="1.0" encoding="UTF-8" ?'.'>
 <'.$b.' xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 '.$d.'</'.$b.'>'."\n";}
 
 static function content($b,$url,$date,$freq,$prio){
-$ret='<'.$b.'>'."\n";//url//sitemap
-$ret.=balc('loc','',$url)."\n";
-if($date)$ret.=balc('lastmod','',$date)."\n";
-if($freq)$ret.=balc('changefreq','',$freq)."\n";
-if($prio)$ret.=balc('priority','',$prio)."\n";
-//if($video)$ret.=balc('video:video','',balc('video:content_loc','',$prio))."\n";
-$ret.='</'.$b.'>'."\n";
-return $ret;}
+$ret=tagb('loc',$url)."\n";
+if($date)$ret.=tagb('lastmod',$date)."\n";
+if($freq)$ret.=tagb('changefreq',$freq)."\n";
+if($prio)$ret.=tagb('priority',$prio)."\n";
+//if($video)$ret.=tagb('video:video',tagb('video:content_loc',$prio))."\n";
+return tagb($b,$ret)."\n";}//url//sitemap
 
-static function sitmap_list($r){
+static function build($r){$ret='';
 foreach($r as $k=>$v){//0=day 1=frm 2=suj 3=img 4=nod 5=tag 6=lu 7=re
 $url='http://'.$_SERVER['HTTP_HOST'].htacc('read').$k;
 $date=date('Y-m-d',$v[0]); $freq='never'; $prio='';
 if($v[11]==4)$prio=1; elseif($v[11]==3)$prio=0.8;
 elseif($v[11]==2)$prio=0.6; elseif($v[11]==1)$prio=0.5;
-$xml.=self::content('url',$url,$date,$freq,$prio);}
-return $xml;}
+$ret.=self::content('url',$url,$date,$freq,$prio);}
+return self::head('urlset',$ret);}
 
-static function root($hub){
-$r=msql_read('users',$hub.'_cache','',1);
-if($r)return sitmap_list($r);}
+static function call($hub){
+$r=msql::read('users',$hub.'_cache','',1);
+if($r)return self::build($r);}
 
-static function build($hub,$o){$ret='';
-if(!isset($_SESSION['mn'][$hub])){$ret=root($hub); return b_sitm('urlset',$ret);}
-else foreach($_SESSION['mn'] as $k=>$v)$ret.=self::content('sitemap',prep_host_b($k),'','','');
-return b_sitm('sitemapindex',$ret);}
+static function robots($r){$rt=[];
+foreach($r as $k=>$v)$rt[]='Sitemap: '.self::host($k);
+write_file('robots.txt',implode("\n",$rt));}
 
-static function home($p,$o){return self::$build($p,$o);}
+static function robots2($r){//general
+$d='Sitemap: http://'.host().'/app/sitemap';
+write_file('robots.txt',$d);}
+
+static function home($hub,$o){$ret=''; $mn=ses('mn'); self::robots([ses('qb')=>1]);//$mn
+if($hub && !$mn[$hub]){$ret=self::call($hub); return self::head('urlset',$ret);}
+elseif($mn)foreach($mn as $k=>$v)$ret.=self::content('sitemap',self::host($k),'','','');
+return $ret;}//self::head('sitemapindex',$ret)
 }
 ?>

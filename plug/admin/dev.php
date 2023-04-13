@@ -93,7 +93,7 @@ $ret=msql::val('server','program_dev',$d,3);
 return divc('txtblc',nl2br($ret));}
 
 static function cancel_menu($del){$i=0; $ret='';
-$r=msql_read('server','program_dev',''); //1=>array('','','')
+$r=msql::read('server','program_dev',''); //1=>array('','','')
 if($del=='all'){$r=array(); msql::modif('server','program_dev',$r,'arr');}
 if($del){unset($r[$del]); msql::modif('server','program_dev',$del,'del');}
 //$ret.=lj('txtx','popup_dev,cancel*menu___all','empty').br();
@@ -121,7 +121,7 @@ $fb=$d.'/'.$p.'.php'; $va=substr(ajx($va,1),0,-1);
 if(is_file($fb)){//echo $fab;
 	$t=read_file($fb);
 	$od=self::find_end($t,'static function '.$f.'(','{','}');
-	$t=str_replace($od,$va.'}',$t); //echo textarea('',$od,40,20);
+	$t=str_replace($od,$va.'}',$t);
 		$va=str_replace("\r","\n",$va);
 	$defs=[$d,$p,$f,$va];
 	msql::modif('server','program_dev',$defs,'one',[],time());
@@ -159,9 +159,9 @@ $ret.=lj('popbt','popup_dev,cancel*menu___','history').' ';
 $ret.=lj('popbt','popup_dev,menus___'.$d,'open').' ';
 $ret.=hlpbt('dev').br().br();
 $ret.=self::openfuncs();
-//if($d=='progb')$ret.=ljb('txt','SaveJ','edc_dev,copy','prod').' ';
-$ret.=textarea('txtarea',htmlentities_b($v),64,20,atc('console').atb('onclick','detctfunc(this)').atb('ondblclick','findfunc(this)').atb('wrap','on'));
-//$v=htmlentities_b($v); $v=highlight_string('<'.'?php'.$v.'?'.'>',true);
+//if($d=='progb')$ret.=lj('txt','edc_dev,copy','prod').' ';
+$ret.=textarea('txtarea',str::htmlentities_b($v),64,20,['class'=>'console','onclick'=>'detctfunc(this)','ondblclick'=>'findfunc(this)','wrap'=>'on']);
+//$v=str::htmlentities_b($v); $v=highlight_string('<'.'?php'.$v.'?'.'>',true);
 //$v=str_replace(array('FF8000','007700','0000BB','DD0000','0000BB'),array('FF8000','00ee00','afafff','eeeeee','ffbf00'),$v);
 //$sj='SaveG(this,event,\'txarec_dev,render\')'; 
 //$ret.=divedit('txarec','console','width:545px;',$sj,$v);

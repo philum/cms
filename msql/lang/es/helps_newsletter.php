@@ -1,19 +1,16 @@
-<?php
-//philum_microsql_helps_newsletter
-$r["_menus_"]=array('txt');
-$r["register"]=array('register to the newsletter');
-$r["see_newsletter"]=array('actually sent newsletter');
-$r["answer_success"]=array('a mail for confirmation have been sent');
-$r["answer_exists"]=array('mail already exists');
-$r["answer_not_exists"]=array('mail no exists');
-$r["answer_error"]=array('please fill form');
-$r["form_name"]=array('name');
-$r["form_mail"]=array('email');
-$r["form_button"]=array('ok');
-$r["welcome_mail"]=array('Thank you for register');
-$r["unregister"]=array('Unsubscribe');
-$r["unregister_success"]=array('Your mail have been deleted');
-$r["adios_mail"]=array('clic the link to confirm');
-$r["uns_mail"]=array('mail for unsubscribe sent to');
-
-?>
+<?php //msql/helps_newsletter
+$r=["_menus_"=>['txt'],
+"register"=>['register to the newsletter'],
+"see_newsletter"=>['actually sent newsletter'],
+"answer_success"=>['a mail for confirmation have been sent'],
+"answer_exists"=>['mail already exists'],
+"answer_not_exists"=>['mail no exists'],
+"answer_error"=>['please fill form'],
+"form_name"=>['name'],
+"form_mail"=>['email'],
+"form_button"=>['ok'],
+"welcome_mail"=>['Thank you for register'],
+"unregister"=>['Unsubscribe'],
+"unregister_success"=>['Your mail have been deleted'],
+"adios_mail"=>['clic the link to confirm'],
+"uns_mail"=>['mail for unsubscribe sent to']];

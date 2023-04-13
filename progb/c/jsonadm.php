@@ -1,4 +1,4 @@
-<?php //b/jsonadm
+<?php 
 class jsonadm{
 static $a=__CLASS__;
 
@@ -15,7 +15,8 @@ json::read($dr,$nod,$rid);
 return self::nav($u,$rid);}
 
 static function add($u,$rid){
-$ret=inputj('add'.$rid,'',$rid.'_jsonadm,create_add'.$rid.'__'.ajx($u));
+$j=$rid.'_jsonadm,create_add'.$rid.'__'.ajx($u);
+$ret=inputj('add'.$rid,'',$j);
 return self::nav($u,$rid).$ret;}
 
 static function stats($r){$ret=''; $rb=[]; $na=count($r); $nb=0;

@@ -1,11 +1,6 @@
-<?php //tests
-session_start();
-ini_set('display_errors',1);
-error_reporting(-1);//E_NOTICE/E_ALL/E_STRICT
-require_once('../progb/lib.php');
-//http://lehollandaisvolant.net/?d=2012/07/25/18/35/32-script-denvoi-de-fichiers-minimaliste-dragndrop-pure-js
-
-function upim_h(){
+<?php 
+class upim{
+static function upim_h(){
 $_SESSION['uproot']='users/'.ses('qb').'/downloads';//destination folder
 Head::add('csslink','../css/_admin.css');
 //Head::add('jslink','../js/upload.js');
@@ -20,13 +15,11 @@ Head::add('csscode','
 #result .success {background-color:#77fc9f;}
 #result .failure {background-color:#fcc577;}
 }');}
-upim_h();
-echo Head::get();
 
-function fsize_b($d){$u=['B','KB','MB'];
-	return @round($d/pow(1024,($i=floor(log($d,1024)))),1).' '.$u[$i];}
+static function fsize_b($d){$u=['B','KB','MB'];
+return @round($d/pow(1024,($i=floor(log($d,1024)))),1).' '.$u[$i];}
 
-function upload_j(){
+static function upload_j(){
 //p($_FILES);
 if(isset($_FILES['myfile']) && $_SESSION['uproot']){
 	$tmp=$_FILES['myfile']['tmp_name'];
@@ -43,8 +36,9 @@ if(isset($_FILES['myfile']) && $_SESSION['uproot']){
 	}
 else return 'nothing';}
 
-function plug_upim(){
+static function home(){
 upim_h();
+//jscode(up_js());
 return '
 <div class="container">
 	<div class="contr"></div>
@@ -59,10 +53,7 @@ return '
 	</div>
 </div>
 <script src="../js/upload.js"></script>
-';
-//jscode(up_js());
+';}
+
 }
-
-if(!@$_GET['plug'])echo upload_j();
-
 ?>

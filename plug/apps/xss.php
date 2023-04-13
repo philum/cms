@@ -24,13 +24,13 @@ if($r)foreach(self::$dfb as $k=>$v)if($v){$rz=opt($r[$v],':',4);
 if($ra)$vr=$q->getElementsByTagName($ra['channel'][2]); //pr($vr);
 if($vr)foreach($vr as $k=>$v){
 	foreach($r as $ka=>$va){//pr($v);
-		//$rb[$k][$ka]=utf8_decode_b(utf8_decode(self::find($v,$va)));
+		//$rb[$k][$ka]=utf8dec_b(utf8dec_b(self::find($v,$va)));
 		$rb[$k][$ka]=$va?dom::extract($v,$va):'';}} //pr($rb);
 if($rb)foreach($rb as $k=>$v)if($v['title']){$rt='';
-	//foreach($v as $ka=>$va)$rt.=balb($ka,$va);
-	//$ret.=balb('channel',$rt); $rt='';
+	//foreach($v as $ka=>$va)$rt.=tagb($ka,$va);
+	//$ret.=tagb('channel',$rt); $rt='';
 	$ret.=lj('','popup_sav,batchpreview__3_'.ajx($v['link']),pictxt('view',$v['title'])).br();
-	$ret.=balb('section',img($v['img']).$v['descr']);}
+	$ret.=tagb('section',img($v['img']).$v['descr']);}
 return $ret;}
 
 static function bt($p,$o){
@@ -50,7 +50,7 @@ $bt=self::bt($u,$o);
 return $bt.$ret;}
 
 static function xssr(){
-$r=msql_read('',nod('xss'),'',1);
+$r=msql::read('',nod('xss'),'',1);
 if(!$r)$r=msql::save('',nod('xss'),[['','','','','','','','','','','','','']],self::$dfb);
 foreach($r as $k=>$v)$rb[$k]=$v[0];
 return $rb;}
@@ -66,7 +66,7 @@ return divc('list',$ret);}
 static function install($b){
 ses($b,qd($b));//name of table
 $r=['site'=>'var','tit'=>'var','img'=>'var','descr'=>'var','content'=>'var','footer'=>'var','day'=>'int'];
-mysql::install($b,$r,0);}
+sqlop::install($b,$r,0);}
 
 static function sav($r=[]){
 return msql::modif('',nod('xss'),$r,'push',self::$dfb);}

@@ -6,13 +6,13 @@ return msql::read_b('',nod('chat_'.$p),'',1,['time','name','msg']);}
 static function erz($p,$erz){$nod=ses('qb').'_chat_'.$p;
 msql::modif('',$nod,$erz,'del'); return self::read($p);}
 
-static function sav($p,$nm,$msg){$nod=ses('qb').'_chat_'.$p; $ret=ajxg($msg);
-if($ret)msql::modif('',$nod,[time(),$nm,embed_links($ret)],'push');
+static function sav($p,$nm,$prm=[]){$nod=ses('qb').'_chat_'.$p; $msg=$prm[0]??'';;
+if($ret)msql::modif('',$nod,[time(),$nm,embed_links($msg)],'push');
 return self::read($p);}
 
-static function nam($p,$nm,$res){
-$j='popup_plug__x_chat__'.$p.'_'.substr($res,0,-1).'_nam'.$p;
-$d=autoclic('" id="nam'.$p,'name',8,'20','search');
+static function nam($p,$nm,$prm=[]){$res=$prm[0]??'';
+$j='popup_chat,home_nam'.$p.'_x_chat__'.$p.'_'.ajx($res);
+$d=inputb('nam'.$p,'',8,'name',20,[]);
 return $d.lj('popbt',$j,picto('kright'));}
 
 static function read($p){$nm=ses('muse'); $c='txtsmall'; $r=self::data($p); $ret='';
@@ -27,15 +27,15 @@ return scroll($r,$ret,7);}
 
 static function form($p,$msg){$nm=ses('muse');
 $d=lj('popbt','cht'.$p.'_chat,read___'.$p,picto('reload'),att('#'.$p));
-$d.=autoclic('" id="msg'.$p,'message',18,'1000','search');
-if($nm)$j='cht'.$p.'_chat,sav___'.$p.'_'.$nm.'_msg'.$p;
-else $j='popup_chat,nam__x_'.$p.'__msg'.$p;
-$d.=ljb('popbt',sj($j),'',picto('kright'));
+$d.=inputb('msg'.$p,'',18,'message',1000,[]);
+if($nm)$j='cht'.$p.'_chat,sav_msg'.$p.'__'.$p.'_'.$nm;
+else $j='popup_chat,nam_msg'.$p.'_x_'.$p;
+$d.=lj('popbt',$j,picto('kright'));
 return '<form name="chat'.$p.'" action="javascript:'.sj($j).'">'.$d.'</form>';
 return $ret;}
 
-static function home($p,$msg,$res=''){
-$p=$p?normalize($p):'public'; ses('muse',$res?ajxg($res):ses('USE'));
+static function home($p,$msg,$prm=[]){
+$p=$p?normalize($p):'public'; ses('muse',$pr[0]??ses('USE'));
 return self::form($p,$msg).divd('cht'.$p,self::read($p));}
 
 }

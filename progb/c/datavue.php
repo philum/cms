@@ -1,4 +1,4 @@
-<?php //b
+<?php 
 class datavue{
 static $a=__CLASS__;
 static $cb='mdl';

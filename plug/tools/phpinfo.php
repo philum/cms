@@ -1,5 +1,5 @@
-<?php //phpinfo
-
-function plug_phpinfo(){return phpinfo();}
-
+<?php 
+class phpinfo{
+static function home(){return phpinfo();}}
+}
 ?>

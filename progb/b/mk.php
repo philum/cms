@@ -1,4 +1,4 @@
-<?php //a/mk for conns few usited
+<?php //mk for conns
 class mk{
 
 static function pub_css($d){[$d,$o]=cprm($d); return btn($o,$d);}
@@ -7,9 +7,8 @@ static function pub_font($d){[$d,$o]=cprm($d); return bts('font-family:'.$o,$d);
 static function pub_float($d){[$d,$o]=cprm($d); return divs('float:'.($o?'right':'left'),$d);}
 static function pub_clr($d,$o=''){if(!$o)[$d,$o]=cprm($d); return bts('color:'.$o,$d);}
 static function pub_bkgclr($d){[$d,$o]=cprm($d); return bts('background-color:'.$o,$d);}
-static function pub_size($d){[$d,$o]=cprm($d);
-$sty='font-size:'.$o.'px; line-height:'.round($o*1.2).'px;';
-return bal('font',ats($sty),$d);}
+static function pub_size($d){[$d,$o]=cprm($d); $s='font-size:'.$o.'px; line-height:'.round($o*1.2).'px;';
+return tag('font',['style'=>$s],$d);}
 static function pub_html($d){[$p,$o]=split_right('§',$d); $r=explode_k($o,' ','=');
 $ra=['css'=>'class','font'=>'font-family','size'=>'font-size']; $rb=colors(); $atb='';
 foreach($r as $k=>$v){if($k=='color')$v=$rb[$v]?$rb[$v]:'#'.$v; $atb.=(isset($ra[$k])?$ra[$k]:$k).':'.$v.'; ';}
@@ -25,7 +24,7 @@ static function caviar($d){$n=strlen($d); $ret='';
 for($i=0;$i<$n;$i++)$ret.=substr($d,$i,1)==' '?' ':"&blk34;";//&block;
 return $ret;}
 static function imgtxt($v){[$p,$o]=cprm($v);
-return plugin('imgtxt',$p,$o,'');}
+return imgtxt::home($p,$o,'');}
 static function webview($d,$id){[$u,$v]=cprm($d); $lk=lka($u,$v);
 return togbub('web,call',ajx($u).'_0_'.$id,picto('acquire')).sep().$lk;}
 
@@ -48,23 +47,22 @@ static function download($d,$t=''){//$f=goodroot($f);//root_security
 if(strpos($d,'§'))[$d,$t]=split_one('§',$d); [$f,$nm]=prepdlink($d); if($t==1)$t=strend($d,'/');
 if(!is_file($f))$g='img/'.$f; if(!is_file($f))$f='users/'.$f;
 if(is_http($d))return lkc('small',$d,pictxt('chain',$t));//$nm
-elseif(is_file($f)){$size=' '.btn('small','('.fsize($f,1).')'); $nbd=mk::nbdwnl($f);
+elseif(is_file($f)){$size=' '.btn('small','('.fsize($f,1).')'); $nbd=self::nbdwnl($f);
 	return lk('app/download/'.base64_encode($f),pictxt('download',$t)).$size.$nbd;}//.' '.$nm
 else return btn('small',$nm.' (file not exists)');}
 
 static function make_li($d,$ul){$ret='';
 //[$d,$n]=cprm($d); //atb('start',$n)
-//if(strpos($d,'¬'))$r=explode('¬',$d); else
-$r=explode("\n\n",$d);
-foreach($r as $v){if(substr($v,0,1)=='-')$v=substr($v,1);
-	if(strpos($v,'<li'))$ret.=$v; elseif(trim($v))$ret.=li(trim($v));}
-if($ret)return balb($ul,$ret);}
+if(strpos($d,'¬'))$r=explode('¬',$d); else $r=explode("\n",$d);
+foreach($r as $v){if(substr($v,0,1)=='-')$v=substr($v,1); $v=trim($v);
+	if(strpos($v,'<li')!==false)$ret.=$v; elseif($v)$ret.=li($v);}
+if($ret)return tagb($ul,$ret);}
 
 static function footlist($d,$id){$i=1; $ret='';
 if(strpos($d,'|'))$r=explode('|',$d); else $r=explode("\n",$d);
 foreach($r as $k=>$v)if(trim($v)){$v=trim($v); if(substr($v,0,1)=='-')$v=substr($v,1);
 	$ret.='['.lka(urlread($id).'#nh'.$i.'" name="nb'.$i,$i).'] '.$v.br(); $i++;}
-if($ret)return balb('footer',$ret);}
+if($ret)return tagb('footer',$ret);}
 
 static function iframe_bt($d,$m,$nl){
 [$u,$t]=cprm($d); $t=$t==1?nms(194):$t; $bt=lkt('',$u,picto('url'));
@@ -89,8 +87,8 @@ $s='height:'.$h.'px; background-image:url(/'.$im.'); background-size:cover; back
 return div(ats($s),'');}
 
 static function lastup($v,$id){
-$d=sesr('opts',$id); if(!$d)$d=art::metart($id);
-if(!$d){$d=time(); meta::utag_sav($id,'',$d);}
+$r=art::metart($id); $d=$r['lastup']??'';
+if(!$d){$d=time(); meta::utag_sav($id,'lastup',$d);}
 if($d)return btn('txtsmall2',nms(118).' : '.mkday($d,1));}
 
 static function table($d){
@@ -113,18 +111,18 @@ if($nl)return lkt('',$p,$im?$im:$o);
 $lk=lkt('',$p,$o?$o:picto('pdf'));
 return lj('','popup_mk,pdfreader__xr_'.ajx($p).'_'.ajx($o).'__autowidth',$im?$im:picto('pdf')).' '.$lk;}
 
-static function pdfplayer($d,$s='',$o=''){if(!$s)$s=get('sz');
-return obj($d,'application/pdf',$s?'width:920px; height:550px;':'');}
+static function pdfplayer($d,$s=''){if(!$s)$s=get('sz');
+return obj($d,'application/pdf',$s?'width:920px; height:640px;':'');}
 
-static function pdfreader($d,$prw){if(substr($d,-3)!='pdf')$d.='.pdf';
+static function pdfreader($d,$prw){[$d,$t]=cprm($d);
+if(substr($d,-3)!='pdf')$d.='.pdf';
 if(substr($d,0,4)!='http')$d=host().'/users/'.$d; //$hlp=hlpbt('pdf');.$hlp
-[$d,$t]=cprm($d);
 if($prw==3 && !$t)return self::pdfplayer($d).lk($d,pictxt('pdf',domain($d)));
 if(!$t or $t==1)$t=domain($d);
 return lk($d,picto('pdf')). ' '.lj('','popup_mk,pdfplayer__15_'.ajx($d).'_'.ajx($t).'__autowidth',$t);}
 
 static function bkg($v,$id){[$d,$p]=cprm($v); if(!$p){$p=$d; $d='';}
-if($p)$mg=$p; else{$imgs=sql('img','qda','v','id='.$id); $mg=pop::art_img($imgs,$id);}
+if($p)$mg=$p; else{$imgs=sql('img','qda','v',$id); $mg=pop::art_img($imgs,$id);}
 $f=goodroot($mg,1);
 if(file_exists($f))[$w,$h]=getimagesize($f);
 return divs('background-image: url(/img/'.$mg.'); background-repeat:no-repeat;  background-position:center center; background-size:cover; background-attachment:fixed; height:90%;',$d);}//'.$h.'px
@@ -139,7 +137,7 @@ return divs('display:inline-block; width:'.$sz.'px; margin:0 10px;',$p);}
 static function artwork($d,$m=''){
 if(!$d)return; $nbo=0; $n=','; $r=explode(',',$d.$n); $ret='';// or $m<3
 foreach($r as $k=>$v){$nb=substr_count($v,'-'); $id=substr($v,$nb);
-	if($id){$ret.=pop::openart($id.'§'.bal('h'.$nb,'',ma::suj_of_id($id)));}}
+	if($id){$ret.=pop::openart($id.'§'.tagb('h'.$nb,ma::suj_of_id($id)));}}
 return $ret;}
 
 static function artlook($d){[$p,$o]=cprm($d);
@@ -147,6 +145,8 @@ return lj('','popup_art,look___'.$p.'_'.ajx($o).'_1',pictxt('enquiry',$o));}
 
 static function frame($d,$m){
 [$d,$c]=cprm($d); if(!$c)$c='red'; //if($m<3)return $d;
+$r=['white','blue','green','cyan','yellow','purple','orange','black'];
+if(in_array($c,$r))return divc('frame-'.$c,$d);
 return divs('padding:6px; border:1px solid '.$c,$d);}
 
 static function underline($d,$m){$sty='1px solid';
@@ -156,18 +156,17 @@ return bts('border-bottom:'.$sty.' '.$c,$d);}
 
 static function nh($d,$id,$nl){static $i; $i++;//.'-'.$i
 if(!$nl)return togbub('usg,nbp',$d.'-'.$i.'_'.$id,$d,'',atn('nh'.$d),0);//over
-else return '<a href="#nb'.$d.'" name="nh'.$d.'">'.$d.'</a>';}
+else return '<a href="#nb'.$d.'" id="nh'.$d.'">'.$d.'</a>';}
 
 static function nb($d,$id,$nl){
 if(!$nl)return lk(urlread($id).'#nh'.$d,$d,atn('nb'.$d).atc('note'));
-else return '<a href="#nh'.$d.'" name="nb'.$d.'">'.$d.'</a>';}
+else return '<a href="#nh'.$d.'" id="nb'.$d.'">'.$d.'</a>';}
 
-static function nbdwnl($f){$nmf=normalize($f);
-if(strrpos($nmf,"/")!==false)$nmf=substr($nmf,strrpos($nmf,"/")+1);
-if(strrpos($nmf,".")!==false)$nmf=substr($nmf,0,strrpos($nmf,"."));
-$nmf='_datas/'.ses('qb').'_'.$nmf.'.txt';
-if(is_file($nmf)){$nb=read_file($nmf);
-return btn("txtsmall",':: '.$nb.' downloads');}}
+static function nbdwnl($f){$f=normalize($f);
+if(strrpos($f,"/")!==false)$f=substr($f,strrpos($f,"/")+1);
+if(strrpos($f,".")!==false)$f=substr($f,0,strrpos($f,"."));
+$f='_datas/dl/'.nod($f).'.txt'; mkdir_r($f);
+if(is_file($f)){$nb=read_file($f); return btn("txtsmall",':: '.$nb.' downloads');}}
 
 #mecanics
 static function plan($id,$m,$d,$lk=''){
@@ -176,29 +175,29 @@ if(!is_numeric($id) or $m<3)return;
 $d=sql('msg','qdm','v','id="'.$id.'"');
 $r=explode("\n",$d); $ret=[]; $rb=[]; $rt=[]; $n1=0; $n2=0; $n3=0; $n4=0;
 foreach($r as $k=>$v)switch(substr($v,-3)){
-	case('h1]'):$rb[0][$k]=1; $rt[$k]=stripconn($v); $n1=$k; break;
-	case('h2]'):$rb[$n1][$k]=1; $rt[$k]=stripconn($v); $n2=$k; break;
-	case(':h]'):$rb[$n1][$k]=1; $rt[$k]=stripconn($v); $n2=$k; break;
-	case('h3]'):$rb[$n2][$k]=1; $rt[$k]=stripconn($v); $n3=$k; break;
-	case('h4]'):$rb[$n3][$k]=1; $rt[$k]=stripconn($v); $n4=$k; break;
-	case('h5]'):$rb[$n4][$k]=1; $rt[$k]=stripconn($v); break;}
+	case('h1]'):$rb[0][$k]=1; $rt[$k]=str::stripconn($v); $n1=$k; break;
+	case('h2]'):$rb[$n1][$k]=1; $rt[$k]=str::stripconn($v); $n2=$k; break;
+	case(':h]'):$rb[$n1][$k]=1; $rt[$k]=str::stripconn($v); $n2=$k; break;
+	case('h3]'):$rb[$n2][$k]=1; $rt[$k]=str::stripconn($v); $n3=$k; break;
+	case('h4]'):$rb[$n3][$k]=1; $rt[$k]=str::stripconn($v); $n4=$k; break;
+	case('h5]'):$rb[$n4][$k]=1; $rt[$k]=str::stripconn($v); break;}
 if(!isset($rb))return; $ret=self::taxonomy($rb,1);
 if($lk && $rt)foreach($rt as $k=>$v)$rt[$k]=lk('/'.$id.'#h'.$k,$v);
 if($o)return $t.divc('ulnone',self::make_ulb($ret[0],$rt,'ul'));
-if(is_array($ret[0]))return $t.divc('topology',self::make_ul($ret[0],$rt,'ol'));}
+if($ret[0]??'' and is_array($ret[0]))return $t.divc('topology',self::make_ul($ret[0],$rt,'ol'));}
 
 //mk_plan
 static function make_ul($r,$rt,$ul='',$o=''){$ret='';
 if($r)foreach($r as $k=>$v){$bt=$rt[$k]??'';
 	if(is_array($v))$bt.=self::make_ul($v,$rt,$ul,$o);
 	$ret.=tag('li',['type'=>$o],$bt);}
-return tag($ul,'',$ret);}
+return tagb($ul,$ret);}
 
 static function make_ulb($r,$rt,$ul='',$o=''){$ret=''; $i=0;//topologic
 foreach($r as $k=>$v){$bt=$rt[$k]; $i++;
 	if(is_array($v))$bt.=self::make_ulb($v,$rt,$ul,($o?$o.'.':'').$i.'');
-	$ret.=tag('li','',($o?$o.'.':'').$i.'. '.$bt);}
-return tag($ul,'',$ret);}
+	$ret.=tagb('li',($o?$o.'.':'').$i.'. '.$bt);}
+return tagb($ul,$ret);}
 
 //taxonomy
 static function taxo_clean(&$r,$rb){
@@ -242,7 +241,7 @@ return $ret."\n\n".lkt('txtx',$f,$tb);}
 static function translate($d,$m){if($m<3)return $d;
 [$d,$lg]=cprm($d,'§');
 $lng=ses('lng'); $setlg=$lng.'-'.$lg; $ref=rid($d,11);
-$ret=yandex::callxt($d,$ref,$setlg,0);
+$ret=trans::callxt($d,$ref,$setlg,0);
 return divc('trkmsg',$ret);}
 
 //:msql
@@ -266,7 +265,7 @@ switch($oa){
 	case('bin'):return self::msqbin($d); break;
 	case('graph'):return self::msqgraph($d); break;
 	case('data'):return self::msqdata($d,$id); break;
-	case('form'):return plugin('microform',$d,$id); break;
+	case('form'):return microform::home($d,$id); break;
 	case('twit'):return self::msqtwit($d,$id); break;
 	case('twusr'):return self::msqusrs($d,$id); break;}
 [$b,$nd]=split_right('/',$d);
@@ -290,7 +289,7 @@ static function msqconn($d,$id,$ob){$bt='';
 $r=msql::goodtable($d);
 [$b,$nd]=split_right('/',$d);
 if(auth(6))$bt=msqbt($b,$nd);
-if($r)foreach($r as $k=>$v)foreach($v as $kb=>$vb)$r[$k][$kb]=conn::parser(embed_links($vb));
+if($r)foreach($r as $k=>$v)foreach($v as $kb=>$vb)$r[$k][$kb]=conn::parser(str::embed_links($vb));
 return self::msqplay($r,$ob).$bt;}
 
 static function msqlasts($d,$ob){[$d,$l]=split_one('§',$d,1);
@@ -317,7 +316,7 @@ if($bs){$nd=$nd?$nd:ses('qb');}else{$nd=ses('qb'); $bs=$d;}
 $r=msql::goodtable($da); $menu=$r['_menus_']; unset($r['_menus_']);
 if($r && $rep)foreach($r as $k=>$v){$i++; $bit[$k]=$v[$rep];}
 elseif($r && $op){foreach($r as $k=>$v){$i++; $bit[$k]=$v;}}
-$output='/imgc/'.ses('qd').'_'.$_SESSION['read'].'_graph_'.$n.'.png';
+$output='/imgc/'.ses('qd').'_'.ses('read').'_graph_'.$n.'.png';
 img::graphics($output,$pw,140,$bit,getclrs('',7),'yes');///
 if(get('read'))return image($output,'','" style="border:0;')."\n";}
 
@@ -327,9 +326,9 @@ return msqlvue::call($nod,$tmp);}
 static function msqdata($d,$id){
 [$v,$k]=split_right('§',$d); $k=$k?$k:1;
 if($v){$ra=[$v];
-	if($k){$msg=sql('msg','qdm','v','id='.$id);
+	if($k){$msg=sql('msg','qdm','v',$id);
 	$msg=str_replace($d.':msq_data',$k.':msq_data',$msg);
-	update('qdm','msg',$msg,'id',$id);}
+	sql::upd('qdm',['msg'=>$msg],$id);}
 $r=msql::create('art_'.$id,$ra,['txt'],$k); return $r[$k][0];}
 else $ret=msql::row('',nod('art_'.$id),$k);
 if(auth(3))$ret.=msqbt('',ses('qb').'_art_'.$id,$k);
@@ -443,7 +442,7 @@ return $bt.divc('list',$ret);}
 
 //:modpop
 static function modpop($d){
-return lj('','popup_mod,mkmodr__3_'.ajx($d),picto('get'));}
+return lj('','popup_mod,callmod__3_'.ajx($d),picto('get'));}
 
 //:form
 //$d='date=date,choix1/choix2=list,entr§e1,entr§e2,message=text,image=upload,mail=mail,ok=button';
@@ -456,12 +455,12 @@ switch($type){
 	case('check'):$ret.=checkbox($chk,'no','',''); break;
 	case('hidden'):$ret.=hidden($vb,$val);break;
 	case('uniqid'):$ret.=hidden($vb,ses('iq'));break;
-	case('list'):$ret.=select(atd($vb),explode('/',$val),'vv'); break;
+	case('list'):$ret.=select(['id'=>$vb],explode('/',$val),'vv'); break;
 	case('date'):$ret.=hidden($vb,mkday('','ymd.his')); break;
-	case('upload'):$ret.=input1($vb,'url','','',1); break;
+	case('upload'):$ret.=inputb($vb,'url','',1); break;
 	case('button'):$btn=$val;break;
-	case('mail'):$ret.=bal('input',['type'=>'text','id'=>$vb,'size'=>20,'placeholder'=>$val,'onkeyup'=>'num_mail(\''.$vb.'\');'],''); break;
-	default:$ret.=autoclic($val.'" id="'.$vb,'',20,255,'');break;}
+	case('mail'):$ret.=inputb($vb,'','20',$val,'',['onkeyup'=>'num_mail(\''.$vb.'\');']); break;
+	default:$ret.=inputb($vb,'',20,'',255,['name'=>$val]);break;}
 if($type!='button' && $type!='date' && $type!='hidden' && $type!='uniqid')
 	$ret.=' '.label($vb,$val,'txtsmall2').br();}
 $ret.=lj('popsav',$tg.'_'.implode(',',$hn).'__'.$p,$btn?$btn:picto('ok'));
@@ -472,7 +471,7 @@ return divd($tg,$ret);}
 static function find_quotes($d,$id,$s,$pad,$l2){static $dc=0;//decal because of previous results
 $d=htmlentities($d);
 $d=str_replace("&laquo;",'§',$d); $d=str_replace("&raquo;",'§',$d); $d=str_replace("&nbsp;",' ',$d);
-$d=html_entity_decode($d); //$pad=clean_punct($pad);
+$d=html_entity_decode($d); //$pad=str::clean_punct($pad);
 $l=mb_strlen($pad); $s2=0; if($dc)$s+=$dc*$l2;//lenght to add
 $s2=mb_strpos($d,$pad,$s); if(!$s2)$s2=strpos($d,$pad,$s); if(!$s2)$s2=strpos($d,$pad);
 if($s2){$d1=mb_substr($d,0,$s2); $d2=mb_substr($d,$s2,$l); $d3=mb_substr($d,$s2+$l);}
@@ -480,7 +479,7 @@ else{$d1=$d; $d2=''; $d3='';} $dc++;
 return [$d1,$d2,$d3];}
 
 static function apply_quote2($d,$id,$s,$pad,$idtrk){
-$nh=ljb('','scrolltoob','qnb'.$s,picto('arrow-down'),'qnh'.$s);
+$nh=ljb('','scrolltoob','qnb'.$s,picto('arrow-down'),atd('qnh'.$s));
 [$d1,$d2,$d3]=self::find_quotes($d,$id,$s,$pad,10+strlen($idtrk)+strlen($nh));
 if($d2){$d2=preg_replace('/(\n){2,}/',br().br(),$d2);
 	return $d1.'['.$d2.'§'.$idtrk.':quote2]'.$nh.$d3;}
@@ -496,7 +495,7 @@ if($r)foreach($r as $k=>$v){$rb=explode(':callquote]',$v[2]); $n=count($rb);
 return div(atb('ondblclick','useslct(this,\''.$id.'\')'),conn::read($msg,3,$id,''));}
 
 //ephemeral conn
-static function quote2($d,$id){[$p,$o]=cprm($d); return mk::stabilo($p);//from art, built by find_quotes
+static function quote2($d,$id){[$p,$o]=cprm($d); return self::stabilo($p);//from art, built by find_quotes
 return togbub('mk,quotrk',$id.'_'.$o.'_'.ajx($p),$p,'stabilo',att('notes'));}
 
 //called by quote2
@@ -511,8 +510,8 @@ static function callquote($d,$idtrk,$id){
 if(!$id)$id=sql('ib','qdi','v',$idtrk);
 if(!$idtrk)$idtrk=sql('id','qda','v',$id);
 [$p,$o]=cprm($d);//from track, go to art_read_c
-$nb=ljb('','callquote',[$id,$o,ajx($p),$idtrk],picto('arrow-top'),'qnb'.$o);
-return bal('blockquote','',$p.' '.$nb);}//find_quotes
+$nb=ljb('','callquote',[$id,$o,ajx($p),$idtrk],picto('arrow-top'),atd('qnb'.$o));
+return tagb('blockquote',$p.' '.$nb);}//find_quotes
 
 //xltags
 static function xltags($id,$conn,$msg=''){if(!$msg)$msg=sql('msg','qdm','v','id="'.$id.'"');
@@ -531,7 +530,7 @@ return $ret.divc('nbp',$bt);}
 
 static function applyconn($id,$pad,$s,$conn){$msg=sql('msg','qdm','v','id="'.$id.'"');
 [$d1,$d2,$d3]=self::find_quotes($msg,$id,$s,$pad,3+strlen($conn));
-if($d2){$msg=$d1.'['.$d2.':'.$conn.']'.$d3; sqlup('qdm',['msg'=>$msg],'id',$id);}
+if($d2){$msg=$d1.'['.$d2.':'.$conn.']'.$d3; sqlup('qdm',['msg'=>$msg],$id);}
 return self::xltags($id,$conn,$msg);}
 
 }

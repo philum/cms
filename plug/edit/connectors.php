@@ -1,4 +1,4 @@
-<?php //connectors
+<?php 
 class connectors{
 
 static function build($p,$o){
@@ -13,7 +13,7 @@ return $ret;}
 
 static function menu($p,$o,$rid){
 $j=$rid.'_connectors,call_inp'.$rid;
-$js='onkeyup="'.sj($j).'" onclick="'.sj($j).'"';
+$js=['onkeyup'=>sj($j),'onclick'=>sj($j)];
 $ret=editarea('inp'.$rid,$p,54,8,$js,1);
 //$ret.=lj('',$j,picto('ok')).' ';
 return $ret;}

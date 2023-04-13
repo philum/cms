@@ -7,8 +7,8 @@ static $enc='UTF-8';
 
 static function enc($d){
 //return $d;
-//return utf8_encode($d);
-return ascii2utf8($d);}
+//return utf8enc($d);
+return utf8enc_b($d);}
 
 static function manifest($r,$dr,$ti=''){$n=count($r); $lg='fr';
 //$t0='Oummo - Corpus principal';
@@ -60,30 +60,30 @@ $d='application/epub+zip'; write_file($dr.'/mimetype',$d);
 mkdir_r($dr.'/OEBPS/images'); mkdir_r($dr.'/OEBPS/sections'); mkdir_r($dr.'/OEBPS/styles');
 write_file($dr.'/OEBPS/styles/stylesheet.css',read_file('css/_global.css'));
 if($r)foreach($r as $k=>$v){$i=$k+1;
-$f=$dr.'/OEBPS/sections/section'.str_pad($i,4,0,STR_PAD_LEFT).'.xhtml';
-$rt=balb('h1',self::enc($v[2]));
-$rt.=balb('i',date('d/m/Y',(int)$v[1])).' ';
-$rt.=balb('b','#'.$v[0]).br();
-$txt=str_replace(':video',':videourl',$v[3]);
-$txt=codeline::parse($txt,'epub','sconn2');
+	$f=$dr.'/OEBPS/sections/section'.str_pad($i,4,0,STR_PAD_LEFT).'.xhtml';
+	$rt=tagb('h1',self::enc($v[2]));
+	$rt.=tagb('i',date('d/m/Y',(int)$v[1])).' ';
+	$rt.=tagb('b','#'.$v[0]).br();
+	$txt=str_replace(':video',':videourl',$v[3]);
+	$txt=codeline::parse($txt,'epub','sconn2');
 	$txt=str_replace('œ','&oelig;',$txt);
 	$txt=self::enc($txt);
 	$txt=embed_p($txt);
 	$txt=str_replace('</blockquote></p>','</p></blockquote>',$txt);
 	$rt.=$txt;
-//$rt.=conn::read($v[3],3,'','1').br();
-$doc='<?xml version="1.0" encoding="'.self::$enc.'"?>
-<html xmlns="http://www.w3.org/1999/xhtml"><head><link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/></head><body xmlns:epub="http://www.idpf.org/2007/ops">'.$rt.'</body></html>';
-write_file($f,$doc);}
+	//$rt.=conn::read($v[3],3,'','1').br();
+	$doc='<?xml version="1.0" encoding="'.self::$enc.'"?>
+	<html xmlns="http://www.w3.org/1999/xhtml"><head><link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/></head><body xmlns:epub="http://www.idpf.org/2007/ops">'.$rt.'</body></html>';
+	write_file($f,$doc);}
 if($r){self::manifest($r,$dr.'/OEBPS',$ti);
-	$f='_datas/'.$ti.'.epub';//.tar
+	$f='_datas/books/'.$ti.'.epub';//.tar
 	//$lk=tar::gzdir($f,$dr);
 	$ok=tar::zip($f,$dr); //count($r).' results: '
 	return lkc('txtx','/'.$f,pictxt('book2',$ti));}
 else return 'no results';}
 
 static function req($p,$lg='',$pg=0){
-//$_SESSION['qr']->query('SET NAMES utf8');
+//sql::setutf8();
 //Oaxiiboo 6,Oolga Waam,Oomo Toa,Oyagaa Ayoo Yissaa
 $qda=ses('qda'); $qdm=ses('qdm'); $wh='nod="'.ses('qb').'"';
 $ra=explode(',',$p); foreach($ra as $k=>$v)if(is_numeric($v))$r1[]=$v; else $r2[]=$v;
@@ -92,29 +92,29 @@ if(isset($r2))$wh.=' and '.$qda.'.frm in ("'.implode('","',$r2).'")';
 if($lg)$wh.=' and lg="'.$lg.'"';
 if($pg)$limit='limit '.(($pg-1)*20).',20'; else $limit='';
 $sql='select '.$qda.'.id,day,suj,msg,lg from '.$qda.' inner join '.$qdm.' on '.$qdm.'.id='.$qda.'.id where '.$wh.' order by day asc '.$limit;//collate utf8
-return sql_b($sql,'',0);}
+return sql::call($sql,'',0);}
 
 static function req2($p,$lg=''){//***
 $qda=ses('qda'); $qdm=ses('qdm'); $wh='nod="'.ses('qb').'"';
 $wh.=' and '.$qda.'.re>3 and day>'.calctime(365);
 if($lg)$wh.=' and lg="'.$lg.'"';
 $sql='select '.$qda.'.id,day,suj,msg,lg from '.$qda.' inner join '.$qdm.' on '.$qdm.'.id='.$qda.'.id where '.$wh.' order by day asc '.$limit;//collate utf8
-return sql_b($sql,'',0);}
+return sql::call($sql,'',0);}
 
 static function req3($p){//favs
 $r=sql('ib','qdf','rv','type="'.$p.'" and iq="'.ses('iq').'"');
 $qda=ses('qda'); $qdm=ses('qdm'); $wh=$qda.'.id in("'.implode('","',$r).'")';
 $sql='select '.$qda.'.id,day,suj,msg,lg from '.$qda.' inner join '.$qdm.' on '.$qdm.'.id='.$qda.'.id where '.$wh;
-return sql_b($sql,'',0);}
+return sql::call($sql,'',0);}
 
 static function req4($p){//art
 $qda=ses('qda'); $qdm=ses('qdm'); $wh=$qda.'.id="'.$p.'"';
 $sql='select '.$qda.'.id,day,suj,msg,lg from '.$qda.' inner join '.$qdm.' on '.$qdm.'.id='.$qda.'.id where '.$wh;
-return sql_b($sql,'',0);}
+return sql::call($sql,'',0);}
 
 static function req5($p,$t){
 $ra=explode_k($p,',',':'); $r=[]; $rb=[]; $t=$ra['ti']??$t;
-$ra=api::defaults_rq($ra,'',''); //p($ra);
+$ra=api::defaults_rq($ra); //p($ra);
 $ra['preview']=3; $t=$ra['ti']??($ra['t']??''); if($t)$t=normalize($t);
 if($ra)$r=api::datas($ra); //pr($r);
 if($r)foreach($r as $k=>$v)$rb[]=[$v['id'],$v['day'],$v['suj'],$v['txt']??($v['msg']??''),$v['lg']];
@@ -127,27 +127,23 @@ elseif($o=='favs'){$r=self::req3($p); $t=$p.'-'.date('ymd');}
 elseif($o=='art'){$r=self::req4($p); $t=$r[0][2];}
 elseif($o=='api'){[$t,$r]=self::req5($p,$t); $t=$t?$t:'Ebook-'.date('ymd');}
 else $r=self::req($p,'',0);//req2
-if($r)return self::build($r,hardurl($t));}
+if($r)return self::build($r,str::hardurl($t));}
 
 static function menu($p,$o,$rid){
 $r=sql('distinct(frm)','qda','rv',['nod'=>ses('qb')]);
 $ret=datalist('inp',$r,'',$s=16,$t='cat1,cat2');
 //$r=sql('distinct(lg)','qda','rv',['nod'=>ses('qb')]);
 //$ret.=datalist('inb',$r,'fr',$s=2,$t='lang');
-//$ret.='page'.input('ing',0,atz(2)).' ';
+//$ret.='page'.input('ing',0,'2').' ';
 $ret.='title'.input('inl','').' ';
-$ret.=lj('',$rid.'_app__3_mkbook_call___inp|inl',picto('ok')).' ';
+$ret.=lj('',$rid.'_mkbook,call_inp,inl',picto('ok')).' ';
 return $ret;}
 
 static function home($p,$o){
 $rid=randid(self::$a);
 $bt=self::menu($p,$o,$rid);
-$ret=$p?self::build($p,$o):'';
+$ret=$p?self::call($p,$o):'';
 return $bt.divd($rid,$ret);}
 
 }
-
-function plug_mkbook($p,$o){
-return book::home($p,$o);}
-
 ?>

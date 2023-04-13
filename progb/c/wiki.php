@@ -1,4 +1,4 @@
-<?php //a/wiki
+<?php 
 class wiki{
 
 /*function curl($f){$ch=curl_init();
@@ -25,7 +25,7 @@ foreach($r->childNodes as $k=>$v){
 		$tag=$v->tagName; //echo $tag.br();
 		$val=$v->nodeValue;
 		$a=$tag=='a'?ath($v->getAttribute('href')):'';
-		if($tag && $val)$ret.=bal($tag,$a,self::explore($v));
+		if($tag && $val)$ret.=tag($tag,$a,self::explore($v));
 		else $ret.=$val;
 		}
 	else{//pr($v);
@@ -50,7 +50,7 @@ return $ret;}
 //$r=msql::read_b('',nod('wiki_1'));//p($r);
 
 static function build0($p,$o){
-$f=utf8_encode_b($p);
+$f=utf8enc_b($p);
 if($f)$dom=fdom($f,1); $ret='';
 if($dom)foreach($dom->getElementsByTagName('div') as $k=>$div)
 	if($div->getAttribute('id')=='mw-content-text'){
@@ -60,7 +60,7 @@ if($dom)foreach($dom->getElementsByTagName('div') as $k=>$div)
 	//$ret=$div->ownerDocument->saveHTML($div);
 	}
 //eco($ret);
-$ret=utf82ascii($ret);
+$ret=utf2ascii($ret);
 $ret=str_replace('<h2>Sommaire</h2>','',$ret);
 $ret=preg_replace('/\[.*\][,]|\[.*\]/','',$ret);
 return $ret;}
@@ -73,11 +73,10 @@ $jump='plainlinks metadata::|navigation:role:div|mw-editsection::div|mw-editsect
 $d=dom::del($d,$jump);
 return $d;}
 
-static function build($p,$o){
-ses::$urlsrc=$p;
-[$t,$d]=conv::vacuum($p); $d=clean_html($d,1); $d=embed_links($d);
-$d=clean_br_lite($d); $d=clean_punct($d); $d=conn::read($d,'noimages','');
-//if($o)$d=kmax($d,10000);
+static function build($p,$o){ses::$urlsrc=$p;
+[$t,$d]=conv::vacuum($p); $d=str::clean_html($d,1); $d=str::embed_links($d);
+$d=str::clean_br_lite($d); $d=str::clean_punct($d); $d=conn::read($d,'noimages','');
+//if($o)$d=str::kmax($d,10000);
 //if(strpos($d,'<big>'))$mx='<big>'; elseif(strpos($d,'<h2>'))$mx='<h2>';
 if($o)$d=strto($d,'<big>');
 return $d;}

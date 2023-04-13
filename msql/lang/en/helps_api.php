@@ -1,39 +1,36 @@
-<?php
-//philum_microsql_helps_api
-$r["_menus_"]=array('txt');
-$r["hub"]=array('hub');
-$r["section"]=array('multi');
-$r["nosection"]=array('multi');
-$r["priority"]=array('1-2-3-4');
-$r["minday"]=array('from nb of days');
-$r["maxday"]=array('until nb of days');
-$r["mintime"]=array('timestamp min');
-$r["maxtime"]=array('timestamp max');
-$r["from"]=array('min date');
-$r["to"]=array('max id');
-$r["nbchars"]=array('>400');
-$r["source"]=array('domain');
-$r["parent"]=array('id');
-$r["idlist"]=array('list of id');
-$r["tag"]=array('multi');
-$r["search"]=array('mot');
-$r["title"]=array('mot');
-$r["lang"]=array('fr/eng/esp');
-$r["order"]=array('id-desc');
-$r["json"]=array('parser');
-$r["preview"]=array('auto/1/2/3');
-$r["page"]=array('1');
-$r["nbyp"]=array('articles by page');
-$r["t"]=array('title');
-$r["verbose"]=array('1');
-$r["cat"]=array('multi');
-$r["nocat"]=array('multi');
-$r["minid"]=array('min id');
-$r["maxid"]=array('max id');
-$r["until"]=array('max date');
-$r["nodig"]=array('1');
-$r["nopages"]=array('1');
-$r["template"]=array('title');
-$r["file"]=array('1');
-
-?>
+<?php //msql/helps_api
+$r=["_menus_"=>['txt'],
+"hub"=>['hub'],
+"section"=>['multi'],
+"nosection"=>['multi'],
+"priority"=>['1-2-3-4'],
+"minday"=>['from nb of days'],
+"maxday"=>['until nb of days'],
+"mintime"=>['timestamp min'],
+"maxtime"=>['timestamp max'],
+"from"=>['min date'],
+"to"=>['max id'],
+"nbchars"=>['>400'],
+"source"=>['domain'],
+"parent"=>['id'],
+"idlist"=>['list of id'],
+"tag"=>['multi'],
+"search"=>['mot'],
+"title"=>['mot'],
+"lang"=>['fr/eng/esp'],
+"order"=>['id-desc'],
+"json"=>['parser'],
+"preview"=>['auto/1/2/3'],
+"page"=>['1'],
+"nbyp"=>['articles by page'],
+"t"=>['title'],
+"verbose"=>['1'],
+"cat"=>['multi'],
+"nocat"=>['multi'],
+"minid"=>['min id'],
+"maxid"=>['max id'],
+"until"=>['max date'],
+"nodig"=>['1'],
+"nopages"=>['1'],
+"template"=>['title'],
+"file"=>['1']];

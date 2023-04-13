@@ -224,9 +224,9 @@ for($i=1;$i<=$n;$i++){$k=round($min+($sec*$i));
 return $rb;}
 
 static function clr2(){
-return msql::col('','public_atomic_3',4);}
+return msql::col('','public_atomic_3',4);
 //$r=msql::read_b('','public_atomic_3','',1);
-//return array_keys_r($r,4);
+return array_keys_r($r,4);}
 
 static function patch(){
 $r=msql::read_b('','public_atomic_2','',1); $rb=self::$clr;
@@ -264,14 +264,14 @@ return self::build($p,$o);}
 static function menu($p,$o,$rid){$mx=self::$max;
 //$ret=bar('barsvg',$p,$step=1,$min=1,$mx,$js='spiatom','236px').br();
 $j=$rid.'_spisvg,call_inpsvg,inpmod_2__'.$o;
-//$ret=inputj('inpsvg',$p,$j,'',atz(4),'number');
-$ret=input1('inpsvg',$p,4,'number','','',['onchange'=>sj($j)]);
+//$ret=inputj('inpsvg',$p,$j,'',4,[],'number');
+$ret=inputb('inpsvg',$p,4,'number','',['onchange'=>sj($j)]);
 $ret.=lj('',$j,picto('ok')).' ';
 $ret.=lj('popbt','spt_spisvg,call_inpsvg_2_118_radial','radial');
 $ret.=lj('popbt','spt_spisvg,call_inpsvg_2_118_linear','linear'); $ret.='|';
 $rm=[1=>'clr1',2=>'clr2',5=>'fusion',6=>'ebulition',8=>'mass',9=>'atomic mass',10=>'isotopes',12=>'origin'];
 foreach($rm as $k=>$v)$ret.=lj('popbt','spt_spisvg,call__2_'.$mx.'_'.$o.'-'.$k,$v); $ret.='|';
-//foreach($rm as $k=>$v)$ret.=lja('txtx','coloriz2('.$k.')',$v);
+//foreach($rm as $k=>$v)$ret.=btj($v,'coloriz2('.$k.')','txtx');
 $ret.=btn('txtx','Davy@2021');
 $ret.=hlpbt('spitable');
 $ret.=msqbt('','public_atomic_1');

@@ -1,8 +1,5 @@
-<?php
-//philum_microsql_program_updates_1611
-$r["_menus_"]=array('date','text');
-$r[1]=array('1101','publication');
-$r[2]=array('1111','am�lioration du lecteur de metas des autres sites');
-$r[3]=array('1122','am�liorations ergonomiques de l\'onglet metas, du template par d�faut');
-
-?>
+<?php //msql/program_updates_1611
+$r=["_menus_"=>['date','text'],
+"1"=>['1101','publication'],
+"2"=>['1111','amÃ©lioration du lecteur de metas des autres sites'],
+"3"=>['1122','amÃ©liorations ergonomiques de l\'onglet metas, du template par dÃ©faut']];

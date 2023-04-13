@@ -1,7 +1,4 @@
-<?php
-//philum_microsql_program_updates_1707
-$r["_menus_"]=array('date','text');
-$r[1]=array('0702','publication');
-$r[2]=array('0706','le traducteur d\'articles Yandex est rendu sensible � la langue en cours, obtenue depuis le menu admin lang');
-
-?>
+<?php //msql/program_updates_1707
+$r=["_menus_"=>['date','text'],
+"1"=>['0702','publication'],
+"2"=>['0706','le traducteur d\'articles Yandex est rendu sensible Ã  la langue en cours, obtenue depuis le menu admin lang']];

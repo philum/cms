@@ -1,5 +1,4 @@
-<?php //txt
-
+<?php 
 class txt{
 
 static function log(){return ses('auth')>6?ses('qb'):ses('USE');}
@@ -9,8 +8,8 @@ if($d)unlink('msql/users/'.$nd.'_txt_'.$d.'.php');
 return btn('txtyl','deleted');}
 
 static function paste($d){$ret=hidden('cka','m'.$d);
-$ret.=ljb('','mem_storage','txtarea_m1___cka0',picto('save2'),'cka1',att(nms(57))).' ';
-$ret.=ljb('','mem_storage','txtarea_m1_1__ckb0',picto('refresh'),'ckb1',att(nms(95))).' ';
+$ret.=ljb('','mem_storage','txtarea_m1___cka0',picto('save2'),atd('cka1').att(nms(27))).' ';
+$ret.=ljb('','mem_storage','txtarea_m1_1__ckb0',picto('refresh'),atd('ckb1').att(nms(95))).' ';
 //$ret.=hlpbt('memstorage');
 return btn('nbp',$ret).' ';}
 
@@ -30,7 +29,7 @@ $ret.=div(atb('contenteditable','true').atd('txtareb').atc('panel').ats('min-hei
 return $ret;}
 
 static function mkquotes($d){$ret=''; $r=explode("\n",$d);
-foreach($r as $k=>$v)if(substr($v,0,4)=='    ')$ret.=balb('blockquote',trim($v)); else $ret.=trim($v).n();
+foreach($r as $k=>$v)if(substr($v,0,4)=='    ')$ret.=tagb('blockquote',trim($v)); else $ret.=trim($v).n();
 return $ret;}
 
 //actions
@@ -43,33 +42,39 @@ case('brut'):$ret=get_file($d); break;
 case('conn2html'):$d=self::mkquotes($d); $ret=conn::read($d,0,''); break;
 case('html2conn'):$ret=conv::call($d); break;
 case('code'):$ret=($d); break;
-case('cleanmail'):$ret=cleanmail($d); break;
-case('cleanbr'):$ret=clean_br($d); break;
-case('deln'):$ret=del_n($d); break;
+case('cleanmail'):$ret=str::cleanmail($d); break;
+case('cleanbr'):$ret=str::clean_br($d); break;
+case('deln'):$ret=str::del_n($d); break;
 case('striplink'):$ret=codeline::parse($d,'striplink','correct'); break;
-case('cleanpunct'):$ret=clean_punct($d); break;
+case('cleanpunct'):$ret=str::clean_punct($d); break;
 case('addlines'):$ret=mc::add_lines($d); break;
 case('txt2array'):$ret=buildtable::call($d); break;
 case('dump2array'):$ret=buildtable::jb($d); break;
 case('replace'):$ret=str_replace($d1,$d2,$d); break;
 case('exec'):$ret=exec::run($d); break;
 case('entities'):$ret=html_entity_decode($d); break;
-case('utf8'):$ret=utf8_decode($d); break;
+case('utf8'):$ret=utf8dec_b($d); break;
 case('url'):$ret=urldecode($d); break;
-case('lower'):$ret=lowercase($d); break;}
+case('lower'):$ret=str::lowercase($d); break;}
+return $ret;}
+
+static function repl($p,$o){
+$ret=textarea('repla','',15,1).' '.textarea('replb','',15,1).' ';
+$ret.=lj('popsav','txtarea_txt,act_txtarea,repla,replb_23_replace','replace');
+//$ret.=btj('replace',atjr('replacetxt',['txtarea','repla','replb'])'popbt',);
 return $ret;}
 
 static function btact($p,$o){$ret='';
 $r=['cleanmail','cleanbr','deln','striplink','cleanpunct','addlines','entities','utf8','url','lower','html2conn','txt2array','dump2array'];
 foreach($r as $k=>$v)$ret.=lj('','txtarea_txt,act_txtarea_23_'.$v,$v);
-$ret=lj('txtx','popup_converts,home','converts');
-$ret.=lj('txtx','popup_plug___connectors','conn');
-$ret.=lj('txtx','popup_plug___sconn','sconn');
-if(auth(6))$ret.=lj('txtx','popup_exec,home','exec');
-$ret.=lj('txtx','txtarea_converts,act__23_x','x').' ';
-$reb=textarea('repla','',15,1).' '.textarea('replb','',15,1).' ';
-$reb.=lj('popsav','txtarea_txt,act_txtarea,repla,replb_23_replace','replace').br();
-//$reb.=lja('popbt',atj('replacetxt',['txtarea','repla','replb']),'replace');
+$ret=lj('','popup_converts,home','converts');
+$ret.=lj('','popup_connectors,home','conn');
+$ret.=lj('','popup_sconn,home','sconn');
+$ret.=lj('','popup_vue,home','vue');
+if(auth(6))$ret.=lj('','popup_exec,home','exec');
+$ret.=toggle('','rpl_txt,repl','replace');
+$ret.=lj('','txtarea_converts,act__23_x','x').' ';
+$reb=divd('rpl','');
 $reb.=inputj('url','','txtarea_txt,act_url_23_src','url');//import
 $reb.=lj('popsav','txtarea_txt,act_url_23_src',nms(132)).' ';
 $reb.=lj('popbt','txtarea_txt,act_url_23_brut','brut').' ';
@@ -97,16 +102,16 @@ if($d)$ret.=msqbt('',$nd.'_txt_'.$d);
 return $ret;}
 
 static function home($d,$tx){$nd=self::log(); $msg='';
-if($d)$ra=msql_read('',$nd.'_txt_'.$d,'');
-if($d && is_array($ra)){$msg=stripslashes(valr($ra,1,1)); $msg=html_entity_decode_b($msg);}
+if($d)$ra=msql::read('',$nd.'_txt_'.$d,'');
+if($d && is_array($ra)){$msg=stripslashes(valr($ra,1,1)); $msg=str::html_entity_decode_b($msg);}
 if($d && !$ra && $nd)msql::modif('users',$nd.'_txt_'.$d,['title',''],'one','',1);
 $ret=self::paste($d).' ';
-if($d)$ret.=input1('tit',stripslashes(valr($ra,1,0))).' ';
+if($d)$ret.=input('tit',stripslashes(valr($ra,1,0))).' ';
 $ret.=self::btn($d,$nd,$tx).br();
 $ret.=div('',edit::bt(''));//ats('width:630px;')
 $ret.=div('',self::btact('',''));
-$s=ats('width:100%; min-height:360px; padding:4px 8px; margin-top:2px;');
-$edt=divc('col1',textarea('txtarea',$msg,44,4,$s));
+$s='width:100%; min-height:360px; padding:4px 8px; margin-top:2px;';
+$edt=divc('col1',textarea('txtarea',$msg,44,4,['style'=>$s]));
 $edt.=div(atc('col2 tab'),div(atd('wyswyg'),''));
 $ret.=divc('grid-pad',$edt);
 $ret.=divd('bck','');

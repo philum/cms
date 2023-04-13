@@ -1,10 +1,10 @@
-<?php //b/favs
+<?php 
 class favs{
 //render
 static function icons($r){
-return apps::ico($r,'icones').divc('clear','');}
+return desk::pane_icons($r,'icones').divc('clear','');}
 
-static function cols($r){
+static function cols($r){$ret='';
 if($r)foreach($r as $id=>$v)$ret.=self::art($id);
 return div(atc('cols').ats('width:640px;'),$ret);}
 
@@ -38,21 +38,21 @@ $r=msql::modif('',nod('coms'),[ses('iq'),$ti,$tx,$tp],$k);
 return self::reload($r);}
 
 static function form($p,$o,$b){
-$ret=input('comn',$o,atb('placeholder',nms(38))).hlpbt('fav_edit').' ';
+$ret=inputb('comn',$o,'',nms(38)).hlpbt('fav_edit').' ';
 $ret.=lj('','popup_api_comv',picto('view')).' ';
 $ret.=lj('','popup_apicom,menu__loadself_'.ajx($p),picto('menu')).' ';
 $ret.=checkbox_j('comp',$b,'public').br();
-$ret.=textarea('comv',$p,44,4,atb('placeholder','Api Command').atz('44'));
+$ret.=textarea('comv',$p,44,4,['placeholder'=>'Api Command','size'=>'44']);
 return $ret;}
 
 static function edt($k){
 $r=msql::read_b('',nod('coms'),$k);
 $ret=self::form($r[2],$r[1],$r[3]);
-$ret.=lj('popsav','plgfavcom_favs,mdf_comn,comv,comp__'.$k,pictxt('save',nms(57)));
+$ret.=lj('popsav','plgfavcom_favs,mdf_comn,comv,comp__'.$k,pictxt('save',nms(27)));
 return $ret;}
 
 static function add($p){$ret=self::form($p,'','');
-$ret.=lj('popsav','plgfavcom_favs,sav_comn,comv,comp',pictxt('save',nms(57)));
+$ret.=lj('popsav','plgfavcom_favs,sav_comn,comv,comp',pictxt('save',nms(27)));
 return divd('fvcmdt',$ret);}
 
 static function pub($p){
@@ -85,7 +85,7 @@ return divd('plgfavcom',$ret);}
 static function shar($p){
 $r=msql::read('',nod('coms'),'',1); $r=array_reverse($r,true);
 $rb=array_keys_r($r,0,1); $rn=[]; $ret='';
-foreach($rb as $k=>$v){$ip=sql('ip','qdp','v','id='.$k);
+foreach($rb as $k=>$v){$ip=sql('ip','qdp','v',$k);
 	$rn[$k]=sql('name','qdu','v','ip="'.$ip.'"');}
 foreach($r as $k=>$v)if(!empty($v[3]) && !empty($v[2])){$bt='';
 	if($rn[$v[0]])$bt.=btn('txtx',$rn[$v[0]]).' ';
@@ -109,24 +109,24 @@ if($r)foreach($r as $tag=>$v)foreach($v as $id)$rtg[$id][$tag]=1;
 //if($r)foreach($r as $tag=>$v)foreach($v as $id)$ret[$tag].=self::art($id,$rtg[$id]);
 //if($ret)foreach($ret as $k=>$v)$ret[$k]=divc('cols',$v);
 if($r)foreach($r as $tag=>$v)$ret[$tag]=br().self::icons(array_flip($v));
-return make_tabs($ret);}
+return tabs($ret);}
 
-static function mktag($r){if(!$r)return; //p($r);
-foreach($r as $k=>$v)$rt.=$k;//lj('','popup_api___'.ses('iq').';'.ajx($k),$k).' ';
-if($rt)return btn('nbp',picto('bookmark',16).' '.$rt);}
+static function mktag($r){if(!$r)return; $ret='';
+foreach($r as $k=>$v)$ret.=$k;//lj('','popup_api___'.ses('iq').';'.ajx($k),$k).' ';
+if($ret)return btn('nbp',picto('bookmark',16).' '.$ret);}
 
 //read
 static function art($id,$rtg=''){
-$im=minimg(sql('img','qda','v','id='.$id),'h');
-$day=sql('day','qda','v','id='.$id); $dat=mkday($day).' ';
+$im=minimg(sql('img','qda','v',$id),'h');
+$day=sql('day','qda','v',$id); $dat=mkday($day).' ';
 if($rtg)$tag=self::mktag($rtg).' ';
-$suj=balb('h4',ma::suj_of_id($id).' ');
-if($id)return divc('txtcadr',$im.$dat.$tag.$del.lj('','popup_popart__3_'.$id.'_3',$suj));}
+$suj=tagb('h4',ma::suj_of_id($id).' ');
+if($id)return divc('txtcadr',$im.$dat.$tag.lj('','popup_popart__3_'.$id.'_3',$suj));}
 
 //menus
 static function log(){
 $iqb=ses('iq');//base64_encode
-$ret=input1('favid',$iqb,'4');
+$ret=input('favid',$iqb,'4');
 $ret.=lj('popbt','plgfv_fav,home_favid',picto('ok'));
 $ret.=hlpbt('flog').' '.msqbt('',nod('coms'));
 if(auth(1))$ret.=lj('popbt','popup_login,form____'.$iqb,pictxt('logout',nms(54)));
@@ -134,13 +134,13 @@ return divc('',$ret);}
 
 static function menu($p){$j='plgfavs_favs,build___'; $ret='';
 //$ret=lj('txtx','popup_art,home__x___640',picto('refresh')).' ';
-if(rstr(52))$ret=lj($p=='fav'?'active':'',$j.'fav',pictxt('bookmark',nms(108))).' ';//favs
-if(rstr(90))$ret.=lj($p=='like'?'active':'',$j.'like',pictxt('love','likes')).' ';
-if(rstr(91))$ret.=lj($p=='poll'?'active':'',$j.'poll',pictxt('like',nms(144))).' ';//polls
-if(rstr(42))$ret.=lj($p=='tags'?'active':'',$j.'tags',pictxt('diez','tags')).' ';
-if(ses('mem'))$ret.=lj($p=='visit'?'active':'',$j.'visit',pictxt('articles',nms(33))).' ';
-if(rstr(52))$ret.=lj($p=='com'?'active':'',$j.'com',pictxt('work','com')).' ';
-$ret.=lj($p=='shar'?'active':'',$j.'shar',pictxt('people',nms(74))).' ';
+if(rstr(52))$ret=lj(active($p,'fav'),$j.'fav',pictxt('bookmark',nms(108))).' ';//favs
+if(rstr(90))$ret.=lj(active($p,'like'),$j.'like',pictxt('love','likes')).' ';
+if(rstr(91))$ret.=lj(active($p,'poll'),$j.'poll',pictxt('like',nms(144))).' ';//polls
+if(rstr(42))$ret.=lj(active($p,'tags'),$j.'tags',pictxt('diez','tags')).' ';
+if(ses('mem'))$ret.=lj(active($p,'visit'),$j.'visit',pictxt('articles',nms(33))).' ';
+if(rstr(52))$ret.=lj(active($p,'com'),$j.'com',pictxt('work','com')).' ';
+$ret.=lj(active($p,'shar'),$j.'shar',pictxt('people',nms(74))).' ';
 $ret.=lj('','popup_favs,log',picto('logout')).' ';
 //if(rstr(90))$ret.=lj('txtx',$j.'like_no',pictxt('trash','Olds')).' ';
 if($p=='fav' or $p=='like' or $p=='poll' or $p=='visit'){

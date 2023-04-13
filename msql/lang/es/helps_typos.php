@@ -1,38 +1,35 @@
-<?php
-//philum_microsql_helps_typos
-$r["_menus_"]=array('description');
-$r["30s"]=array('Simplification des écritures classiques, pleins et déliers très accentués, post-romantique : banc public, théâtre, films muets');
-$r["50s"]=array('Début du matérialisme et de l\'individualisme, époque où l\'idée devient réalité, la ligne de base est matérialisée et la typo souvent écrasée et étirée, tout en conservant les variations des années 30, qui sont leur base classique : Chevrolet, Cadillac, Frigidère...');
-$r["70s"]=array('Expérimental, courbes omniprésentes, répétition des lignes, parallélismes et imbrication, comme si la typographie est libérée des règles de la typographie et découvre l\'infinité des variantes possibles : psychedelic, power flower...');
-$r["calligraphic"]=array('typos très soignées qui tendent vers gothic, classic, manuscrites');
-$r["classic"]=array('théoriques ou manuscrites, évoquent la musicalité du caractère ou la poésie');
-$r["comic"]=array('style bandes-dessinées, manuscrites, années 50 à contemporain, expriment l\'intonation et incorporent la voix ou la couleur thématique de l\'histoire');
-$r["compact"]=array('économes en énergie, lisibilité des petits titres');
-$r["computer"]=array('double-déliers, pacman, invaders, et technicité');
-$r["dingbats"]=array('icônes ou motifs');
-$r["disrupted"]=array('perturbation graphique, tremblements, irrégularités, brisure de symétrie, ligne de base non respectée');
-$r["fiction"]=array('évolution de 70s, appendices, découverte de nouvelles possibilités, dont certaines peuvent potentiellement devenir classiques');
-$r["funny"]=array('expérimentation débridée, jeu, amusement, art décoratif');
-$r["gothic"]=array('classiques du moyen-âge, mots anciens, formes anciennes, noirceur, obscurantisme');
-$r["glyphes"]=array('invention de l\'écriture, cunéiforme, signes, codes secrets');
-$r["hand"]=array('manuscrites irrégulières à l\'esthétisme non désiré : ni policées ni salies, sans exagération, \"naturelles\"');
-$r["initials"]=array('lettrines, majuscules seules, acronymes, initiales gravées sur une valise...');
-$r["ink"]=array('pinceau, feutre, crayon, salissure, tâches, vieillissement, érosion...');
-$r["japan"]=array('calligraphiques cunéiformes');
-$r["monospaced"]=array('empattement fixe produisant une irrégularité non désirable mais devenue classique');
-$r["pixels"]=array('construction par points, ronds, semi-géométrie assemblée (quartz), pixelisation, typos lues sur un écran');
-$r["postmodern"]=array('ronds dans le carré, rapport avec 70s, slab, fiction');
-$r["proto"]=array('23 variantes de la Proto (carrée)');
-$r["rounded"]=array('idée du rond, cercle, demi-cercle, spirale, souplesse, mollesse, douceur');
-$r["sans"]=array('texte plein sans jambes (sans serif) et/ou sans variante de graisse, lecture rendue plus difficile');
-$r["serif"]=array('texte plein avec jambes, tissage de la ligne de base, et souvent à graisse variable (Times et mère des serif)');
-$r["shaded"]=array('variantes avec ombre ou relief');
-$r["slab"]=array('serif exagéré, lourd, pesant, lettres de westerns, frappées avec force');
-$r["square"]=array('carrées, hexagonales, biseaux, angles durs, souvent au dépend de la lisibilité, ou à l\'inverse pour forcer l\'impact');
-$r["stencil"]=array('lettres obtenues par le passage de peinture à travers un pochoir');
-$r["superfine"]=array('variantes extra fines, cosmétiques, pointillées');
-$r["trombone"]=array('faites d\'un seul trait, parfois post-modernes');
-$r["typewriter"]=array('machines à écrire, défauts des galets, machines classiques, tâches d\'encre, usure, vieillement');
-$r["pixel"]=array('LCD, diodes, LED, oldschool');
-
-?>
+<?php //msql/helps_typos
+$r=["_menus_"=>['description'],
+"30s"=>['Simplification des Ã©critures classiques, pleins et dÃ©liers trÃ¨s accentuÃ©s, post-romantique : banc public, thÃ©Ã¢tre, films muets'],
+"50s"=>['DÃ©but du matÃ©rialisme et de l\'individualisme, Ã©poque oÃ¹ l\'idÃ©e devient rÃ©alitÃ©, la ligne de base est matÃ©rialisÃ©e et la typo souvent Ã©crasÃ©e et Ã©tirÃ©e, tout en conservant les variations des annÃ©es 30, qui sont leur base classique : Chevrolet, Cadillac, FrigidÃ¨re...'],
+"70s"=>['ExpÃ©rimental, courbes omniprÃ©sentes, rÃ©pÃ©tition des lignes, parallÃ©lismes et imbrication, comme si la typographie est libÃ©rÃ©e des rÃ¨gles de la typographie et dÃ©couvre l\'infinitÃ© des variantes possibles : psychedelic, power flower...'],
+"calligraphic"=>['typos trÃ¨s soignÃ©es qui tendent vers gothic, classic, manuscrites'],
+"classic"=>['thÃ©oriques ou manuscrites, Ã©voquent la musicalitÃ© du caractÃ¨re ou la poÃ©sie'],
+"comic"=>['style bandes-dessinÃ©es, manuscrites, annÃ©es 50 Ã  contemporain, expriment l\'intonation et incorporent la voix ou la couleur thÃ©matique de l\'histoire'],
+"compact"=>['Ã©conomes en Ã©nergie, lisibilitÃ© des petits titres'],
+"computer"=>['double-dÃ©liers, pacman, invaders, et technicitÃ©'],
+"dingbats"=>['icÃ´nes ou motifs'],
+"disrupted"=>['perturbation graphique, tremblements, irrÃ©gularitÃ©s, brisure de symÃ©trie, ligne de base non respectÃ©e'],
+"fiction"=>['Ã©volution de 70s, appendices, dÃ©couverte de nouvelles possibilitÃ©s, dont certaines peuvent potentiellement devenir classiques'],
+"funny"=>['expÃ©rimentation dÃ©bridÃ©e, jeu, amusement, art dÃ©coratif'],
+"gothic"=>['classiques du moyen-Ã¢ge, mots anciens, formes anciennes, noirceur, obscurantisme'],
+"glyphes"=>['invention de l\'Ã©criture, cunÃ©iforme, signes, codes secrets'],
+"hand"=>['manuscrites irrÃ©guliÃ¨res Ã  l\'esthÃ©tisme non dÃ©sirÃ© : ni policÃ©es ni salies, sans exagÃ©ration, \"naturelles\"'],
+"initials"=>['lettrines, majuscules seules, acronymes, initiales gravÃ©es sur une valise...'],
+"ink"=>['pinceau, feutre, crayon, salissure, tÃ¢ches, vieillissement, Ã©rosion...'],
+"japan"=>['calligraphiques cunÃ©iformes'],
+"monospaced"=>['empattement fixe produisant une irrÃ©gularitÃ© non dÃ©sirable mais devenue classique'],
+"pixels"=>['construction par points, ronds, semi-gÃ©omÃ©trie assemblÃ©e (quartz), pixelisation, typos lues sur un Ã©cran'],
+"postmodern"=>['ronds dans le carrÃ©, rapport avec 70s, slab, fiction'],
+"proto"=>['23 variantes de la Proto (carrÃ©e)'],
+"rounded"=>['idÃ©e du rond, cercle, demi-cercle, spirale, souplesse, mollesse, douceur'],
+"sans"=>['texte plein sans jambes (sans serif) et/ou sans variante de graisse, lecture rendue plus difficile'],
+"serif"=>['texte plein avec jambes, tissage de la ligne de base, et souvent Ã  graisse variable (Times et mÃ¨re des serif)'],
+"shaded"=>['variantes avec ombre ou relief'],
+"slab"=>['serif exagÃ©rÃ©, lourd, pesant, lettres de westerns, frappÃ©es avec force'],
+"square"=>['carrÃ©es, hexagonales, biseaux, angles durs, souvent au dÃ©pend de la lisibilitÃ©, ou Ã  l\'inverse pour forcer l\'impact'],
+"stencil"=>['lettres obtenues par le passage de peinture Ã  travers un pochoir'],
+"superfine"=>['variantes extra fines, cosmÃ©tiques, pointillÃ©es'],
+"trombone"=>['faites d\'un seul trait, parfois post-modernes'],
+"typewriter"=>['machines Ã  Ã©crire, dÃ©fauts des galets, machines classiques, tÃ¢ches d\'encre, usure, vieillement'],
+"pixel"=>['LCD, diodes, LED, oldschool']];

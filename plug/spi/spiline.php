@@ -145,8 +145,8 @@ $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
-$j=$rid.'_spiline,call_inpln_2__'.$o;
-$ret=inputj('inpln',$p,$j,'',atz(4).atch(sj($j)),'number').lj('',$j,picto('ok')).' ';
+$j=$rid.'_spiline,call_inpln_2__'.$o; $pr=['onchange'=>sj($j)];
+$ret=inputj('inpln',$p,$j,'',4,$pr,'number').lj('',$j,picto('ok')).' ';
 return $ret;}
 
 static function nav($p,$o,$rid){$ret=''; $bt='';
@@ -166,7 +166,7 @@ return $ret;}
 
 static function home($p,$o){
 new spiline(118);
-$rid='spl'; $p=$p?$p:self::$max; //reqp('spt');
+$rid='spl'; $p=$p?$p:self::$max;
 Head::add('csscode',self::css());
 //Head::add('jscode',spiline::js($rid.'_spiline,call__2_',$p,$o));
 $bt=self::menu($p,$o,$rid);

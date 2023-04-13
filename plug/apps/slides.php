@@ -9,10 +9,10 @@ return ul($ret);}
 
 //nb_pages_j($r,$jx,$n)
 static function slide($r,$p,$rid){
-$j=$rid.'_app___slides_call_'; $v=val($r,$p);
-if(isset($r[$p-1]))$bt1=lj('',$j.($p-1).'_'.$rid.'_inp',pictxt('before',($p-1))).' ';
+$j=$rid.'_slides,call_inp__'; $v=$r[$p]??'';
+if(isset($r[$p-1]))$bt1=lj('',$j.($p-1).'_'.$rid,pictxt('before',($p-1))).' ';
 else $bt1=btn('grey',picto('before'));
-if(isset($r[$p+1]))$bt2=lj('',$j.($p+1).'_'.$rid.'_inp',pictxt('after',($p+1))).' ';
+if(isset($r[$p+1]))$bt2=lj('',$j.($p+1).'_'.$rid,pictxt('after',($p+1))).' ';
 else $bt2=btn('grey',picto('after'));
 $bt=divc('',$bt1.$bt2);
 $ret=nl2br(stripslashes_b($v[0]??''));

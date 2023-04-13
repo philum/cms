@@ -1,4 +1,4 @@
-<?php //b/graph
+<?php 
 class graph{
 static $a=__CLASS__;
 

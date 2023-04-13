@@ -94,8 +94,8 @@ $zip=new ZipArchive();
 if(!$zip->open($fb,ZIPARCHIVE::CREATE))return false;
 $f=str_replace('\\','/',realpath($f));
 if(is_dir($f)===true){
-$files=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($f),RecursiveIteratorIterator::SELF_FIRST);
-foreach($files as $file){
+$r=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($f),RecursiveIteratorIterator::SELF_FIRST);
+foreach($r as $file){
 	$file=str_replace('\\','/',$file);
 	//Ignore "." and ".." folders
 	if(in_array(substr($file,strrpos($file,'/')+1),['.','..']))continue;
@@ -104,6 +104,13 @@ foreach($files as $file){
 	elseif(is_file($file)===true)$zip->addFromString(str_replace($f.'/','',$file),file_get_contents($file));}}
 elseif(is_file($f)===true)$zip->addFromString(basename($f),file_get_contents($f));
 return $zip->close();}
+
+static function zip0($f,$dr){//folder included
+$z=new ZipArchive();
+$z->open($f,ZIPARCHIVE::CREATE);
+$z->addEmptyDir($dr);
+self::folderToZip($f,$z,strlen("$f/"));
+$z->close();}
 
 static function com($p,$o){
 $rid='plg'.randid(); $id='del'.$o;
@@ -120,8 +127,10 @@ require('plug/tar/pcltar.lib.php');}
 static function extract($f,$to='/'){self::req();
 PclTarExtract($f,$to,'',''); return $f;}
 
-static function untar($f){
-$dr=__DIR__; $r=explode('/',$dr); $dr='/'.$r[1].'/'.$r[2];
+static function untar($f){$dr=__DIR__;
+if(strpos($dr,'\\'))$r=explode('\\',str_replace('C:\laragon\www\nfo','',$dr));
+else $r=explode('/',$dr);
+$dr='/'.$r[1].'/'.$r[2];
 $e='chmod -R 777 '.$dr; exc($e); //chmod('',0777);
 $e='tar -zxvf '.$dr.'/'.$f.''; exc($e);}
 
@@ -132,8 +141,4 @@ static function home($f,$dr){
 if($f && $dr)return self::gzdir($f,$dr);
 return self::com($f,'.tar');}
 }
-
-function plug_tar($f,$dr){
-return tar::home($f,$dr);}
-
 ?>

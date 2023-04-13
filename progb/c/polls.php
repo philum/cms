@@ -1,4 +1,4 @@
-<?php //b/polls
+<?php 
 class polls{
 static $a=__CLASS__;
 

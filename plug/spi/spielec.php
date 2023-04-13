@@ -8,7 +8,7 @@ static function mol($d){
 $r=msql::read('','public_atomic','',1);
 [$ring,$subring,$pos]=self::findpos($r[$d][4],$d);
 $rg=[1=>2,2=>6,3=>10,4=>14];
-$ret=$rg[$subring]-$pos;
+$freesocks=$rg[$subring]-$pos;
 return $ret;}
 
 static function clr(){return [''=>'ccc','Nonmetals'=>"5FA92E",'Nobles Gasses'=>"00D0F9",'Alkali Metals'=>"FF0008",'Alkali Earth Metals'=>"FF00FF",'Metalloids'=>"1672B1",'Halogens'=>"F6E617",'Metals'=>"999999",'Transactinides'=>"FF9900",'Lanthanides'=>"666698",'Actinides'=>"9D6568",'undefined'=>"ffffff"];}

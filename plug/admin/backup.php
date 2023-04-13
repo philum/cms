@@ -1,24 +1,23 @@
-<?php //backup
+<?php 
 //if(!auth(6))exit;
-
 class backup{
 
 static function dbcols($db){
-return sql_b('select COLUMN_NAME,DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS where table_name="'.transport::pub($db).'"','kv');}
+return sql::call('select COLUMN_NAME,DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS where table_name="'.transport::pub($db).'"','kv');}
 
-static function atm($v){return '"'.qres(($v)).'"';}//utf8_encode
+static function atm($v){return '"'.sql::qres(($v)).'"';}//utf8_encode
 static function atmr($r){foreach($r as $k=>$v)$ret[]=self::atm($v); return $ret;}
-static function atmrup($r){foreach($r as $k=>$v)$ret[]=$k.'='.self::atm($v); return $ret;}
-static function mysqlra($r,$o=''){$rb=self::atmr($r); $d=$o?'"",':''; if($rb)return '('.$d.implode(',',$rb).')';}
-static function mysqlrup($r,$o=''){$rb=self::atmrup($r); $d=$o?'"",':''; if($rb)return $d.implode(',',$rb);}
+static function atmrk($r){foreach($r as $k=>$v)$ret[]=$k.'='.self::atm($v); return $ret;}
+static function atmra($r,$o=''){$rb=self::atmr($r); $d=$o?'"",':''; if($rb)return '('.$d.implode(',',$rb).')';}
+static function atmrak($r,$o=''){$rb=self::atmrk($r); $d=$o?'"",':''; if($rb)return $d.implode(',',$rb);}
 
 static function build($db,$id,$o=''){$ret=''; $rb=[]; $err=''; $b=transport::pub($db);//$rb=[];
 $ra=self::dbcols($b); $cols=implode(',',array_keys($ra)); //pr($ra);
-$r=sql_b('select '.$cols.' from '.($b).' where id>"'.$id.'"','ar',0);
+$r=sql::call('select '.$cols.' from '.($b).' where id>"'.$id.'"','ar',0);
 if($o==1){$deb='update `'.($b).'` set ';
-	if($r)foreach($r as $k=>$v)$rb[]=$deb.self::mysqlrup($v).' where id="'.$v['id'].'";'.n();}
+	if($r)foreach($r as $k=>$v)$rb[]=$deb.self::atmrak($v).' where id="'.$v['id'].'";'.n();}
 else{$deb='INSERT INTO `'.($b).'` ('.$cols.') VALUES ';
-	if($r)foreach($r as $k=>$v)$rb[]=self::mysqlra($v);}//pr($rb);
+	if($r)foreach($r as $k=>$v)$rb[]=self::atmra($v);}//pr($rb);
 if($rb){if($o==1)$ret=implode("\n",$rb); else $ret=$deb.implode(",\n",$rb).';';}
 //if($o)return $ret;
 $f='_backup/'.$db.'.dump';//_from_'.$id.'
@@ -29,7 +28,7 @@ if(!$err)return lkt('txtyl','/'.$f,$f);}//.'.gz'
 
 static function dump($b){
 if($_SERVER['HTTP_HOST']=='oumo.fr')$n=12; else $n=11;
-[$usr,$db,$ps,$dr]=transport::srv(); $table=$b!=1?transport::pub($b):'';
+[$usr,$db,$ps,$dr]=transport::srv(1); $table=$b!=1?transport::pub($b):'';
 $f='_backup/'.($b!=1?$b:$db.date('ymd')).'.dump';//-default-character-set=utf8
 if($b==1){if(is_file($f.'.gz'))return $f.'.gz';} elseif(is_file($f))unlink($f); 
 $e='mysqldump -u'.$usr.' -h localhost -p'.$ps.' '.$db.' '.$table.' > '.$dr.'/'.$f;
@@ -54,12 +53,12 @@ static function restore($d){//import
 exc($d);}
 
 static function home($p,$o,$y=''){
-if(!$p){require('params/_connectx.php'); $p=$db;} if(!$p)return;
+if(!$p){connect(); $p=sql::$db;} if(!$p)return;
 $o='1';//gz
-[$usr,$db,$ps,$dr]=transport::srv(); $base=$p;//$db //echo $ps;
+[$usr,$db,$ps,$dr]=transport::srv(1); $base=$p;//$db //echo $ps;
 //exc('mkdir '.$dr.'/backup');
 //$fa='/var/backups/'; $f=''.$p.date('ymd').'.dump';
-$fa='/home'.$dr.'/'; $f='_backup/'.$p.date('ymd').'.dump';
+$fa=''.$dr.'/'; $f='_backup/'.$p.date('ymd').'.dump';
 #tar dir
 //$f='/_backup/'.$p.date('ymd').'.tgz'; $d='tar -zcf '.$dr.'/'.$f.' /var/lib/mysql/'.$p; $o='';
 #dump
@@ -78,9 +77,4 @@ if(!is_file($f) && $p){//exc($d);
 $ret=lkt('',$f,$p);//substr(,10)
 return $ret;}
 }
-
-function plug_backup($p,$o){
-return backup::home($p,$o);}
-
-
 ?>

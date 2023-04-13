@@ -1,6 +1,3 @@
-<?php
-//philum_microsql_program_updates_1610
-$r["_menus_"]=array('date','text');
-$r[1]=array('1001','publication');
-
-?>
+<?php //msql/program_updates_1610
+$r=["_menus_"=>['date','text'],
+"1"=>['1001','publication']];

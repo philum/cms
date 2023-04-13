@@ -1,15 +1,15 @@
 <?php //msql/connectors_basic
 $r=["_menus_"=>['description'],
-"conn"=>['détection : url, image ou média (jpg,mp3,mp4,flv...)'],
-"url"=>['[url§text] applique une Url au texte sélectionné'],
+"conn"=>['dÃ©tection : url, image ou mÃ©dia (jpg,mp3,mp4,flv...)'],
+"url"=>['[urlÂ§text] applique une Url au texte sÃ©lectionnÃ©'],
 "img"=>['image'],
-"video"=>['vidéo'],
+"video"=>['vidÃ©o (youtube etc.)'],
 "iframe"=>['iframe'],
 "h"=>['big'],
 "b"=>['gras (bold)'],
 "i"=>['italique'],
-"u"=>['souligné (underline)'],
-"k"=>['barré (strike)'],
+"u"=>['soulignÃ© (underline)'],
+"k"=>['barrÃ© (strike)'],
 "s"=>['petit (small)'],
 "q"=>['bloc de citation'],
 "list"=>['liste avec puces (pour chaque saut de ligne)'],
@@ -17,29 +17,29 @@ $r=["_menus_"=>['description'],
 "web"=>['Affiche la description d\'une page web'],
 "twitter"=>['Api Twitter :
 - [123456789:twitter] renvoie un twit
-- [text§search:twitter] résultat d\'une recherche
-- [123456789§thread:twitter] fil d\'une discussion (en remontant)'],
+- [textÂ§search:twitter] rÃ©sultat d\'une recherche
+- [123456789Â§thread:twitter] fil d\'une discussion (en remontant)'],
 "art"=>['Pointe vers un article : 
 - [1234:art] renvoie un bouton vers l\'article avec son titre
-- [1234§titre:art] assoie le bouton à un titre
+- [1234Â§titre:art] assoie le bouton Ã  un titre
 - [titre:art] : trouve l\'article dans la langue courante'],
-"msql"=>['Renvoie les données d\'une table : 
-[hub_table_(version)-(key)|(row)§option:microsql] ;
+"msql"=>['Renvoie les donnÃ©es d\'une table : 
+[hub_table_(version)-(key)|(row)Â§option:microsql] ;
 Options : pop, read, conn, last, count, graph, form, tmp'],
 "table"=>['- colonnes : | ou virgules
-- lignes : ¬ ou saut de ligne
-- headers : §1'],
-"center"=>['aligné au centre'],
-"right"=>['aligné à droite'],
+- lignes : Â¬ ou saut de ligne
+- headers : Â§1'],
+"center"=>['alignÃ© au centre'],
+"right"=>['alignÃ© Ã  droite'],
 "--"=>['ligne horizontale'],
-"nbsp"=>['espace insécable'],
+"nbsp"=>['espace insÃ©cable'],
 "quo"=>['guillemets typographiques'],
 "qu"=>['balise guillemets'],
-"select"=>['sélectionner tout'],
+"select"=>['sÃ©lectionner tout'],
 "copy"=>['copier'],
 "paste"=>['coller'],
-"deline"=>['réduction sauts de lignes'],
+"deline"=>['rÃ©duction sauts de lignes'],
 "delconn"=>['supprimer connecteur'],
-"findconn"=>['sélectionne connecteur'],
+"findconn"=>['sÃ©lectionne connecteur'],
 "del"=>['effacer'],
-"nl"=>['à la ligne']];
+"nl"=>['Ã  la ligne']];

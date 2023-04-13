@@ -1,2 +1,2 @@
-<?php //philum/microsql/program_plugs
+<?php //msql/program_plugs
 $r=["_menus_"=>['usage']];

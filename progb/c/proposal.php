@@ -1,4 +1,4 @@
-<?php //b/proposal
+<?php 
 
 class proposal{
 
@@ -46,8 +46,8 @@ $j=$o.'_proposal,save__3_'.$p.'_'.$o.'_inp1|inp2';
 $usr=cookie('use'); if(!$usr)$usr=ses('USE'); $day=date('ymd'); //$usr='dav';
 $ret=lj('popbt '.active($ord,1),$o.'_proposal,call__3_'.$p.'_'.$o.';1','score');
 $ret.=lj('popbt '.active($ord,2),$o.'_proposal,call__3_'.$p.'_'.$o.';2','date');
-$inp2=!$usr||auth(6)?inputj('inp2',$usr,$j,'user',atz(8)):hidden('inp2',$usr).btn('txtx',$usr);
-$ret.=inputj('inp1','',$j,'msg',atz(48)).$inp2.lj('popbt',$j,picto('save'));
+$inp2=!$usr||auth(6)?inputj('inp2',$usr,$j,'user',8):hidden('inp2',$usr).btn('txtx',$usr);
+$ret.=inputj('inp1','',$j,'msg',48).$inp2.lj('popbt',$j,picto('save'));
 if(auth(6))$ret.=lj('',$o.'_proposal,delok__3_'.$p.'_'.$o,picto('del'));
 if(auth(6))$ret.=msqbt('',nod('proposal_'.$p)); $ret.=hlpbt('purpose');
 $rf=sql('ib,poll','qdf','v',['type'=>'agree','iq'=>ses('iq')]);

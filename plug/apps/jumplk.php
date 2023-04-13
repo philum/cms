@@ -1,5 +1,4 @@
 <?php //jumplk
-
 class jumplk{
 static $a=__CLASS__;
 static $default='';
@@ -12,7 +11,7 @@ if($dom)$r=$dom->getElementsByTagName($tg); //pr($r);
 if($r->length==0)return 'no result';
 if($r)foreach($r as $k=>$v){$attr=domattr($v,$b);//$v->getAttribute($b)//$v->nodeValue
 	if($attr==$a)$ret=$v->getAttribute($g);}
-return utf8_decode($ret);}
+return utf8dec_b($ret);}
 
 static function build($p,$o=''){$u=domain(trim($p)); //echo $u;
 $d=get_file($p); $r=dom($d); $ret=''; //$ret=eco($d,1); //pr($r);
@@ -24,14 +23,14 @@ if($u=='sco.lt')$ret=self::dom_extract($r,'mainEntityOfPage:itemprop:meta:conten
 $pb=domain($ret); if($pb!=$u && ($pb=='buff.ly' or $pb=='sco.lt'))$ret=self::build($ret,'');
 return $ret?$ret:$p;}
 
-static function call($p,$o,$res=''){
-[$p,$o]=ajxp($res,$p,$o);
+static function call($p,$o,$prm=[]){
+[$p,$o]=prmp($prm,$p,$o);
 $ret=self::build($p,$o);
 return $ret;}
 
 static function menu($p,$o,$rid){
 if(!$p)$p=self::$default; $inpid='inp'.$rid;
-$j=$rid.'_app__3_jumplk_call___'.$inpid;
+$j=$rid.'_jumplk,call_'.$inpid;
 $ret=inputj($inpid,$p,$j);
 $ret.=lj('',$j,picto('ok')).' ';
 return $ret;}
@@ -43,8 +42,4 @@ if($p)$ret=self::build($p,$o);
 return $bt.divd($rid,$ret);}
 
 }
-
-function plug_jumplk($p,$o){
-return jumplk::home($p,$o);}
-
 ?>
